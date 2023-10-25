@@ -4,25 +4,23 @@
   
     
     <entry>
-      <title>fujiweekly</title>
-      <link href="/2023/10/26/fujiweekly/"/>
-      <url>/2023/10/26/fujiweekly/</url>
+      <title>Kodachrome</title>
+      <link href="/2023/10/26/Fuji%20Weekly/Kodachrome/"/>
+      <url>/2023/10/26/Fuji%20Weekly/Kodachrome/</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Classic Chrome</span><br><span class="line">Dynamic Range: DR200</span><br><span class="line">Highlight: <span class="number">0</span></span><br><span class="line">Shadow: <span class="number">0</span></span><br><span class="line">Color: +<span class="number">2</span></span><br><span class="line">Noise Reduction: <span class="number">-4</span></span><br><span class="line">Sharpening: +<span class="number">1</span></span><br><span class="line">Clarity: +<span class="number">3</span></span><br><span class="line">Grain Effect: Weak, Small</span><br><span class="line">Color Chrome Effect: Strong</span><br><span class="line">Color Chrome Effect Blue: Weak</span><br><span class="line">White Balance: Daylight, +<span class="number">2</span> Red &amp; <span class="number">-5</span> Blue</span><br><span class="line">ISO: Auto, up to ISO <span class="number">6400</span></span><br><span class="line">Exposure Compensation: <span class="number">0</span> to +<span class="number">2</span>/<span class="number">3</span> (typically)</span><br></pre></td></tr></table></figure>]]></content>
       
       
       <categories>
           
-          <category> 一级标签 </category>
-          
-          <category> 二级标签 </category>
+          <category> Fuji Recipes </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> 标签 </tag>
+            <tag> Fuji Recipes </tag>
             
         </tags>
       
@@ -61,17 +59,6 @@
     
     
     <entry>
-      <title>about</title>
-      <link href="/about/index.html"/>
-      <url>/about/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>categories</title>
       <link href="/categories/index.html"/>
       <url>/categories/index.html</url>
@@ -94,6 +81,17 @@
     
     
     <entry>
+      <title>tags</title>
+      <link href="/tags/index.html"/>
+      <url>/tags/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>movies</title>
       <link href="/movies/index.html"/>
       <url>/movies/index.html</url>
@@ -105,9 +103,9 @@
     
     
     <entry>
-      <title>tags</title>
-      <link href="/tags/index.html"/>
-      <url>/tags/index.html</url>
+      <title>about</title>
+      <link href="/about/index.html"/>
+      <url>/about/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
