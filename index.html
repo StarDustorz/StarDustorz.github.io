@@ -1,202 +1,100 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>StarDust - We are all stardust</title><meta name="author" content="茶杯养鲸鱼"><meta name="copyright" content="茶杯养鲸鱼"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="website">
-<meta property="og:title" content="StarDust">
-<meta property="og:url" content="http://example.com/index.html">
-<meta property="og:site_name" content="StarDust">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/img/avatar.webp">
-<meta property="article:author" content="茶杯养鲸鱼">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/img/avatar.webp"><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="http://example.com/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
-  root: '/',
-  algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
-  translate: undefined,
-  noticeOutdate: undefined,
-  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
-  copy: {
-    success: '复制成功',
-    error: '复制错误',
-    noSupport: '浏览器不支持'
-  },
-  relativeDate: {
-    homepage: false,
-    post: false
-  },
-  runtime: '',
-  dateSuffix: {
-    just: '刚刚',
-    min: '分钟前',
-    hour: '小时前',
-    day: '天前',
-    month: '个月前'
-  },
-  copyright: {"limitCount":50,"languages":{"author":"作者: 茶杯养鲸鱼","link":"链接: ","source":"来源: StarDust","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
-  lightbox: 'fancybox',
-  Snackbar: undefined,
-  source: {
-    justifiedGallery: {
-      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
-    }
-  },
-  isPhotoFigcaption: false,
-  islazyload: false,
-  isAnchor: false,
-  percent: {
-    toc: true,
-    rightside: false,
-  },
-  autoDarkmode: false
-}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: 'StarDust',
-  isPost: false,
-  isHome: true,
-  isHighlightShrink: false,
-  isToc: false,
-  postUpdate: '2025-01-06 22:40:32'
-}</script><noscript><style type="text/css">
-  #nav {
-    opacity: 1
-  }
-  .justified-gallery img {
-    opacity: 1
-  }
-
-  #recent-posts time,
-  #post-meta time {
-    display: inline !important
-  }
-</style></noscript><script>(win=>{
-    win.saveToLocal = {
-      set: function setWithExpiry(key, value, ttl) {
-        if (ttl === 0) return
-        const now = new Date()
-        const expiryDay = ttl * 86400000
-        const item = {
-          value: value,
-          expiry: now.getTime() + expiryDay,
-        }
-        localStorage.setItem(key, JSON.stringify(item))
-      },
-
-      get: function getWithExpiry(key) {
-        const itemStr = localStorage.getItem(key)
-
-        if (!itemStr) {
-          return undefined
-        }
-        const item = JSON.parse(itemStr)
-        const now = new Date()
-
-        if (now.getTime() > item.expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return item.value
-      }
-    }
-  
-    win.getScript = url => new Promise((resolve, reject) => {
-      const script = document.createElement('script')
-      script.src = url
-      script.async = true
-      script.onerror = reject
-      script.onload = script.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        script.onload = script.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(script)
-    })
-  
-    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.href = url
-      if (id) link.id = id
-      link.onerror = reject
-      link.onload = link.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        link.onload = link.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(link)
-    })
-  
-      win.activateDarkMode = function () {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
-        }
-      }
-      win.activateLightMode = function () {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
-        }
-      }
-      const t = saveToLocal.get('theme')
-    
-          if (t === 'dark') activateDarkMode()
-          else if (t === 'light') activateLightMode()
-        
-      const asideStatus = saveToLocal.get('aside-status')
-      if (asideStatus !== undefined) {
-        if (asideStatus === 'hide') {
-          document.documentElement.classList.add('hide-aside')
-        } else {
-          document.documentElement.classList.remove('hide-aside')
-        }
-      }
-    
-    const detectApple = () => {
-      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
-        document.documentElement.classList.add('apple')
-      }
-    }
-    detectApple()
-    })(window)</script><link rel="stylesheet" href="/css/iconfont.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.webp" onerror="onerror=null;src='/img/404.jpg'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw iconfont icon-shouye"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw iconfont icon-rili"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw iconfont icon-biaoqian"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw iconfont icon-fenlei"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw iconfont icon-guanyuwomen-"></i><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('/img/banner.png')"><nav id="nav"><span id="blog-info"><a href="/" title="StarDust"><span class="site-name">StarDust</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw iconfont icon-shouye"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw iconfont icon-rili"></i><span> 时间线</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw iconfont icon-biaoqian"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw iconfont icon-fenlei"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw iconfont icon-guanyuwomen-"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">StarDust</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="mailto:1429266799@qq.com" target="_blank" title="Email"><i class="iconfont icon-youxiang"></i></a><a class="social-icon" href="tencent://message/?uin=1429266799&amp;Site=Sambow&amp;Menu=yes" target="_blank" title="QQ"><i class="iconfont icon-QQ"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left"><a href="/2025/01/06/Golang/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="[object Object]"><img class="post-bg" src="https://hexoblog-1309391399.cos.ap-shanghai.myqcloud.com/image/wallhaven-zyokog.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="[object Object]"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/01/06/Golang/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="[object Object]">[object Object]</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-01-06T14:37:42.459Z" title="发表于 2025-01-06 22:37:42">2025-01-06</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Golang/">Golang</a></span></div><div class="content"></div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2025/01/06/Golang/%E5%9F%BA%E7%A1%80/" title="无题"><img class="post-bg" src="https://hexoblog-1309391399.cos.ap-shanghai.myqcloud.com/image/wallhaven-kxk7km.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"></a></div><div class="recent-post-info"><a class="article-title" href="/2025/01/06/Golang/%E5%9F%BA%E7%A1%80/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-01-06T14:36:48.715Z" title="发表于 2025-01-06 22:36:48">2025-01-06</time></span></div><div class="content"></div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2023/10/26/Fuji%20Weekly/Kodachrome/" title="Kodachrome"><img class="post-bg" src="https://hexoblog-1309391399.cos.ap-shanghai.myqcloud.com/image/wallhaven-zyokog.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Kodachrome"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/10/26/Fuji%20Weekly/Kodachrome/" title="Kodachrome">Kodachrome</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-10-25T17:11:50.000Z" title="发表于 2023-10-26 01:11:50">2023-10-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Fuji-Recipes/">Fuji Recipes</a></span></div><div class="content">1234567891011121314Classic ChromeDynamic Range: DR200Highlight: 0Shadow: 0Color: +2Noise Reduction: -4Sharpening: +1Clarity: +3Grain Effect: Weak, SmallColor Chrome Effect: StrongColor Chrome Effect Blue: WeakWhite Balance: Daylight, +2 Red &amp; -5 BlueISO: Auto, up to ISO 6400Exposure Compensation: 0 to +2/3 (typically)
-</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/06/12/Leetcode/LeetCode-LinkedList/" title="LeetCode-LinkedList"><img class="post-bg" src="https://hexoblog-1309391399.cos.ap-shanghai.myqcloud.com/image/wallhaven-vqy5p8.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="LeetCode-LinkedList"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/06/12/Leetcode/LeetCode-LinkedList/" title="LeetCode-LinkedList">LeetCode-LinkedList</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-06-12T11:29:17.000Z" title="发表于 2023-06-12 19:29:17">2023-06-12</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/LeetCode/">LeetCode</a><i class="fas fa-angle-right article-meta-link"></i><a class="article-meta__categories" href="/categories/LeetCode/LinkedList/">LinkedList</a></span></div><div class="content">[toc]
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content=""><title>Draco</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="https://unpkg.com/normalize.css"><link rel="stylesheet" type="text/css" href="https://unpkg.com/purecss/build/pure-min.css"><link rel="stylesheet" type="text/css" href="https://unpkg.com/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="https://unpkg.com/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="https://unpkg.com/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="https://unpkg.com/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="https://unpkg.com/toastr/build/toastr.min.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Draco</h1><a id="logo" href="/.">Draco</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title"><a href="/2025/01/06/Golang/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">[object Object]</a></h1><div class="post-meta">2025-01-06</div><p class="readmore"><a href="/2025/01/06/Golang/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">阅读全文</a></p></div><div class="post"><h1 class="post-title"><a href="/2025/01/06/Golang/%E5%9F%BA%E7%A1%80/">no-title</a></h1><div class="post-meta">2025-01-06</div><p class="readmore"><a href="/2025/01/06/Golang/%E5%9F%BA%E7%A1%80/">阅读全文</a></p></div><div class="post"><h1 class="post-title"><a href="/2023/10/26/Fuji%20Weekly/Kodachrome/">Kodachrome</a></h1><div class="post-meta">2023-10-26</div><div class="post-content">1234567891011121314Classic ChromeDynamic Range: DR200Highlight: 0Shadow: 0Color: +2Noise Reduction: -4Sharpening: +1Clarity: +3Grain Effect: Weak, SmallColor Chrome Effect: StrongColor Chrome Effect Blue: WeakWhite Balance: Daylight, +2 Red &amp; -5 BlueISO: Auto, up to ISO 6400Exposure Compensation: 0 to +2/3 (typically)
+</div><p class="readmore"><a href="/2023/10/26/Fuji%20Weekly/Kodachrome/">阅读全文</a></p></div><div class="post"><h1 class="post-title"><a href="/2023/06/12/Leetcode/LeetCode-LinkedList/">LeetCode-LinkedList</a></h1><div class="post-meta">2023-06-12</div><div class="post-content">[toc]
 链表定义123456// Definition for singly-linked list.public class SinglyListNode &#123;    int val;    SinglyListNode next;    SinglyListNode(int x) &#123; val = x; &#125;&#125;
 206. 反转链表 *题目：反转一个单链表
 1.双指针迭代
 从前向后反转
-12345678910111213141516class Solution &#123;    public ListNode reverseList(ListNode head) &#123;        // cur 是当前需要翻转的节点        // pre 是 cur 的前一个节点        ListNode cur = head, pre = null;        while(cur != null) &#123;            // 记录 cur 的下一个节点            ListNode temp = cur.nex ...</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="avatar"/></div><div class="author-info__name">茶杯养鲸鱼</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="mailto:1429266799@qq.com" target="_blank" title="Email"><i class="iconfont icon-youxiang"></i></a><a class="social-icon" href="tencent://message/?uin=1429266799&amp;Site=Sambow&amp;Menu=yes" target="_blank" title="QQ"><i class="iconfont icon-QQ"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">施工中~</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/01/06/Golang/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="[object Object]"><img src="https://hexoblog-1309391399.cos.ap-shanghai.myqcloud.com/image/wallhaven-zyokog.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="[object Object]"/></a><div class="content"><a class="title" href="/2025/01/06/Golang/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="[object Object]">[object Object]</a><time datetime="2025-01-06T14:37:42.459Z" title="发表于 2025-01-06 22:37:42">2025-01-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/01/06/Golang/%E5%9F%BA%E7%A1%80/" title="无题"><img src="https://hexoblog-1309391399.cos.ap-shanghai.myqcloud.com/image/wallhaven-kxk7km.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2025/01/06/Golang/%E5%9F%BA%E7%A1%80/" title="无题">无题</a><time datetime="2025-01-06T14:36:48.715Z" title="发表于 2025-01-06 22:36:48">2025-01-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/26/Fuji%20Weekly/Kodachrome/" title="Kodachrome"><img src="https://hexoblog-1309391399.cos.ap-shanghai.myqcloud.com/image/wallhaven-zyokog.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Kodachrome"/></a><div class="content"><a class="title" href="/2023/10/26/Fuji%20Weekly/Kodachrome/" title="Kodachrome">Kodachrome</a><time datetime="2023-10-25T17:11:50.000Z" title="发表于 2023-10-26 01:11:50">2023-10-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/06/12/Leetcode/LeetCode-LinkedList/" title="LeetCode-LinkedList"><img src="https://hexoblog-1309391399.cos.ap-shanghai.myqcloud.com/image/wallhaven-vqy5p8.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="LeetCode-LinkedList"/></a><div class="content"><a class="title" href="/2023/06/12/Leetcode/LeetCode-LinkedList/" title="LeetCode-LinkedList">LeetCode-LinkedList</a><time datetime="2023-06-12T11:29:17.000Z" title="发表于 2023-06-12 19:29:17">2023-06-12</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
-            <i class="fas fa-folder-open"></i>
-            <span>分类</span>
-            
-            </div>
-            <ul class="card-category-list" id="aside-cat-list">
-            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Fuji-Recipes/"><span class="card-category-list-name">Fuji Recipes</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/LeetCode/"><span class="card-category-list-name">LeetCode</span><span class="card-category-list-count">1</span></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/LeetCode/LinkedList/"><span class="card-category-list-name">LinkedList</span><span class="card-category-list-count">1</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"><span class="card-category-list-name">编程语言</span><span class="card-category-list-count">1</span></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Golang/"><span class="card-category-list-name">Golang</span><span class="card-category-list-count">1</span></a></li></ul></li>
-            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/LeetCode/" style="font-size: 1.1em; color: #999">LeetCode</a> <a href="/tags/Golang/" style="font-size: 1.1em; color: #999">Golang</a> <a href="/tags/Fuji-Recipes/" style="font-size: 1.1em; color: #999">Fuji Recipes</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2025/01/"><span class="card-archive-list-date">一月 2025</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/10/"><span class="card-archive-list-date">十月 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/06/"><span class="card-archive-list-date">六月 2023</span><span class="card-archive-list-count">1</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">4</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">5.4k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-01-06T14:40:32.198Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2025 By 茶杯养鲸鱼</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>window.typedJSFn = {
-  init: (str) => {
-    window.typed = new Typed('#subtitle', Object.assign({
-      strings: str,
-      startDelay: 300,
-      typeSpeed: 150,
-      loop: true,
-      backSpeed: 50,
-    }, null))
-  },
-  run: (subtitleType) => {
-    if (true) {
-      if (typeof Typed === 'function') {
-        subtitleType()
-      } else {
-        getScript('https://cdn.jsdelivr.net/npm/typed.js/dist/typed.umd.min.js').then(subtitleType)
-      }
-    } else {
-      subtitleType()
-    }
-  }
-}
-</script><script>function subtitleType () {
-  if (true) {
-    typedJSFn.init(["万竹扫天青欲雨，一峰受月白成霜。","画舫烟中浅，青阳日际微。","归路乘明月，千门开未央。","愿天上人间，占得欢娱，年年今夜。","门寂山相对，身闲鸟不猜。","欲买桂花同载酒，终不似，少年游。","黄昏把酒祝东风，且从容。","应是天仙狂醉，乱把白云揉碎。","晚来天欲雪，能饮一杯无。","流波将月去，潮水带星来。","夜阑风静欲归时，唯有一江明月碧琉璃。","拨雪寻春，烧灯续昼。","万籁生山，一星在水，鹤梦疑重续。"])
-  } else {
-    document.getElementById("subtitle").textContent = "万竹扫天青欲雨，一峰受月白成霜。"
-  }
-}
-typedJSFn.run(subtitleType)</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
+12345678910111213141516class Solution &#123;    public ListNode reverseList(ListNode head) &#123;        // cur 是当前需要翻转的节点        // pre 是 cur 的前一个节点        ListNode cur = head, pre = null;        while(cur != null) &#123;            // 记录 cur 的下一个节点            ListNode temp = cur.next;            cur.next = pre;            pre = cur;            cur = temp;        &#125;        // 最后 cur 是 null, pre 是新链表的 head        return pre;    &#125;&#125;
+2.递归
+从后往前反转
+终止条件是当前节点或者下一个节点==null12345678910111213141516171819202122class Solution &#123;	public ListNode reverseList(ListNode head) &#123;		//递归终止条件是当前为空，或者下一个节点为空		if(head==null || head.next==null) &#123;			return head;		&#125;    // cur 从头到尾是不变的 都是指向最后递归结束时的		ListNode cur = reverseList(head.next);		head.next.next = head;		//防止链表循环，需要将head.next设置为空		head.next = null;	  //每层递归函数都返回cur，也就是最后一个节点		return cur;	&#125;&#125;reverseList(5) 中 head=5，head.next=null，返回head=5reverseList(4) cur = 5，head=4，head.next=5reverseList(3)reverseList(2)reverseList(1)
+92. 反转链表 II  *题目：反转从位置 m 到 n 的链表。请使用一趟扫描完成反转。
+123456789101112131415161718192021222324252627282930// 递归实现时间复杂度：O(n)空间复杂度：O(1)class Solution &#123;    // 记录第 N+1 个节点    ListNode mark = null;    public ListNode reverseBetween(ListNode head, int left, int right) &#123;        // 递归到变成翻转前n 个节点        if (left == 1)&#123;            return reverseN(head, right);        &#125;        head.next = reverseBetween(head.next, left - 1, right - 1);        return head;    &#125;    // 递归翻转从 root 开始,长度为 n 的链表    private ListNode reverseN(ListNode root, int n) &#123;        // basecase,只有一个节点,也就是第 n 个,返回它本身        if (n == 1)&#123;            // mark 记录第 n 加一个,避免断链            mark = root.next;            return root;        &#125;        ListNode cur = reverseN(root.next, n - 1);        root.next.next = root;        // root 是翻转后的最后一个,连上后面        root.next = mark;        return cur;    &#125;&#125;
+1234567891011121314151617181920212223242526272829// 迭代实现,头插法时间复杂度：O(n)空间复杂度：O(1)class Solution &#123;    public ListNode reverseBetween(ListNode head, int left, int right) &#123;        ListNode dummy = new ListNode(-1);        dummy.next = head;        // 需要翻转的节点数        right = right - left;        ListNode cur = dummy;        // 移动到 left 左侧        while (left-- &gt; 1) cur = cur.next;        ListNode a = cur.next, b = a.next;                // 将中间的链表翻转,此时 cur 在前一段最后,a 在第一段最后,b 在最后一段开始        while (right-- &gt; 0) &#123;            ListNode tmp = b.next;            b.next = a;            a = b;            b = tmp;        &#125;        // 将第二段开头连上第三段开头        cur.next.next = b;        // 第一段末尾连上第二段末尾        cur.next = a;        return dummy.next;    &#125;&#125;
+25. K 个一组翻转链表 important给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。
+k 是一个正整数，它的值小于或等于链表的长度。
+如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。
+12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970class Solution &#123;    public ListNode reverseKGroup(ListNode head, int k) &#123;        //哑节点辅助反转        ListNode dummyNode = new ListNode(-1);        dummyNode.next = head;        //将从pre的下一个节点开始反转        ListNode pre = dummyNode;        //当前已经反转完成的位置        ListNode cur = head;        //需要进行反转的节点        ListNode next;        ListNode p = head;        int len = 0;        while(p != null)&#123;            len++;            p = p.next;        &#125;        //需要翻转len/k组        for(int i = 0; i &lt; len/k; i++)&#123;            //每组需要将k-1个节点头插法到pre后面            for(int j = 0; j &lt; k-1; j++)&#123;                next = cur.next;                cur.next = next.next;                next.next = pre.next;                pre.next = next;            &#125;            //一组反转完成后，重置pre和cur位置            pre = cur;            cur = pre.next;        &#125;        return dummyNode.next;    &#125;&#125;// 递归解法class Solution &#123;    public ListNode reverseKGroup(ListNode head, int k) &#123;        if (head == null) return null;        // 区间 [a, b) 包含 k 个待反转元素        ListNode a, b;        a = b = head;        for (int i = 0; i &lt; k; i++) &#123;            // 不足 k 个，不需要反转，base case            if (b == null) return head;            b = b.next;        &#125;        // 反转前 k 个元素        ListNode newHead = reverse(a, b);        // 递归反转后续链表并连接起来        a.next = reverseKGroup(b, k);        return newHead;    &#125;    /* 反转区间 [a, b) 的元素，注意是左闭右开 */    ListNode reverse(ListNode a, ListNode b) &#123;        ListNode pre, cur, nxt;        pre = null;        cur = a;        nxt = a;        // while 终止的条件改一下就行了        while (cur != b) &#123;            nxt = cur.next;            cur.next = pre;            pre = cur;            cur = nxt;        &#125;        // 返回反转后的头结点        return pre;    &#125;&#125;
+83. 删除排序链表中的重复元素题目：给定一个排序链表，删除所有重复的元素，使得每个元素只出现一次。
+思路：从头到尾遍历，将结点的值与后面 的结点值比较，如果重复就跳过下一个结点指向之后的结点。
+代码：
+12345678910111213public class Solution &#123;    public ListNode deleteDuplicates(ListNode head) &#123;        ListNode current = head;        while (current != null &amp;&amp; current.next != null) &#123;            if (current.next.val == current.val) &#123;            	current.next = current.next.next;            &#125; else &#123;            	current = current.next;            &#125;        &#125;        return head;    &#125;&#125;
+82. 删除排序链表中的重复元素 II题目：给定一个排序链表，删除所有重复的元素，只保留没有重复出现的结点。
+思路：1.头节点也可能要删除，增加一个哑结点2.双指针a，b；a指向dummy，b指向head，如果a.next！=b.next 那么ab都往前，如果相等则只移动b到不等为止，然后a.next=b.next;b=b.next
+代码：
+123456789101112131415161718192021222324252627class Solution &#123;    public ListNode deleteDuplicates(ListNode head) &#123;        if(head==null || head.next==null) &#123;            return head;        &#125;        ListNode dummy = new ListNode(-1);        dummy.next = head;        ListNode a = dummy;        ListNode b = head;        while(b!=null &amp;&amp; b.next!=null) &#123;            //初始化的时a指向的是哑结点，所以比较逻辑应该是a的下一个节点和b的下一个节点            if(a.next.val!=b.next.val) &#123;                a = a.next;                b = b.next;            &#125;            else &#123;                //如果a、b指向的节点值相等，就不断移动b，直到a、b指向的值不相等                 while(b!=null &amp;&amp; b.next!=null &amp;&amp; a.next.val==b.next.val) &#123;                    b = b.next;                &#125;                a.next = b.next;                b = b.next;            &#125;        &#125;        return dummy.next;    &#125;&#125;
+从尾到头打印链表题目：输入一个链表，按链表值从尾到头的顺序返回一个ArrayList。
+思路：1.递归
+每层递归将值加入结果数组
+代码：
+12345678910111213141516171819class Solution &#123;    ArrayList temp = new ArrayList();    public int[] reversePrint(ListNode head) &#123;        recur(head);        int[] res = new int[temp.size()];        for(int i = 0;i &lt; res.length;i++)            res[i] = temp.get(i);        return res;&#125;void recur(ListNode head)&#123;    if(head == null)&#123;        return;    &#125;    recur(head.next);    temp.add(head.val);&#125;&#125;
+2.辅助栈
+遍历链表，将结点值入栈，遍历完成后将栈中元素存入数组，实现倒序输出
+代码：
+1234567891011121314class Solution &#123;    public int[] reversePrint(ListNode head) &#123;        Deque stack = new LinkedList();        while(head != null)&#123;           stack.add(head.val);           head = head.next;        &#125;        int[] res = new int[stack.size()];        for(int i = 0;i &lt; res.length ;i++)&#123;            res[i] = stack.removeLast();        &#125;        return res;    &#125;&#125;
+链表中的倒数第K个节点 *题目：输入一个链表，输出该链表中倒数第k个结点。
+思路：双指针法，一个先走k步，另一个也开始走，直到
+代码：
+1234567891011121314class Solution &#123;    public ListNode getKthFromEnd(ListNode head, int k) &#123;        ListNode a = head;    ListNode b = head;    for(int i = 0;i &lt; k ;i++)&#123;        b = b.next;    &#125;    while(b != null)&#123;        a = a.next;        b = b.next;    &#125;    return a;&#125;&#125;
+19. 删除链表的倒数第 N 个结点1题目:给定一个链表，删除链表的倒数第 n 个节点，并且返回链表的头结点。
+123给定一个链表: 1-&gt;2-&gt;3-&gt;4-&gt;5, 和 n = 2.当删除了倒数第二个节点后，链表变为 1-&gt;2-&gt;3-&gt;5.
+12345678910111213141516171819 // 采用两个间隔为n的指针，同时向前移动。当快指针的下一个节点为最后一个节点时，要删除的节点就是慢指针的下一个节点。class Solution &#123;    public ListNode removeNthFromEnd(ListNode head, int n) &#123;        // 只有一个节点        if (head.next == null) return null;        ListNode fast = head, slow = head;        // fast 先走 n 步,然后一起到最后,slow 指向删除的前一个位置        while(n-- &gt; 0) fast = fast.next;      	// 边界:如果有 n 个节点,删倒数第 n 个,也就是头结点        if(fast == null) return head.next;      	// 直到 fast 指向末尾,slow 指向待删除的前一个        while(fast.next != null) &#123;            slow = slow.next;            fast = fast.next;        &#125;        slow.next = slow.next.next;        return head;    &#125;&#125;
+复杂链表的复制题目：请实现 copyRandomList 函数，复制一个复杂链表。在复杂链表中，每个节点除了有一个 next 指针指向下一个节点，还有一个 random 指针指向链表中的任意节点或者 null。
+思路：先在原链路中复制，然后建立random连接，最后拆分
+代码：
+12345678910111213141516171819202122class Solution &#123; //HashMap实现    public Node copyRandomList(Node head) &#123;        HashMap map = new HashMap&lt;&gt;(); //创建HashMap集合        Node cur=head;        //复制结点值        while(cur!=null)&#123;            //存储put:            map.put(cur,new Node(cur.val)); //顺序遍历，存储老结点和新结点(先存储新创建的结点值)            cur=cur.next;        &#125;        //复制结点指向        cur = head;        while(cur!=null)&#123;            //得到get:.value2,3            map.get(cur).next = map.get(cur.next); //新结点next指向同旧结点的next指向            map.get(cur).random = map.get(cur.random); //新结点random指向同旧结点的random指向            cur = cur.next;        &#125;   	//返回复制的链表    return map.get(head);&#125;&#125;
+两个链表的第一个公共节点题目：输入两个链表，找出它们的第一个公共节点。
+思路：两个指针 node1，node2 分别指向两个链表 headA，headB 的头结点，然后同时分别逐结点遍历，当 node1 到达链表 headA 的末尾时，重新定位到链表 headB 的头结点；当 node2 到达链表 headB 的末尾时，重新定位到链表 headA 的头结点。
+这样，当它们相遇时，所指向的结点就是第一个公共结点。
+代码：
+1234567891011public class Solution &#123;    public ListNode getIntersectionNode(ListNode headA, ListNode headB) &#123;        ListNode nodeA = headA;        ListNode nodeB = headB;        while(nodeA!=nodeB)&#123;            nodeA = nodeA==null?headB:nodeA.next;            nodeB = nodeB==null?headA:nodeB.next;        &#125;        return nodeA;    &#125;&#125;
+环型链表题目：给定一个链表，判断链表中是否有环。
+思路：快慢指针
+代码：
+1234567891011121314151617public class Solution &#123;    public boolean hasCycle(ListNode head) &#123;        if(head == null)&#123;            return false;        &#125;        ListNode low = head;        ListNode fast = head.next;        while( fast != null &amp;&amp; fast.next != null)&#123;            if(low.equals(fast) )&#123;                return true;            &#125;            low = low.next;            fast = fast.next.next;        &#125;        return false;        &#125;    &#125;
+链表中环的入口结点https://leetcode-cn.com/problems/linked-list-cycle-ii/submissions/
+1234567891011121314151617181920// 快慢指针public ListNode EntryNodeOfLoop(ListNode pHead) &#123;    // 设计双指针， 1. 边界都要判断下一个结点也是否为空    if (pHead == null || pHead.next == null)        return null;    ListNode slow = pHead, fast = pHead;    // 2. 快以二倍速前进，慢正常操作    do &#123;        fast = fast.next.next;        slow = slow.next;    &#125; while (slow != fast); // 3. 相遇点    // 4. fast从头继续和slow正常走    fast = pHead;    while (slow != fast) &#123;         slow = slow.next;        fast = fast.next;    &#125;    // 5. 返回slow，毕竟二者走在一块    return slow;&#125;
+2. 两数相加  *题目:给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
+请你将两个数相加，并以相同形式返回一个表示和的链表。
+你可以假设除了数字 0 之外，这两个数都不会以 0 开头。
+思路:用一个虚拟头结点 逐位相加,考虑进位
+123456789101112131415161718192021// 逐位相加,考虑进位// 复杂度 时间:O(max(m,n));  空间:O(max(m,n))class Solution &#123;    public ListNode addTwoNumbers(ListNode l1, ListNode l2) &#123;        ListNode dummy = new ListNode(-1);        ListNode temp = dummy;        int carry = 0;        while(l1 != null || l2 != null)&#123;            int a = l1 != null ? l1.val : 0;            int b = l2 != null ? l2.val : 0;            carry = a + b + carry;            temp.next = new ListNode(carry % 10);            carry /= 10;            temp = temp.next;            if(l1 != null) l1 = l1.next;            if(l2 != null) l2 = l2.next;        &#125;        if(carry != 0) temp.next = new ListNode(carry);        return dummy.next;    &#125;&#125;
+445. 两数相加 II题目：给你两个 非空 链表来代表两个非负整数。数字最高位位于链表开始位置。它们的每个节点只存储一位数字。将这两数相加会返回一个新的链表。
+你可以假设除了数字 0 之外，这两个数字都不会以零开头。
+思路：两辅助栈
+代码：
+123456789101112131415161718192021222324252627class Solution &#123;    public ListNode addTwoNumbers(ListNode l1, ListNode l2) &#123;        Stack&lt;Integer&gt; stack1 = new Stack&lt;&gt;();        Stack&lt;Integer&gt; stack2 = new Stack&lt;&gt;();        while(l1 != null)&#123;            stack1.push(l1.val);            l1 = l1.next;        &#125;        while(l2 != null)&#123;            stack2.push(l2.val);            l2 = l2.next;        &#125;                int carry = 0;  //标记是否进位        ListNode head1 = new ListNode(-1);        while( !stack1.isEmpty() || !stack2.isEmpty() || carry!=0)&#123;            int sum = carry;            sum += stack1.isEmpty() ? 0 : stack1.pop();            sum += stack2.isEmpty() ? 0 : stack2.pop();            ListNode node = new ListNode(sum%10);            node.next = head1.next;		//头插法            head1.next = node;            carry = sum/10;        &#125;        return head1.next;    &#125;&#125;
+328. 奇偶链表题目：给定一个单链表，把所有的奇数节点和偶数节点分别排在一起。请注意，这里的奇数节点和偶数节点指的是节点编号的奇偶性，而不是节点的值的奇偶性。
+思路：三个指针，两个排序，一个标记偶数链表的头
+12345678910111213141516class Solution &#123;    public ListNode oddEvenList(ListNode head) &#123;        if(head == null) return head;        ListNode odd = head;        ListNode even = head.next;        ListNode evenHead = even;        while(even!= null &amp;&amp; even.next!= null)&#123;	//偶数在后面，如果偶数有，那么奇数也有            odd.next = odd.next.next;            odd = odd.next;            even.next = even.next.next;            even = even.next;        &#125;        odd.next = evenHead;        return head;    &#125;&#125;
+725. 分隔链表给定一个头结点为 root 的链表, 编写一个函数以将链表分隔为 k 个连续的部分。
+每部分的长度应该尽可能的相等: 任意两部分的长度差距不能超过 1，也就是说可能有些部分为 null。
+这k个部分应该按照在链表中出现的顺序进行输出，并且排在前面的部分的长度应该大于或等于后面的长度。
+返回一个符合上述规则的链表的列表。
+12345678910111213141516171819202122232425262728293031class Solution &#123;    public ListNode[] splitListToParts(ListNode root, int k) &#123;        int N = 0;        //链表长度        ListNode cur = root;        while(cur != null)&#123;            cur = cur.next;            N++;        &#125;        //每个部分的基础长度和余数        int size = N/k;        int mod = N%k;        cur = root;        ListNode[] res = new ListNode[k];        for(int i = 0; cur != null &amp;&amp; i &lt; k ; i++)&#123;            //表头加入            res[i] = cur;            //当前的大小取决于基础大小和是否还有余数            int curSize = size + (mod-- &gt; 0 ? 1:0);            //需要得到Cursize规模的链表，需要走Cursize - 1步            for(int j = 0 ; j &lt; curSize - 1; j++)&#123;                cur = cur.next;            &#125;            //记录下下一个节点，断开链表            ListNode next = cur.next;            cur.next = null;            cur = next;        &#125;        return res;    &#125;&#125;
+21. 合并两个有序链表 *题目：将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。
+递归解法：
+终止条件：两条链表分别名为 l1 和 l2，当 l1 为空或 l2 为空时结束
+返回值：每一层调用都返回排序好的链表头
+本级递归内容：如果 l1 的 val 值更小，则将 l1.next 与排序好的链表头相接，l2 同理
+123456789101112131415161718192021222324252627282930313233343536373839// 递归  时间 O(n+m)  空间 O(n+m)class Solution &#123;    public ListNode mergeTwoLists(ListNode l1, ListNode l2) &#123;        if(l1 == null) &#123;            return l2;        &#125;        if(l2 == null) &#123;            return l1;        &#125;    		if(l1.val &lt; l2.val) &#123;        	l1.next = mergeTwoLists(l1.next, l2);        	return l1;    	&#125; else &#123;        	l2.next = mergeTwoLists(l1, l2.next);        	return l2;    &#125;&#125;  // 迭代  时间 O(n+m)  空间 O(1)class Solution &#123;    public ListNode mergeTwoLists(ListNode l1, ListNode l2) &#123;        ListNode dummy = new ListNode(-1);        ListNode pre = dummy;        while (l1 != null &amp;&amp; l2 != null) &#123;            if (l1.val &lt;= l2.val)&#123;                pre.next = l1;                l1 = l1.next;            &#125; else &#123;                pre.next = l2;                l2 = l2.next;            &#125;            pre = pre.next;        &#125;        pre.next = l1 == null ? l2 : l1;        return dummy.next;    &#125;&#125;
+23. 合并K个升序链表 *给你一个链表数组，每个链表都已经按升序排列。
+请你将所有链表合并到一个升序链表中，返回合并后的链表。
+123456789101112131415161718192021222324// 最小堆// 时间: O(kn×logk)  k 个链表,kn 个点// 空间: O(k)// 堆排序,使用大顶堆可以得到升序的class Solution &#123;    public ListNode mergeKLists(ListNode[] lists) &#123;        // 哨兵节点        ListNode dummy = new ListNode(-1), tail = dummy;        //优先队列，每次出堆的都是最小的  小顶堆,输出根节点        PriorityQueue&lt;ListNode&gt; q = new PriorityQueue&lt;&gt;((a, b) -&gt; a.val - b.val);        // 入队        for(ListNode node : lists) &#123;            if(node != null) q.add(node);        &#125;        while(!q.isEmpty()) &#123;            tail.next = q.poll();            tail = tail.next;            if(tail.next != null) &#123;                q.add(tail.next);            &#125;        &#125;        return dummy.next;    &#125;&#125;
+12345678910111213141516171819202122232425262728293031// 分治实现// 时间 O(kn×logk)// 空间 O(logk)class Solution &#123;   public ListNode mergeKLists(ListNode[] lists) &#123;        if (lists == null || lists.length == 0) return null;        return merge(lists, 0, lists.length - 1);    &#125;	//分治实现两两合并    private ListNode merge(ListNode[] lists, int left, int right) &#123;        if (left == right) return lists[left];        int mid = left + (right - left) / 2;        ListNode l1 = merge(lists, left, mid);        ListNode l2 = merge(lists, mid + 1, right);        return mergeTwoLists(l1, l2);    &#125;    	//合并两个有序    private ListNode mergeTwoLists(ListNode l1, ListNode l2) &#123;        if (l1 == null) return l2;        if (l2 == null) return l1;        if (l1.val &lt; l2.val) &#123;            l1.next = mergeTwoLists(l1.next, l2);            return l1;        &#125; else &#123;            l2.next = mergeTwoLists(l1,l2.next);            return l2;        &#125;    &#125;&#125;
+234. 回文链表 important请判断一个链表是否为回文链表。
+12345678910111213141516171819202122232425262728293031323334353637383940414243444546class Solution &#123;    public boolean isPalindrome(ListNode head) &#123;        //只有一个或者两个        if(head == null || head.next == null) return true;        ListNode slow = head,fast = head.next;        //找出中点        while(fast!= null &amp;&amp; fast.next != null)&#123;            slow = slow.next;            fast = fast.next.next;        &#125;        //考虑只有两个元素的情况        if(fast != null) slow = slow.next;        cut(head,slow);        return isequal(head,reverse(slow));    &#125;	//断开链表，断在slow前    private void cut(ListNode head,ListNode slow)&#123;        while(head.next != slow)&#123;            head = head.next;        &#125;        head.next = null;    &#125;	    //反转链表    private  ListNode reverse(ListNode head)&#123;        if(head == null || head.next == null) return head;        ListNode cur = reverse(head.next);        head.next.next = head;        head.next = null;        return cur;    &#125;	    //判断是否相等    private boolean isequal(ListNode l1,ListNode l2)&#123;        //忽略奇数个节点情况        while(l1 != null &amp;&amp; l2 != null)&#123;            if(l1.val != l2.val)&#123;                return false;            &#125;                l1 = l1.next;                l2 = l2.next;            &#125;        return true;    &#125;&#125;
+86. 分隔链表  important给你一个链表的头节点 head 和一个特定值 x ，请你对链表进行分隔，使得所有 小于 x 的节点都出现在 大于或等于 x 的节点之前。
+你应当 保留 两个分区中每个节点的初始相对位置。
+1234567891011121314151617181920212223class Solution &#123;    public ListNode partition(ListNode head, int x) &#123;        ListNode dummy1 = new ListNode(0);        ListNode dummy2 = new ListNode(0);        ListNode node1 = dummy1, node2 = dummy2;        while (head != null)&#123;            if (head.val &lt; x)&#123;                node1.next = head;                head = head.next;                node1 = node1.next;                //断开与主链表的联系                node1.next = null;            &#125; else &#123;                node2.next = head;                head = head.next;                node2 = node2.next;                node2.next = null;            &#125;        &#125;        node1.next = dummy2.next;        return dummy1.next;    &#125;&#125;
+剑指46.圆圈中最后剩下的数每年六一儿童节,牛客都会准备一些小礼物去看望孤儿院的小朋友,今年亦是如此。HF作为牛客的资深元老,自然也准备了一些小游戏。其中,有个游戏是这样的:首先,让小朋友们围成一个大圈。然后,他随机指定一个数m,让编号为0的小朋友开始报数。每次喊到m-1的那个小朋友要出列唱首歌,然后可以在礼品箱中任意的挑选礼物,并且不再回到圈中,从他的下一个小朋友开始,继续0…m-1报数….这样下去….直到剩下最后一个小朋友,可以不用表演,并且拿到牛客名贵的“名侦探柯南”典藏版(名额有限哦!!^_^)。请你试着想下,哪个小朋友会得到这份礼品呢？(注：小朋友的编号是从0到n-1) 
+如果没有小朋友，请返回-1 
+思路：
+使用List模拟，使用一个指针。
+123456789101112131415161718public class Solution &#123;    public int LastRemaining_Solution(int n, int m) &#123;        if(n == 0 || m == 0) return -1;        LinkedList&lt;Integer&gt; list = new LinkedList&lt;&gt;();        for(int i = 0; i &lt; n; i++) list.add(i);        int cur = -1;        while(list.size()&gt;1)&#123;            for(int i = 0; i &lt; m; i++)&#123;                cur++;                if(cur == list.size()) cur = 0;            &#125;            list.remove(cur);            //删除节点时，cur会指向下一个节点，因此需要减1。            cur--;        &#125;        return list.get(0);    &#125;&#125;
+853.链表的中间结点  importanthttps://leetcode-cn.com/problems/middle-of-the-linked-list/
+1234567891011// 双指针（快慢）class Solution &#123;    public ListNode middleNode(ListNode head) &#123;        ListNode p = head, q = head;        while (q != null &amp;&amp; q.next != null) &#123;            q = q.next.next;            p = p.next;        &#125;        return p;    &#125;&#125;
+24. 两两交换链表中的节点 *给你一个链表，两两交换其中相邻的节点，并返回交换后链表的头节点。你必须在不修改节点内部的值的情况下完成本题（即，只能进行节点交换）。
+12345678910111213141516171819202122232425262728293031323334class Solution &#123;    public ListNode swapPairs(ListNode head) &#123;        ListNode pre = new ListNode(0);        pre.next = head;        ListNode temp = pre;        // temp -&gt; start -&gt; end        // temp 是要交换的两个的前一个        while(temp.next != null &amp;&amp; temp.next.next != null) &#123;            ListNode start = temp.next;            ListNode end = temp.next.next;            temp.next = end;            start.next = end.next;            end.next = start;            // 交换完成,此时 start 后面是需要交换的            temp = start;        &#125;        return pre.next;    &#125;&#125; // 递归解法class Solution &#123;    public ListNode swapPairs(ListNode head) &#123;        // 当前无节点或者只有一个节点，无法进行交换        if(head == null || head.next == null)&#123;            return head;        &#125;        // head -&gt; next -&gt; (next.next)        ListNode next = head.next;        head.next = swapPairs(next.next);        next.next = head;        return next;    &#125;&#125;
+奇数位升序偶数位降序的链表  important1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556public static ListNode oddEvenLinkedList(ListNode head) &#123;    // 将偶数链表拆分出来    ListNode evenHead = getEvenList(head);    // 逆序偶数链表    ListNode reEvenHead = reverseList(evenHead);    // 归并奇偶链表    ListNode mHead = mergeList(head, reEvenHead);    return mHead;&#125; public static ListNode getEvenList(ListNode head) &#123;    ListNode cur = head;    ListNode next = null;    ListNode evenHead = head.next;    while (cur != null &amp;&amp; cur.next != null) &#123;        // 获取next        next = cur.next;        // cur奇数，-&gt; next.next (奇数)        cur.next = next.next;        // 移动        cur = cur.next;        // 开始偶数        next.next = cur.next;        // 移动        next = next.next;    &#125;    return evenHead;&#125;public static ListNode reverseList(ListNode head) &#123;    ListNode pre = null;    ListNode cur = head;    while (cur != null) &#123;        ListNode next = cur.next;        cur.next = pre;        pre = cur;        cur = next;    &#125;    return pre;&#125;public static ListNode mergeList(ListNode l1, ListNode l2)&#123;    // 我用递归    if (l1 == null)         return l2;    if (l2 == null)        return l1;    if (l1.val &lt; l2.val) &#123;        l1.next = mergeList(l1.next, l2);        return l1;    &#125; else &#123;        l2.next = mergeList(l1, l2.next);        return l2;    &#125;&#125;
+</div><p class="readmore"><a href="/2023/06/12/Leetcode/LeetCode-LinkedList/">阅读全文</a></p></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://example.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Fuji-Recipes/">Fuji Recipes</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/LeetCode/">LeetCode</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/LeetCode/LinkedList/">LinkedList</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/">编程语言</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Golang/">Golang</a></li></ul></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/Fuji-Recipes/" style="font-size: 15px;">Fuji Recipes</a> <a href="/tags/Golang/" style="font-size: 15px;">Golang</a> <a href="/tags/LeetCode/" style="font-size: 15px;">LeetCode</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2025/01/06/Golang/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">[object Object]</a></li><li class="post-list-item"><a class="post-list-link" href="/2025/01/06/Golang/%E5%9F%BA%E7%A1%80/">Golang/基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2023/10/26/Fuji%20Weekly/Kodachrome/">Kodachrome</a></li><li class="post-list-item"><a class="post-list-link" href="/2023/06/12/Leetcode/LeetCode-LinkedList/">LeetCode-LinkedList</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2025 <a href="/." rel="nofollow">Draco.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="https://unpkg.com/@fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="https://unpkg.com/@fancyapps/fancybox/dist/jquery.fancybox.min.css"><script type="text/javascript" src="/js/copycode.js?v=1.0.0" successtext="复制成功！"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>
