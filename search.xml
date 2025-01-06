@@ -4,7 +4,7 @@
   
     
     <entry>
-      <title>[object Object]</title>
+      <title>内存管理</title>
       <link href="/2025/01/06/Golang/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
       <url>/2025/01/06/Golang/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
       
@@ -23,8 +23,6 @@
         <tags>
             
             <tag> 标签 </tag>
-            
-            <tag> 安装 </tag>
             
         </tags>
       
