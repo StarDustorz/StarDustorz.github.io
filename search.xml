@@ -4,6 +4,87 @@
   
     
     <entry>
+      <title>{{ title }}</title>
+      <link href="/2025/01/12/Cloud-Native/Service%20Mesh/"/>
+      <url>/2025/01/12/Cloud-Native/Service%20Mesh/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> Cloud-Native </category>
+          
+          <category> Service Mesh </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Service-Mesh </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>{{ title }}</title>
+      <link href="/2025/01/12/Cloud-Native/K8S/"/>
+      <url>/2025/01/12/Cloud-Native/K8S/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> Cloud-Native </category>
+          
+          <category> K8S </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Kubernetes </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>{{ title }}</title>
+      <link href="/2025/01/12/Cloud-Native/Docker/"/>
+      <url>/2025/01/12/Cloud-Native/Docker/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> Cloud-Native </category>
+          
+          <category> Docker </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Docker </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>内存管理</title>
       <link href="/2025/01/06/Golang/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
       <url>/2025/01/06/Golang/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
@@ -14,6 +95,8 @@
       <categories>
           
           <category> Golang </category>
+          
+          <category> 内存管理 </category>
           
       </categories>
       
