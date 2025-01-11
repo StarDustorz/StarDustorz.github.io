@@ -4,7 +4,7 @@
   
     
     <entry>
-      <title>{{ title }}</title>
+      <title>Service Mesh</title>
       <link href="/2025/01/12/Cloud-Native/Service%20Mesh/"/>
       <url>/2025/01/12/Cloud-Native/Service%20Mesh/</url>
       
@@ -31,7 +31,7 @@
     
     
     <entry>
-      <title>{{ title }}</title>
+      <title>Kubernetes</title>
       <link href="/2025/01/12/Cloud-Native/K8S/"/>
       <url>/2025/01/12/Cloud-Native/K8S/</url>
       
@@ -58,7 +58,7 @@
     
     
     <entry>
-      <title>{{ title }}</title>
+      <title>Docker</title>
       <link href="/2025/01/12/Cloud-Native/Docker/"/>
       <url>/2025/01/12/Cloud-Native/Docker/</url>
       
