@@ -162,7 +162,7 @@
         </div>
     </header>
 
-    <div class="post-content">
+    <div class="post-content"><span id="more"></span>
         </div></article>
       <article class="post">
     <header class="post-header"><h2 class="post-title emphasized-title">
@@ -178,7 +178,7 @@
         </div>
     </header>
 
-    <div class="post-content">
+    <div class="post-content"><span id="more"></span>
         </div></article>
       <article class="post">
     <header class="post-header"><h2 class="post-title emphasized-title">
@@ -194,7 +194,8 @@
         </div>
     </header>
 
-    <div class="post-content"><h1 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><ul>
+    <div class="post-content"><span id="more"></span>
+<h1 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><ul>
 <li>内存分配与回收的重要性</li>
 <li>Go 语言的内存管理特点<ul>
 <li>自动垃圾回收 (Garbage Collection, GC)</li>
@@ -420,7 +421,8 @@
         </div>
     </header>
 
-    <div class="post-content"><h2 id="排序算法的比较"><a href="#排序算法的比较" class="headerlink" title="排序算法的比较"></a>排序算法的比较</h2><div class="table-container">
+    <div class="post-content"><span id="more"></span>
+<h2 id="排序算法的比较"><a href="#排序算法的比较" class="headerlink" title="排序算法的比较"></a>排序算法的比较</h2><div class="table-container">
 <table>
 <thead>
 <tr>
@@ -557,7 +559,8 @@
         </div>
     </header>
 
-    <div class="post-content"><h3 id="字符串常用方法"><a href="#字符串常用方法" class="headerlink" title="字符串常用方法"></a>字符串常用方法</h3><ul>
+    <div class="post-content"><span id="more"></span>
+<h3 id="字符串常用方法"><a href="#字符串常用方法" class="headerlink" title="字符串常用方法"></a>字符串常用方法</h3><ul>
 <li>不必考虑到线程同步问题，我们应该优先使用StringBuilder类；如果要保证线程安全，自然是StringBuffer。</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//String的方法</span></span><br><span class="line"><span class="type">char</span>	  <span class="title function_">charAt</span><span class="params">(<span class="type">int</span> index)</span> 		<span class="comment">//返回指定索引处的值</span></span><br><span class="line">String	  <span class="title function_">concat</span><span class="params">(String str)</span>  		<span class="comment">//将指定的字符串连接到该字符串的末尾</span></span><br><span class="line"><span class="type">boolean</span>   <span class="title function_">contentEquals</span><span class="params">(StringBuffer sb)</span>  	<span class="comment">//将此字符串与指定的StringBuffer进行比较</span></span><br><span class="line"><span class="type">int</span> 	  <span class="title function_">indexOf</span><span class="params">(<span class="type">int</span> ch)</span>  			<span class="comment">//返回指定字符第一次出现的字符串内的索引</span></span><br><span class="line"><span class="type">int</span> 	  <span class="title function_">indexOf</span><span class="params">(String str)</span>  		<span class="comment">//返回指定子字符串第一次出现的字符串内的索引</span></span><br><span class="line"><span class="type">boolean</span>	  <span class="title function_">isEmpty</span><span class="params">()</span> </span><br><span class="line"><span class="type">int</span>		  <span class="title function_">length</span><span class="params">()</span></span><br><span class="line">String 	  <span class="title function_">valueOf</span><span class="params">(<span class="type">int</span> i)</span>  			<span class="comment">//将 int 变量 i 转换成字符串(使用于其他数据类型)</span></span><br><span class="line">String[]  split(String regex)  		<span class="comment">//按regex将String切分成数组</span></span><br><span class="line"><span class="type">char</span>[] 	  toCharArray()  			<span class="comment">//将此字符串转换为新的字符数组</span></span><br><span class="line">String 	  <span class="title function_">trim</span><span class="params">()</span>  					<span class="comment">//删除前后的空格</span></span><br><span class="line">String    <span class="title function_">substring</span><span class="params">(<span class="type">int</span> beginIndex, <span class="type">int</span> endIndex)</span>  <span class="comment">//获得子串，是左闭右开区间</span></span><br><span class="line">  </span><br><span class="line">StringBuffer  方法</span><br><span class="line"><span class="type">StringBuilder</span> <span class="variable">res</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line"><span class="type">StringBuffer</span> <span class="variable">sb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuffer</span>();</span><br><span class="line"><span class="type">StringBuffer</span> <span class="variable">sb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuffer</span>(<span class="number">50</span>);  <span class="comment">// 容量为50</span></span><br><span class="line"><span class="type">StringBuffer</span> <span class="variable">sb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuffer</span>(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">sb.append(<span class="string">&quot; World&quot;</span>);  <span class="comment">// &quot;Hello World&quot;</span></span><br><span class="line">sb.insert(<span class="number">5</span>, <span class="string">&quot; Java&quot;</span>);  <span class="comment">// &quot;Hello Java World&quot;</span></span><br><span class="line">sb.replace(<span class="number">6</span>, <span class="number">10</span>, <span class="string">&quot;Beautiful&quot;</span>);  <span class="comment">// &quot;Hello Beautiful World&quot;</span></span><br><span class="line">sb.delete(<span class="number">6</span>, <span class="number">15</span>);  <span class="comment">// &quot;Hello World&quot;</span></span><br><span class="line">sb.deleteCharAt(<span class="number">5</span>);  <span class="comment">// &quot;HelloWorld&quot;</span></span><br><span class="line">sb.reverse();  <span class="comment">// &quot;dlroWolleH&quot;</span></span><br><span class="line">sb.setCharAt(<span class="number">0</span>, <span class="string">&#x27;h&#x27;</span>);  <span class="comment">// &quot;helloWorld&quot;</span></span><br><span class="line"><span class="type">String</span> <span class="variable">sub</span> <span class="operator">=</span> sb.substring(<span class="number">5</span>);  <span class="comment">// &quot;World&quot;</span></span><br><span class="line"><span class="type">String</span> <span class="variable">sub</span> <span class="operator">=</span> sb.substring(<span class="number">0</span>, <span class="number">5</span>);  <span class="comment">// &quot;hello&quot;</span></span><br><span class="line"><span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> sb.length();  <span class="comment">// 10</span></span><br><span class="line">res.toString()   <span class="comment">//转换成string</span></span><br></pre></td></tr></table></figure>
@@ -612,7 +615,8 @@
         </div>
     </header>
 
-    <div class="post-content"><h2 id="BFS"><a href="#BFS" class="headerlink" title="BFS"></a>BFS</h2><p>广度优先搜索一层一层的进行遍历，每次遍历以上层遍历的结果作为起点，遍历一个距离能达到的节点，注意去除重复遍历的情况</p>
+    <div class="post-content"><span id="more"></span>
+<h2 id="BFS"><a href="#BFS" class="headerlink" title="BFS"></a>BFS</h2><p>广度优先搜索一层一层的进行遍历，每次遍历以上层遍历的结果作为起点，遍历一个距离能达到的节点，注意去除重复遍历的情况</p>
 <h3 id="279-完全平方数"><a href="#279-完全平方数" class="headerlink" title="279. 完全平方数"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/perfect-squares/">279. 完全平方数</a></h3><p>给定正整数 <em>n</em>，找到若干个完全平方数（比如 <code>1, 4, 9, 16, ...</code>）使得它们的和等于 <em>n</em>。你需要让组成和的完全平方数的个数最少。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">numSquares</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">    Queue&lt;Integer&gt; queue = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line">    HashSet&lt;Integer&gt; visited = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line">    <span class="type">int</span> <span class="variable">level</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    queue.add(n);</span><br><span class="line">    <span class="keyword">while</span> (!queue.isEmpty()) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">size</span> <span class="operator">=</span> queue.size();</span><br><span class="line">        level++; <span class="comment">// 开始生成下一层</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">cur</span> <span class="operator">=</span> queue.poll();</span><br><span class="line">            <span class="comment">//依次减 1, 4, 9... 生成下一层的节点</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">1</span>; j * j &lt;= cur; j++) &#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">next</span> <span class="operator">=</span> cur - j * j;</span><br><span class="line">                <span class="keyword">if</span> (next == <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="keyword">return</span> level;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (!visited.contains(next)) &#123;</span><br><span class="line">                    queue.offer(next);</span><br><span class="line">                    visited.add(next);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="127-单词接龙"><a href="#127-单词接龙" class="headerlink" title="127. 单词接龙"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/word-ladder/">127. 单词接龙</a></h3><p>给定两个单词（beginWord 和 endWord）和一个字典，找到从 beginWord 到 endWord 的最短转换序列的长度。转换需遵循如下规则：</p>
@@ -782,7 +786,8 @@
         </div>
     </header>
 
-    <div class="post-content"><p>二分查找就是不断缩小搜索区间的过程，要注意到区间内的元素不能遗漏</p>
+    <div class="post-content"><span id="more"></span>
+<p>二分查找就是不断缩小搜索区间的过程，要注意到区间内的元素不能遗漏</p>
 <h2 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h2><p>二分查找也称为折半查找，每次都能将查找区间减半，这种折半特性的算法时间复杂度为 O(logN)。</p>
 <h2 id="二分查找框架"><a href="#二分查找框架" class="headerlink" title="二分查找框架"></a>二分查找框架</h2><p>注意循环不变量</p>
 <h4 id="第一种："><a href="#第一种：" class="headerlink" title="第一种："></a>第一种：</h4><p>如果定义在一个左闭右闭的区间里，也就是[left,right];<br>循环结束条件： left &gt; right</p>
