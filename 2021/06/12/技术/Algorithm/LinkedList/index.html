@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
   <head><meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
@@ -71,19 +71,19 @@
 
 <nav id="mobile-menu" class="mobile-menu slideout-menu">
   <ul class="mobile-menu-list"><a href="/">
-        <li class="mobile-menu-item">首页
+        <li class="mobile-menu-item">Home
           </li>
       </a><a href="/archives/">
-        <li class="mobile-menu-item">归档
+        <li class="mobile-menu-item">Archives
           </li>
       </a><a href="/tags/">
-        <li class="mobile-menu-item">标签
+        <li class="mobile-menu-item">Tags
           </li>
       </a><a href="/categories/">
-        <li class="mobile-menu-item">分类
+        <li class="mobile-menu-item">Categories
           </li>
       </a><a href="/about/">
-        <li class="mobile-menu-item">关于
+        <li class="mobile-menu-item">About
           </li>
       </a></ul>
 </nav>
@@ -94,27 +94,27 @@
 
 <nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
           <a class="menu-item-link" href="/">
-            首页
+            Home
             </a>
         </li>
       <li class="menu-item">
           <a class="menu-item-link" href="/archives/">
-            归档
+            Archives
             </a>
         </li>
       <li class="menu-item">
           <a class="menu-item-link" href="/tags/">
-            标签
+            Tags
             </a>
         </li>
       <li class="menu-item">
           <a class="menu-item-link" href="/categories/">
-            分类
+            Categories
             </a>
         </li>
       <li class="menu-item">
           <a class="menu-item-link" href="/about/">
-            关于
+            About
             </a>
         </li>
       </ul></nav>
@@ -136,7 +136,7 @@
     </header>
 
     <div class="post-toc" id="post-toc">
-    <h2 class="post-toc-title">文章目录</h2>
+    <h2 class="post-toc-title">Contents</h2>
     <div class="post-toc-content">
       <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%93%BE%E8%A1%A8"><span class="toc-text">链表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#206-%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8"><span class="toc-text">206. 反转链表 *</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#92-%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8-II"><span class="toc-text">92. 反转链表 II  *</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#25-K-%E4%B8%AA%E4%B8%80%E7%BB%84%E7%BF%BB%E8%BD%AC%E9%93%BE%E8%A1%A8-important"><span class="toc-text">25. K 个一组翻转链表 important</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#83-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0"><span class="toc-text">83. 删除排序链表中的重复元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#82-%E5%88%A0%E9%99%A4%E6%8E%92%E5%BA%8F%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0-II"><span class="toc-text">82. 删除排序链表中的重复元素 II</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8E%E5%B0%BE%E5%88%B0%E5%A4%B4%E6%89%93%E5%8D%B0%E9%93%BE%E8%A1%A8"><span class="toc-text">从尾到头打印链表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%ACK%E4%B8%AA%E8%8A%82%E7%82%B9"><span class="toc-text">链表中的倒数第K个节点 *</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#19-%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%AC-N-%E4%B8%AA%E7%BB%93%E7%82%B9"><span class="toc-text">19. 删除链表的倒数第 N 个结点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E6%9D%82%E9%93%BE%E8%A1%A8%E7%9A%84%E5%A4%8D%E5%88%B6"><span class="toc-text">复杂链表的复制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%A4%E4%B8%AA%E9%93%BE%E8%A1%A8%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%85%AC%E5%85%B1%E8%8A%82%E7%82%B9"><span class="toc-text">两个链表的第一个公共节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%9E%8B%E9%93%BE%E8%A1%A8"><span class="toc-text">环型链表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%8E%AF%E7%9A%84%E5%85%A5%E5%8F%A3%E7%BB%93%E7%82%B9"><span class="toc-text">链表中环的入口结点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%B8%A4%E6%95%B0%E7%9B%B8%E5%8A%A0"><span class="toc-text">2. 两数相加  *</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#445-%E4%B8%A4%E6%95%B0%E7%9B%B8%E5%8A%A0-II"><span class="toc-text">445. 两数相加 II</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#328-%E5%A5%87%E5%81%B6%E9%93%BE%E8%A1%A8"><span class="toc-text">328. 奇偶链表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#725-%E5%88%86%E9%9A%94%E9%93%BE%E8%A1%A8"><span class="toc-text">725. 分隔链表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#21-%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8"><span class="toc-text">21. 合并两个有序链表 *</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#23-%E5%90%88%E5%B9%B6K%E4%B8%AA%E5%8D%87%E5%BA%8F%E9%93%BE%E8%A1%A8"><span class="toc-text">23. 合并K个升序链表 *</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#234-%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8-important"><span class="toc-text">234. 回文链表 important</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#86-%E5%88%86%E9%9A%94%E9%93%BE%E8%A1%A8-important"><span class="toc-text">86. 分隔链表  important</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%91%E6%8C%8746-%E5%9C%86%E5%9C%88%E4%B8%AD%E6%9C%80%E5%90%8E%E5%89%A9%E4%B8%8B%E7%9A%84%E6%95%B0"><span class="toc-text">剑指46.圆圈中最后剩下的数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#853-%E9%93%BE%E8%A1%A8%E7%9A%84%E4%B8%AD%E9%97%B4%E7%BB%93%E7%82%B9-important"><span class="toc-text">853.链表的中间结点  important</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#24-%E4%B8%A4%E4%B8%A4%E4%BA%A4%E6%8D%A2%E9%93%BE%E8%A1%A8%E4%B8%AD%E7%9A%84%E8%8A%82%E7%82%B9"><span class="toc-text">24. 两两交换链表中的节点 *</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A5%87%E6%95%B0%E4%BD%8D%E5%8D%87%E5%BA%8F%E5%81%B6%E6%95%B0%E4%BD%8D%E9%99%8D%E5%BA%8F%E7%9A%84%E9%93%BE%E8%A1%A8-important"><span class="toc-text">奇数位升序偶数位降序的链表  important</span></a></li></ol></li></ol>
     </div>
@@ -242,15 +242,15 @@
       
         <p class="post-cp">
     <p class="cp-item">
-      <span>原文作者: </span>
+      <span>Author: </span>
       <a href="http://example.com">draco</a>
     </p>
     <p class="cp-item">
-      <span>原文链接: </span>
+      <span>Link: </span>
       <a href="http://example.com/2021/06/12/%E6%8A%80%E6%9C%AF/Algorithm/LinkedList/">http://example.com/2021/06/12/%E6%8A%80%E6%9C%AF/Algorithm/LinkedList/</a>
     </p>
     <p class="cp-item">
-      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+      <span>License: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
     </p>
   </p>
         
@@ -262,11 +262,11 @@
         <nav class="post-nav"><a class="prev" href="/2023/10/26/%E6%91%84%E5%BD%B1/Fuji-Recipes/">
         <i class="iconfont icon-left"></i>
         <span class="prev-text nav-default">Kodachrome</span>
-        <span class="prev-text nav-mobile">上一篇</span>
+        <span class="prev-text nav-mobile">Prev</span>
       </a>
     <a class="next" href="/2021/06/12/%E6%8A%80%E6%9C%AF/Algorithm/Sort/">
         <span class="next-text nav-default">Sort</span>
-        <span class="prev-text nav-mobile">下一篇</span>
+        <span class="prev-text nav-mobile">Next</span>
         <i class="iconfont icon-right"></i>
       </a>
     </nav></footer>
@@ -277,7 +277,7 @@
         <a href="/atom.xml" class="iconfont" title="rss"><i class="fas fa-rss"></i></a>
     </div><div class="copyright">
   <span class="power-by">
-    由 <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> 强力驱动
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
   </span>
   <span class="division">|</span>
   <span class="theme-info">
