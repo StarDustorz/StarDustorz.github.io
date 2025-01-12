@@ -411,7 +411,7 @@
       <link href="/tags/index.html"/>
       <url>/tags/index.html</url>
       
-        <content type="html"><![CDATA[<p>这个错误是 YAML 文件解析错误，出现在你的 Hexo 博客配置中。具体来说，问题出在 <code>menu</code> 配置项中的 <code>Archives</code> 键值，<code>/archives/</code> 后面多了一个 <code>-</code>。</p><p>你需要编辑你的 YAML 配置文件，删除多余的 <code>-</code>。 通常这个文件是 <code>_config.yml</code>。</p><p>以下是如何修复的示例：</p><smtcmp_block filename="_config.yml" language="yaml"># ... existing content ...menu:  Home: /  Archives: /archives/  Tags: /tags/  Categories: /categories/# ... existing content ...</smtcmp_block>]]></content>
+        <content type="html"><![CDATA[]]></content>
       
     </entry>
     
