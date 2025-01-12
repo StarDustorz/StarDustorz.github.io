@@ -1,8 +1,223 @@
-{%- extends "_layout.swig" -%}
-{%- import '_macro/post.swig' as post_template -%}
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
-{%- block title -%} {{ page.title }} - {{ config.title }} {%- endblock -%}
 
-{%- block content -%}
-  {{ post_template.render(page) }}
-{%- endblock -%}
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="内存管理"/><meta name="keywords" content="Golang, Draco's Blog" /><link rel="alternate" href="/atom.xml" title="Draco's Blog" type="application/atom+xml">
+<link rel="canonical" href="http://example.com/2025/01/06/技术/Golang/内存管理/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=" />
+
+
+<link rel="stylesheet" type="text/css" href="/lib/fontawesome/css/all.min.css">
+
+<script>
+  window.config = {"leancloud":"","toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "WebSite",
+            "@id": "http://example.com/#website",
+            "url": "http://example.com",
+            "name": "Draco's Blog",
+            "description": "",
+            "publisher": {
+                "@id": "http://example.com/#person"
+            }
+        },
+        {
+            "@type": "Person",
+            "@id": "http://example.com/#person",
+            "name": "",
+            "image": {
+                "@type": "ImageObject",
+                "@id": "http://example.com/#personImage",
+                "url": "",
+                "width": "",
+                "height": "",
+                "caption": ""
+            }}
+    ]
+}
+</script>
+    <title>内存管理 - Draco's Blog</title>
+  <meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Draco's Blog</a>
+</div>
+
+<nav class="site-navbar"></nav>
+
+</header><main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header"><h1 class="post-title emphasized-title">
+            内存管理
+        </h1>
+      <div class="post-meta">
+        <span class="post-time">
+          2025-01-06
+        </span><span class="post-category">
+            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+            <a href="/categories/%E6%8A%80%E6%9C%AF/Golang/">Golang</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content"><h1 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><ul>
+<li>内存分配与回收的重要性</li>
+<li>Go 语言的内存管理特点<ul>
+<li>自动垃圾回收 (Garbage Collection, GC)</li>
+<li>堆 (heap) 和栈 (stack) 的概念</li>
+</ul>
+</li>
+</ul>
+<h2 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h2><ul>
+<li>栈内存分配<ul>
+<li>局部变量</li>
+<li>函数调用</li>
+<li>栈的特点：快速、自动</li>
+</ul>
+</li>
+<li>堆内存分配<ul>
+<li>使用 <code>new</code> 和 <code>make</code> 分配</li>
+<li>动态分配</li>
+<li>堆的特点：灵活、慢速</li>
+</ul>
+</li>
+</ul>
+<h2 id="垃圾回收-Garbage-Collection-GC"><a href="#垃圾回收-Garbage-Collection-GC" class="headerlink" title="垃圾回收 (Garbage Collection, GC)"></a>垃圾回收 (Garbage Collection, GC)</h2><ul>
+<li>GC 的基本原理<ul>
+<li>标记-清除 (Mark and Sweep) 算法</li>
+<li>三色标记法 (Tri-color Marking)</li>
+</ul>
+</li>
+<li>GC 的触发时机<ul>
+<li>定时触发</li>
+<li>内存分配达到阈值</li>
+</ul>
+</li>
+<li>GC 的性能优化<ul>
+<li>减少内存分配</li>
+<li>避免不必要的对象创建</li>
+</ul>
+</li>
+</ul>
+<h2 id="内存逃逸分析"><a href="#内存逃逸分析" class="headerlink" title="内存逃逸分析"></a>内存逃逸分析</h2><ul>
+<li>逃逸分析的概念</li>
+<li>逃逸到堆上的情况<ul>
+<li>函数返回局部变量的指针</li>
+<li>向 channel 发送指针</li>
+<li>在 slice, map 中存储指针</li>
+</ul>
+</li>
+<li>逃逸分析的重要性：减少堆分配、提高性能</li>
+</ul>
+<h2 id="内存泄漏"><a href="#内存泄漏" class="headerlink" title="内存泄漏"></a>内存泄漏</h2><ul>
+<li>内存泄漏的原因</li>
+<li>如何检测内存泄漏</li>
+<li>如何避免内存泄漏<ul>
+<li>及时释放资源</li>
+<li>使用 <code>defer</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="内存管理工具"><a href="#内存管理工具" class="headerlink" title="内存管理工具"></a>内存管理工具</h2><ul>
+<li><code>pprof</code> 工具的使用<ul>
+<li>CPU 分析</li>
+<li>内存分析</li>
+</ul>
+</li>
+<li><code>go tool trace</code> 的使用</li>
+</ul>
+<h2 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h2><ul>
+<li>避免全局变量</li>
+<li>复用对象</li>
+<li>使用对象池 (sync.Pool)</li>
+<li>了解数据结构的内存占用</li>
+<li>避免频繁的内存分配与释放</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>Go 语言内存管理机制的优点与缺点</li>
+<li>如何编写高效的 Go 代码</li>
+</ul>
+
+      
+        
+        
+        </div><footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/Golang/">Golang</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2025/01/12/%E6%8A%80%E6%9C%AF/Cloud-Native/Docker/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Docker</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2023/10/26/%E6%91%84%E5%BD%B1/Fuji-Recipes/">
+        <span class="next-text nav-default">Kodachrome</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a> based <a class="theme-link" target="_blank" rel="noopener" href="https://easonyang.com/2021/08/01/enhanced-hexo-theme-even/">EasonEven</a>
+  </span><span class="copyright-year">
+    <a href="/log" target="_blank">&copy;2025</a>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href="/about" target="_blank">draco</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v="></script>
+</body>
+</html>

@@ -1,8 +1,146 @@
-{%- extends "_layout.swig" -%}
-{%- import '_macro/post.swig' as post_template -%}
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
-{%- block title -%} {{ page.title }} - {{ config.title }} {%- endblock -%}
 
-{%- block content -%}
-  {{ post_template.render(page) }}
-{%- endblock -%}
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Kubernetes"/><meta name="keywords" content="Cloud-Native, Draco's Blog" /><link rel="alternate" href="/atom.xml" title="Draco's Blog" type="application/atom+xml">
+<link rel="canonical" href="http://example.com/2025/01/12/技术/Cloud-Native/K8S/"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=" />
+
+
+<link rel="stylesheet" type="text/css" href="/lib/fontawesome/css/all.min.css">
+
+<script>
+  window.config = {"leancloud":"","toc":"","fancybox":"","pjax":"","latex":""};
+</script>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "WebSite",
+            "@id": "http://example.com/#website",
+            "url": "http://example.com",
+            "name": "Draco's Blog",
+            "description": "",
+            "publisher": {
+                "@id": "http://example.com/#person"
+            }
+        },
+        {
+            "@type": "Person",
+            "@id": "http://example.com/#person",
+            "name": "",
+            "image": {
+                "@type": "ImageObject",
+                "@id": "http://example.com/#personImage",
+                "url": "",
+                "width": "",
+                "height": "",
+                "caption": ""
+            }}
+    ]
+}
+</script>
+    <title>Kubernetes - Draco's Blog</title>
+  <meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Draco's Blog</a>
+</div>
+
+<nav class="site-navbar"></nav>
+
+</header><main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header"><h1 class="post-title emphasized-title">
+            Kubernetes
+        </h1>
+      <div class="post-meta">
+        <span class="post-time">
+          2025-01-12
+        </span><span class="post-category">
+            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+            <a href="/categories/%E6%8A%80%E6%9C%AF/Cloud-Native/">Cloud-Native</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-content">
+      
+        
+        
+        </div><footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/Cloud-Native/">Cloud-Native</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2025/01/12/%E6%8A%80%E6%9C%AF/Cloud-Native/Service%20Mesh/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">Service Mesh</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2025/01/12/%E6%8A%80%E6%9C%AF/Cloud-Native/Docker/">
+        <span class="next-text nav-default">Docker</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a> based <a class="theme-link" target="_blank" rel="noopener" href="https://easonyang.com/2021/08/01/enhanced-hexo-theme-even/">EasonEven</a>
+  </span><span class="copyright-year">
+    <a href="/log" target="_blank">&copy;2025</a>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href="/about" target="_blank">draco</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v="></script>
+</body>
+</html>
