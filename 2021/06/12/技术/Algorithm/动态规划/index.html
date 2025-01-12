@@ -13,17 +13,17 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
-<meta name="description" content="关于动态规划的总结"/><meta name="keywords" content="Algorithm, Draco's Blog" /><link rel="alternate" href="/atom.xml" title="Draco's Blog" type="application/atom+xml">
+<meta name="description" content="关于动态规划的总结"/><meta name="keywords" content="Algorithm, Draco's Blog" /><link rel="alternate" href="/default" title="Draco's Blog" ><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.19" />
 <link rel="canonical" href="http://example.com/2021/06/12/技术/Algorithm/动态规划/"/>
 
-
-<link rel="stylesheet" type="text/css" href="/css/style.css?v=" />
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.19" />
 
 
 <link rel="stylesheet" type="text/css" href="/lib/fontawesome/css/all.min.css">
 
 <script>
-  window.config = {"leancloud":"","toc":"","fancybox":"","pjax":"","latex":""};
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
 </script>
 
 <script type="application/ld+json">
@@ -54,7 +54,7 @@
             }}
     ]
 }
-</script>
+</script><script async defer data-website-id="" src=""></script>
     <title>动态规划 - Draco's Blog</title>
   <meta name="generator" content="Hexo 6.3.0"></head>
 
@@ -70,14 +70,54 @@
 </div>
 
 <nav id="mobile-menu" class="mobile-menu slideout-menu">
-  <ul class="mobile-menu-list"></ul>
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">首页
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于
+          </li>
+      </a></ul>
 </nav>
 <div class="container" id="mobile-panel">
       <header id="header" class="header"><div class="logo-wrapper">
   <a href="/." class="logo">Draco's Blog</a>
 </div>
 
-<nav class="site-navbar"></nav>
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            首页
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            标签
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            分类
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            关于
+            </a>
+        </li>
+      </ul></nav>
 
 </header><main id="main" class="main">
         <div class="content-wrapper">
@@ -95,7 +135,12 @@
         </div>
     </header>
 
-    <div class="post-content"><h1 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h1><h3 id="1、思考状态"><a href="#1、思考状态" class="headerlink" title="1、思考状态"></a>1、思考状态</h3><ul>
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92"><span class="toc-text">动态规划</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E6%80%9D%E8%80%83%E7%8A%B6%E6%80%81"><span class="toc-text">1、思考状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%80%9D%E8%80%83%E7%8A%B6%E6%80%81%E8%BD%AC%E7%A7%BB%E6%96%B9%E7%A8%8B"><span class="toc-text">2、思考状态转移方程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%80%9D%E8%80%83%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-text">3、思考初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E6%80%9D%E8%80%83%E8%BE%93%E5%87%BA"><span class="toc-text">4、思考输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5%E3%80%81%E6%80%9D%E8%80%83%E4%BC%98%E5%8C%96%E7%A9%BA%E9%97%B4%EF%BC%88%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%8F%AB%E5%81%9A%E8%A1%A8%E6%A0%BC%E5%A4%8D%E7%94%A8%EF%BC%89"><span class="toc-text">5、思考优化空间（也可以叫做表格复用）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97"><span class="toc-text">斐波那契数列</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#70-%E7%88%AC%E6%A5%BC%E6%A2%AF"><span class="toc-text">70.爬楼梯</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#198-%E5%BC%BA%E7%9B%97%E6%89%93%E5%8A%AB"><span class="toc-text">198.强盗打劫</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#213-%E5%BC%BA%E7%9B%97%E5%9C%A8%E7%8E%AF%E5%9E%8B%E8%A1%97%E9%81%93%E6%89%93%E5%8A%AB"><span class="toc-text">213.强盗在环型街道打劫</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E4%BB%B6%E9%94%99%E6%8E%92"><span class="toc-text">信件错排</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%8D%E7%89%9B%E7%94%9F%E4%BA%A7"><span class="toc-text">母牛生产</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9F%A9%E9%98%B5%E8%B7%AF%E5%BE%84"><span class="toc-text">矩阵路径</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#64-%E7%9F%A9%E9%98%B5%E7%9A%84%E6%9C%80%E5%B0%8F%E8%B7%AF%E5%BE%84%E5%92%8C"><span class="toc-text">64.矩阵的最小路径和</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#62-%E7%9F%A9%E9%98%B5%E7%9A%84%E6%80%BB%E8%B7%AF%E5%BE%84%E6%95%B0"><span class="toc-text">62.矩阵的总路径数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0-1%E8%83%8C%E5%8C%85"><span class="toc-text">0-1背包</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A9%BA%E9%97%B4%E4%BC%98%E5%8C%96"><span class="toc-text">空间优化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8C%E5%85%A8%E8%83%8C%E5%8C%85"><span class="toc-text">完全背包</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#322-%E6%89%BE%E9%9B%B6%E9%92%B1%E7%9A%84%E6%9C%80%E5%B0%91%E7%A1%AC%E5%B8%81%E6%95%B0"><span class="toc-text">322.找零钱的最少硬币数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#518-%E6%89%BE%E9%9B%B6%E9%92%B1%E7%9A%84%E7%A1%AC%E5%B8%81%E6%95%B0%E7%BB%84%E5%90%88"><span class="toc-text">518.找零钱的硬币数组合</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E5%8C%BA%E9%97%B4"><span class="toc-text">数组区间</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#303-%E6%95%B0%E7%BB%84%E5%8C%BA%E9%97%B4%E5%92%8C"><span class="toc-text">303.数组区间和</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#413-%E7%AD%89%E5%B7%AE%E6%95%B0%E5%88%97%E5%88%92%E5%88%86"><span class="toc-text">413.等差数列划分</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%89%B2%E6%95%B4%E6%95%B0"><span class="toc-text">分割整数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%89%B2%E6%95%B4%E6%95%B0%E7%9A%84%E6%9C%80%E5%A4%A7%E4%B9%98%E7%A7%AF"><span class="toc-text">分割整数的最大乘积</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E9%95%BF%E4%B8%8A%E5%8D%87%E5%AD%90%E5%BA%8F%E5%88%97"><span class="toc-text">最长上升子序列</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%91%E6%8C%87-Offer-46-%E6%8A%8A%E6%95%B0%E5%AD%97%E7%BF%BB%E8%AF%91%E6%88%90%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text">剑指 Offer 46. 把数字翻译成字符串</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9B%B8%E5%85%B3"><span class="toc-text">字符串相关</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#72-%E7%BC%96%E8%BE%91%E8%B7%9D%E7%A6%BB"><span class="toc-text">72. 编辑距离</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2"><span class="toc-text">5. 最长回文子串</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><h1 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h1><h3 id="1、思考状态"><a href="#1、思考状态" class="headerlink" title="1、思考状态"></a>1、思考状态</h3><ul>
 <li>状态的定义：题目问什么，把什么设置成状态</li>
 <li>思考状态怎么转移，如果不好转移，尝试修改定义</li>
 <li>状态转移方程：大问题的最优解怎么从小问题的最优解得到</li>
@@ -159,7 +204,19 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义状态 dp[i][j] 表示从 i 到 j 的字串是不是回文的</span></span><br><span class="line"><span class="comment">//状态转移方程 ：dp[i][j] = ( s[j] == s[j] ) &amp;&amp; dp[i+1][j-1]</span></span><br><span class="line"><span class="comment">//或者 j - i &lt; 3 的情况下 s[j] == s[j]</span></span><br><span class="line"><span class="comment">//初始化dp[i][i] = true</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">longestPalindrome</span><span class="params">(String s)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> s.length();</span><br><span class="line">        <span class="keyword">if</span>(len &lt; <span class="number">2</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> s;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//记录最大长度</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">maxLen</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="comment">//记录开始</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">start</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="comment">//表示从i到j是不是回文串</span></span><br><span class="line">        <span class="type">boolean</span>[][] dp = <span class="keyword">new</span> <span class="title class_">boolean</span>[len][len];</span><br><span class="line">        <span class="type">char</span>[] charArray = s.toCharArray();</span><br><span class="line">        <span class="comment">//初始化</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span> ; i &lt; len; i++)&#123;</span><br><span class="line">            dp[i][i] = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">1</span>; j &lt; len; j++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; j; i++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(charArray[i] != charArray[j])&#123;</span><br><span class="line">                    dp[i][j] = <span class="literal">false</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">if</span>(j - i &lt; <span class="number">3</span>)&#123;</span><br><span class="line">                        dp[i][j] = <span class="literal">true</span>;</span><br><span class="line">                    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                        dp[i][j] = dp[i + <span class="number">1</span>][j - <span class="number">1</span>];</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            <span class="keyword">if</span>(dp[i][j] &amp;&amp; j - i + <span class="number">1</span> &gt; maxLen)&#123;</span><br><span class="line">                maxLen = j - i + <span class="number">1</span>;</span><br><span class="line">                start = i;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> s.substring(start,start+maxLen);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
-        
+        <p class="post-cp">
+    <p class="cp-item">
+      <span>原文作者: </span>
+      <a href="http://example.com">draco</a>
+    </p>
+    <p class="cp-item">
+      <span>原文链接: </span>
+      <a href="http://example.com/2021/06/12/%E6%8A%80%E6%9C%AF/Algorithm/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">http://example.com/2021/06/12/%E6%8A%80%E6%9C%AF/Algorithm/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/</a>
+    </p>
+    <p class="cp-item">
+      <span>许可协议: </span><a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+    </p>
+  </p>
         
         </div><footer class="post-footer">
         <div class="post-tags">
@@ -180,7 +237,9 @@
     </article></div><div class="comments" id="comments"></div></div>
       </main>
 
-      <footer id="footer" class="footer"><div class="copyright">
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:caotianlong@pku.org.cn" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont" title="rss"><i class="fas fa-rss"></i></a>
+    </div><div class="copyright">
   <span class="power-by">
     由 <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> 强力驱动
   </span>
@@ -188,7 +247,7 @@
   <span class="theme-info">
     <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a> based <a class="theme-link" target="_blank" rel="noopener" href="https://easonyang.com/2021/08/01/enhanced-hexo-theme-even/">EasonEven</a>
   </span><span class="copyright-year">
-    <a href="/log" target="_blank">&copy;2025</a>
+    <a href="/log" target="_blank">&copy;2015 - 2025</a>
 
     <span class="heart">
       <i class="iconfont icon-heart"></i>
@@ -203,6 +262,7 @@
       </div>
     </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
   <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
-  <script type="text/javascript" src="/js/src/even.js?v="></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.19"></script>
 </body>
 </html>
