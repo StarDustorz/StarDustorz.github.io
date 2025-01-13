@@ -151,6 +151,7 @@
   </div><div class="post-content"><blockquote>
 <p>Golang 在编译时使用ldflags动态设置包中变量的值</p>
 </blockquote>
+<span id="more"></span>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-X importpath.name=value Set the value of the string variable in importpath named name to value. Note that before Go 1.5 this option took two separate arguments. Now it takes one argument split on the first = sign.</span><br></pre></td></tr></table></figure>
 <p>ldflags用于链接过程，详细见文章<a target="_blank" rel="noopener" href="https://tonybai.com/2017/06/27/an-intro-about-go-portability/">也谈Go的可移植性</a><br><a target="_blank" rel="noopener" href="http://blog.champbay.com/2019/11/25/%e9%9d%99%e6%80%81%e9%93%be%e6%8e%a5%e5%8a%a8%e6%80%81%e9%93%be%e6%8e%a5%e9%9d%99%e6%80%81%e5%ba%93%e5%85%b1%e4%ba%ab%e5%ba%93%e8%bf%99%e4%ba%9b%e6%a6%82%e5%bf%b5%e7%9a%84%e8%af%a6%e8%a7%a3/">静态链接,动态链接,静态库,共享库这些概念的详解</a></p>
 <h2 id="参数作用"><a href="#参数作用" class="headerlink" title="参数作用"></a>参数作用</h2><p><code>golang在编译、测试、安装时使用-ldflags -X动态设置包中变量的值 go install/build/test 时可以通过命令行参数设置package中的变量， 其格式为-X importpath.name=val, 其中importpath是变量所在包的的路径， name是包中定义的变量， val 是需要在编译时设置的变量的值(string)， name表示的变量只能是variable，不能是constant, 且不能通过函数调用的方式初始化， 其类型只能是string，不可是int, bool等. 如果val中存在空格,需要用引号括起来,如下date和go version输出结果有空格： go build -ldflags &quot;-X &#39;main.BUILD_TIME=`date`&#39; -X &#39;main.GO_VERSION=`go version`&#39;&quot;</code></p>
@@ -194,9 +195,9 @@ ok      gotest  0.009s
             <a href="/tags/Golang/">Golang</a>
             </div>
         
-        <nav class="post-nav"><a class="prev" href="/2023/10/26/%E6%91%84%E5%BD%B1/Fuji-Recipes/">
+        <nav class="post-nav"><a class="prev" href="/2021/08/17/%E6%8A%80%E6%9C%AF/Golang/Quic/">
         <i class="iconfont icon-left"></i>
-        <span class="prev-text nav-default">Kodachrome</span>
+        <span class="prev-text nav-default">Quic</span>
         <span class="prev-text nav-mobile">Prev</span>
       </a>
     <a class="next" href="/2021/06/12/%E6%8A%80%E6%9C%AF/Algorithm/LinkedList/">
