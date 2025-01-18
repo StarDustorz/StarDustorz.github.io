@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
-<meta name="description" content="Golang Test 工具指令"/><meta name="keywords" content="Golang, Draco's Blog" /><link rel="alternate" href="/default" title="Draco's Blog" ><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.19" />
+<meta name="description" content="[Go] Golang Test 工具指令"/><meta name="keywords" content="Golang, Draco's Blog" /><link rel="alternate" href="/default" title="Draco's Blog" ><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.19" />
 <link rel="canonical" href="http://example.com/2021/10/26/技术/Golang/工具/Golang Test 工具指令/"/>
 
 <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
@@ -55,7 +55,7 @@
     ]
 }
 </script><script async defer data-website-id="" src=""></script>
-    <title>Golang Test 工具指令 - Draco's Blog</title>
+    <title>[Go] Golang Test 工具指令 - Draco's Blog</title>
   <meta name="generator" content="Hexo 6.3.0"></head>
 
   <body><div id="mobile-navbar" class="mobile-navbar">
@@ -131,7 +131,7 @@
         <div class="content-wrapper">
           <div id="content" class="content"><article class="post">
     <header class="post-header"><h1 class="post-title emphasized-title">
-            Golang Test 工具指令
+            [Go] Golang Test 工具指令
         </h1>
       <div class="post-meta">
         <span class="post-time">
@@ -146,13 +146,13 @@
     <div class="post-toc" id="post-toc">
     <h2 class="post-toc-title">Contents</h2>
     <div class="post-toc-content">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%EF%BC%9A"><span class="toc-text">参考：</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="toc-text">1 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%8F%82%E8%80%83%EF%BC%9A"><span class="toc-text">2 参考：</span></a></li></ol>
     </div>
   </div><div class="post-content"><blockquote>
 <p>Golang Test 工具指令</p>
 </blockquote>
 <span id="more"></span>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Go test 测试工具包含示例函数测试 (ExampleXXX)、单元测试 (TestXXX)、基准测试 (BenchmarkXXX)。</p>
+<h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h2><p>Go test 测试工具包含示例函数测试 (ExampleXXX)、单元测试 (TestXXX)、基准测试 (BenchmarkXXX)。</p>
 <p>命令格式：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Go test [-c] [-i] [build flags] [packages] [flags for test binary]</span><br></pre></td></tr></table></figure><br>参数解释：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">-c : 编译 go test 成为可执行的二进制文件，但是不运行测试。</span><br><span class="line">-i : 安装测试包依赖的 package，但是不运行测试。</span><br><span class="line"></span><br><span class="line">build flags 是编译过程中常用参数，使用命令 `go help build` 查看帮助</span><br><span class="line"></span><br><span class="line">packages 是关于包管理参数，使用命令 `go help packages` 查看帮助</span><br><span class="line"></span><br><span class="line">flags for test binary 是 test 常用参数，使用命令 `go help testflag` 查看帮助, 部分参数如下：</span><br><span class="line">-test. V : 是否输出全部的单元测试用例（不管成功或者失败），默认没有加上，所以只输出失败的单元测试用例。</span><br><span class="line">-test. Run pattern: 指定正则来运行某个/某些测试用例</span><br><span class="line">-test. Bench patten: 只跑那些性能测试用例</span><br><span class="line">-test. Benchmem : 是否在性能测试的时候输出内存情况</span><br><span class="line">-test. Benchtime t : 性能测试运行的时间，默认是 1 s</span><br><span class="line">-test. Cpuprofile cpu. Out : 是否输出 cpu 性能分析文件，为空则不做 cpu 分析</span><br><span class="line">-test. Memprofile mem. Out : 是否输出内存性能分析文件</span><br><span class="line">-test. Blockprofile block. Out : 是否输出内部 goroutine 阻塞的性能分析文件</span><br><span class="line">-test. Memprofilerate n : 内存分析参数，内存分析的抽样率, 默认 512*1024, 可结合 GOGC=off 来关闭内存回收，对每个内存块的分配进行观察。</span><br><span class="line">-test. Blockprofilerate n: 阻塞事件的分析参数，指定抽样频率，控制 goroutine 阻塞时候打点的纳秒数。默认 1。</span><br><span class="line">-test. Parallel n : 性能测试的程序并行 cpu 数，默认等于 GOMAXPROCS。</span><br><span class="line">-test. Timeout t : 如果测试用例运行时间超过 t，则抛出 panic</span><br><span class="line">-test. Cpu 1,2,4 : 程序运行在哪些 CPU 上面</span><br><span class="line">-test. Short : 将那些运行时间较长的测试用例运行时间缩短</span><br><span class="line">-test. Outputdir : 输出目录</span><br><span class="line">-test. Coverprofile : 测试覆盖率参数，指定输出文件</span><br></pre></td></tr></table></figure>
 <p>测试函数示例：</p>
@@ -163,7 +163,7 @@
 <p>其他参数：-p -cpu=1,2,4 -args= -parallel -timeout -run -short</p>
 <p>执行基准测试:</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Go test -bench=.</span><br><span class="line">Go test -c</span><br><span class="line">./xxx. Test -test. Bench=.</span><br><span class="line">Go test -bench=. -benchtime <span class="number">0.1</span> s</span><br><span class="line">./xxx. Test -test. Bench=. -test. Benchtime=<span class="number">1</span> s</span><br><span class="line">Go test -bench=. -count=<span class="number">2</span></span><br><span class="line">./xxx. Test -test. Bench=. -test. Count=<span class="number">2</span></span><br><span class="line"># -benchmem : 打印用于基准测试的内存分配统计数据</span><br><span class="line">Go test -bench=. -benchmem</span><br><span class="line">./xxx. Test -test. Bench -test. Benchmem</span><br></pre></td></tr></table></figure>
-<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><ul>
+<h2 id="2-参考："><a href="#2-参考：" class="headerlink" title="2 参考："></a>2 参考：</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://deepzz.com/post/the-command-flag-of-go-test.html">Go 测试，go test 工具的具体指令 flag</a></li>
 <li><a target="_blank" rel="noopener" href="https://sanyuesha.com/2019/08/21/go-test/">Golang 测试</a></li>
 <li><a target="_blank" rel="noopener" href="https://studygolang.com/articles/2491">golang test测试使用</a></li>
