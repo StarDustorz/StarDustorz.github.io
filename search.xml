@@ -368,6 +368,8 @@
           
           <category> Golang </category>
           
+          <category> Basic </category>
+          
       </categories>
       
       
@@ -375,7 +377,7 @@
             
             <tag> Golang </tag>
             
-            <tag> GolangBasic </tag>
+            <tag> Golang-Basic </tag>
             
         </tags>
       
