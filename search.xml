@@ -226,7 +226,7 @@
     
     
     <entry>
-      <title>[Go] Http</title>
+      <title>[Go] 内存分配</title>
       <link href="/2023/10/26/%E6%8A%80%E6%9C%AF/Golang/2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/"/>
       <url>/2023/10/26/%E6%8A%80%E6%9C%AF/Golang/2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/</url>
       
@@ -239,7 +239,7 @@
           
           <category> Golang </category>
           
-          <category> Go 标准库 </category>
+          <category> 内存管理 </category>
           
       </categories>
       
@@ -248,7 +248,7 @@
             
             <tag> Golang </tag>
             
-            <tag> Go标准库 </tag>
+            <tag> Go内存管理 </tag>
             
         </tags>
       
@@ -257,7 +257,7 @@
     
     
     <entry>
-      <title>[Go] Http</title>
+      <title>[Go] 垃圾收集</title>
       <link href="/2023/10/26/%E6%8A%80%E6%9C%AF/Golang/2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86/"/>
       <url>/2023/10/26/%E6%8A%80%E6%9C%AF/Golang/2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86/</url>
       
@@ -270,7 +270,7 @@
           
           <category> Golang </category>
           
-          <category> Go 标准库 </category>
+          <category> 内存管理 </category>
           
       </categories>
       
@@ -279,7 +279,7 @@
             
             <tag> Golang </tag>
             
-            <tag> Go标准库 </tag>
+            <tag> Go内存管理 </tag>
             
         </tags>
       
@@ -288,7 +288,7 @@
     
     
     <entry>
-      <title>[Go] Http</title>
+      <title>[Go] 栈内存管理</title>
       <link href="/2023/10/26/%E6%8A%80%E6%9C%AF/Golang/2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E6%A0%88%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
       <url>/2023/10/26/%E6%8A%80%E6%9C%AF/Golang/2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E6%A0%88%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
       
@@ -301,7 +301,7 @@
           
           <category> Golang </category>
           
-          <category> Go 标准库 </category>
+          <category> 内存管理 </category>
           
       </categories>
       
@@ -310,7 +310,7 @@
             
             <tag> Golang </tag>
             
-            <tag> Go标准库 </tag>
+            <tag> Go内存管理 </tag>
             
         </tags>
       
@@ -474,7 +474,7 @@
     
     
     <entry>
-      <title>[Go] for 和 range</title>
+      <title>[Go] defer</title>
       <link href="/2023/10/26/%E6%8A%80%E6%9C%AF/Golang/3%20%E5%B8%B8%E7%94%A8%E5%85%B3%E9%94%AE%E5%AD%97/defer/"/>
       <url>/2023/10/26/%E6%8A%80%E6%9C%AF/Golang/3%20%E5%B8%B8%E7%94%A8%E5%85%B3%E9%94%AE%E5%AD%97/defer/</url>
       
@@ -505,7 +505,7 @@
     
     
     <entry>
-      <title>[Go] for 和 range</title>
+      <title>[Go] make 和 new</title>
       <link href="/2023/10/26/%E6%8A%80%E6%9C%AF/Golang/3%20%E5%B8%B8%E7%94%A8%E5%85%B3%E9%94%AE%E5%AD%97/make%20%E5%92%8C%20new/"/>
       <url>/2023/10/26/%E6%8A%80%E6%9C%AF/Golang/3%20%E5%B8%B8%E7%94%A8%E5%85%B3%E9%94%AE%E5%AD%97/make%20%E5%92%8C%20new/</url>
       
@@ -536,7 +536,7 @@
     
     
     <entry>
-      <title>[Go] for 和 range</title>
+      <title>[Go] panic 和 recover</title>
       <link href="/2023/10/26/%E6%8A%80%E6%9C%AF/Golang/3%20%E5%B8%B8%E7%94%A8%E5%85%B3%E9%94%AE%E5%AD%97/panic%20%E5%92%8C%20recover/"/>
       <url>/2023/10/26/%E6%8A%80%E6%9C%AF/Golang/3%20%E5%B8%B8%E7%94%A8%E5%85%B3%E9%94%AE%E5%AD%97/panic%20%E5%92%8C%20recover/</url>
       
@@ -598,7 +598,7 @@
     
     
     <entry>
-      <title>[Go] for 和 range</title>
+      <title>[Go] select</title>
       <link href="/2023/10/26/%E6%8A%80%E6%9C%AF/Golang/3%20%E5%B8%B8%E7%94%A8%E5%85%B3%E9%94%AE%E5%AD%97/select/"/>
       <url>/2023/10/26/%E6%8A%80%E6%9C%AF/Golang/3%20%E5%B8%B8%E7%94%A8%E5%85%B3%E9%94%AE%E5%AD%97/select/</url>
       
