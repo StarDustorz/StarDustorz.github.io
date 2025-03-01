@@ -153,9 +153,8 @@
 <p>主要介绍了 Go 语言(golang)中的 chan，并从分析其具体实现，包括创建 channel，发送数据，接收数据以及相关调度等。</p>
 </blockquote>
 <span id="more"></span>
-<blockquote>
-<p>以下分析基于 Go 1.17.5</p>
-<h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h2><p>A channel provides a mechanism for concurrently executing functions to communicate by sending and receiving values of a specified element type. The value of an uninitialized channel is nil.</p>
+<h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h2><blockquote>
+<p>A channel provides a mechanism for concurrently executing functions to communicate by sending and receiving values of a specified element type. The value of an uninitialized channel is nil.</p>
 </blockquote>
 <p>chan 提供了一种并发通信机制，用于生产和消费某一指定类型数据，未初始化的 chan 的值是nil。</p>
 <p> <strong>使用场景：</strong> 消息传递、消息过滤，信号广播，事件订阅与广播，请求、响应转发，任务分发，结果汇总，并发控制，限流，同步与异步</p>
