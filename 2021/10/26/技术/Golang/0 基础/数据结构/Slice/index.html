@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="[Go] Golang Slice"/><meta name="keywords" content="Golang, Golang-Basic, Draco's Blog" /><link rel="alternate" href="/default" title="Draco's Blog" ><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.19" />
+<link rel="canonical" href="http://example.com/2021/10/26/技术/Golang/0 基础/数据结构/Slice/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.19" />
+
+
+<link rel="stylesheet" type="text/css" href="/lib/fontawesome/css/all.min.css">
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "WebSite",
+            "@id": "http://example.com/#website",
+            "url": "http://example.com",
+            "name": "Draco's Blog",
+            "description": "",
+            "publisher": {
+                "@id": "http://example.com/#person"
+            }
+        },
+        {
+            "@type": "Person",
+            "@id": "http://example.com/#person",
+            "name": "",
+            "image": {
+                "@type": "ImageObject",
+                "@id": "http://example.com/#personImage",
+                "url": "",
+                "width": "",
+                "height": "",
+                "caption": ""
+            }}
+    ]
+}
+</script><script async defer data-website-id="" src=""></script>
+    <title>[Go] Golang Slice - Draco's Blog</title>
+  <meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/links/">
+        <li class="mobile-menu-item">Links
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Draco's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/links/">
+            Links
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+
+</header><main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header"><h1 class="post-title emphasized-title">
+            [Go] Golang Slice
+        </h1>
+      <div class="post-meta">
+        <span class="post-time">
+          2021-10-26
+        </span><span class="post-category">
+            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+            <a href="/categories/%E6%8A%80%E6%9C%AF/Golang/">Golang</a>
+            <a href="/categories/%E6%8A%80%E6%9C%AF/Golang/Basic/">Basic</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A6%82%E8%BF%B0"><span class="toc-text">1 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C"><span class="toc-text">2 相关操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-text">2.1 初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E8%AE%BF%E9%97%AE"><span class="toc-text">2.2 访问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A0"><span class="toc-text">2.3 添加元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E5%88%A0%E9%99%A4%E5%85%83%E7%B4%A0"><span class="toc-text">2.4 删除元素</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%BA%95%E5%B1%82%E6%95%B0%E7%BB%84"><span class="toc-text">3 底层数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%89%A9%E5%AE%B9"><span class="toc-text">4 扩容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E4%B8%8E-String-%E4%BA%92%E8%BD%AC"><span class="toc-text">5 与 String 互转</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%8F%82%E8%80%83"><span class="toc-text">6 .参考</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><blockquote>
+<p>temp</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h2><p>Go 语言中的 Slice 具体实现如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> SliceHeader <span class="keyword">struct</span> &#123;</span><br><span class="line">	Data <span class="type">uintptr</span></span><br><span class="line">	Len  <span class="type">int</span></span><br><span class="line">	Cap  <span class="type">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Data：真实数据的地址</li>
+<li>Len：元素个数</li>
+<li>Cap：容量</li>
+</ul>
+<p>Slice 的元素存在一段连续的内存中，实际上就是一个数组，Data 就是这个底层数组的起始地址。</p>
+<p>具体结构如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ss := <span class="built_in">new</span>([]<span class="type">string</span>)</span><br><span class="line">*ss = <span class="built_in">append</span>(*ss, <span class="string">&quot;指月&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>整个结构如下图：</p>
+<p><img src="file-20250119033510544.png" alt=""></p>
+<p><strong>ss 为一个指向 String Slice 的指针，Slice 的 Data 指向的是 String Array，String Array 每个元素都是一个 String，最后由 String 的 Data 指向最终的 字符串内容。</strong></p>
+<h2 id="2-相关操作"><a href="#2-相关操作" class="headerlink" title="2 相关操作"></a>2 相关操作</h2><h3 id="2-1-初始化"><a href="#2-1-初始化" class="headerlink" title="2.1 初始化"></a>2.1 初始化</h3><p><strong>var</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ints []<span class="type">int</span></span><br></pre></td></tr></table></figure>
+<p>这时只是定义了 Slice，初始化了 SliceHeader 这个结构，并没有分配内存开辟底层数组，所以 Data 字段为 nil，同样的 Len 和 Cap 则为0。</p>
+<p><strong>new 关键字</strong></p>
+<p>使用 new 关键字和之前直接定义是一样的，都不会初始化 Slice 的  3个字段，不过 new 关键字返回的是指针。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ints:=<span class="built_in">new</span>([]<span class="type">int</span>)</span><br></pre></td></tr></table></figure>
+<p><strong>make 关键字</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ints = <span class="built_in">make</span>([]<span class="type">int</span>, <span class="number">4</span>, <span class="number">8</span>)</span><br></pre></td></tr></table></figure>
+<p>想这样，通过 make 关键字初始话化 Slice 时，可以指定 Len 和 Cap ，同时也会开辟一个长度为 Cap 的底层数组，同时该数组元素初始化为指定类型的零值。</p>
+<blockquote>
+<p>这里就是 Len =4 Cap=8 Data 数组长度为8，元素皆为 Int 型的零值 0。</p>
+</blockquote>
+<h3 id="2-2-访问"><a href="#2-2-访问" class="headerlink" title="2.2 访问"></a>2.2 访问</h3><p>已经存储的元素可以安全访问，超过这个范围则为越界访问，会发生 panic。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ints = <span class="built_in">make</span>([]<span class="type">int</span>, <span class="number">4</span>, <span class="number">8</span>)</span><br><span class="line">fmt.Println(ints[<span class="number">4</span>]) <span class="comment">// panic: runtime error: index out of range [4] with length 4</span></span><br></pre></td></tr></table></figure>
+<p>初始化时 Len=4，通过 ints[4] 访问第 5 个元素则为越界访问。</p>
+<blockquote>
+<p>所以 Slice 访问边界实际由 Len 属性决定。</p>
+</blockquote>
+<h3 id="2-3-添加元素"><a href="#2-3-添加元素" class="headerlink" title="2.3 添加元素"></a>2.3 添加元素</h3><p>需要注意的是，由于指定了Len=4，所以后续添加元素则会从第5个位置开始,例子如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ints = <span class="built_in">make</span>([]<span class="type">int</span>, <span class="number">4</span>, <span class="number">8</span>)</span><br><span class="line">ints = <span class="built_in">append</span>(ints, <span class="number">1</span>)</span><br><span class="line">fmt.Println(ints) <span class="comment">//[0 0 0 0 1]</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-4-删除元素"><a href="#2-4-删除元素" class="headerlink" title="2.4 删除元素"></a>2.4 删除元素</h3><p>Slice 删除元素没有直接调用的方法，所以比较麻烦。</p>
+<p>具体逻辑为：将待删除元素之前的元素和之后的元素拼接形成一个新的 Slice，这样待删除元素就算是删掉了。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">s1 := []<span class="type">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;</span><br><span class="line">before := s1[:<span class="number">1</span>] <span class="comment">// 1</span></span><br><span class="line">after := s1[<span class="number">2</span>:] <span class="comment">// 3 4 5</span></span><br><span class="line">s2 := <span class="built_in">append</span>(before, after...)</span><br><span class="line">fmt.Println(<span class="string">&quot;s1:&quot;</span>, s1)</span><br><span class="line">fmt.Println(<span class="string">&quot;s2:&quot;</span>, s2) <span class="comment">// 1 3 4 5</span></span><br></pre></td></tr></table></figure>
+<h2 id="3-底层数组"><a href="#3-底层数组" class="headerlink" title="3 底层数组"></a>3 底层数组</h2><p>Slice 的 Data 字段指向的就是 Slice 的底层数组，但是没有限制只能从数组起始地址开始，可以从数组中任意元素开始。所以 Slice 的底层数组是可以共用的。例子如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">arr := [<span class="number">10</span>]<span class="type">int</span>&#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>&#125;</span><br><span class="line">s1 := arr[:<span class="number">3</span>]</span><br><span class="line">s2 := arr[<span class="number">6</span>:]</span><br></pre></td></tr></table></figure>
+<p>具体结构图如下：</p>
+<p><img src="file-20250119033532803.png" alt=""></p>
+<p>对 Slice 的更改实际都是在修改 底层数组。如果底层数组可以满足要求，则会修改底层数组，否则就会重新开辟一个底层数组。</p>
+<blockquote>
+<p>比如这里对 s2 进行 append 操作就会开辟新数组，因为这个数组已经满了。</p>
+</blockquote>
+<p>正是因为有开辟新数组的可能，所以每次 append 的结果都需要用一个变量来接收，因为可能 append 后返回的不在是以前那个 Slice 了。</p>
+<p>例子如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">SliceArray</span><span class="params">()</span></span> &#123;</span><br><span class="line">	arr := [<span class="number">10</span>]<span class="type">int</span>&#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>&#125;</span><br><span class="line">	s1 := arr[:<span class="number">3</span>] <span class="comment">// 索引范围[)左闭右开</span></span><br><span class="line">	s2 := arr[<span class="number">6</span>:]</span><br><span class="line">	fmt.Println(<span class="string">&quot;s1:&quot;</span>, s1)</span><br><span class="line">	fmt.Println(<span class="string">&quot;s2:&quot;</span>, s2)</span><br><span class="line">	s3 := <span class="built_in">append</span>(s2, <span class="number">10</span>)</span><br><span class="line">	fmt.Println(<span class="string">&quot;s2:&quot;</span>, s2) <span class="comment">// s2:[6 7 8 9] </span></span><br><span class="line">	fmt.Println(<span class="string">&quot;s3:&quot;</span>, s3) <span class="comment">// s3:[6 7 8 9 10] </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到对 s2 append 后返回的新切片 s3 ，底层开辟了新数组，所以已经和 s1、s2 没关系了、</p>
+<h2 id="4-扩容"><a href="#4-扩容" class="headerlink" title="4 扩容"></a>4 扩容</h2><p>Slice 扩容分为 4 个步骤，例子如下</p>
+<blockquote>
+<p>s1 cap 为 2，所以 append 时必定会触发扩容。</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">s1 := []<span class="type">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>&#125;</span><br><span class="line">s1 = <span class="built_in">append</span>(s1, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>)</span><br><span class="line">fmt.Println(<span class="built_in">cap</span>(s1)) <span class="comment">// 扩容后容量为 8</span></span><br></pre></td></tr></table></figure>
+<p><strong>STEP1：预估容量</strong></p>
+<ul>
+<li>1）<strong>如果</strong>：oldCap * 2 &lt; targetCap，newCap —&gt; targetCap，如果旧容量翻倍也不满足所需目标容量，则新容量就是目标所需容量。</li>
+<li>2）<strong>否则</strong>：<ul>
+<li>1）oldLen &lt; 1024 , newCap = oldCap * 2, 如果扩容前元素个数小于 1024，那么新容量直接翻倍。</li>
+<li>2）oldLen &gt; 1024 ,newCap = oldCap * 1.25, 如果扩容前元素个数大于 1024，那么新容量则翻 1.25 倍。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>所以 s1 预估容量为  7，走的是第一条逻辑。</p>
+</blockquote>
+<p><strong>STEP2：预估容量需要多大内存</strong></p>
+<p>预估容量确定的是元素个数，newCap 个元素需要占用多大内存呢？这就和元素类型挂钩了。</p>
+<p>所需内存 = 预估容量 * 元素类型大小</p>
+<blockquote>
+<p>s1 所需内容 = 7 * 8 = 56 字节</p>
+</blockquote>
+<p><strong>STEP3：匹配合适内存规则</strong></p>
+<p>step2 中确定了所需内存大小，但是 Go 语言的<code>内存分配模块</code>只提供<code>固定规格</code>的内存,比如 8 16 32 48 64 80 96 112 …这样的规格。对于所有内存申请都会分配一个满足要求且浪费最少的内存规则。</p>
+<blockquote>
+<p>所以 s1 扩容申请 56 字节会得到一个 64 字节的空间。</p>
+</blockquote>
+<p><strong>步骤四：确定最终容量</strong></p>
+<p>最终容量 = 分配内存 / 元素类型大小</p>
+<blockquote>
+<p>step3 中分配了一个 64 字节的内存，int64 每个元素占 8 字节，所以最终容量为 64 / 8 = 8。</p>
+</blockquote>
+<h2 id="5-与-String-互转"><a href="#5-与-String-互转" class="headerlink" title="5 与 String 互转"></a>5 与 String 互转</h2><p>Slice 由 Data、Len、Cap 构成，String 由 Data、Len 构成，二者只相差了一个 Cap 属性。</p>
+<p>通过 unsafe 包可以快速进行二者的转换。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">String2Bytes</span><span class="params">(str <span class="type">string</span>)</span></span> []<span class="type">byte</span> &#123;</span><br><span class="line">	sh := (*reflect.SliceHeader)(unsafe.Pointer(&amp;str))</span><br><span class="line">	<span class="comment">// slice 比 string 多一个 cap 属性 这里给 cap 单独赋值</span></span><br><span class="line">	sh.Cap = sh.Len</span><br><span class="line">	<span class="keyword">return</span> *(*[]<span class="type">byte</span>)(unsafe.Pointer(sh))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Bytes2String</span><span class="params">(buf []<span class="type">byte</span>)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> *(*<span class="type">string</span>)(unsafe.Pointer(&amp;buf))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Go 语言标准库中 strings.Builder 就使用到了 unsafe.Pointer 来提升效率。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// strings/builder.go 47 行</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Builder)</span></span> String() <span class="type">string</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> *(*<span class="type">string</span>)(unsafe.Pointer(&amp;b.buf))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="6-参考"><a href="#6-参考" class="headerlink" title="6 .参考"></a>6 .参考</h2><p><code>https://draveness.me/golang/docs/part2-foundation/ch03-datastructure/golang-array-and-slice/</code></p>
+<p><code>https://blog.golang.org/slices-intro</code></p>
+
+      
+        
+        
+        </div><footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/Golang/">Golang</a>
+            <a href="/tags/Golang-Basic/">Golang-Basic</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2021/10/26/%E6%8A%80%E6%9C%AF/Golang/0%20%E5%9F%BA%E7%A1%80/%E5%85%B3%E9%94%AE%E5%AD%97/Panic%20Recover/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">[Go] Golang Panic Recover</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2021/10/26/%E6%8A%80%E6%9C%AF/Golang/0%20%E5%9F%BA%E7%A1%80/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/Function/">
+        <span class="next-text nav-default">[Go] Golang Function</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:caotianlong@pku.org.cn" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont" title="rss"><i class="fas fa-rss"></i></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a> based <a class="theme-link" target="_blank" rel="noopener" href="https://easonyang.com/2021/08/01/enhanced-hexo-theme-even/">EasonEven</a>
+  </span><span class="copyright-year">
+    <a href="/log" target="_blank">&copy;2020 - 2025</a>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href="/about" target="_blank">draco</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.19"></script>
+</body>
+</html>
