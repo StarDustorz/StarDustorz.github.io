@@ -273,21 +273,23 @@
 <h2 id="3-Cloud-Native"><a href="#3-Cloud-Native" class="headerlink" title="3 Cloud Native"></a>3 Cloud Native</h2><h3 id="3-1-容器化（Containerization）"><a href="#3-1-容器化（Containerization）" class="headerlink" title="3.1 容器化（Containerization）"></a>3.1 容器化（Containerization）</h3><h4 id="3-1-1-Docker"><a href="#3-1-1-Docker" class="headerlink" title="3.1.1 Docker"></a>3.1.1 Docker</h4><ul>
 <li><strong>核心功能</strong>：应用打包、隔离与标准化运行时环境。</li>
 <li><a target="_blank" rel="noopener" href="https://vuepress.mirror.docker-practice.com/">Docker 从入门到实践</a></li>
-<li><a target="_blank" rel="noopener" href="https://docs.docker.com/">Docker 官方文档</a><h4 id="3-1-2-容器编排（Container-Orchestration）"><a href="#3-1-2-容器编排（Container-Orchestration）" class="headerlink" title="3.1.2 容器编排（Container Orchestration）"></a>3.1.2 容器编排（Container Orchestration）</h4></li>
+<li><a target="_blank" rel="noopener" href="https://docs.docker.com/">Docker 官方文档</a></li>
+</ul>
+<h4 id="3-1-2-容器编排（Container-Orchestration）"><a href="#3-1-2-容器编排（Container-Orchestration）" class="headerlink" title="3.1.2 容器编排（Container Orchestration）"></a>3.1.2 容器编排（Container Orchestration）</h4><ul>
 <li><strong>Kubernetes</strong>：<ul>
 <li>自动化部署、扩缩容、服务发现。</li>
 <li><a target="_blank" rel="noopener" href="https://kubernetes.feisky.xyz/">Kubernetes 指南</a></li>
 <li><a target="_blank" rel="noopener" href="https://kubernetes.io/docs/home/">Kubernetes 官方文档</a></li>
 </ul>
 </li>
-<li><p><strong>其他</strong>：</p>
-<ul>
+<li><strong>其他</strong>：<ul>
 <li><a target="_blank" rel="noopener" href="https://www.nomadproject.io/">Nomad</a>（轻量级编排工具）</li>
-<li><a target="_blank" rel="noopener" href="https://docs.docker.com/engine/swarm/">Docker Swarm</a>（Docker 原生编排）<h3 id="3-2-微服务架构（Microservices）"><a href="#3-2-微服务架构（Microservices）" class="headerlink" title="3.2 微服务架构（Microservices）"></a>3.2 微服务架构（Microservices）</h3></li>
+<li><a target="_blank" rel="noopener" href="https://docs.docker.com/engine/swarm/">Docker Swarm</a>（Docker 原生编排）</li>
 </ul>
 </li>
-<li><p>微服务最佳实践：<a target="_blank" rel="noopener" href="https://www.mulesoft.com/ty/wp/microservices-best-practices">https://www.mulesoft.com/ty/wp/microservices-best-practices</a></p>
-</li>
+</ul>
+<h3 id="3-2-微服务架构（Microservices）"><a href="#3-2-微服务架构（Microservices）" class="headerlink" title="3.2 微服务架构（Microservices）"></a>3.2 微服务架构（Microservices）</h3><ul>
+<li>微服务最佳实践：<a target="_blank" rel="noopener" href="https://www.mulesoft.com/ty/wp/microservices-best-practices">https://www.mulesoft.com/ty/wp/microservices-best-practices</a></li>
 <li>微服务：<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Microservices#Technologies">https://en.wikipedia.org/wiki/Microservices#Technologies</a></li>
 <li><a target="_blank" rel="noopener" href="https://callistaenterprise.se/blogg/teknik/2017/02/17/go-blog-series-part1/">Go Microservices blog</a></li>
 <li><a target="_blank" rel="noopener" href="https://github.com/micro">go-micro</a></li>
@@ -304,14 +306,14 @@
 <li><a target="_blank" rel="noopener" href="https://grpc.io/docs/">gRPC 官方文档</a></li>
 </ul>
 </li>
-<li><p><strong>事件驱动</strong>：</p>
-<ul>
+<li><strong>事件驱动</strong>：<ul>
 <li>使用消息队列（如 Kafka、RabbitMQ）实现异步通信。</li>
-<li>资源链接：<a target="_blank" rel="noopener" href="https://kafka.apache.org/documentation/">Apache Kafka 指南</a><h4 id="3-2-2-微服务治理"><a href="#3-2-2-微服务治理" class="headerlink" title="3.2.2 微服务治理"></a>3.2.2 微服务治理</h4></li>
+<li>资源链接：<a target="_blank" rel="noopener" href="https://kafka.apache.org/documentation/">Apache Kafka 指南</a></li>
 </ul>
 </li>
-<li><p><strong>服务发现</strong></p>
-<ul>
+</ul>
+<h4 id="3-2-2-微服务治理"><a href="#3-2-2-微服务治理" class="headerlink" title="3.2.2 微服务治理"></a>3.2.2 微服务治理</h4><ul>
+<li><strong>服务发现</strong><ul>
 <li>Consul</li>
 <li>Etcd</li>
 </ul>
@@ -320,20 +322,20 @@
 <li><strong>限流与熔断</strong><ul>
 <li>gobreaker</li>
 <li>Sentinel-Golang</li>
-<li>Service Mesh<h3 id="3-3-服务网格（Service-Mesh）"><a href="#3-3-服务网格（Service-Mesh）" class="headerlink" title="3.3 服务网格（Service Mesh）"></a>3.3 服务网格（Service Mesh）</h3></li>
+<li>Service Mesh</li>
 </ul>
 </li>
 </ul>
-<h4 id="3-3-1-Istio"><a href="#3-3-1-Istio" class="headerlink" title="3.3.1 Istio"></a>3.3.1 Istio</h4><ul>
+<h3 id="3-3-服务网格（Service-Mesh）"><a href="#3-3-服务网格（Service-Mesh）" class="headerlink" title="3.3 服务网格（Service Mesh）"></a>3.3 服务网格（Service Mesh）</h3><h4 id="3-3-1-Istio"><a href="#3-3-1-Istio" class="headerlink" title="3.3.1 Istio"></a>3.3.1 Istio</h4><ul>
 <li><strong>核心功能</strong>：流量管理、安全、可观测性。</li>
-<li><p>资源链接：</p>
-<ul>
+<li>资源链接：<ul>
 <li><a target="_blank" rel="noopener" href="https://istio.io/latest/docs/">Istio 官方文档</a></li>
-<li><a target="_blank" rel="noopener" href="https://istio-handbook.com/">Istio 实战指南</a><h4 id="3-3-2-Linkerd"><a href="#3-3-2-Linkerd" class="headerlink" title="3.3.2 Linkerd"></a>3.3.2 Linkerd</h4></li>
+<li><a target="_blank" rel="noopener" href="https://istio-handbook.com/">Istio 实战指南</a></li>
 </ul>
 </li>
-<li><p>轻量级服务网格，专注于性能。</p>
-</li>
+</ul>
+<h4 id="3-3-2-Linkerd"><a href="#3-3-2-Linkerd" class="headerlink" title="3.3.2 Linkerd"></a>3.3.2 Linkerd</h4><ul>
+<li>轻量级服务网格，专注于性能。</li>
 <li>资源链接：<a target="_blank" rel="noopener" href="https://linkerd.io/docs/">Linkerd 官方文档</a></li>
 </ul>
 <h4 id="3-3-3-其他工具"><a href="#3-3-3-其他工具" class="headerlink" title="3.3.3 其他工具"></a>3.3.3 其他工具</h4><ul>
@@ -346,10 +348,10 @@
 <h4 id="3-4-2-指标监控"><a href="#3-4-2-指标监控" class="headerlink" title="3.4.2 指标监控"></a>3.4.2 指标监控</h4><ul>
 <li><strong>Prometheus</strong>：<a target="_blank" rel="noopener" href="https://prometheus.io/docs/introduction/overview/">Prometheus 指南</a></li>
 <li><strong>Grafana</strong>：<a target="_blank" rel="noopener" href="https://grafana.com/docs/">Grafana 官方文档</a></li>
-<li><p><strong>OpenTelemetry</strong></p>
-<h4 id="3-4-3-链路追踪"><a href="#3-4-3-链路追踪" class="headerlink" title="3.4.3 链路追踪"></a>3.4.3 链路追踪</h4></li>
-<li><p><strong>Jaeger</strong>：<a target="_blank" rel="noopener" href="https://www.jaegertracing.io/docs/">Jaeger 官方文档</a></p>
-</li>
+<li><strong>OpenTelemetry</strong></li>
+</ul>
+<h4 id="3-4-3-链路追踪"><a href="#3-4-3-链路追踪" class="headerlink" title="3.4.3 链路追踪"></a>3.4.3 链路追踪</h4><ul>
+<li><strong>Jaeger</strong>：<a target="_blank" rel="noopener" href="https://www.jaegertracing.io/docs/">Jaeger 官方文档</a></li>
 <li><strong>Zipkin</strong>：轻量级追踪系统。</li>
 </ul>
 <h3 id="3-5-无服务器架构（Serverless）"><a href="#3-5-无服务器架构（Serverless）" class="headerlink" title="3.5 无服务器架构（Serverless）"></a>3.5 无服务器架构（Serverless）</h3><h4 id="3-5-1-公有云服务"><a href="#3-5-1-公有云服务" class="headerlink" title="3.5.1 公有云服务"></a>3.5.1 公有云服务</h4><ul>
@@ -362,10 +364,10 @@
 </ul>
 <h3 id="3-6-云原生安全（Security）"><a href="#3-6-云原生安全（Security）" class="headerlink" title="3.6 云原生安全（Security）"></a>3.6 云原生安全（Security）</h3><h4 id="3-6-1-容器安全"><a href="#3-6-1-容器安全" class="headerlink" title="3.6.1 容器安全"></a>3.6.1 容器安全</h4><ul>
 <li><strong>镜像扫描</strong>：Clair、Trivy</li>
-<li><p><strong>运行时防护</strong>：Falco</p>
-<h4 id="3-6-2-零信任网络"><a href="#3-6-2-零信任网络" class="headerlink" title="3.6.2 零信任网络"></a>3.6.2 零信任网络</h4></li>
-<li><p><strong>SPIFFE/SPIRE</strong>：服务身份认证框架。</p>
-</li>
+<li><strong>运行时防护</strong>：Falco</li>
+</ul>
+<h4 id="3-6-2-零信任网络"><a href="#3-6-2-零信任网络" class="headerlink" title="3.6.2 零信任网络"></a>3.6.2 零信任网络</h4><ul>
+<li><strong>SPIFFE/SPIRE</strong>：服务身份认证框架。</li>
 <li><strong>API 网关</strong>：Kong、OAuth2 Proxy</li>
 </ul>
 <h3 id="3-7-DevOps-与-CI-CD"><a href="#3-7-DevOps-与-CI-CD" class="headerlink" title="3.7 DevOps 与 CI/CD"></a>3.7 DevOps 与 CI/CD</h3><h4 id="3-7-1-持续集成"><a href="#3-7-1-持续集成" class="headerlink" title="3.7.1 持续集成"></a>3.7.1 持续集成</h4><ul>
