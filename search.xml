@@ -1379,7 +1379,7 @@
       <link href="/about/index.html"/>
       <url>/about/index.html</url>
       
-        <content type="html"><![CDATA[<blockquote><p>The world is not my oyster</p></blockquote>]]></content>
+        <content type="html"><![CDATA[<blockquote><p>The world is not my oyster</p></blockquote><h2 id="test"><a href="#test" class="headerlink" title="test"></a>test</h2><h3 id="test-1"><a href="#test-1" class="headerlink" title="test"></a>test</h3>]]></content>
       
     </entry>
     
