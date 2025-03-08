@@ -211,24 +211,33 @@
 <h2 id="2-GMP-模型"><a href="#2-GMP-模型" class="headerlink" title="2 GMP 模型"></a>2 GMP 模型</h2><h3 id="2-1-g"><a href="#2-1-g" class="headerlink" title="2.1 g"></a>2.1 g</h3><ul>
 <li>g 即goroutine，是 golang 中对协程的抽象</li>
 <li>g 有自己的运行栈、状态、以及执行的任务函数（用户通过 go func 指定）</li>
-<li>g 需要绑定到 p 才能执行，在 g 的视角中，p 就是它的 cpu<h3 id="2-2-m"><a href="#2-2-m" class="headerlink" title="2.2 m"></a>2.2 m</h3></li>
+<li>g 需要绑定到 p 才能执行，在 g 的视角中，p 就是它的 cpu</li>
+</ul>
+<h3 id="2-2-m"><a href="#2-2-m" class="headerlink" title="2.2 m"></a>2.2 m</h3><ul>
 <li>m 即 machine，是 golang 中对线程的抽象</li>
 <li>m 不直接执行 g，而是先和 p 绑定，由其实现代理</li>
-<li>借由 p 的存在，m 无需和 g 绑死，也无需记录 g 的状态信息，因此 g 在全生命周期中可以实现跨 m 执行.<h3 id="2-3-p"><a href="#2-3-p" class="headerlink" title="2.3 p"></a>2.3 p</h3></li>
+<li>借由 p 的存在，m 无需和 g 绑死，也无需记录 g 的状态信息，因此 g 在全生命周期中可以实现跨 m 执行.</li>
+</ul>
+<h3 id="2-3-p"><a href="#2-3-p" class="headerlink" title="2.3 p"></a>2.3 p</h3><ul>
 <li>p 即 processor，是 golang 中的调度器</li>
 <li>p 是 gmp 的中枢，借由 p 承上启下，实现 g 和 m 之间的动态有机结合</li>
 <li>对 g 而言，p 是其 cpu，g 只有被 p 调度，才得以执行</li>
 <li>对 m 而言，p 是其执行代理，为其提供必要信息的同时（可执行的 g、内存分配情况等），并隐藏了繁杂的调度细节</li>
-<li>p 的数量决定了 g 最大并行数量，可由用户通过 GOMAXPROCS 进行设定（超过 CPU 核数时无意义）<h3 id="2-4-GMP"><a href="#2-4-GMP" class="headerlink" title="2.4 GMP"></a>2.4 GMP</h3></li>
+<li>p 的数量决定了 g 最大并行数量，可由用户通过 GOMAXPROCS 进行设定（超过 CPU 核数时无意义）</li>
+</ul>
+<h3 id="2-4-GMP"><a href="#2-4-GMP" class="headerlink" title="2.4 GMP"></a>2.4 GMP</h3><ul>
 <li>M 是线程的抽象；G 是 goroutine；P 是承上启下的调度器；</li>
 <li>M调度G前，需要和P绑定；</li>
 <li>全局有多个M和多个P，但同时并行的G的最大数量等于P的数量；</li>
 <li>G的存放队列有三类：P的本地队列；全局队列；和wait队列（图中未展示，为io阻塞就绪态goroutine队列）；</li>
 <li>M调度G时，优先取P本地队列，其次取全局队列，最后取wait队列；这样的好处是，取本地队列时，可以接近于无锁化，减少全局锁竞争；</li>
-<li>为防止不同P的闲忙差异过大，设立work-stealing机制，本地队列为空的P可以尝试从其他P本地队列偷取一半的G补充到自身队列.<h2 id="3-核心数据结构"><a href="#3-核心数据结构" class="headerlink" title="3 核心数据结构"></a>3 核心数据结构</h2><blockquote>
+<li>为防止不同P的闲忙差异过大，设立work-stealing机制，本地队列为空的P可以尝试从其他P本地队列偷取一半的G补充到自身队列.</li>
+</ul>
+<h2 id="3-核心数据结构"><a href="#3-核心数据结构" class="headerlink" title="3 核心数据结构"></a>3 核心数据结构</h2><blockquote>
 <p>gmp 数据结构定义在 runtime/runtime2.go 文件中</p>
-<h3 id="3-1-g"><a href="#3-1-g" class="headerlink" title="3.1 g"></a>3.1 g</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> g <span class="keyword">struct</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    m         *m      </span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    sched     gobuf</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> gobuf <span class="keyword">struct</span> &#123;</span><br><span class="line">    sp   <span class="type">uintptr</span></span><br><span class="line">    pc   <span class="type">uintptr</span></span><br><span class="line">    ret  <span class="type">uintptr</span></span><br><span class="line">    bp   <span class="type">uintptr</span> <span class="comment">// for framepointer-enabled architectures</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></blockquote>
-</li>
+</blockquote>
+<h3 id="3-1-g"><a href="#3-1-g" class="headerlink" title="3.1 g"></a>3.1 g</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> g <span class="keyword">struct</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    m         *m      </span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    sched     gobuf</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> gobuf <span class="keyword">struct</span> &#123;</span><br><span class="line">    sp   <span class="type">uintptr</span></span><br><span class="line">    pc   <span class="type">uintptr</span></span><br><span class="line">    ret  <span class="type">uintptr</span></span><br><span class="line">    bp   <span class="type">uintptr</span> <span class="comment">// for framepointer-enabled architectures</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
 <li>m：在 p 的代理，负责执行当前 g 的 m；</li>
 <li>sched.sp：保存 CPU 的 rsp 寄存器的值，指向函数调用栈栈顶；</li>
 <li>sched.pc：保存 CPU 的 rip 寄存器的值，指向程序下一条执行指令的地址；</li>
@@ -239,11 +248,11 @@
 <h3 id="3-2-m"><a href="#3-2-m" class="headerlink" title="3.2 m"></a>3.2 m</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> m <span class="keyword">struct</span> &#123;</span><br><span class="line">    g0      *g     <span class="comment">// goroutine with scheduling stack</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    tls           [tlsSlots]<span class="type">uintptr</span> <span class="comment">// thread-local storage (for x86 extern register)</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>g0：一类特殊的调度协程，不用于执行用户函数，负责执行 g 之间的切换调度. 与 m 的关系为 1:1；</li>
-<li><p>tls：thread-local storage，线程本地存储，存储内容只对当前线程可见. 线程本地存储的是 m.tls 的地址，m.tls[0] 存储的是当前运行的 g，因此线程可以通过 g 找到当前的 m、p、g0 等信息.</p>
-<h3 id="3-3-p"><a href="#3-3-p" class="headerlink" title="3.3 p"></a>3.3 p</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> p <span class="keyword">struct</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    runqhead <span class="type">uint32</span></span><br><span class="line">    runqtail <span class="type">uint32</span></span><br><span class="line">    runq     [<span class="number">256</span>]guintptr</span><br><span class="line">    </span><br><span class="line">    runnext guintptr</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>runq：本地 goroutine 队列，最大长度为 256.</p>
-</li>
+<li>tls：thread-local storage，线程本地存储，存储内容只对当前线程可见. 线程本地存储的是 m.tls 的地址，m.tls[0] 存储的是当前运行的 g，因此线程可以通过 g 找到当前的 m、p、g0 等信息.<h3 id="3-3-p"><a href="#3-3-p" class="headerlink" title="3.3 p"></a>3.3 p</h3></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> p <span class="keyword">struct</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    runqhead <span class="type">uint32</span></span><br><span class="line">    runqtail <span class="type">uint32</span></span><br><span class="line">    runq     [<span class="number">256</span>]guintptr</span><br><span class="line">    </span><br><span class="line">    runnext guintptr</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>runq：本地 goroutine 队列，最大长度为 256.</li>
 <li>runqhead：队列头部；</li>
 <li>runqtail：队列尾部；</li>
 <li>runnext：下一个可执行的 goroutine.</li>
@@ -268,9 +277,12 @@
 </ul>
 <h4 id="4-2-2-被动调度"><a href="#4-2-2-被动调度" class="headerlink" title="4.2.2 被动调度"></a>4.2.2 被动调度</h4><ul>
 <li>因当前不满足某种执行条件，g 可能会陷入阻塞态无法被调度，直到关注的条件达成后，g才从阻塞中被唤醒，重新进入可执行队列等待被调度.</li>
-<li>常见的被动调度触发方式为因 channel 操作或互斥锁操作陷入阻塞等操作，底层会走进 gopark 方法.<h4 id="4-2-3-正常调度"><a href="#4-2-3-正常调度" class="headerlink" title="4.2.3 正常调度"></a>4.2.3 正常调度</h4></li>
-<li>g 中的执行任务已完成，g0 会将当前 g 置为死亡状态，发起新一轮调度.<h4 id="4-2-4-抢占调度"><a href="#4-2-4-抢占调度" class="headerlink" title="4.2.4 抢占调度"></a>4.2.4 抢占调度</h4></li>
-<li>如果 g 执行系统调用超过指定的时长，且全局的 p 资源比较紧缺，此时将 p 和 g 解绑，抢占出来用于其他 g 的调度. 等 g 完成系统调用后，会重新进入可执行队列中等待被调度.</li>
+<li><p>常见的被动调度触发方式为因 channel 操作或互斥锁操作陷入阻塞等操作，底层会走进 gopark 方法.</p>
+<h4 id="4-2-3-正常调度"><a href="#4-2-3-正常调度" class="headerlink" title="4.2.3 正常调度"></a>4.2.3 正常调度</h4></li>
+<li><p>g 中的执行任务已完成，g0 会将当前 g 置为死亡状态，发起新一轮调度.</p>
+<h4 id="4-2-4-抢占调度"><a href="#4-2-4-抢占调度" class="headerlink" title="4.2.4 抢占调度"></a>4.2.4 抢占调度</h4></li>
+<li><p>如果 g 执行系统调用超过指定的时长，且全局的 p 资源比较紧缺，此时将 p 和 g 解绑，抢占出来用于其他 g 的调度. 等 g 完成系统调用后，会重新进入可执行队列中等待被调度.</p>
+</li>
 <li>前 3 种调度方式都由 m 下的 g0 完成，唯独抢占调度不同.</li>
 <li>因为发起系统调用时需要打破用户态的边界进入内核态，此时 m 也会因系统调用而陷入僵直，无法主动完成抢占调度的行为.</li>
 <li>因此，在 Golang 进程会有一个全局监控协程 monitor g 的存在，这个 g 会越过 p 直接与一个 m 进行绑定，不断轮询对所有 p 的执行状况进行监控. 倘若发现满足抢占调度的条件，则会从第三方的角度出手干预，主动发起该动作.</li>
@@ -281,7 +293,7 @@
 <li>g 因主动让渡( gosche_m() )、被动调度( park_m() )、正常结束( goexit0() )等原因，调用 m_call 函数，执行权重新回到 g0 手中</li>
 <li>g0 执行 schedule() 函数，开启新一轮循环</li>
 </ul>
-<h3 id="4-4-schedule"><a href="#4-4-schedule" class="headerlink" title="4.4 schedule"></a>4.4 schedule</h3><p>调度流程的主干方法是位于 runtime/proc.go 中的 schedule 函数，此时的执行权位于 g0 手中：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">schedule</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    gp, inheritTime, tryWakeP := findRunnable() <span class="comment">// blocks until work is available</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    execute(gp, inheritTime)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-4-schedule"><a href="#4-4-schedule" class="headerlink" title="4.4 schedule"></a>4.4 schedule</h3><p>调度流程的主干方法是位于 runtime/proc.go 中的 schedule 函数，此时的执行权位于 g0 手中：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">schedule</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    gp, inheritTime, tryWakeP := findRunnable() <span class="comment">// blocks until work is available</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    execute(gp, inheritTime)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <ul>
 <li>寻找到下一个执行的 goroutine</li>
 <li>执行该 goroutine</li>

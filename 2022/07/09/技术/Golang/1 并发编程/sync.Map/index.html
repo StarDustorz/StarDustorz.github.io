@@ -146,14 +146,32 @@
     <div class="post-toc" id="post-toc">
     <h2 class="post-toc-title">Contents</h2>
     <div class="post-toc-content">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-text">1 数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-sync-Map"><span class="toc-text">1.1 sync.Map</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-text">1 数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-sync-Map"><span class="toc-text">1.1 sync.Map</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-entry-%E5%8F%8A%E5%AF%B9%E5%BA%94%E7%9A%84%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81"><span class="toc-text">1.2 entry 及对应的几种状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-readOnly"><span class="toc-text">1.3 readOnly</span></a></li></ol></li></ol>
     </div>
   </div><div class="post-content"><blockquote>
 <p>在 golang 中, map 并不保证并发安全的安全性, 对 map 进行并发读写会导致严重的错误, sync 标准包下的 sync.Map 解决了这一问题.</p>
 </blockquote>
 <span id="more"></span>
 <h2 id="1-数据结构"><a href="#1-数据结构" class="headerlink" title="1 数据结构"></a>1 数据结构</h2><h3 id="1-1-sync-Map"><a href="#1-1-sync-Map" class="headerlink" title="1.1 sync.Map"></a>1.1 sync.Map</h3><p><img src="file-20250307231828243.png" alt=""></p>
-
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Map <span class="keyword">struct</span> &#123;</span><br><span class="line">    mu Mutex</span><br><span class="line">    read atomic.Value </span><br><span class="line">    dirty <span class="keyword">map</span>[any]*entry</span><br><span class="line">    misses <span class="type">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>read：无锁化的只读 map，实际类型为 readOnly</li>
+<li>dirty：加锁处理的读写 map</li>
+<li>misses：记录访问 read 的失效次数，累计达到阈值时，会进行 read map/dirty map 的更新轮换</li>
+<li>mu：一把互斥锁，实现 dirty 和 misses 的并发管理</li>
+<li>sync.Map 的特点是冗余了两份 map：read map 和 dirty map</li>
+</ul>
+<h3 id="1-2-entry-及对应的几种状态"><a href="#1-2-entry-及对应的几种状态" class="headerlink" title="1.2 entry 及对应的几种状态"></a>1.2 entry 及对应的几种状态</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">type entry struct &#123;</span><br><span class="line">	p unsafe.Pointer </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>kv 对中的 value，统一采用 unsafe.Pointer 的形式进行存储，通过 entry.p 的指针进行链接</li>
+<li>entry.p 的指向分为三种情况：<ul>
+<li>存活态：正常指向元素</li>
+<li>软删除态：指向 nil, nil 态表示软删除，read map 和 dirty map 底层的 map 结构仍存在 key-entry 对，但在逻辑上该 key-entry 对已经被删除，因此无法被用户查询到</li>
+<li>硬删除态：指向固定的全局变量 expunged, expunged 态表示硬删除，dirty map 中已不存在该 key-entry 对</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-3-readOnly"><a href="#1-3-readOnly" class="headerlink" title="1.3 readOnly"></a>1.3 readOnly</h3>
       
         
         
