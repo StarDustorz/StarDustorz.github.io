@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="单例模式"/><meta name="keywords" content="设计模式, Draco's Blog" /><link rel="alternate" href="/default" title="Draco's Blog" ><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.19" />
+<link rel="canonical" href="http://example.com/2022/02/26/技术/基础知识/设计模式/单例模式/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.19" />
+
+
+<link rel="stylesheet" type="text/css" href="/lib/fontawesome/css/all.min.css">
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "WebSite",
+            "@id": "http://example.com/#website",
+            "url": "http://example.com",
+            "name": "Draco's Blog",
+            "description": "",
+            "publisher": {
+                "@id": "http://example.com/#person"
+            }
+        },
+        {
+            "@type": "Person",
+            "@id": "http://example.com/#person",
+            "name": "",
+            "image": {
+                "@type": "ImageObject",
+                "@id": "http://example.com/#personImage",
+                "url": "",
+                "width": "",
+                "height": "",
+                "caption": ""
+            }}
+    ]
+}
+</script><script async defer data-website-id="" src=""></script>
+    <title>单例模式 - Draco's Blog</title>
+  <meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/links/">
+        <li class="mobile-menu-item">Links
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Draco's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/links/">
+            Links
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+
+</header><main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header"><h1 class="post-title emphasized-title">
+            单例模式
+        </h1>
+      <div class="post-meta">
+        <span class="post-time">
+          2022-02-26
+        </span><span class="post-category">
+            <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+            <a href="/categories/%E6%8A%80%E6%9C%AF/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F"><span class="toc-text">1 单例模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E9%80%82%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">1.1 适用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E5%AE%9E%E7%8E%B0%E6%A8%A1%E5%BC%8F"><span class="toc-text">1.2 实现模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%A5%BF%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F"><span class="toc-text">2 饿汉式单例模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%AE%9E%E7%8E%B0%E6%B5%81%E7%A8%8B"><span class="toc-text">2.1 实现流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-text">2.2 具体实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="toc-text">2.3 一些问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%87%92%E6%B1%89%E5%BC%8F%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F"><span class="toc-text">3 懒汉式单例模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%AE%9E%E7%8E%B0%E6%B5%81%E7%A8%8B"><span class="toc-text">3.1 实现流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-text">3.2 具体实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-1-%E6%87%92%E6%B1%89%E6%A8%A1%E5%BC%8F-1-0"><span class="toc-text">3.2.1 懒汉模式 1.0</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-2-%E6%87%92%E6%B1%89%E6%A8%A1%E5%BC%8F-2-0"><span class="toc-text">3.2.2 懒汉模式 2.0</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-3-%E6%87%92%E6%B1%89%E6%A8%A1%E5%BC%8F-3-0"><span class="toc-text">3.2.3 懒汉模式 3.0</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-4-%E6%87%92%E6%B1%89%E6%A8%A1%E5%BC%8F-4-0"><span class="toc-text">3.2.4 懒汉模式 4.0</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-5-%E6%87%92%E6%B1%89%E6%A8%A1%E5%BC%8F-5-0"><span class="toc-text">3.2.5 懒汉模式 5.0</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%AF%B9%E6%AF%94"><span class="toc-text">3.3 对比</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-sync-Once-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-text">4 sync.Once 实现原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-text">4.1 数据结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-Once-Do"><span class="toc-text">4.2 Once.Do</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><blockquote>
+<p> 单例模式是最经典的设计模式, 声明一个类并保证这个类只存在全局唯一的实例供外部使用</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="1-单例模式"><a href="#1-单例模式" class="headerlink" title="1 单例模式"></a>1 单例模式</h2><h3 id="1-1-适用场景"><a href="#1-1-适用场景" class="headerlink" title="1.1 适用场景"></a>1.1 适用场景</h3><ul>
+<li>只允许存在一个实例的类，比如全局统一的监控统计模块</li>
+<li>耗费资源的类，比如协程池、连接池、和第三方交互的客户端等</li>
+<li>入参繁杂的系统模块组件，比如 controller、service、dao 等</li>
+</ul>
+<h3 id="1-2-实现模式"><a href="#1-2-实现模式" class="headerlink" title="1.2 实现模式"></a>1.2 实现模式</h3><p>主要有懒汉式和饿汉式:</p>
+<ul>
+<li>饿汉式：从一开始就完成单例的初始化工作</li>
+<li>懒汉式：需要使用时再进行初始化</li>
+</ul>
+<h2 id="2-饿汉式单例模式"><a href="#2-饿汉式单例模式" class="headerlink" title="2 饿汉式单例模式"></a>2 饿汉式单例模式</h2><h3 id="2-1-实现流程"><a href="#2-1-实现流程" class="headerlink" title="2.1 实现流程"></a>2.1 实现流程</h3><ul>
+<li>单例类和构造方法声明为不可导出类型，避免让外界拥有直接初始化的能力，导致单例模式被破坏</li>
+<li>在代码启动之初，就初始化好一个全局单一的实例，作为后续所谓的“单例”</li>
+<li>暴露一个可导出的单例获取方法 GetXXX()，用于返回这个单例对象</li>
+</ul>
+<h3 id="2-2-具体实现"><a href="#2-2-具体实现" class="headerlink" title="2.2 具体实现"></a>2.2 具体实现</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> singleton</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> s *singleton</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</span><br><span class="line">    s = newSingleton()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> singleton <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">newSingleton</span><span class="params">()</span></span> *singleton &#123;</span><br><span class="line">    <span class="keyword">return</span> &amp;singleton&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *singleton)</span></span> Work() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetInstance</span><span class="params">()</span></span> *singleton &#123;</span><br><span class="line">    <span class="keyword">return</span> s</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>singleton 是需要被单例模式保护的类型</li>
+<li>singleton 首字母小写，是不可导出的类型，避免被外界直接获取</li>
+<li>在包初始化函数 init 中完成了 singleton 单例的初始化工作</li>
+<li>对外暴露可导出方法 GetInstance，返回提前初始化好的全局单例对象 s</li>
+</ul>
+<h3 id="2-3-一些问题"><a href="#2-3-一些问题" class="headerlink" title="2.3 一些问题"></a>2.3 一些问题</h3><ul>
+<li>在对外可导出的 GetInstance 方法中，返回了不可导出的类型 singleton</li>
+<li>singleton 是包内的不可导出类型，在包外即便获取到了，也无法直接作为方法的入参或者出参进行传递</li>
+<li>singleton 的对外暴露，使得 singleton 所在 package 的代码设计看起来是自相矛盾的，混淆了 singleton 这个不可导出类型的边界和定位</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Instance <span class="keyword">interface</span> &#123;</span><br><span class="line">    Work()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetInstance</span><span class="params">()</span></span> Instance &#123;</span><br><span class="line">    <span class="keyword">return</span> s</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在不可导出单例类 singleton 的基础上包括一层接口 interface，将其作为对对导出方法 GetInstance 的返回参数类型</p>
+<h2 id="3-懒汉式单例模式"><a href="#3-懒汉式单例模式" class="headerlink" title="3 懒汉式单例模式"></a>3 懒汉式单例模式</h2><h3 id="3-1-实现流程"><a href="#3-1-实现流程" class="headerlink" title="3.1 实现流程"></a>3.1 实现流程</h3><ul>
+<li>单例类声明为不可导出类型，避免被外界直接获取到</li>
+<li>声明一个全局单例变量, 但不进行初始化（注意只声明，不初始化）</li>
+<li>暴露一个对外公开的方法,用于获取这个单例</li>
+<li>在这个获取方法被调用时，会判断单例是否初始化过，倘若没有，则在此时才完成初始化工作</li>
+</ul>
+<h3 id="3-2-具体实现"><a href="#3-2-具体实现" class="headerlink" title="3.2 具体实现"></a>3.2 具体实现</h3><p>懒汉相较于恶汉,会出现一些问题</p>
+<h4 id="3-2-1-懒汉模式-1-0"><a href="#3-2-1-懒汉模式-1-0" class="headerlink" title="3.2.1 懒汉模式 1.0"></a>3.2.1 懒汉模式 1.0</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">package singleton</span><br><span class="line"></span><br><span class="line">var s *singleton</span><br><span class="line"></span><br><span class="line">type singleton struct &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func newSingleton() *singleton &#123;</span><br><span class="line">    return &amp;singleton&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (s *singleton) Work() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type Instance interface &#123;</span><br><span class="line">    Work()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func GetInstance() Instance &#123;</span><br><span class="line">    if s == nil &#123;</span><br><span class="line">        s = newSingleton()</span><br><span class="line">    &#125;</span><br><span class="line">    return s</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果 GetInstance 方法被并发调用, 则 singleton 这个单例就可能被初始化两次</li>
+</ul>
+<h4 id="3-2-2-懒汉模式-2-0"><a href="#3-2-2-懒汉模式-2-0" class="headerlink" title="3.2.2 懒汉模式 2.0"></a>3.2.2 懒汉模式 2.0</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> singleton</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;sync&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">    s   *singleton</span><br><span class="line">    mux sync.Mutex</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> singleton <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">newSingleton</span><span class="params">()</span></span> *singleton &#123;</span><br><span class="line">    <span class="keyword">return</span> &amp;singleton&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *singleton)</span></span> Work() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Instance <span class="keyword">interface</span> &#123;</span><br><span class="line">    Work()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetInstance</span><span class="params">()</span></span> Instance &#123;</span><br><span class="line">    mux.Lock()</span><br><span class="line">    <span class="keyword">defer</span> mux.Unlock()</span><br><span class="line">    <span class="keyword">if</span> s == <span class="literal">nil</span> &#123;</span><br><span class="line">        s = newSingleton()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> s</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>通过定义一把全局锁，用于在并发场景下保护单例 singleton 的数据一致性</li>
+<li>因为即便 singleton 已经初始化过了，后续外界用户每次在获取单例时，都需要加锁，存在无意义的性能损耗</li>
+</ul>
+<h4 id="3-2-3-懒汉模式-3-0"><a href="#3-2-3-懒汉模式-3-0" class="headerlink" title="3.2.3 懒汉模式 3.0"></a>3.2.3 懒汉模式 3.0</h4><p>解决 2.0 版本性能问题的关键在于减少和互斥锁的交互</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> singleton</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;sync&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">    s   *singleton</span><br><span class="line">    mux sync.Mutex</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> singleton <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">newSingleton</span><span class="params">()</span></span> *singleton &#123;</span><br><span class="line">    <span class="keyword">return</span> &amp;singleton&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *singleton)</span></span> Work() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Instance <span class="keyword">interface</span> &#123;</span><br><span class="line">    Work()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetInstance</span><span class="params">()</span></span> Instance &#123;</span><br><span class="line">    <span class="keyword">if</span> s != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> s</span><br><span class="line">    &#125;</span><br><span class="line">    mux.Lock()</span><br><span class="line">    <span class="keyword">defer</span> mux.Unlock()</span><br><span class="line"></span><br><span class="line">    s = newSingleton()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> s</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>首先在加锁前，先判断 singleton 是否初始化过，如果是，则直接返回</li>
+<li>如果 singleton 没初始化过，才加锁，并执行初始化工作</li>
+<li>一些问题:<ul>
+<li>如果两个协程同时走到了抢锁的流程中, 协程二在等协程一执行完成释放锁之后会继续执行, 导致了重复的初始化</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-2-4-懒汉模式-4-0"><a href="#3-2-4-懒汉模式-4-0" class="headerlink" title="3.2.4 懒汉模式 4.0"></a>3.2.4 懒汉模式 4.0</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> singleton</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;sync&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">    s   *singleton</span><br><span class="line">    mux sync.Mutex</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> singleton <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">newSingleton</span><span class="params">()</span></span> *singleton &#123;</span><br><span class="line">    <span class="keyword">return</span> &amp;singleton&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *singleton)</span></span> Work() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Instance <span class="keyword">interface</span> &#123;</span><br><span class="line">    Work()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetInstance</span><span class="params">()</span></span> Instance &#123;</span><br><span class="line">    <span class="keyword">if</span> s != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> s</span><br><span class="line">    &#125;</span><br><span class="line">    mux.Lock()</span><br><span class="line">    <span class="keyword">defer</span> mux.Unlock()</span><br><span class="line">    <span class="keyword">if</span> s != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> s</span><br><span class="line">    &#125;</span><br><span class="line">    s = newSingleton()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> s</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>将流程升级为加锁 double check 模式：</p>
+<ul>
+<li>在加锁前，先检查一轮单例的初始化状态，倘若已初始化过，则直接返回，以做到最大限度的无锁操作</li>
+<li>通过第一轮检查，则进行加锁，保证并发安全性</li>
+<li>加锁成功后，需要执行第二轮检查，确保在此时单例仍未初始化过的前提下，才执行初始化工作</li>
+</ul>
+<h4 id="3-2-5-懒汉模式-5-0"><a href="#3-2-5-懒汉模式-5-0" class="headerlink" title="3.2.5 懒汉模式 5.0"></a>3.2.5 懒汉模式 5.0</h4><p>基于 go 语言支持的单例工具 sync.Once, 可以更加优雅的实现单例</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> singleton</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;sync&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">    s    *singleton</span><br><span class="line">    once sync.Once</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> singleton <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">newSingleton</span><span class="params">()</span></span> *singleton &#123;</span><br><span class="line">    <span class="keyword">return</span> &amp;singleton&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *singleton)</span></span> Work() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Instance <span class="keyword">interface</span> &#123;</span><br><span class="line">    Work()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetInstance</span><span class="params">()</span></span> Instance &#123;</span><br><span class="line">    once.Do(<span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        s = newSingleton()</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">return</span> s</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-3-对比"><a href="#3-3-对比" class="headerlink" title="3.3 对比"></a>3.3 对比</h3><ul>
+<li>饿汉式在程序运行之初就完成单例的初始化，如果使用不到的话, 会造成无谓的性能损耗</li>
+<li>懒汉式在单例被首次使用时才执行初始化, 但如果出现问题会更加难排查</li>
+</ul>
+<h2 id="4-sync-Once-实现原理"><a href="#4-sync-Once-实现原理" class="headerlink" title="4 sync.Once 实现原理"></a>4 sync.Once 实现原理</h2><h3 id="4-1-数据结构"><a href="#4-1-数据结构" class="headerlink" title="4.1 数据结构"></a>4.1 数据结构</h3><p>sync.Once 是 Golang 提供的用于支持实现单例模式的标准库工具</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> sync</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;sync/atomic&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Once <span class="keyword">struct</span> &#123;</span><br><span class="line">    <span class="comment">// 通过一个整型变量标识，once 保护的函数是否已经被执行过</span></span><br><span class="line">    done <span class="type">uint32</span></span><br><span class="line">    <span class="comment">// 一把锁，在并发场景下保护临界资源 done 字段只能串行访问</span></span><br><span class="line">    m    Mutex</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>done：一个整型 uint32，用于标识用户传入的任务函数是否已经执行过了</li>
+<li>m：一把互斥锁 sync.Mutex，用于保护标识值 done ，避免因并发问题导致数据不一致</li>
+</ul>
+<h3 id="4-2-Once-Do"><a href="#4-2-Once-Do" class="headerlink" title="4.2 Once.Do"></a>4.2 Once.Do</h3><p>sync.Once 本质上也是通过加锁 double check 机制，实现了任务的全局单次执行</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(o *Once)</span></span> Do(f <span class="function"><span class="keyword">func</span><span class="params">()</span></span>) &#123;</span><br><span class="line">    <span class="comment">// 锁外的第一次 check，读取 Once.done 的值</span></span><br><span class="line">    <span class="keyword">if</span> atomic.LoadUint32(&amp;o.done) == <span class="number">0</span> &#123;</span><br><span class="line">        o.doSlow(f)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(o *Once)</span></span> doSlow(f <span class="function"><span class="keyword">func</span><span class="params">()</span></span>) &#123;</span><br><span class="line">    <span class="comment">// 加锁</span></span><br><span class="line">    o.m.Lock()</span><br><span class="line">    <span class="keyword">defer</span> o.m.Unlock()</span><br><span class="line">    <span class="comment">// double check</span></span><br><span class="line">    <span class="keyword">if</span> o.done == <span class="number">0</span> &#123;</span><br><span class="line">        <span class="comment">// 任务执行完成后，将 Once.done 标识为 1</span></span><br><span class="line">        <span class="keyword">defer</span> atomic.StoreUint32(&amp;o.done, <span class="number">1</span>)</span><br><span class="line">        <span class="comment">// 保证全局唯一一次执行用户注入的任务</span></span><br><span class="line">        f()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>first check：第一次检查 Once.done 的值是否为 0，这步是无锁化的</li>
+<li>easy return：倘若 Once.done 的值为 1，说明任务已经执行过，直接返回</li>
+<li>lock：加锁</li>
+<li>double check：再次检查 Once.done 的值是否为 0</li>
+<li>execute func：倘若通过 double check，真正执行用户传入的执行函数 f</li>
+<li>update：执行完 f 后，将 Once.done 的值设为 1</li>
+<li>return：解锁并返回</li>
+</ul>
+
+      
+        
+        
+        </div><footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2022/07/03/%E6%8A%80%E6%9C%AF/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/GMP/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">[Go] GMP</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2021/12/13/%E6%8A%80%E6%9C%AF/Golang/0%20%E5%9F%BA%E7%A1%80/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E7%B1%BB%E5%9E%8B%E6%96%AD%E8%A8%80/">
+        <span class="next-text nav-default">[Go] 类型断言</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:tianlong@pku.edu.cn" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont" title="rss"><i class="fas fa-rss"></i></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a> based <a class="theme-link" target="_blank" rel="noopener" href="https://easonyang.com/2021/08/01/enhanced-hexo-theme-even/">EasonEven</a>
+  </span><span class="copyright-year">
+    <a href="/log" target="_blank">&copy;2020 - 2025</a>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href="/about" target="_blank">draco</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.19"></script>
+</body>
+</html>
