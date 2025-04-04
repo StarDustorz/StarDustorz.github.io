@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="[设计模式] 适配器模式"/><meta name="keywords" content="设计模式, Draco's Blog" /><link rel="alternate" href="/default" title="Draco's Blog" ><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.19" />
+<link rel="canonical" href="http://example.com/2022/06/11/技术/基础知识/设计模式/适配器模式/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.19" />
+
+
+<link rel="stylesheet" type="text/css" href="/lib/fontawesome/css/all.min.css">
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "WebSite",
+            "@id": "http://example.com/#website",
+            "url": "http://example.com",
+            "name": "Draco's Blog",
+            "description": "",
+            "publisher": {
+                "@id": "http://example.com/#person"
+            }
+        },
+        {
+            "@type": "Person",
+            "@id": "http://example.com/#person",
+            "name": "",
+            "image": {
+                "@type": "ImageObject",
+                "@id": "http://example.com/#personImage",
+                "url": "",
+                "width": "",
+                "height": "",
+                "caption": ""
+            }}
+    ]
+}
+</script><script async defer data-website-id="" src=""></script>
+    <title>[设计模式] 适配器模式 - Draco's Blog</title>
+  <meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/links/">
+        <li class="mobile-menu-item">Links
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Draco's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/links/">
+            Links
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+
+</header><main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header"><h1 class="post-title emphasized-title">
+            [设计模式] 适配器模式
+        </h1>
+      <div class="post-meta">
+        <span class="post-time">
+          2022-06-11
+        </span><span class="post-category">
+            <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%8B%E7%BB%8D"><span class="toc-text">1 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%9E%E7%8E%B0"><span class="toc-text">2 实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%B8%B8%E8%A7%84%E9%80%82%E9%85%8D%E6%A8%A1%E5%BC%8F"><span class="toc-text">2.1 常规适配模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-interface-%E9%80%82%E9%85%8D%E6%A8%A1%E5%BC%8F"><span class="toc-text">2.2 interface 适配模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-interface-%E5%BB%BA%E7%AB%8B%E6%8E%A5%E5%8F%A3%E8%A7%84%E8%8C%83"><span class="toc-text">2.3 interface 建立接口规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E9%80%9A%E8%BF%87-interface-%E9%9A%90%E8%97%8F%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82"><span class="toc-text">2.4 通过 interface 隐藏实现细节</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><blockquote>
+<p> 适配器模式的作用是能够实现两个不兼容或弱兼容接口之间的适配桥接作用</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1 介绍"></a>1 介绍</h2><p>涉及到如下几个核心角色：</p>
+<ul>
+<li>目标 target：是一类含有指定功能的接口</li>
+<li>使用方 client：需要使用 target 的用户</li>
+<li>被适配的类 adaptee：和目标类 target 功能类似，但不完全吻合</li>
+<li>适配器类：adapter：能够将 adaptee 适配转换成 target 的功能类</li>
+</ul>
+<p>用户（client）现在手中持有一个两孔的插头，需要匹配的目标是一个两孔的插座（target），但是现状是我们只找到了三孔的插座（adaptee），于是我们通过在三孔插座上插上一个实现三孔转两孔的适配器（adapter），最终实现了两孔插头与三孔插座之间的适配使用.</p>
+<h2 id="2-实现"><a href="#2-实现" class="headerlink" title="2 实现"></a>2 实现</h2><p>适配器模式分为常规适配模式和 interface 适配模式两种类型</p>
+<h3 id="2-1-常规适配模式"><a href="#2-1-常规适配模式" class="headerlink" title="2.1 常规适配模式"></a>2.1 常规适配模式</h3><ul>
+<li>有一个抽象的 Target interface，具备一种核心功能 Operation</li>
+<li>有一个 Client 作为使用方，需要使用到 Target 的 Operation 功能</li>
+<li>分别定义了两种具体类型 ConcreteTypeA 和 ConcreteTypeB，作为 Target 的实现类，都具备 Target 所要求的 Operation 方法</li>
+<li>有一个 Adaptee 类型，它有 Target 相似但又不完全相同的功能 DifferentOperation</li>
+<li>接下来，Client 为了能够把 Adaptee 当作 Target 使用，引入了一个适配器类 Adapter</li>
+<li><p>在 Adapter 中实现了 Target 所要求的 Operation 方法，同时 Adapter 中引入了 Adaptee 作为成员属性. 在 Adapter 的 Operation 方法中，会调用 Adaptee 的 DifferentOperation 方法，并完成将其适配转换成 Operation 的职责</p>
+</li>
+<li><p>市场上手机充电器的通用电压通常设置为5V. 于是我们声明一个 PhoneCharger interface，作为手机充电器的抽象定义，其中包含了一个方法 Output5V，可以保证在充电期间持续稳定地输出 5V 电压</p>
+</li>
+<li>有关手机充电器的具体实现，根据手机型号，可以分为华为手机充电器 HuaWeiCharger 和小米手机充电器 XiaoMiCharger，两个实现类都实现了 Ouput5V 方法，具备稳定输出 5V 电压的能力</li>
+<li>接下来我们还有一个苹果笔记本的充电器 MacBookCharger，由于适配的是笔记本电脑，因此只有一个 Output28V 方法，对应输出的电压幅值为 28V</li>
+<li>手机充电器的使用方自然是手机. 我们声明一个 Phone interface，代表手机的类型. Phone interface 中包含一个方法 Charge，需要使用到 PhongCharger 的 Output5V 方法，完成对手机的充电</li>
+<li>其中，Phone interface 我们给出一个具体的实现类——华为手机 HuaWeiPhone</li>
+<li>现在存在的一个情况是，华为手机充电器 HuaWeiCharger 和小米手机充电器 XiaoMiCharger 都被占用了，我们希望临时使用苹果笔记本充电器 MacBookCharger 来为手机充电</li>
+<li>由于 MacBookCharger 输出电压为 28V，所以需要引入一个充电适配器 MacBookChargerAdapter 来将 28V 电压转换为 5V，避免在充电过程中对手机造成损坏</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> PhoneCharger <span class="keyword">interface</span> &#123;</span><br><span class="line">    Output5V()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>具体的手机充电器型号</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> HuaWeiCharger <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewHuaWeiCharger</span><span class="params">()</span></span> *HuaWeiCharger &#123;</span><br><span class="line">    <span class="keyword">return</span> &amp;HuaWeiCharger&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(h *HuaWeiCharger)</span></span> Output5V() &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;华为手机充电器输出 5V 电压...&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> XiaoMiCharger <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewXiaoMiCharger</span><span class="params">()</span></span> *XiaoMiCharger &#123;</span><br><span class="line">    <span class="keyword">return</span> &amp;XiaoMiCharger&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(x *XiaoMiCharger)</span></span> Output5V() &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;小米手机充电器输出 5V 电压...&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>苹果笔记本充电器，输出的电压是 28V：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> MacBookCharger <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewMacBookCharger</span><span class="params">()</span></span> *MacBookCharger &#123;</span><br><span class="line">    <span class="keyword">return</span> &amp;MacBookCharger&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *MacBookCharger)</span></span> Output28V() &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;苹果笔记本充电器输出 28V 电压...&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>创建出一个手机充电器的适配器类，在适配器类的 Output5V 方法中，会调用苹果笔记本输出电压的能力，并将其适配转换成 5V 输出：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> MacBookChargerAdapter <span class="keyword">struct</span> &#123;</span><br><span class="line">    core *MacBookCharger</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewMacBookChargerAdapter</span><span class="params">(m *MacBookCharger)</span></span> *MacBookChargerAdapter &#123;</span><br><span class="line">    <span class="keyword">return</span> &amp;MacBookChargerAdapter&#123;</span><br><span class="line">        core: m,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *MacBookChargerAdapter)</span></span> Output5V() &#123;</span><br><span class="line">    m.core.Output28V()</span><br><span class="line">    fmt.Println(<span class="string">&quot;适配器将输出电压调整为 5V...&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>定义完手机充电器之后，下面进行手机的类型声明，包括一个 Phone interface 以及一种具体的手机实现类 HuaWeiPhone. Phone 具备一个用于充电的 Charge 方法，其中使用到手机充电器 PhoneCharger 的 Output5V 方法，执行手机的充电操作.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Phone <span class="keyword">interface</span> &#123;</span><br><span class="line">    Charge(phoneCharger PhoneCharger)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> HuaWeiPhone <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewHuaWeiPhone</span><span class="params">()</span></span> Phone &#123;</span><br><span class="line">    <span class="keyword">return</span> &amp;HuaWeiPhone&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(h *HuaWeiPhone)</span></span> Charge(phoneCharger PhoneCharger) &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;华为手机准备开始充电...&quot;</span>)</span><br><span class="line">    phoneCharger.Output5V()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先是对华为手机充电器的使用，然后使用经由适配器转换后的苹果笔记本充电器进行充电：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Test_adapter</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    <span class="comment">// 创建一个华为手机实例</span></span><br><span class="line">    huaWeiPhone := NewHuaWeiPhone()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用华为手机充电器进行充电</span></span><br><span class="line">    HuaWeiCharger := NewHuaWeiCharger()</span><br><span class="line">    huaWeiPhone.Charge(HuaWeiCharger)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用适配器转换后的 macbook 充电器进行充电</span></span><br><span class="line">    macBookCharger := NewMacBookCharger()</span><br><span class="line">    macBookChargerAdapter := NewMacBookChargerAdapter(macBookCharger)</span><br><span class="line">    huaWeiPhone.Charge(macBookChargerAdapter)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出</span></span><br><span class="line">华为手机准备开始充电...</span><br><span class="line">华为手机充电器输出 <span class="number">5</span>V 电压...</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">华为手机准备开始充电...</span><br><span class="line">苹果笔记本充电器输出 <span class="number">28</span>V 电压...</span><br><span class="line">适配器将输出电压调整为 <span class="number">5</span>V...</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-interface-适配模式"><a href="#2-2-interface-适配模式" class="headerlink" title="2.2 interface 适配模式"></a>2.2 interface 适配模式</h3><p>在 golang 中，class 对 interface 的实现采用的隐式实现的方式，即我们在定义具体类型时，不需要显式声明对 interface 的 implement 操作，只需要实现了 interface 的所有方法，就自动会被编译器识别为 interface 的一种实现.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> MyInterface <span class="keyword">interface</span> &#123;</span><br><span class="line">    MethodA()</span><br><span class="line">    MethodB()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MyClass <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewMyClass</span><span class="params">()</span></span> *MyClass &#123;</span><br><span class="line">    <span class="keyword">return</span> &amp;MyClass&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// MyClass 实现了 MyInterface 声明的所有方法</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *MyClass)</span></span> MethodA() &#123;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *MyClass)</span></span> MethodB() &#123;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Test_implement</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    <span class="comment">// 获取 myClass 的类型</span></span><br><span class="line">    myClassTyp := reflect.TypeOf(NewMyClass())</span><br><span class="line">    <span class="comment">// 获取 myInterface 的类型</span></span><br><span class="line">    myInterTyp := reflect.TypeOf((*MyInterface)(<span class="literal">nil</span>)).Elem()</span><br><span class="line">    <span class="comment">// 判断是否具有实现关系</span></span><br><span class="line">    t.Log(myClassTyp.Implements(myInterTyp))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>正是基于 golang 中这种隐式实现的特性，使得 interface 本身也具备了适配器的功能.</p>
+<p>2.1 小节中，我们所探讨的一类常规适配器模式，指的是被适配对象 adaptee 中缺少了一部分目标 target 的核心能力，需要由适配器 adapter 完成这部分能力的适配补齐.</p>
+<p>而在接下来的 2.2 小节中，我们聊的是另一种场景：adaptee 不仅具备 target 的全部能力，还聚合了一部分 target 本身不关心的能力. 因此倘若我们直接把 adaptee 当作 target 使用，这部分不相干能力也会被暴露出来，最终对 target 的使用方造成困惑.</p>
+<p>这对于这种问题，我们可以通过对 interface 的合适定义使其充当适配器的角色，来规避这类因边界不清晰导致功能泄漏的代码规范问题.</p>
+<h3 id="2-3-interface-建立接口规范"><a href="#2-3-interface-建立接口规范" class="headerlink" title="2.3 interface 建立接口规范"></a>2.3 interface 建立接口规范</h3><p>首先，interface 最常用的一种使用模式，是抽象出了同一类型下多种角色的共性，将其声明成一个接口规范的形式，最终所有实现类 class 都需要实现 interface 的所有方法，或者反过来说，具体 class 本身对应于 interface 类型中的一种具体角色，它就理所应当具备 interface 所抽象出来的核心能力，否则，就只能说明 interface 的抽象程度并不合理.</p>
+<p>举个具体的例子，我们定义出了手机的 interface——phone，其中抽象出每种手机都需要具备的能力，包括拨打电话的 Call 方法、充电 Charge 方法、发送短信 SendMessage 方法等…</p>
+<p>我们基于品牌维度声明出 Phone 的具体实现类，包括华为手机 HuaWeiPhone、小米手机 XiaoMiPhone、OPPO 手机 OPPOPhone、VIVO 手机 VIVOPhone 等，每种实现类 class 都需要实现好 Phone interface 中定义好的 Call、Charge、SendMessage 等方法.</p>
+<h3 id="2-4-通过-interface-隐藏实现细节"><a href="#2-4-通过-interface-隐藏实现细节" class="headerlink" title="2.4 通过 interface 隐藏实现细节"></a>2.4 通过 interface 隐藏实现细节</h3><p>另一种 interface 的使用场景，在模块间进行类的传输时，为了保护具体的实现类隐藏其中的实现细节，转而使用抽象 interface 的形式进行传递. 同时这种基于 interface 进行传递参数的方式，也基于了使用方一定的灵活度，可以通过注入 interface 不同实现 class 的方式，赋予方法更高的灵活度. 这正是我们在编程设计模式中所推崇的面向接口编程而非面向实现编程的思路体现.</p>
+<p>interface 的定义应该由模块的使用方而非实现方来进行定义. 只有这样，使用方才能根据自己的视角，对模块进行最合适或者说最贴合自己使用需求的抽象定义.</p>
+
+      
+        
+        
+        </div><footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2022/06/25/%E6%8A%80%E6%9C%AF/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">[设计模式] 建造者模式</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2022/06/07/%E6%8A%80%E6%9C%AF/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/">
+        <span class="next-text nav-default">[设计模式] 装饰器模式</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:tianlong@pku.edu.cn" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont" title="rss"><i class="fas fa-rss"></i></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a> based <a class="theme-link" target="_blank" rel="noopener" href="https://easonyang.com/2021/08/01/enhanced-hexo-theme-even/">EasonEven</a>
+  </span><span class="copyright-year">
+    <a href="/log" target="_blank">&copy;2020 - 2025</a>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href="/about" target="_blank">draco</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.19"></script>
+</body>
+</html>

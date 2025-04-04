@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="[设计模式] 观察者模式"/><meta name="keywords" content="设计模式, Draco's Blog" /><link rel="alternate" href="/default" title="Draco's Blog" ><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.19" />
+<link rel="canonical" href="http://example.com/2022/04/11/技术/基础知识/设计模式/观察者模式/"/>
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.19" />
+
+
+<link rel="stylesheet" type="text/css" href="/lib/fontawesome/css/all.min.css">
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null},"toc":true,"fancybox":true,"pjax":"","latex":false};
+</script>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "WebSite",
+            "@id": "http://example.com/#website",
+            "url": "http://example.com",
+            "name": "Draco's Blog",
+            "description": "",
+            "publisher": {
+                "@id": "http://example.com/#person"
+            }
+        },
+        {
+            "@type": "Person",
+            "@id": "http://example.com/#person",
+            "name": "",
+            "image": {
+                "@type": "ImageObject",
+                "@id": "http://example.com/#personImage",
+                "url": "",
+                "width": "",
+                "height": "",
+                "caption": ""
+            }}
+    ]
+}
+</script><script async defer data-website-id="" src=""></script>
+    <title>[设计模式] 观察者模式 - Draco's Blog</title>
+  <meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco's Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/">
+        <li class="mobile-menu-item">Home
+          </li>
+      </a><a href="/archives/">
+        <li class="mobile-menu-item">Archives
+          </li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags
+          </li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories
+          </li>
+      </a><a href="/links/">
+        <li class="mobile-menu-item">Links
+          </li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">Draco's Blog</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/">
+            Home
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            Archives
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/tags/">
+            Tags
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/categories/">
+            Categories
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/links/">
+            Links
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about/">
+            About
+            </a>
+        </li>
+      </ul></nav>
+
+</header><main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header"><h1 class="post-title emphasized-title">
+            [设计模式] 观察者模式
+        </h1>
+      <div class="post-meta">
+        <span class="post-time">
+          2022-04-11
+        </span><span class="post-category">
+            <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+            </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%8B%E7%BB%8D"><span class="toc-text">1 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%9E%E7%8E%B0"><span class="toc-text">2 实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E6%A0%B8%E5%BF%83%E8%A7%92%E8%89%B2"><span class="toc-text">2.1 核心角色</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%90%8C%E6%AD%A5%E6%A8%A1%E5%BC%8F"><span class="toc-text">2.2 同步模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E5%BC%82%E6%AD%A5%E6%A8%A1%E5%BC%8F"><span class="toc-text">2.3 异步模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E4%BD%BF%E7%94%A8"><span class="toc-text">2.4 使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%B7%A5%E7%A8%8B%E6%A1%88%E4%BE%8B"><span class="toc-text">3 工程案例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-MQ-%E5%8F%91%E5%B8%83-%E8%AE%A2%E9%98%85"><span class="toc-text">3.1 MQ 发布&#x2F;订阅</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-ETCD-%E7%9B%91%E5%90%AC%E5%9B%9E%E8%B0%83"><span class="toc-text">3.2 ETCD 监听回调</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><blockquote>
+<p> 观察者模式适用于多对一的订阅/发布场景</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1 介绍"></a>1 介绍</h2><p>核心对象有两类，一类是“观察者”，一类是“被观察的事物”，且两者间在数量上存在多对一的映射关系.</p>
+<ul>
+<li>”多“：指的是有多名观察者</li>
+<li>”一“：指的是有一个被观察事物</li>
+<li>”订阅“：指的是观察者时刻关注着事物的动态</li>
+<li>”发布“：指的是事物状态发生变化时是透明公开的，能够正常进入到观察者的视线</li>
+</ul>
+<h2 id="2-实现"><a href="#2-实现" class="headerlink" title="2 实现"></a>2 实现</h2><h3 id="2-1-核心角色"><a href="#2-1-核心角色" class="headerlink" title="2.1 核心角色"></a>2.1 核心角色</h3><p>角色包含三类：</p>
+<ul>
+<li>Observer：观察者. 指的是关注事物动态的角色</li>
+<li>Event：事物的变更事件. 其中 Topic 标识了事物的身份以及变更的类型，Val 是变更详情</li>
+<li>EventBus：事件总线. 位于观察者与事物之间承上启下的代理层. 负责维护管理观察者，并且在事物发生变更时，将情况同步给每个观察者.</li>
+</ul>
+<p>观察者模式的核心就在于建立了 <strong>EventBus</strong> 的角色. 由于 EventBus 模块的诞生，实现了观察者与具体被观察事物之间的解耦:</p>
+<ul>
+<li>针对于观察者而言，需要向 EventBus 完成注册操作，注册时需要声明自己关心的变更事件类型（调用 EventBus 的 Subscribe 方法），不再需要直接和事物打交道</li>
+<li>针对于事物而言，在其发生变更时，只需要将变更情况向 EventBus 统一汇报即可（调用 EventBus 的 Publish 方法），不再需要和每个观察者直接交互</li>
+<li>对于 EventBus，需要提前维护好每个观察者和被关注事物之间的映射关系，保证在变更事件到达时，能找到所有的观察者逐一进行通知（调用 Observer 的 OnChange 方法）</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Event <span class="keyword">struct</span> &#123;</span><br><span class="line">    Topic <span class="type">string</span></span><br><span class="line">    Val   <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Observer <span class="keyword">interface</span> &#123;</span><br><span class="line">    OnChange(ctx context.Context, e *Event) <span class="type">error</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> EventBus <span class="keyword">interface</span> &#123;</span><br><span class="line">    Subscribe(topic <span class="type">string</span>, o Observer)</span><br><span class="line">    Unsubscribe(topic <span class="type">string</span>, o Observer)</span><br><span class="line">    Publish(ctx context.Context, e *Event)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>观察者 Observer 需要实现 OnChange 方法，用于向 EventBus 暴露出通知自己的“联系方式”，并且在方法内部实现好当关注对象发生变更时，自己需要采取的处理逻辑.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> BaseObserver <span class="keyword">struct</span> &#123;</span><br><span class="line">    name <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewBaseObserver</span><span class="params">(name <span class="type">string</span>)</span></span> *BaseObserver &#123;</span><br><span class="line">    <span class="keyword">return</span> &amp;BaseObserver&#123;</span><br><span class="line">        name: name,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *BaseObserver)</span></span> OnChange(ctx context.Context, e *Event) <span class="type">error</span> &#123;</span><br><span class="line">    fmt.Printf(<span class="string">&quot;observer: %s, event key: %s, event val: %v&quot;</span>, b.name, e.Topic, e.Val)</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>事件总线 EventBus 需要实现 Subscribe 和 Unsubscribe 方法暴露给观察者，用于新增或删除订阅关系，其实现示例如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> BaseEventBus <span class="keyword">struct</span> &#123;</span><br><span class="line">    mux       sync.RWMutex</span><br><span class="line">    observers <span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">map</span>[Observer]<span class="keyword">struct</span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewBaseEventBus</span><span class="params">()</span></span> BaseEventBus &#123;</span><br><span class="line">    <span class="keyword">return</span> BaseEventBus&#123;</span><br><span class="line">        observers: <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">map</span>[Observer]<span class="keyword">struct</span>&#123;&#125;),</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *BaseEventBus)</span></span> Subscribe(topic <span class="type">string</span>, o Observer) &#123;</span><br><span class="line">    b.mux.Lock()</span><br><span class="line">    <span class="keyword">defer</span> b.mux.Unlock()</span><br><span class="line">    _, ok := b.observers[topic]</span><br><span class="line">    <span class="keyword">if</span> !ok &#123;</span><br><span class="line">        b.observers[topic] = <span class="built_in">make</span>(<span class="keyword">map</span>[Observer]<span class="keyword">struct</span>&#123;&#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    b.observers[topic][o] = <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *BaseEventBus)</span></span> Unsubscribe(topic <span class="type">string</span>, o Observer) &#123;</span><br><span class="line">    b.mux.Lock()</span><br><span class="line">    <span class="keyword">defer</span> b.mux.Unlock()</span><br><span class="line">    <span class="built_in">delete</span>(b.observers[topic], o)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-同步模式"><a href="#2-2-同步模式" class="headerlink" title="2.2 同步模式"></a>2.2 同步模式</h3><p>在同步模式下，EventBus 在接受到变更事件 Event 时，会根据事件类型 Topic 匹配到对应的观察者列表 observers，然后采用串行遍历的方式分别调用 Observer.OnChange 方法对每个观察者进行通知，并对处理流程中遇到的错误进行聚合，放到 handleErr 方法中进行统一的后处理</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> SyncEventBus <span class="keyword">struct</span> &#123;</span><br><span class="line">    BaseEventBus</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewSyncEventBus</span><span class="params">()</span></span> *SyncEventBus &#123;</span><br><span class="line">    <span class="keyword">return</span> &amp;SyncEventBus&#123;</span><br><span class="line">        BaseEventBus: NewBaseEventBus(),</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *SyncEventBus)</span></span> Publish(ctx context.Context, e *Event) &#123;</span><br><span class="line">    s.mux.RLock()</span><br><span class="line">    subscribers := s.observers[e.Topic]</span><br><span class="line">    s.mux.RUnlock()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    errs := <span class="built_in">make</span>(<span class="keyword">map</span>[Observer]<span class="type">error</span>)</span><br><span class="line">    <span class="keyword">for</span> subscriber := <span class="keyword">range</span> subscribers &#123;</span><br><span class="line">        <span class="keyword">if</span> err := subscriber.OnChange(ctx, e); err != <span class="literal">nil</span> &#123;</span><br><span class="line">            errs[subscriber] = err</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    s.handleErr(ctx, errs)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-3-异步模式"><a href="#2-3-异步模式" class="headerlink" title="2.3 异步模式"></a>2.3 异步模式</h3><p>在异步模式下，会在 EventBus 启动之初，异步启动一个守护协程，负责对接收到的错误进行后处理.</p>
+<p>在事物发生变更时，EventBus 的 Publish 方法会被调用，此时 EventBus 会并发调用 Observer.OnChange 方法对每个观察者进行通知，在这个过程中遇到的错误会通过 channel 统一汇总到 handleErr 的守护协程中进行处理.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> observerWithErr <span class="keyword">struct</span> &#123;</span><br><span class="line">    o   Observer</span><br><span class="line">    err <span class="type">error</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> AsyncEventBus <span class="keyword">struct</span> &#123;</span><br><span class="line">    BaseEventBus</span><br><span class="line">    errC <span class="keyword">chan</span> *observerWithErr</span><br><span class="line">    ctx  context.Context</span><br><span class="line">    stop context.CancelFunc</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewAsyncEventBus</span><span class="params">()</span></span> *AsyncEventBus &#123;</span><br><span class="line">    aBus := AsyncEventBus&#123;</span><br><span class="line">        BaseEventBus: NewBaseEventBus(),</span><br><span class="line">    &#125;</span><br><span class="line">    aBus.ctx, aBus.stop = context.WithCancel(context.Background())</span><br><span class="line">    <span class="comment">// 处理处理错误的异步守护协程</span></span><br><span class="line">    <span class="keyword">go</span> aBus.handleErr()</span><br><span class="line">    <span class="keyword">return</span> &amp;aBus</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a *AsyncEventBus)</span></span> Stop() &#123;</span><br><span class="line">    a.stop()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a *AsyncEventBus)</span></span> Publish(ctx context.Context, e *Event) &#123;</span><br><span class="line">    a.mux.RLock()</span><br><span class="line">    subscribers := a.observers[e.Topic]</span><br><span class="line"><span class="keyword">defer</span> a.mux.RUnlock()</span><br><span class="line">    <span class="keyword">for</span> subscriber := <span class="keyword">range</span> subscribers &#123;</span><br><span class="line">        <span class="comment">// shadow</span></span><br><span class="line">        subscriber := subscriber</span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">            <span class="keyword">if</span> err := subscriber.OnChange(ctx, e); err != <span class="literal">nil</span> &#123;</span><br><span class="line">                <span class="keyword">select</span> &#123;</span><br><span class="line">                <span class="keyword">case</span> &lt;-a.ctx.Done():</span><br><span class="line">                <span class="keyword">case</span> a.errC &lt;- &amp;observerWithErr&#123;</span><br><span class="line">                    o:   subscriber,</span><br><span class="line">                    err: err,</span><br><span class="line">                &#125;:</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a *AsyncEventBus)</span></span> handleErr() &#123;</span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        <span class="keyword">select</span> &#123;</span><br><span class="line">        <span class="keyword">case</span> &lt;-a.ctx.Done():</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">case</span> resp := &lt;-a.errC:</span><br><span class="line">            <span class="comment">// 处理 publish 失败的 observer</span></span><br><span class="line">            fmt.Printf(<span class="string">&quot;observer: %v, err: %v&quot;</span>, resp.o, resp.err)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<h3 id="2-4-使用"><a href="#2-4-使用" class="headerlink" title="2.4 使用"></a>2.4 使用</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Test_syncEventBus</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    observerA := NewBaseObserver(<span class="string">&quot;a&quot;</span>)</span><br><span class="line">    observerB := NewBaseObserver(<span class="string">&quot;b&quot;</span>)</span><br><span class="line">    observerC := NewBaseObserver(<span class="string">&quot;c&quot;</span>)</span><br><span class="line">    observerD := NewBaseObserver(<span class="string">&quot;d&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    sbus := NewSyncEventBus()</span><br><span class="line">    topic := <span class="string">&quot;order_finish&quot;</span></span><br><span class="line">    sbus.Subscribe(topic, observerA)</span><br><span class="line">    sbus.Subscribe(topic, observerB)</span><br><span class="line">    sbus.Subscribe(topic, observerC)</span><br><span class="line">    sbus.Subscribe(topic, observerD)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    sbus.Publish(context.Background(), &amp;Event&#123;</span><br><span class="line">        Topic: topic,</span><br><span class="line">        Val:   <span class="string">&quot;order_id: xxx&quot;</span>,</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Test_asyncEventBus</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    observerA := NewBaseObserver(<span class="string">&quot;a&quot;</span>)</span><br><span class="line">    observerB := NewBaseObserver(<span class="string">&quot;b&quot;</span>)</span><br><span class="line">    observerC := NewBaseObserver(<span class="string">&quot;c&quot;</span>)</span><br><span class="line">    observerD := NewBaseObserver(<span class="string">&quot;d&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    abus := NewAsyncEventBus()</span><br><span class="line">    <span class="keyword">defer</span> abus.Stop()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    topic := <span class="string">&quot;order_finish&quot;</span></span><br><span class="line">    abus.Subscribe(topic, observerA)</span><br><span class="line">    abus.Subscribe(topic, observerB)</span><br><span class="line">    abus.Subscribe(topic, observerC)</span><br><span class="line">    abus.Subscribe(topic, observerD)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    abus.Publish(context.Background(), &amp;Event&#123;</span><br><span class="line">        Topic: topic,</span><br><span class="line">        Val:   <span class="string">&quot;order_id: xxx&quot;</span>,</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &lt;-time.After(time.Second)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-工程案例"><a href="#3-工程案例" class="headerlink" title="3 工程案例"></a>3 工程案例</h2><h3 id="3-1-MQ-发布-订阅"><a href="#3-1-MQ-发布-订阅" class="headerlink" title="3.1 MQ 发布/订阅"></a>3.1 MQ 发布/订阅</h3><p>消息队列就是对观察者模式的一种实践:</p>
+<ul>
+<li>EventBus：对应的是消息队列组件，为整个通信架构提供了分布式解耦、流量削峰等能力</li>
+<li>Event：对应的是消息队列中的一条消息，有明确的主题 topic，由生产者 producer 提供</li>
+<li>Observer：对应的是消费者 consumer，对指定事物的动态（topic）进行订阅，并在消费到对应的变更事件后执行对应的处理逻辑</li>
+</ul>
+<h3 id="3-2-ETCD-监听回调"><a href="#3-2-ETCD-监听回调" class="headerlink" title="3.2 ETCD 监听回调"></a>3.2 ETCD 监听回调</h3><p>etcd 提供了作用于指定数据范围的监听回调功能，能在对应数据状态发生变更时，将变更通知传达到每个订阅者的手中:</p>
+<ul>
+<li>EventBus：对应的是 etcd 服务端的 watchableStore 监听器存储模块，该模块会负责存储用户创建的一系列监听器 watcher，并建立由监听数据 key 到监听器集合 watcherGroup 之间的映射关系. 当任意存储数据发生变化时，etcd 的数据存储模块会在一个统一的切面中调用通知方法，将这一信息传达到 watchableStore 模块，watchableStore 则会将变更数据与监听数据 key 之间进行 join，最终得到一个需要执行回调操作的 watchers 组合，顺沿 watcher 中的路径，向订阅者发送通知消息</li>
+<li>Event：对应的是一条 etcd 状态机的数据变更事件，由 etcd 使用方在执行一条写数据操作时触发，在写操作真正生效后，变更事件会被传送到 watchableStore 模块执行回调处理</li>
+<li>Observer：使用 etcd watch 功能对指定范围数据建立监听回调机制的使用方，在 etcd 服务端 watchableStore 模块会建立监听器实体 watcher 作为自身的代理，当变更事件真的发生后，watchableStore 会以 watcher 作为起点，沿着返回路径一路将变更事件发送到使用方手中.</li>
+</ul>
+
+      
+        
+        
+        </div><footer class="post-footer">
+        <div class="post-tags">
+            <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+            </div>
+        
+        <nav class="post-nav"><a class="prev" href="/2022/06/07/%E6%8A%80%E6%9C%AF/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">[设计模式] 装饰器模式</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    <a class="next" href="/2022/03/02/%E6%8A%80%E6%9C%AF/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/">
+        <span class="next-text nav-default">[设计模式] 工厂模式</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"></div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:tianlong@pku.edu.cn" class="iconfont icon-email" title="email"></a>
+        <a href="/atom.xml" class="iconfont" title="rss"><i class="fas fa-rss"></i></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a> based <a class="theme-link" target="_blank" rel="noopener" href="https://easonyang.com/2021/08/01/enhanced-hexo-theme-even/">EasonEven</a>
+  </span><span class="copyright-year">
+    <a href="/log" target="_blank">&copy;2020 - 2025</a>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author"><a href="/about" target="_blank">draco</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.19"></script>
+</body>
+</html>
