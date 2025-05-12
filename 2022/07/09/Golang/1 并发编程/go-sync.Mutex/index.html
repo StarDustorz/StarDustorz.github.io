@@ -18,8 +18,12 @@
 
 <!-- Website description -->
 
+<meta name="description" content="[Go] sync.Mutex" />
+
 
 <!-- Website keywords -->
+
+<meta name="keywords" content="Golang, Draco&#39;s Blog" />
 
 
 
@@ -35,7 +39,7 @@
 
 
 <!-- Canonical, good for google search engine -->
-<link rel="canonical" href="https://stardustorz.github.io/2025/05/07/Golang/1 并发编程/go-sync.Mutex/" />
+<link rel="canonical" href="https://stardustorz.github.io/2022/07/09/Golang/1 并发编程/go-sync.Mutex/" />
 
 <!-- Fancybox styling -->
 
@@ -63,7 +67,7 @@
   window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":false};
 </script>
   
-  <title> - Draco&#39;s Blog</title>
+  <title>[Go] sync.Mutex - Draco&#39;s Blog</title>
 
 <meta name="generator" content="Hexo 6.3.0"></head>
 
@@ -187,15 +191,23 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      
+      [Go] sync.Mutex
       
     </h1>
 
     <div class="post-meta">
       <span class="post-time">
-        2025-05-07
+        2022-07-09
       </span>
       
+      
+      <span class="post-category">
+        
+        <a href="/categories/Golang/">Golang</a>
+        
+        <a href="/categories/Golang/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a>
+        
+      </span>
       
       
     </div>
@@ -205,14 +217,14 @@
   <div class="post-toc" id="post-toc">
     <h2 class="post-toc-title">Contents</h2>
     <div class="post-toc-content">
-      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-state%E5%AD%97%E6%AE%B5"><span class="toc-number">1.</span> <span class="toc-text">1.1 state字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%AD%A3%E5%B8%B8%E6%A8%A1%E5%BC%8F%E5%92%8C%E9%A5%A5%E9%A5%BF%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">1.2 正常模式和饥饿模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%8A%A0%E8%A7%A3%E9%94%81%E8%BF%87%E7%A8%8B"><span class="toc-number"></span> <span class="toc-text">2 加解锁过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%8A%A0%E9%94%81"><span class="toc-number">1.</span> <span class="toc-text">2.1 加锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-Fast-path"><span class="toc-number">1.1.</span> <span class="toc-text">2.1.1 Fast path</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-Slow-Path"><span class="toc-number">1.2.</span> <span class="toc-text">2.1.2 Slow Path</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-2-1-%E5%88%A4%E6%96%AD%E5%BD%93%E5%89%8D-Goroutine-%E8%83%BD%E5%90%A6%E8%BF%9B%E5%85%A5%E8%87%AA%E6%97%8B"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1.2.1 判断当前 Goroutine 能否进入自旋</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-2-2-%E9%80%9A%E8%BF%87%E8%87%AA%E6%97%8B%E7%AD%89%E5%BE%85%E4%BA%92%E6%96%A5%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.1.2.2 通过自旋等待互斥锁的释放</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-2-3-%E8%AE%A1%E7%AE%97%E4%BA%92%E6%96%A5%E9%94%81%E7%9A%84%E6%9C%80%E6%96%B0%E7%8A%B6%E6%80%81"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.1.2.3 计算互斥锁的最新状态</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-2-4-%E6%9B%B4%E6%96%B0%E4%BA%92%E6%96%A5%E9%94%81%E7%9A%84%E7%8A%B6%E6%80%81%E5%B9%B6%E8%8E%B7%E5%8F%96%E9%94%81"><span class="toc-number">1.2.4.</span> <span class="toc-text">2.1.2.4 更新互斥锁的状态并获取锁</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E8%A7%A3%E9%94%81"><span class="toc-number">2.</span> <span class="toc-text">2.2 解锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-Fast-path"><span class="toc-number">2.1.</span> <span class="toc-text">2.2.1 Fast path</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-Slow-path"><span class="toc-number">2.2.</span> <span class="toc-text">2.2.2 Slow path</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%B0%8F%E7%BB%93"><span class="toc-number"></span> <span class="toc-text">3 小结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Sync-RWMutex"><span class="toc-number"></span> <span class="toc-text">4 Sync.RWMutex</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">4.1 数据结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E8%AF%BB%E9%94%81%E6%B5%81%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">4.2 读锁流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-1-RLock"><span class="toc-number">2.1.</span> <span class="toc-text">4.2.1 RLock</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-2-RUnlock"><span class="toc-number">2.2.</span> <span class="toc-text">4.2.2 RUnlock</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-3-rUnlockSlow"><span class="toc-number">2.3.</span> <span class="toc-text">4.2.3 rUnlockSlow</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E5%86%99%E9%94%81%E6%B5%81%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">4.3 写锁流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-1-Lock"><span class="toc-number">3.1.</span> <span class="toc-text">4.3.1 Lock</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-2-Unlock"><span class="toc-number">3.2.</span> <span class="toc-text">4.3.2 Unlock</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">1 基本结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-state%E5%AD%97%E6%AE%B5"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 state字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%AD%A3%E5%B8%B8%E6%A8%A1%E5%BC%8F%E5%92%8C%E9%A5%A5%E9%A5%BF%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 正常模式和饥饿模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%8A%A0%E8%A7%A3%E9%94%81%E8%BF%87%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">2 加解锁过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%8A%A0%E9%94%81"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 加锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-Fast-path"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.1.1 Fast path</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-Slow-Path"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.1.2 Slow Path</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-2-1-%E5%88%A4%E6%96%AD%E5%BD%93%E5%89%8D-Goroutine-%E8%83%BD%E5%90%A6%E8%BF%9B%E5%85%A5%E8%87%AA%E6%97%8B"><span class="toc-number">2.1.2.1.</span> <span class="toc-text">2.1.2.1 判断当前 Goroutine 能否进入自旋</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-2-2-%E9%80%9A%E8%BF%87%E8%87%AA%E6%97%8B%E7%AD%89%E5%BE%85%E4%BA%92%E6%96%A5%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE"><span class="toc-number">2.1.2.2.</span> <span class="toc-text">2.1.2.2 通过自旋等待互斥锁的释放</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-2-3-%E8%AE%A1%E7%AE%97%E4%BA%92%E6%96%A5%E9%94%81%E7%9A%84%E6%9C%80%E6%96%B0%E7%8A%B6%E6%80%81"><span class="toc-number">2.1.2.3.</span> <span class="toc-text">2.1.2.3 计算互斥锁的最新状态</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-2-4-%E6%9B%B4%E6%96%B0%E4%BA%92%E6%96%A5%E9%94%81%E7%9A%84%E7%8A%B6%E6%80%81%E5%B9%B6%E8%8E%B7%E5%8F%96%E9%94%81"><span class="toc-number">2.1.2.4.</span> <span class="toc-text">2.1.2.4 更新互斥锁的状态并获取锁</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E8%A7%A3%E9%94%81"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 解锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-Fast-path"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 Fast path</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-Slow-path"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 Slow path</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%B0%8F%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">3 小结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Sync-RWMutex"><span class="toc-number">4.</span> <span class="toc-text">4 Sync.RWMutex</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 数据结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E8%AF%BB%E9%94%81%E6%B5%81%E7%A8%8B"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 读锁流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-1-RLock"><span class="toc-number">4.2.1.</span> <span class="toc-text">4.2.1 RLock</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-2-RUnlock"><span class="toc-number">4.2.2.</span> <span class="toc-text">4.2.2 RUnlock</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-3-rUnlockSlow"><span class="toc-number">4.2.3.</span> <span class="toc-text">4.2.3 rUnlockSlow</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E5%86%99%E9%94%81%E6%B5%81%E7%A8%8B"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 写锁流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-1-Lock"><span class="toc-number">4.3.1.</span> <span class="toc-text">4.3.1 Lock</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-2-Unlock"><span class="toc-number">4.3.2.</span> <span class="toc-text">4.3.2 Unlock</span></a></li></ol></li></ol></li></ol>
     </div>
   </div>
   
 
   <div class="post-content">
     
-    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line">## 1 基本结构</span><br><span class="line">```go</span><br><span class="line">// sync/mutex.go 25行</span><br><span class="line">type Mutex struct &#123;</span><br><span class="line">	state int32      // 当前互斥锁的状态</span><br><span class="line">	sema  uint32     // 控制锁状态的信号量</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <h2 id="1-基本结构"><a href="#1-基本结构" class="headerlink" title="1 基本结构"></a>1 基本结构</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sync/mutex.go 25行</span></span><br><span class="line"><span class="keyword">type</span> Mutex <span class="keyword">struct</span> &#123;</span><br><span class="line">	state <span class="type">int32</span>      <span class="comment">// 当前互斥锁的状态</span></span><br><span class="line">	sema  <span class="type">uint32</span>     <span class="comment">// 控制锁状态的信号量</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="1-1-state字段"><a href="#1-1-state字段" class="headerlink" title="1.1 state字段"></a>1.1 state字段</h3><p>![[Pasted image 20230901043018.png]]<br>低三位分别标识</p>
 <ul>
 <li>mutexLocked（是否上锁）</li>
@@ -294,7 +306,7 @@
   </p>
   <p class="copyright-item">
     <span>Link: </span>
-    <a href="https://stardustorz.github.io/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/go-sync.Mutex/">https://stardustorz.github.io/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/go-sync.Mutex/</a>
+    <a href="https://stardustorz.github.io/2022/07/09/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/go-sync.Mutex/">https://stardustorz.github.io/2022/07/09/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/go-sync.Mutex/</a>
   </p>
   <p class="copyright-item">
     <span>License: </span>
@@ -310,18 +322,24 @@
   
   <footer class="post-footer">
     
+    <div class="post-tags">
+      
+      <a href="/tags/Golang/">Golang</a>
+      
+    </div>
+    
       
   <nav class="post-nav">  
       
-      <a class="prev" href="/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/go-sync.WaitGroup/">  
+      <a class="prev" href="/2022/07/09/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/go-sync.WaitGroup/">  
         <i class="iconfont icon-left"></i>  
-        <span class="prev-text nav-default"></span>  
+        <span class="prev-text nav-default">[Go] sync.WaitGroup</span>  
         <span class="prev-text nav-mobile">Prev</span>  
       </a>  
       
       
-      <a class="next" href="/2023/08/27/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/05-sync.pool/">  
-        <span class="next-text nav-default"></span>  
+      <a class="next" href="/2022/07/09/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/sync.Map/">  
+        <span class="next-text nav-default">[Go] sync.Map</span>  
         <span class="prev-text nav-mobile">Next</span>  
         <i class="iconfont icon-right"></i>  
       </a>  

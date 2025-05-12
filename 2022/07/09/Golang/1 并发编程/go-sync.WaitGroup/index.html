@@ -18,8 +18,12 @@
 
 <!-- Website description -->
 
+<meta name="description" content="[Go] sync.WaitGroup" />
+
 
 <!-- Website keywords -->
+
+<meta name="keywords" content="Golang, Draco&#39;s Blog" />
 
 
 
@@ -35,7 +39,7 @@
 
 
 <!-- Canonical, good for google search engine -->
-<link rel="canonical" href="https://stardustorz.github.io/2025/05/07/Golang/1 并发编程/go-sync.WaitGroup/" />
+<link rel="canonical" href="https://stardustorz.github.io/2022/07/09/Golang/1 并发编程/go-sync.WaitGroup/" />
 
 <!-- Fancybox styling -->
 
@@ -63,7 +67,7 @@
   window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":false};
 </script>
   
-  <title> - Draco&#39;s Blog</title>
+  <title>[Go] sync.WaitGroup - Draco&#39;s Blog</title>
 
 <meta name="generator" content="Hexo 6.3.0"></head>
 
@@ -187,15 +191,23 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      
+      [Go] sync.WaitGroup
       
     </h1>
 
     <div class="post-meta">
       <span class="post-time">
-        2025-05-07
+        2022-07-09
       </span>
       
+      
+      <span class="post-category">
+        
+        <a href="/categories/Golang/">Golang</a>
+        
+        <a href="/categories/Golang/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a>
+        
+      </span>
       
       
     </div>
@@ -205,14 +217,19 @@
   <div class="post-toc" id="post-toc">
     <h2 class="post-toc-title">Contents</h2>
     <div class="post-toc-content">
-      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-WaitGroup-channel-%E5%AE%8C%E6%88%90%E6%95%B0%E6%8D%AE%E8%81%9A%E5%90%88"><span class="toc-number">1.</span> <span class="toc-text">1.3 WaitGroup + channel 完成数据聚合</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%BA%90%E7%A0%81%E8%B5%B0%E8%AF%BB"><span class="toc-number"></span> <span class="toc-text">2 源码走读</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">2.1 数据结构</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-How-to-use%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">1 How to use？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E6%A0%B8%E5%BF%83%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 核心方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%A1%88%E4%BE%8B"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-WaitGroup-channel-%E5%AE%8C%E6%88%90%E6%95%B0%E6%8D%AE%E8%81%9A%E5%90%88"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 WaitGroup + channel 完成数据聚合</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%BA%90%E7%A0%81%E8%B5%B0%E8%AF%BB"><span class="toc-number">2.</span> <span class="toc-text">2 源码走读</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 数据结构</span></a></li></ol></li></ol>
     </div>
   </div>
   
 
   <div class="post-content">
     
-    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line">&gt;Golang 调度方式：`主动让渡`和`被动调度`</span><br><span class="line">&gt;	被动调度: `通道 channel` 、`单机锁 sync.Mutex`、`并发等待组 sync.WaitGroup`</span><br><span class="line">&gt;当 goroutine 之间需要建立明确的`层级关系`. 倘若父 goroutine 希望持有子 goroutine 的生杀大权，并且保证父 goroutine 消亡时能连带回收其创建的所有子 goroutine ，此时可以使用到 Golang 上下文工具 context，完成父 goroutine 对 子 goroutine 的`生命周期控制`</span><br><span class="line"></span><br><span class="line">&gt; 多个协程等待一个协程执行完，除了WaitGroup 还有什么方式？  写入channel，for循环读</span><br><span class="line">## 1 How to use？</span><br><span class="line">### 1.1 核心方法</span><br><span class="line">• `WaitGroup.Add(n)`：完成一次登记操作，使得 WaitGroup 中并发计数器的数值加上 n. 在使用场景中，WaitGroup.Add(n) 背后的含义是，注册并启动了 n 个子 goroutine</span><br><span class="line">• `WaitGroup.Done()`：完成一次上报操作，使得 WaitGroup 中并发计数器的数值减 1. 在使用场景中，通常会在一个子 goroutine 退出前，会执行一次 WaitGroup.Done 方法</span><br><span class="line">• `WaitGroup.Wait()`：完成聚合操作. 通常由主 goroutine 调用该方法，主 goroutine 会因此陷入阻塞，直到所有子 goroutine 都已经执行完成，使得 WaitGroup 并发计数器数值清零时，主 goroutine 才得以继续往下执行</span><br><span class="line"></span><br><span class="line">### 1.2 案例</span><br><span class="line">```go</span><br><span class="line">func Test_waitGroup(t *testing.T) &#123;</span><br><span class="line">    var wg sync.WaitGroup   // 声明等待组 wg</span><br><span class="line">    for i := 0; i &lt; 10; i++ &#123;   // 循环开启十个子 Goroutine</span><br><span class="line">        wg.Add(1)               // 登记子 Goroutine</span><br><span class="line">        go func() &#123;</span><br><span class="line">            defer wg.Done()     // 保证退出前会调用一次，完成上报</span><br><span class="line">            &lt;-time.After(time.Second)</span><br><span class="line">        &#125;()</span><br><span class="line">    &#125;</span><br><span class="line">    wg.Wait()                   // 阻塞等待，直到等待组全部完成后才往下走</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <blockquote>
+<p>Golang 调度方式：<code>主动让渡</code>和<code>被动调度</code><br>   被动调度: <code>通道 channel</code> 、<code>单机锁 sync.Mutex</code>、<code>并发等待组 sync.WaitGroup</code><br>当 goroutine 之间需要建立明确的<code>层级关系</code>. 倘若父 goroutine 希望持有子 goroutine 的生杀大权，并且保证父 goroutine 消亡时能连带回收其创建的所有子 goroutine ，此时可以使用到 Golang 上下文工具 context，完成父 goroutine 对 子 goroutine 的<code>生命周期控制</code></p>
+<p>多个协程等待一个协程执行完，除了WaitGroup 还有什么方式？  写入channel，for循环读</p>
+<h2 id="1-How-to-use？"><a href="#1-How-to-use？" class="headerlink" title="1 How to use？"></a>1 How to use？</h2><h3 id="1-1-核心方法"><a href="#1-1-核心方法" class="headerlink" title="1.1 核心方法"></a>1.1 核心方法</h3><p>• <code>WaitGroup.Add(n)</code>：完成一次登记操作，使得 WaitGroup 中并发计数器的数值加上 n. 在使用场景中，WaitGroup.Add(n) 背后的含义是，注册并启动了 n 个子 goroutine<br>• <code>WaitGroup.Done()</code>：完成一次上报操作，使得 WaitGroup 中并发计数器的数值减 1. 在使用场景中，通常会在一个子 goroutine 退出前，会执行一次 WaitGroup.Done 方法<br>• <code>WaitGroup.Wait()</code>：完成聚合操作. 通常由主 goroutine 调用该方法，主 goroutine 会因此陷入阻塞，直到所有子 goroutine 都已经执行完成，使得 WaitGroup 并发计数器数值清零时，主 goroutine 才得以继续往下执行</p>
+</blockquote>
+<h3 id="1-2-案例"><a href="#1-2-案例" class="headerlink" title="1.2 案例"></a>1.2 案例</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Test_waitGroup</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> wg sync.WaitGroup   <span class="comment">// 声明等待组 wg</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;   <span class="comment">// 循环开启十个子 Goroutine</span></span><br><span class="line">        wg.Add(<span class="number">1</span>)               <span class="comment">// 登记子 Goroutine</span></span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">            <span class="keyword">defer</span> wg.Done()     <span class="comment">// 保证退出前会调用一次，完成上报</span></span><br><span class="line">            &lt;-time.After(time.Second)</span><br><span class="line">        &#125;()</span><br><span class="line">    &#125;</span><br><span class="line">    wg.Wait()                   <span class="comment">// 阻塞等待，直到等待组全部完成后才往下走</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>注意：子 goroutine 是异步启动的，所以有可能出现 Wait 方法先于 Add 方法执行，此时由于计数器值为 0，Wait 方法会被直接放行，导致产生预期之外的执行流程；因此要保证 add 在 done 之前。</p>
 </blockquote>
@@ -263,7 +280,7 @@
   </p>
   <p class="copyright-item">
     <span>Link: </span>
-    <a href="https://stardustorz.github.io/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/go-sync.WaitGroup/">https://stardustorz.github.io/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/go-sync.WaitGroup/</a>
+    <a href="https://stardustorz.github.io/2022/07/09/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/go-sync.WaitGroup/">https://stardustorz.github.io/2022/07/09/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/go-sync.WaitGroup/</a>
   </p>
   <p class="copyright-item">
     <span>License: </span>
@@ -279,18 +296,24 @@
   
   <footer class="post-footer">
     
+    <div class="post-tags">
+      
+      <a href="/tags/Golang/">Golang</a>
+      
+    </div>
+    
       
   <nav class="post-nav">  
       
-      <a class="prev" href="/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/04-sync.Mutex/">  
+      <a class="prev" href="/2022/07/10/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/Context/">  
         <i class="iconfont icon-left"></i>  
-        <span class="prev-text nav-default"></span>  
+        <span class="prev-text nav-default">[Go] Context</span>  
         <span class="prev-text nav-mobile">Prev</span>  
       </a>  
       
       
-      <a class="next" href="/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/go-sync.Mutex/">  
-        <span class="next-text nav-default"></span>  
+      <a class="next" href="/2022/07/09/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/go-sync.Mutex/">  
+        <span class="next-text nav-default">[Go] sync.Mutex</span>  
         <span class="prev-text nav-mobile">Next</span>  
         <i class="iconfont icon-right"></i>  
       </a>  
