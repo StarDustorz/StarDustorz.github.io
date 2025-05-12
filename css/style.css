@@ -6,6 +6,28 @@
   font-weight: lighter;
   font-style: normal;
 }
+.language-switcher {
+  display: inline-block;
+  margin-left: 10px;
+}
+.language-switcher a {
+  padding: 0 5px;
+  font-size: 14px;
+}
+.language-switcher a.active {
+  color: #3eaf7c;
+  font-weight: bold;
+}
+.language-switcher a:hover {
+  color: #3eaf7c;
+}
+
+@media (max-width: 767px) {
+  .language-switcher {
+    margin: 10px 0;
+    text-align: center;
+  }
+}
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 /**
  * 1. Set default font family to sans-serif.
