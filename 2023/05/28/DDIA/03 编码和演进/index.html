@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="[DDIA] 编码和演进" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="DDIA, Draco&#39;s Blog" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Draco's Blog" >
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://stardustorz.github.io/2023/05/28/DDIA/03 编码和演进/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":false};
+</script>
+  
+  <title>[DDIA] 编码和演进 - Draco&#39;s Blog</title>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Draco's Blog</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      [DDIA] 编码和演进
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2023-05-28
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">阅读笔记</a>
+        
+        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/DDIA/">DDIA</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81%E7%9A%84%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">1 数据编码的格式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-JSON%E3%80%81XML-%E5%8F%8A%E5%85%B6%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8F%98%E4%BD%93"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 JSON、XML 及其二进制变体</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-1-%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%BC%96%E7%A0%81"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1.1 二进制编码</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-Thrift-%E5%92%8C-Protocol-Buffers"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 Thrift 和 Protocol Buffers</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-1-%E5%AD%97%E6%AE%B5%E6%A0%87%E5%8F%B7%E5%92%8C%E6%A8%A1%E5%BC%8F%E6%BC%94%E5%8F%98"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.2.1 字段标号和模式演变</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-2-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E6%A8%A1%E5%BC%8F%E6%BC%94%E5%8F%98"><span class="toc-number">1.2.2.</span> <span class="toc-text">1.2.2 数据类型和模式演变</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BC%98%E7%82%B9"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 模式的优点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%87%A0%E7%A7%8D%E6%95%B0%E6%8D%AE%E6%B5%81%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">2 几种数据流模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E7%BB%8F%E7%94%B1%E6%9C%8D%E5%8A%A1%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81%EF%BC%9AREST-%E5%92%8C-RPC"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 经由服务的数据流：REST 和 RPC</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-web-%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 web 服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-RPC-%E9%9D%A2%E4%B8%B4%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 RPC 面临的问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-3-RPC-%E5%BD%93%E5%89%8D%E6%96%B9%E5%90%91"><span class="toc-number">2.2.3.</span> <span class="toc-text">2.2.3 RPC 当前方向</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-4-%E6%95%B0%E6%8D%AE%E7%BC%96%E7%A0%81%E5%92%8C-RPC-%E7%9A%84%E6%BC%94%E5%8C%96"><span class="toc-number">2.2.4.</span> <span class="toc-text">2.2.4 数据编码和 RPC 的演化</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E7%BB%8F%E7%94%B1%E6%B6%88%E6%81%AF%E4%BC%A0%E9%80%92%E7%9A%84%E6%95%B0%E6%8D%AE%E6%B5%81"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 经由消息传递的数据流</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-1-%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="toc-number">2.3.1.</span> <span class="toc-text">2.3.1 消息队列</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <blockquote>
+<p>编码主要涉及两方面问题：如何编码能够节省空间、提高性能;<br> 如何编码以适应数据的演化和兼容。</p>
+</blockquote>
+<span id="more"></span>
+<p>所有涉及跨进程通信的地方，都需要对数据进行<strong>编码</strong>（<strong>Encoding</strong>），或者说<strong>序列化</strong>（<strong>Serialization</strong>）。因为持久化存储和网络传输都是面向字节流的。序列化本质上是一种“<strong>降维</strong>”操作，将内存中高维的数据结构降维成单维的字节流，于是底层硬件和相关协议，只需要处理一维信息即可。<br><strong>编码主要涉及两方面问题：</strong></p>
+<ol>
+<li>如何编码能够节省空间、提高性能。</li>
+<li>如何编码以适应数据的演化和兼容。</li>
+</ol>
+<h2 id="1-数据编码的格式"><a href="#1-数据编码的格式" class="headerlink" title="1 数据编码的格式"></a>1 数据编码的格式</h2><h3 id="1-1-JSON、XML-及其二进制变体"><a href="#1-1-JSON、XML-及其二进制变体" class="headerlink" title="1.1 JSON、XML 及其二进制变体"></a>1.1 JSON、XML 及其二进制变体</h3><p>JSON，XML 和 CSV 属于常用的<strong>文本编码</strong>格式，其好处在于肉眼可读，坏处在于不够紧凑，占空间较多。<br>除了不够紧凑外，<strong>文本编码（text encoding）</strong> 还有以下缺点：</p>
+<ol>
+<li>对<strong>数值类型支持不够</strong>。CSV 和 XML 直接不支持，万物皆字符串。JSON 虽区分字符串和数值，但是不进一步区分细分数值类型。可以理解，毕竟文本编码嘛，主要还是面向字符串。</li>
+<li><strong>对二进制数据支持不够</strong>。支持 Unicode，但是对二进制串支持不够，可能会显示为乱码。虽然可以通过 Base64 编码来绕过，但有点做无用功的感觉。</li>
+<li><strong>XML 和 JSON 支持额外的模式</strong>。模式会描述数据的类型，告诉你如何理解数据。配合这些模式语言，虽然可以让 XML 和 JSON 变得强大，但是大大增加了复杂度。</li>
+<li><strong>CSV 没有任何模式</strong>。</li>
+</ol>
+<h4 id="1-1-1-二进制编码"><a href="#1-1-1-二进制编码" class="headerlink" title="1.1.1 二进制编码"></a>1.1.1 二进制编码</h4><p>JSON 有很多二进制变种：MessagePack、BSON、BJSON、UBJSON、BISON 和 Smile 等。</p>
+<h3 id="1-2-Thrift-和-Protocol-Buffers"><a href="#1-2-Thrift-和-Protocol-Buffers" class="headerlink" title="1.2 Thrift 和 Protocol Buffers"></a>1.2 Thrift 和 Protocol Buffers</h3><p>在编码前都需要由接口定义语言（IDL）来描述模式：<br>IDL 是编程语言无关的，可以利用相关代码生成工具，可以将上述 IDL 翻译为指定语言的代码。即，集成这些生成的代码，无论什么样的语言，都可以使用同样的格式编解码。<br>这也是不同 service 可以使用不同编码语言，且能够互相通信的基础。</p>
+<h4 id="1-2-1-字段标号和模式演变"><a href="#1-2-1-字段标号和模式演变" class="headerlink" title="1.2.1 字段标号和模式演变"></a>1.2.1 字段标号和模式演变</h4><p><strong>模式</strong>，即有哪些字段，字段分别为什么类型。<br>在模式发生改变后，需要：</p>
+<ol>
+<li><strong>向后兼容</strong>：新的代码，在处理新的增量数据格式的同时，也得处理旧的存量数据。</li>
+<li><strong>向前兼容</strong>：旧的代码，如果遇到新的数据格式，不能 crash。</li>
+<li>ProtoBuf 和 Thrift 是怎么处理？ <ol>
+<li><strong>字段标号</strong> + <strong>限定符</strong>（optional、required） </li>
+<li>向后兼容：新加的字段需为 optional。这样在解析旧数据时，才不会出现字段缺失的情况。 </li>
+<li>向前兼容：字段标号不能修改，只能追加。这样旧代码在看到不认识的标号时，省略即可。</li>
+</ol>
+</li>
+</ol>
+<h4 id="1-2-2-数据类型和模式演变"><a href="#1-2-2-数据类型和模式演变" class="headerlink" title="1.2.2 数据类型和模式演变"></a>1.2.2 数据类型和模式演变</h4><ul>
+<li>修改数据类型比较麻烦：只能够在相容类型中进行修改。</li>
+<li>如不能将字符串修改为整形，但是可以在整形内修改：32 bit 到 64 bit 整形。</li>
+<li>ProtoBuf 没有列表类型，而有一个 repeated 类型。其好处在于<strong>兼容数组类型</strong>的同时，支持将可选（optional）<strong>单值字段</strong>，修改为<strong>多值字段</strong>。修改后，旧代码在看到新的多值字段时，只会使用最后一个元素。</li>
+</ul>
+<h3 id="1-3-模式的优点"><a href="#1-3-模式的优点" class="headerlink" title="1.3 模式的优点"></a>1.3 模式的优点</h3><p>模式的本质是显式类型约束， 先有模式，再有数据<br><strong>基于显式定义二进制编码优点有：</strong></p>
+<ol>
+<li>省去字段名，从而更加紧凑。</li>
+<li>模式是数据的注释或者文档，并且总是最新的。</li>
+<li>数据模式允许不读取数据，仅比对模式来做低成本的兼容性检查。</li>
+<li>对于静态类型来说，可以利用代码生成做编译时的类型检查。<h2 id="2-几种数据流模式"><a href="#2-几种数据流模式" class="headerlink" title="2 几种数据流模式"></a>2 几种数据流模式</h2></li>
+</ol>
+<ul>
+<li>数据可以以很多种形式从一个系统流向另一个系统，但不变的是，流动时都需要编码与解码。</li>
+<li>在数据流动时，会涉及编解码双方模式匹配问题</li>
+<li>几种进程间典型的数据流方式：<ul>
+<li>通过数据库</li>
+<li>通过服务调用</li>
+<li>通过异步消息传递</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-1-数据库"><a href="#2-1-数据库" class="headerlink" title="2.1 数据库"></a>2.1 数据库</h3><ol>
+<li><strong>只由同一个进程访问</strong>。则数据库可以理解为该进程向将来发送数据的中介。</li>
+<li><strong>由多个进程访问</strong>。则多个进程可能有的是旧版本，有的是新版本，此时数据库需要考虑向前和向后兼容的问题。</li>
+</ol>
+<p>对于应用程序，可能很短时间就可以由旧版本替换为新版本。但是对于数据，旧版本的代码写入的数据量，经年累月，可能很大。在变更了模式之后，由于这些旧模式的数据量很大，全部更新对齐到新版本的代价很高。<br>这种情况我们称之为：<strong>数据的生命周期超过了其对应代码的生命周期</strong>。<br>在读取时，数据库一般会对缺少对应列的旧数据：</p>
+<ol>
+<li>填充新版本字段的<strong>默认值</strong>（default value）</li>
+<li>如果没有默认值则填充<strong>空值</strong>（nullable）<br>后返回给用户。一般来说，在更改模式时（比如 alter table），数据库不允许增加既没有默认值、也不允许为空的列。</li>
+</ol>
+<p>有时候需要对数据库做备份到外存。在做备份（或者说快照）时，虽然会有不同时间点生成的数据，但通常会将各种版本数据转化、对齐到最新版本。毕竟，总是要全盘拷贝数据，那就顺便做下转换好了。</p>
+<h3 id="2-2-经由服务的数据流：REST-和-RPC"><a href="#2-2-经由服务的数据流：REST-和-RPC" class="headerlink" title="2.2 经由服务的数据流：REST 和 RPC"></a>2.2 经由服务的数据流：REST 和 RPC</h3><ul>
+<li>通过网络通信时，通常涉及两种角色：服务器（server）和客户端（client）。</li>
+<li>通常来说，暴露于公网的多为 HTTP 服务，而 RPC 服务常在内部使用。</li>
+<li>服务器也可以同时是客户端：<ol>
+<li>作为客户端访问数据库。</li>
+<li>作为客户端访问其他服务。</li>
+</ol>
+</li>
+<li>对于后者，是因为我们常把一个大的服务拆成一组功能独立、相对解耦的服务，这就是 <strong>面向服务的架构（service-oriented architecture，SOA）</strong>，或者最近比较火的<strong>微服务架构（micro-services architecture）</strong>。</li>
+<li>服务在某种程度上和数据库类似：允许客户端以某种方式存储和查询数据。但不同的是，数据库通常提供某种灵活的查询语言，而服务只能提供相对死板的 API。</li>
+</ul>
+<h4 id="2-2-1-web-服务"><a href="#2-2-1-web-服务" class="headerlink" title="2.2.1 web 服务"></a>2.2.1 web 服务</h4><p>两种设计 HTTP API 的方法：REST 和 SOAP。</p>
+<ol>
+<li><strong>REST 并不是一种协议，而是一种设计哲学</strong>。它强调简单的 API 格式，使用 URL 来标识资源，使用 HTTP 的动作（GET、POST、PUT、DELETE）来对资源进行增删改查。由于其简洁风格，越来越受欢迎。</li>
+<li>SOAP 是基于 XML 的协议。虽然使用 HTTP，但目的在于独立于 HTTP。现在提的比较少了。</li>
+</ol>
+<h4 id="2-2-2-RPC-面临的问题"><a href="#2-2-2-RPC-面临的问题" class="headerlink" title="2.2.2 RPC 面临的问题"></a>2.2.2 RPC 面临的问题</h4><ol>
+<li>本地函数调用要么成功、要么不成功。但是 RPC 由于经过网络，可能会有各种复杂情况，比如请求丢失、响应丢失、hang 住以至于超时等等。因此，可能需要重试。</li>
+<li>如果重试，需要考虑<strong>幂等性</strong>问题。因为上一次的请求可能已经到达了服务端，只是请求没有成功返回。那么多次调用远端函数，就要保证不会造成额外副作用。</li>
+<li>远端调用延迟不可用，受网络影响较大。</li>
+<li>客户端与服务端使用的编程语言可能不同，但如果有些类型不是两种语言都有，就会出一些问题<h4 id="2-2-3-RPC-当前方向"><a href="#2-2-3-RPC-当前方向" class="headerlink" title="2.2.3 RPC 当前方向"></a>2.2.3 RPC 当前方向</h4></li>
+<li>比如局域网的网络通常比较快速、可控。</li>
+<li>多次调用，使用幂等性来解决。</li>
+<li>跨语言，可以使用 RPC 框架的 IDL 来解决。</li>
+</ol>
+<h4 id="2-2-4-数据编码和-RPC-的演化"><a href="#2-2-4-数据编码和-RPC-的演化" class="headerlink" title="2.2.4 数据编码和 RPC 的演化"></a>2.2.4 数据编码和 RPC 的演化</h4><p>通过服务的数据流通常可以假设：所有的服务端先更新，然后客户端再更新。因此，只需要在请求里考虑后向兼容性，在响应中考虑前向兼容性：</p>
+<ol>
+<li>Thrift、gRPC（Protobuf）和 Avro RPC 可以根据编码格式的兼容性规则进行演变。</li>
+<li>RESTful API 通常使用 JSON 作为请求响应的格式，JSON 比较容易添加新的字段来进行演进和兼容。</li>
+<li>SOAP 按下不表。<br>对于 RPC，服务的兼容性比较困难，因为一旦 RPC 服务的 SDK 提供出去之后，你就无法对其生命周期进行控制：总有用户因为各种原因，不会进行主动升级。因此可能需要长期保持兼容性，或者提前通知和不断预告，或者维护多个版本 SDK 并逐渐对早期版本进行淘汰。<br>对于 RESTful API，常用的兼容方法是，将版本号做到 URL 或者 HTTP 请求头中。</li>
+</ol>
+<h3 id="2-3-经由消息传递的数据流"><a href="#2-3-经由消息传递的数据流" class="headerlink" title="2.3 经由消息传递的数据流"></a>2.3 经由消息传递的数据流</h3><p>介于数据库和 RPC 间的<strong>异步消息系统</strong>：一个存储（消息 broker、消息队列来临时存储消息）+ 两次 RPC（生产者一次，消费者一次）。<br>与 RPC 相比，使用消息队列的优点：</p>
+<ol>
+<li>如果消费者暂时不可用，可以充当暂存系统。</li>
+<li>当消费者宕机重启后，自动地重新发送消息。</li>
+<li>生产者不必知道消费者 IP 和端口。</li>
+<li>能将一条消息发送给多个消费者。</li>
+<li>将生产者和消费者解耦。</li>
+</ol>
+<h4 id="2-3-1-消息队列"><a href="#2-3-1-消息队列" class="headerlink" title="2.3.1 消息队列"></a>2.3.1 消息队列</h4><p>消息队列的<strong>送达保证</strong>因实现和配置而异，包括：</p>
+<ol>
+<li><strong>最少一次（at-least-once）</strong>：同一条数据可能会送达多次给消费者。</li>
+<li><strong>最多一次（at-most-once）</strong>：同一条数据最多会送达一次给消费者，有可能丢失。</li>
+<li><strong>严格一次（exactly-once）</strong>：同一条数据保证会送达一次，且最多一次给消费者。</li>
+</ol>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span>Author: </span>
+    <a href="https://stardustorz.github.io">draco</a>
+  </p>
+  <p class="copyright-item">
+    <span>Link: </span>
+    <a href="https://stardustorz.github.io/2023/05/28/DDIA/03%20%E7%BC%96%E7%A0%81%E5%92%8C%E6%BC%94%E8%BF%9B/">https://stardustorz.github.io/2023/05/28/DDIA/03%20%E7%BC%96%E7%A0%81%E5%92%8C%E6%BC%94%E8%BF%9B/</a>
+  </p>
+  <p class="copyright-item">
+    <span>License: </span>
+    
+    <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+  </p>
+</div>
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/DDIA/">DDIA</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/2023/06/14/DDIA/04%20%E5%86%97%E4%BD%99/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">[DDIA] 冗余</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/2023/05/24/DDIA/02%20%E5%AD%98%E5%82%A8%E5%92%8C%E6%9F%A5%E8%AF%A2/">  
+        <span class="next-text nav-default">[DDIA] 存储和查询</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2019 - 2025      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">draco</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+</body>
+
+</html>

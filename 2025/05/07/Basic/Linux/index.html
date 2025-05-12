@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+
+<!-- Website keywords -->
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Draco's Blog" >
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://stardustorz.github.io/2025/05/07/Basic/Linux/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":false};
+</script>
+  
+  <title> - Draco&#39;s Blog</title>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Draco's Blog</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2025-05-07
+      </span>
+      
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.</span> <span class="toc-text">1 常用命令</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BC%96%E8%AF%91"><span class="toc-number"></span> <span class="toc-text">编译</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number"></span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%87%BA%E7%8E%B0%E5%A6%82%E4%B8%8B%E6%98%BE%E7%A4%BA%E8%A1%A8%E7%A4%BA%E7%AB%AF%E5%8F%A3%E6%AD%A3%E5%B8%B8%E6%89%93%E5%BC%80"><span class="toc-number"></span> <span class="toc-text">出现如下显示表示端口正常打开</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%9F%A5%E7%9C%8BCPU%E4%BF%A1%E6%81%AF%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">3 查看CPU信息：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%9F%A5%E7%9C%8B%E7%AB%AF%E5%8F%A3%EF%BC%9A"><span class="toc-number">2.</span> <span class="toc-text">4 查看端口：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%9F%A5%E7%9C%8B%E7%A1%AC%E7%9B%98%E7%A9%BA%E9%97%B4%EF%BC%9A"><span class="toc-number">3.</span> <span class="toc-text">5 查看硬盘空间：</span></a></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <h2 id="1-常用命令"><a href="#1-常用命令" class="headerlink" title="1 常用命令"></a>1 常用命令</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">查看进程  ps -ef| grep A</span><br><span class="line">复制文件  scp -r /home/a.txt root@B_ip:/home  <span class="comment">//将A服务器中/home/a.txt 复制到B服务器的/home中</span></span><br><span class="line">动态查看命令执行结果  watch</span><br><span class="line">网络相关  tcpdump</span><br><span class="line">列出当前系统打开的文件描述符  lsof</span><br><span class="line">网络信息统计    netstat</span><br><span class="line">系统的进程信息，内存使用等资源使用情况   vmstat</span><br><span class="line">cpu的使用情况   mpstat</span><br><span class="line"> </span><br><span class="line"><span class="string">``</span><span class="string">`  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">## 2 升级 openssh</span></span><br><span class="line"><span class="string">一、升级背景：</span></span><br><span class="line"><span class="string">漏洞扫描显示linux服务器openssh有高危漏洞，需要进行修复。openssh是远程登录到linux服务器</span></span><br><span class="line"><span class="string">的重要工具，要修复此漏洞需升级到最高版本（2021年5月中旬最新版本为8.6p1）。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">二、升级说明：</span></span><br><span class="line"><span class="string">1、所有升级文件均从官网下载。</span></span><br><span class="line"><span class="string">2、linux服务器系统为Centos7可适用此方案。</span></span><br><span class="line"><span class="string">3、Centos7系统需要有yum源，方便解决依赖关系问题。如无法实现，则需上传同系统版本安装映</span></span><br><span class="line"><span class="string">像文件，作为本地yum源。</span></span><br><span class="line"><span class="string">4、安装过程受网络影响极大，一旦出现不可抗因素致网络断开，可能会导致升级中断，无法远程</span></span><br><span class="line"><span class="string">连接，出现此情况需现场人员配合解决。</span></span><br><span class="line"><span class="string">5、升级过程出现问题需现场人员根据回退方案进行恢复操作。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">三、升级过程：</span></span><br><span class="line"><span class="string">（0）安装并启用telnet</span></span><br><span class="line"><span class="string">1、安装telnet</span></span><br><span class="line"><span class="string">`</span>yum install telnet-server telnet xinet</span><br><span class="line"><span class="number">2</span>、修改配置文件</span><br><span class="line"><span class="string">`vi /etc/xinetd.d/telnet</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">`</span>disable= no       <span class="comment">//将yes改为no</span></span><br><span class="line"><span class="string">``</span>#让root可以登录</span><br><span class="line"><span class="string">``</span>#mv /etc/securetty /etc/securetty.bak</span><br><span class="line">重启服务</span><br><span class="line"><span class="string">`service xinetd restart</span></span><br><span class="line"><span class="string">3、启动相应服务，然后使用telnet登录到服务器</span></span><br><span class="line"><span class="string">`</span>systemctl start telnet.socket</span><br><span class="line"><span class="string">`systemctl start xinetd</span></span><br><span class="line"><span class="string">`</span>chkconfig --list</span><br><span class="line">（一）配置yum源</span><br><span class="line"><span class="number">1</span>、上传与生产环境相同的centos7版本的iso和openssh8<span class="number">.6</span>p1的安装包到服务器。</span><br><span class="line"></span><br><span class="line"><span class="number">2</span>、挂载iso</span><br><span class="line">创建iso存放目录和挂载目录，并上传iso镜像文件到iso存放目录/mnt/iso下</span><br><span class="line"><span class="string">`mkdir /mnt/iso </span></span><br><span class="line"><span class="string">`</span>mkdir /mnt/cdrom</span><br><span class="line"><span class="string">`mv CentOS-7.6-x86_64-DVD-1810.iso /mnt/iso/</span></span><br><span class="line"><span class="string">挂载iso镜像到挂载目录/mnt/cdrom下</span></span><br><span class="line"><span class="string">`</span>mount -o loop /mnt/iso/CentOS<span class="number">-7.6</span>-x86_64-DVD<span class="number">-1810.i</span>so /mnt/cdrom</span><br><span class="line">使用df -h命令查询挂载是否成功</span><br><span class="line"><span class="string">`df -h</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">3、备份原本地源</span></span><br><span class="line"><span class="string">进入repos配置目录</span></span><br><span class="line"><span class="string">`</span>cd /etc/yum.repos.d/</span><br><span class="line">创建备份文件夹</span><br><span class="line"><span class="string">`mkdir repobak</span></span><br><span class="line"><span class="string">移动配置文件到repobak文件夹中</span></span><br><span class="line"><span class="string">`</span>mv *.repo repobak/</span><br><span class="line"></span><br><span class="line"><span class="number">4</span>、新建光盘源配置文件</span><br><span class="line"><span class="string">`vi CentOS-Media.repo</span></span><br><span class="line"><span class="string">输入下列内容</span></span><br></pre></td></tr></table></figure>
+<p>[c7-media]<br>name=CentOS-$releasever - Media<br>baseurl=file:///mnt/cdrom/</p>
+<p>gpgcheck=0<br>enabled=1<br><code>``
+5、测试安装源</code>yum clean all<br><code>yum makecache
+（二）升级openssh版本到8.6p1
+1、下载或上传安装包openssh-8.6p1.tar.gz到/root目录下
+进入安装包所在文件夹</code>cd /root/linshi</p>
+<p>2、关闭Selinux<br><code>setenforce 0</code>sed -i “s/SELINUX=enforcing/SELINUX=disabled/g” /etc/selinux/config</p>
+<p>3、安装依赖关系<br><code>yum install -y gcc pam-devel rpm-build wget zlib-devel openssl-devel net-tools</code>tar -xvf openssh-8.6p1.tar.gz<br>`cd openssh-8.6p1</p>
+<p>4、卸载旧版openssh<br><code>rpm -qa |grep openssh
+ps:下一步骤为删除原有ssh，但不会影响现在进行的ssh会话，所以整个操作过程不要断开ssh会话，
+否则无法再次连接，只能由现场人员进行回退后重新操作（推荐使用telnet进行升级）。</code>for i in $(rpm -qa |grep openssh);do rpm -e $i —nodeps;done</p>
+<p>5、设置、编译、安装<br><code>`./configure --prefix=/usr --sysconfdir=/etc/ssh --with-md5-passwords --with-pam --with-tcp-wrappers  --with-ssl-dir=/usr/local/ssl/lib --without-hardening</code>mv /etc/ssh /etc/ssh.old<br>`cp contrib/redhat/sshd.pam /etc/pam.d/sshd</p>
+<h1 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h1><p>`make</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>`make install</p>
+<p>6、设置自启动<br><code>复制启动脚本到/etc/init.d</code>cp contrib/redhat/sshd.init /etc/init.d/sshd<br><code>chkconfig --add sshd</code>chkconfig sshd on<br><code>chkconfig --list|grep sshd</code>sed -i “32a PermitRootLogin yes” /etc/ssh/sshd_config<br><code>`重启ssh服务</code>service sshd restart</p>
+<p>7、检查升级情况<br>`ssh -V<br>输出版本号为“OpenSSH_8.6p1”，说明更新成功</p>
+<p>(三)关闭telnet<br>关闭服务<br><code>systemctl stop telnet.socket</code>systemctl stop xinetd<br><code>#root可以登录</code>#mv /etc/securetty.bak /etc/securetty</p>
+<p>卸载telnet<br>`yum remove telnet-server  xinetd</p>
+<p>ps：此时ssh是可以连接状态，不要断开连接防止修改出错无法连接服务器。测试新端口是否打开<br>`telnet 127.0.0.1 22</p>
+<h1 id="出现如下显示表示端口正常打开"><a href="#出现如下显示表示端口正常打开" class="headerlink" title="出现如下显示表示端口正常打开"></a>出现如下显示表示端口正常打开</h1><p><code>Trying 127.0.0.1...</code>Connected to 127.0.0.1.<br><code>Escape character is &#39;^]&#39;.</code>SSH-2.0-OpenSSH_8.6<br>使用远程工具新开窗口，连接新端口测试修改是否成功，如有问题马上使用之前的连接进行检查修改。</p>
+<p>（四）回退方案<br>1、挂载iso文件作为yum源<br><code>mount -o loop /mnt/iso/CentOS-7.6-x86_64-DVD-1810.iso /mnt/cdrom
+2、安装openssh</code>yum install openssh*<br>3、启动ssh<br>`service sshd start<br>4、重新连接ssh，然后从（二）4开始做。</p>
+<h2 id="3-查看CPU信息："><a href="#3-查看CPU信息：" class="headerlink" title="3 查看CPU信息："></a>3 查看CPU信息：</h2><p>内存文件：</p>
+<p>/proc/meminfo</p>
+<p>/proc/cpuinfo</p>
+<p>命令：</p>
+<p>lscpu lsmem</p>
+<p>查看CPU使用最高的进程：</p>
+<p>ps -aux | sort -k3nr | head -n</p>
+<h2 id="4-查看端口："><a href="#4-查看端口：" class="headerlink" title="4 查看端口："></a>4 查看端口：</h2><p>netstat -anp | grep port_number</p>
+<h2 id="5-查看硬盘空间："><a href="#5-查看硬盘空间：" class="headerlink" title="5 查看硬盘空间："></a>5 查看硬盘空间：</h2><p>df -aTh</p>
+<p>du -h -d 1</p>
+<p>作者：赵先生<br>链接：<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/483668258/answer/3048322619">https://www.zhihu.com/question/483668258/answer/3048322619</a><br>来源：知乎<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span>Author: </span>
+    <a href="https://stardustorz.github.io">draco</a>
+  </p>
+  <p class="copyright-item">
+    <span>Link: </span>
+    <a href="https://stardustorz.github.io/2025/05/07/Basic/Linux/">https://stardustorz.github.io/2025/05/07/Basic/Linux/</a>
+  </p>
+  <p class="copyright-item">
+    <span>License: </span>
+    
+    <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+  </p>
+</div>
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/2025/05/07/Basic/Linux%20%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default"></span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/02-cond/">  
+        <span class="next-text nav-default"></span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2019 - 2025      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">draco</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+</body>
+
+</html>

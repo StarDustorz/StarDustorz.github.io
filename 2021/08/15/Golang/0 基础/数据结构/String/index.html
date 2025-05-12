@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="[Go] String" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="Golang, Draco&#39;s Blog" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Draco's Blog" >
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://stardustorz.github.io/2021/08/15/Golang/0 基础/数据结构/String/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":false};
+</script>
+  
+  <title>[Go] String - Draco&#39;s Blog</title>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Draco's Blog</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      [Go] String
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2021-08-15
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/Golang/">Golang</a>
+        
+        <a href="/categories/Golang/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">1 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">2.</span> <span class="toc-text">2 注意事项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E4%B8%8D%E5%8F%AF%E5%8F%98"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 不可变</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 共享内存</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%B8%8E-bytes-%E4%BA%92%E8%BD%AC"><span class="toc-number">3.</span> <span class="toc-text">3 与 bytes 互转</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8B%BC%E6%8E%A5"><span class="toc-number">4.</span> <span class="toc-text">4 字符串拼接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%8F%82%E8%80%83"><span class="toc-number">5.</span> <span class="toc-text">5 参考</span></a></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <blockquote>
+<p>字符串的实现和注意事项</p>
+</blockquote>
+<span id="more"></span>
+<p>以下分析基于 Go1.14 版本。</p>
+<h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h2><p>String 具体实现如下<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// reflect/value.go 1954行  </span></span><br><span class="line"> <span class="keyword">type</span> StringHeader <span class="keyword">struct</span> &#123;  </span><br><span class="line">   Data <span class="type">uintptr</span>  </span><br><span class="line">   Len  <span class="type">int</span>  </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>Data：指向 真正存储字符串内容的地址</li>
+<li>Len：字符串的长度（字节）<br>通过起始地址换个字符串长度就可以准确定位整个字符串了。</li>
+</ul>
+<blockquote>
+<p>Go 语言没有用 C 语言中的<code>\0</code>标志表示字符串结束，而是为 String 增加了 Len 字段。</p>
+</blockquote>
+<h2 id="2-注意事项"><a href="#2-注意事项" class="headerlink" title="2 注意事项"></a>2 注意事项</h2><h3 id="2-1-不可变"><a href="#2-1-不可变" class="headerlink" title="2.1 不可变"></a>2.1 不可变</h3><p><strong>Go 语言中认为字符串是不可变的，所以分配在只读内存段。</strong></p>
+<p>虽然可以通过如下方式读取，但是不可修改</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	str := <span class="string">&quot;hello指月&quot;</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%c \n&quot;</span>, str[<span class="number">1</span>]) <span class="comment">// e</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>要修改可以直接给变量赋新值，这样 string 中的 str 字段就会指向新的地址。</p>
+<p>不过也可以通过强转为 byte slice 的方式进行修改。同样会重新分配一段内存，并拷贝原来的内容。</p>
+<blockquote>
+<p>使用 unsafe 包中的方法可以让 slice 依旧使用原来的这段内存，避免内存拷贝。不过这样转换类型后也无法修改这段只读内存的内容。</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	str := <span class="string">&quot;hello指月&quot;</span></span><br><span class="line">	bs:=[]<span class="type">byte</span>(str)</span><br><span class="line">	bs[<span class="number">1</span>]=<span class="string">&#x27;z&#x27;</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%c \n&quot;</span>, bs[<span class="number">1</span>]) <span class="comment">// z</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-共享内存"><a href="#2-2-共享内存" class="headerlink" title="2.2 共享内存"></a>2.2 共享内存</h3><p>不同字符串可以共享同一个字符串内容，如果其中一个字符串修改了底层字符串内容，这样的影响是不可预测的。</p>
+<p><img src="StarDust/source/_posts/技术/Golang/0%20基础/数据结构/String/file-20250119031144315.png" alt=""></p>
+<p>比如图中的 s1（hello指月） 和 s2（指月）就共享了底层的字符串内容。</p>
+<p>如果其中一个修改后都会导致，其他字符串类容被修改。</p>
+<blockquote>
+<p>所以字符串才被设定为不可修改，分配在只读内存段上。</p>
+</blockquote>
+<h2 id="3-与-bytes-互转"><a href="#3-与-bytes-互转" class="headerlink" title="3 与 bytes 互转"></a>3 与 bytes 互转</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">String2Bytes</span><span class="params">(str <span class="type">string</span>)</span></span> []<span class="type">byte</span> &#123;</span><br><span class="line">	sh := (*reflect.SliceHeader)(unsafe.Pointer(&amp;str))</span><br><span class="line">	<span class="comment">// slice 比 string 多一个 cap 属性 这里给 cap 单独赋值</span></span><br><span class="line">	sh.Cap = sh.Len</span><br><span class="line">	<span class="keyword">return</span> *(*[]<span class="type">byte</span>)(unsafe.Pointer(sh))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Bytes2String</span><span class="params">(buf []<span class="type">byte</span>)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> *(*<span class="type">string</span>)(unsafe.Pointer(&amp;buf))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Go 语言标准库中 strings.Builder 就使用到了 unsafe.Pointer 来提升效率。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// strings/builder.go 47 行</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b *Builder)</span></span> String() <span class="type">string</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> *(*<span class="type">string</span>)(unsafe.Pointer(&amp;b.buf))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>性能测试</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Benchmark_NormalBytes2String<span class="number">-6</span>          <span class="number">33555104</span>                <span class="number">36.7</span> ns/op            <span class="number">64</span> B/op          <span class="number">1</span> allocs/op</span><br><span class="line">Benchmark_UnsafeByte2String<span class="number">-6</span>           <span class="number">1000000000</span>               <span class="number">0.268</span> ns/op           <span class="number">0</span> B/op          <span class="number">0</span> allocs/op</span><br><span class="line">Benchmark_NormalString2Bytes<span class="number">-6</span>          <span class="number">1000000000</span>               <span class="number">0.271</span> ns/op           <span class="number">0</span> B/op          <span class="number">0</span> allocs/op</span><br><span class="line">Benchmark_UnsafeString2Bytes<span class="number">-6</span>          <span class="number">1000000000</span>               <span class="number">0.268</span> ns/op           <span class="number">0</span> B/op          <span class="number">0</span> allocs/op</span><br></pre></td></tr></table></figure>
+<p>Byte2String 的时候 unsafe 包会有明显的优势，String2Bytes的时候二者基本一致。</p>
+<p>[]byte(string)的实现</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// runtime/string.go 155行</span></span><br><span class="line"><span class="comment">// The constant is known to the compiler.</span></span><br><span class="line"><span class="comment">// There is no fundamental theory behind this number.</span></span><br><span class="line"><span class="keyword">const</span> tmpStringBufSize = <span class="number">32</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> tmpBuf [tmpStringBufSize]<span class="type">byte</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">stringtoslicebyte</span><span class="params">(buf *tmpBuf, s <span class="type">string</span>)</span></span> []<span class="type">byte</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> b []<span class="type">byte</span></span><br><span class="line">    <span class="keyword">if</span> buf != <span class="literal">nil</span> &amp;&amp; <span class="built_in">len</span>(s) &lt;= <span class="built_in">len</span>(buf) &#123;</span><br><span class="line">        *buf = tmpBuf&#123;&#125;</span><br><span class="line">        b = buf[:<span class="built_in">len</span>(s)]</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        b = rawbyteslice(<span class="built_in">len</span>(s))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">copy</span>(b, s)</span><br><span class="line">    <span class="keyword">return</span> b</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// rawbyteslice allocates a new byte slice. The byte slice is not zeroed.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">rawbyteslice</span><span class="params">(size <span class="type">int</span>)</span></span> (b []<span class="type">byte</span>) &#123;</span><br><span class="line">    <span class="built_in">cap</span> := roundupsize(<span class="type">uintptr</span>(size))</span><br><span class="line">    p := mallocgc(<span class="built_in">cap</span>, <span class="literal">nil</span>, <span class="literal">false</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">cap</span> != <span class="type">uintptr</span>(size) &#123;</span><br><span class="line">        memclrNoHeapPointers(add(p, <span class="type">uintptr</span>(size)), <span class="built_in">cap</span>-<span class="type">uintptr</span>(size))</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    *(*slice)(unsafe.Pointer(&amp;b)) = slice&#123;p, size, <span class="type">int</span>(<span class="built_in">cap</span>)&#125;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>长度超过 32 的时候就需要通过 mallocgc() 分配一块新内存，然后使用 copy() 复制数据了。</p>
+<p>string([]byte)的实现</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// runtime/string.go 75行</span></span><br><span class="line"><span class="comment">// Buf is a fixed-size buffer for the result,</span></span><br><span class="line"><span class="comment">// it is not nil if the result does not escape.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">slicebytetostring</span><span class="params">(buf *tmpBuf, b []<span class="type">byte</span>)</span></span> (str <span class="type">string</span>) &#123;</span><br><span class="line">    l := <span class="built_in">len</span>(b)</span><br><span class="line">    <span class="keyword">if</span> l == <span class="number">0</span> &#123;</span><br><span class="line">        <span class="comment">// Turns out to be a relatively common case.</span></span><br><span class="line">        <span class="comment">// Consider that you want to parse out data between parens in &quot;foo()bar&quot;,</span></span><br><span class="line">        <span class="comment">// you find the indices and convert the subslice to string.</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  <span class="comment">// 如果开启了竞态检测 -race</span></span><br><span class="line">    <span class="keyword">if</span> raceenabled &#123;</span><br><span class="line">        racereadrangepc(unsafe.Pointer(&amp;b[<span class="number">0</span>]),</span><br><span class="line">            <span class="type">uintptr</span>(l),</span><br><span class="line">            getcallerpc(),</span><br><span class="line">            funcPC(slicebytetostring))</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="comment">// 如果开启了memory sanitizer -msan</span></span><br><span class="line">    <span class="keyword">if</span> msanenabled &#123;</span><br><span class="line">        msanread(unsafe.Pointer(&amp;b[<span class="number">0</span>]), <span class="type">uintptr</span>(l))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> l == <span class="number">1</span> &#123;</span><br><span class="line">        stringStructOf(&amp;str).str = unsafe.Pointer(&amp;staticbytes[b[<span class="number">0</span>]])</span><br><span class="line">        stringStructOf(&amp;str).<span class="built_in">len</span> = <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> p unsafe.Pointer</span><br><span class="line">    <span class="keyword">if</span> buf != <span class="literal">nil</span> &amp;&amp; <span class="built_in">len</span>(b) &lt;= <span class="built_in">len</span>(buf) &#123;</span><br><span class="line">        p = unsafe.Pointer(buf)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        p = mallocgc(<span class="type">uintptr</span>(<span class="built_in">len</span>(b)), <span class="literal">nil</span>, <span class="literal">false</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    stringStructOf(&amp;str).str = p</span><br><span class="line">    stringStructOf(&amp;str).<span class="built_in">len</span> = <span class="built_in">len</span>(b)</span><br><span class="line">  <span class="comment">// 拷贝字节数组至字符串</span></span><br><span class="line">    memmove(p, (*(*slice)(unsafe.Pointer(&amp;b))).array, <span class="type">uintptr</span>(<span class="built_in">len</span>(b)))</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例stringStruct对象</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">stringStructOf</span><span class="params">(sp *<span class="type">string</span>)</span></span> *stringStruct &#123;</span><br><span class="line">    <span class="keyword">return</span> (*stringStruct)(unsafe.Pointer(sp))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同样的，当数组长度超过32时，同样需要调用 mallocgc() 分配一块新内存。最后通过 memmove() 完成拷贝。</p>
+<p><strong>小结</strong></p>
+<p>Go 语言也是在安全和性能之间选择了安全，不过这点性能损失也非常小。</p>
+<p>当不确定会不会出现安全问题的时候就用标准的转换方式。</p>
+<p>在对性能有极高要求，且没有安全隐患（即确定数据是只读的，后续不会有修改操作），就可以使用 unsafe 包。</p>
+<h2 id="4-字符串拼接"><a href="#4-字符串拼接" class="headerlink" title="4 字符串拼接"></a>4 字符串拼接</h2><p>字符串拼接有多种方式：</p>
+<ul>
+<li>1）直接相加</li>
+<li>2）fmt.Sprintf()</li>
+<li>3）strings.Builder</li>
+<li>4）bytes.Buffer</li>
+</ul>
+<p>测试结果如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 2次</span></span><br><span class="line">BenchmarkSprintf-6               5544774               214 ns/op              32 B/op          3 allocs/op</span><br><span class="line">BenchmarkStringBuilder-6        40105342                30.9 ns/op             8 B/op          1 allocs/op</span><br><span class="line">BenchmarkBytesBuf-6             24064540                51.1 ns/op            64 B/op          1 allocs/op</span><br><span class="line">BenchmarkStringAdd-6            30062755                40.6 ns/op             2 B/op          1 allocs/op</span><br><span class="line"><span class="comment"># 100次</span></span><br><span class="line">BenchmarkSprintf-6                 66108             16317 ns/op           12178 B/op        297 allocs/op</span><br><span class="line">BenchmarkStringBuilder-6         1471501               828 ns/op             504 B/op          6 allocs/op</span><br><span class="line">BenchmarkBytesBuf-6              1000000              1122 ns/op             688 B/op          4 allocs/op</span><br><span class="line">BenchmarkStringAdd-6              240511              5032 ns/op            9776 B/op         99 allocs/op</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1000次</span></span><br><span class="line">BenchmarkSprintf-6                  3081            367700 ns/op         1518878 B/op       2998 allocs/op</span><br><span class="line">BenchmarkStringBuilder-6           44805             26449 ns/op           13376 B/op        912 allocs/op</span><br><span class="line">BenchmarkBytesBuf-6                41952             28877 ns/op           15344 B/op        908 allocs/op</span><br><span class="line">BenchmarkStringAdd-6                4620            237020 ns/op         1496941 B/op       1899 allocs/op</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p> Sprintf 和直接相加 因为每次都生成一个新字符串，所以有大量的内存分配，而 strings.Builder 和 bytes.Buffer 都有缓存,省去了内存分配的开销，所以效率比较高。</p>
+<p>结论：<strong>字符串少推荐直接相加，多则使用 strings.Builder。</strong></p>
+<h2 id="5-参考"><a href="#5-参考" class="headerlink" title="5 参考"></a>5 参考</h2><p><code>https://draveness.me/golang/docs/part2-foundation/ch03-datastructure/golang-string/</code></p>
+<p><code>https://www.bilibili.com/video/BV1hv411x7we?p=1</code></p>
+<p><code>https://www.mdeditor.tw/pl/pDSl</code></p>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span>Author: </span>
+    <a href="https://stardustorz.github.io">draco</a>
+  </p>
+  <p class="copyright-item">
+    <span>Link: </span>
+    <a href="https://stardustorz.github.io/2021/08/15/Golang/0%20%E5%9F%BA%E7%A1%80/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/String/">https://stardustorz.github.io/2021/08/15/Golang/0%20%E5%9F%BA%E7%A1%80/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/String/</a>
+  </p>
+  <p class="copyright-item">
+    <span>License: </span>
+    
+    <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+  </p>
+</div>
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/Golang/">Golang</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/2021/08/17/Golang/4%20%E5%85%B6%E4%BB%96/Quic/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">[Go] Golang Quic</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/2021/08/11/Golang/4%20%E5%85%B6%E4%BB%96/WorkerPool/">  
+        <span class="next-text nav-default">[Go] Golang WorkerPool</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2019 - 2025      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">draco</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+</body>
+
+</html>

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="[DDIA] 分区" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="DDIA, Draco&#39;s Blog" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Draco's Blog" >
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://stardustorz.github.io/2023/06/18/DDIA/05 分区/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":false};
+</script>
+  
+  <title>[DDIA] 分区 - Draco&#39;s Blog</title>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Draco's Blog</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      [DDIA] 分区
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2023-06-18
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">阅读笔记</a>
+        
+        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/DDIA/">DDIA</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%88%86%E7%89%87%E5%92%8C%E5%A4%8D%E5%88%B6"><span class="toc-number">1.</span> <span class="toc-text">1 分片和复制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%94%AE%E5%80%BC%E5%AF%B9%E9%9B%86%E7%9A%84%E5%88%86%E7%89%87"><span class="toc-number">2.</span> <span class="toc-text">2 键值对集的分片</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E6%8C%89%E9%94%AE%E8%8C%83%E5%9B%B4%E5%88%86%E5%8C%BA"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 按键范围分区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%8C%89%E9%94%AE%E6%95%A3%E5%88%97%E5%88%86%E5%8C%BA"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 按键散列分区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E8%B4%9F%E8%BD%BD%E5%81%8F%E6%96%9C%E5%92%8C%E7%83%AD%E7%82%B9%E6%B6%88%E9%99%A4"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 负载偏斜和热点消除</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%88%86%E7%89%87%E5%92%8C%E6%AC%A1%E7%BA%A7%E7%B4%A2%E5%BC%95"><span class="toc-number">3.</span> <span class="toc-text">3 分片和次级索引</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%9C%AC%E5%9C%B0%E7%B4%A2%E5%BC%95"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 本地索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%85%A8%E5%B1%80%E7%B4%A2%E5%BC%95"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 全局索引</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%88%86%E7%89%87%E5%9D%87%E8%A1%A1"><span class="toc-number">4.</span> <span class="toc-text">4 分片均衡</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%9D%87%E8%A1%A1%E7%AD%96%E7%95%A5"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 均衡策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E4%B8%8D%E8%A6%81%E4%BD%BF%E7%94%A8%EF%BC%9Ahash-mod-N"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 不要使用：hash mod N</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E9%9D%99%E6%80%81%E5%88%86%E5%8C%BA"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 静态分区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E5%8A%A8%E6%80%81%E5%88%86%E5%8C%BA"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 动态分区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-%E4%B8%8E%E8%8A%82%E7%82%B9%E6%88%90%E6%AF%94%E4%BE%8B%E5%88%86%E5%8C%BA"><span class="toc-number">4.5.</span> <span class="toc-text">4.5 与节点成比例分区</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E8%AF%B7%E6%B1%82%E8%B7%AF%E7%94%B1"><span class="toc-number">5.</span> <span class="toc-text">5 请求路由</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E5%B9%B6%E8%A1%8C%E6%9F%A5%E8%AF%A2%E6%89%A7%E8%A1%8C"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 并行查询执行</span></a></li></ol></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <blockquote>
+<p>解决数据集尺度与单机容量、负载不匹配的问题</p>
+</blockquote>
+<span id="more"></span>
+<ol>
+<li><strong>分片（Partition）</strong>：解决数据集尺度与单机容量、负载不匹配的问题，分片之后可以利用多机容量和负载。</li>
+<li><strong>复制（Replication</strong>）：系统机器一多，单机故障概率便增大，为了防止数据丢失以及服务高可用，需要做多副本。<br>通常来说，数据系统在分布式系统中会有三级划分：数据集（如 Database、Bucket）——分片（Partition）——数据条目（Row、KV）。通常，每个分片只属于一个数据集，每个数据条目只属于一个分片。单个分片，就像一个小点的数据库。但是，跨分区的操作的，就要复杂的多。</li>
+</ol>
+<h2 id="1-分片和复制"><a href="#1-分片和复制" class="headerlink" title="1 分片和复制"></a>1 分片和复制</h2><p>分片通常和复制结合使用。每个分片有多个副本，可以分散到多机上去（更泛化一点：多个容错阈）；同时，每个机器含有多个分片，但通常不会有一个分片的两个副本放到一个机器上。<br><strong>如果使用多副本使用主从模型，则分片、副本、机器关系如下：</strong></p>
+<ol>
+<li>从一个分片的角度看，主副本在一个机器上，从副本们在另外机器上。</li>
+<li>从一个机器的角度看，既有一些主副本分片，也有一些从副本分片。实践中，也会尽量保证主副本在集群中均匀分布，避免过多的集中到一台机器上。</li>
+</ol>
+<h2 id="2-键值对集的分片"><a href="#2-键值对集的分片" class="headerlink" title="2 键值对集的分片"></a>2 键值对集的分片</h2><p>键值对是数据的一种最通用、泛化的表示，其他种类数据库都可以转化为键值对表示<br><strong>分片（Partition）</strong> 的本质是对数据集合的划分。但在实践中，可以细分为两个步骤：</p>
+<ol>
+<li>对数据集进行<strong>逻辑</strong>划分</li>
+<li>将逻辑分片调度到<strong>物理</strong>节点<br><strong>一些基本要求：</strong></li>
+<li>分片过程中，要保证每个分片的数据量多少尽量均匀，否则会有<strong>数据偏斜</strong>（<strong>skew</strong>），甚而形成<strong>数据热点</strong>。</li>
+<li>分片后，需要保存路由信息，给一个 KV 条目，能知道去<strong>哪个</strong>机器上去查；稍差一些，可以知道去<strong>哪几个</strong>机器上去找；最差的，如果需要去所有机器逐一查询，但性能一般不可接受。</li>
+</ol>
+<p>有三种常用的策略：</p>
+<ol>
+<li>通过某种固定规则，比如哈希，算出一个位置。</li>
+<li>使用内存，保存所有数据条目到机器的映射。</li>
+<li>结合两种，首先通过规则算出到逻辑分片的映射，然后通过内存保存逻辑分片到物理节点的映射。</li>
+</ol>
+<h3 id="2-1-按键范围分区"><a href="#2-1-按键范围分区" class="headerlink" title="2.1 按键范围分区"></a>2.1 按键范围分区</h3><p>对于 KV 数据来说，Key 通常会有个定义域，且在定义域内可（按某种维度）排序。则，将该连续的定义域进行切分，保存每个切分的上下界，在给出某个 Key 时，就能通过比较，定位其所在分区。<br>好处在于可以进行<strong>快速的范围查询（Rang Query）</strong><br>坏处在于，数据分散不均匀，且容易造成热点。可能需要动态的调整的分区边界，以维护分片的相对均匀。<br>一个解决办法是<strong>分级</strong>或者<strong>混合</strong>，使用拼接主键，分散到不同的机器上</p>
+<h3 id="2-2-按键散列分区"><a href="#2-2-按键散列分区" class="headerlink" title="2.2 按键散列分区"></a>2.2 按键散列分区</h3><ul>
+<li>选择散列函数的<strong>依据</strong>是，使得数据散列尽量均匀：即给定一个 Key，经过散列函数后，以等概率在哈希区间（如 <code>[0, 2^32-1)</code>）内产生一个值。即使原 Key 相似，他的散列值也能均匀分布。</li>
+<li>选定哈希函数后，将原 Key 定义域映射到新的散列值阈，而散列值是均匀的，因此可以对散列值阈按给定分区数进行等分。</li>
+<li>还有一种常提的哈希方法叫做<a target="_blank" rel="noopener" href="https://zh.m.wikipedia.org/zh-hans/%E4%B8%80%E8%87%B4%E5%93%88%E5%B8%8C">一致性哈希</a> 。其特点是，会考虑逻辑分片和物理拓扑，将数据和物理节点按同样的哈希函数进行哈希，来决定如何将哈希分片路由到不同机器上。它可以避免在内存中维护<strong>逻辑分片到物理节点的映射</strong>，而是每次计算出来。即用一套算法同时解决了我们在最初提出的逻辑分片和物理路由的两个问题。<br>两种分区方式区别在于，一个使用应用相关值（ <code>Key</code> ）分区，一个使用应用无关值（<code>Hash(key)</code>）分区，前者支持高效范围查询，后者可以均摊负载。但可使用多个字段，组合使用两种方式，使用一个字段进行分区，使用另一个字段在分区内进行排序，兼取两者优点。</li>
+</ul>
+<h3 id="2-3-负载偏斜和热点消除"><a href="#2-3-负载偏斜和热点消除" class="headerlink" title="2.3 负载偏斜和热点消除"></a>2.3 负载偏斜和热点消除</h3><ul>
+<li>在数据层，可以通过哈希将数据均匀散列，以期将对数据的请求均摊；但如果在应用层，不同数据条目的负载本就有倾斜，存在对某些键的热点。那么仅在数据层哈希，就不能起到消除热点的作用。<ul>
+<li>在社交网络中的大 V，其发布的信息，天然会引起同一个键（假设键是用户 id）大量数据的写入，因为可能会有针对该用户信息的大量评论和互动。</li>
+</ul>
+</li>
+<li>只能在应用层进行热点消除，如可以用拼接主键，对这些大 V 用户主键进行“分身”，即在用户主键开始或者结尾添加一个随机数，两个十进制后缀就可以增加 100 中拆分可能。但这无疑需要应用层做额外的工作，请求时需要进行拆分，返回时需要进行合并。</li>
+</ul>
+<h2 id="3-分片和次级索引"><a href="#3-分片和次级索引" class="headerlink" title="3 分片和次级索引"></a>3 分片和次级索引</h2><p><strong>次级索引（secondary index）</strong>，即主键以外的列的索引；由于分区都是基于主键的，在针对有分区的数据建立次级索引时，就会遇到一些困难。<br>常见的建立次级索引的方法有：</p>
+<ol>
+<li>本地索引（local index），书中又称 document-based index</li>
+<li>全局索引（global index），书中又称 term-based index<h3 id="3-1-本地索引"><a href="#3-1-本地索引" class="headerlink" title="3.1 本地索引"></a>3.1 本地索引</h3>次级索引会对每个数据条目建立一个索引条目，这给数据库的实现带来了一些问题：</li>
+<li>当数据库已有数据时，建立索引，何时针对存量数据构建索引。</li>
+<li>当数据库中数据条目发生更改时，如何维护数据和索引的一致性，尤其是多客户端并发修改时。</li>
+</ol>
+<p>本地<strong>索引（local index）</strong>，就是对<strong>每个数据分区独立地建立次级索引</strong>，即，次级索引只针对本分区数据，而不关心其他分区数据。本地索引的<strong>优点</strong>是维护方便，在更新数据时，只需要在该分区所在机器同时更新索引即可。但<strong>缺点</strong>是，查询效率相对较低，所有基于索引的查询请求，都要发送到所有分区，并将结果合并，该过程也称为 <strong>scatter/gather</strong> 。但即使用多分区并发（而非顺序）进行索引查询优化，也仍然容易在某些机器上发生<strong>长尾请求</strong>（由于机器负载过高或者网络问题，导致改请求返回特别慢，称为长尾请求），导致整个请求过程变慢。</p>
+<h3 id="3-2-全局索引"><a href="#3-2-全局索引" class="headerlink" title="3.2 全局索引"></a>3.2 全局索引</h3><p>为了避免查询索引时将请求发到所有分区，可以建立<strong>全局索引</strong>，即每个次级索引条目都是针对全局数据。但为了避免索引查询热点，我们会将索引数据本身也分片，分散到多个机器上。</p>
+<p>全局索引能避免索引查询时的 scatter/gather 操作，但维护起来较为复杂，因为每个数据的插入，可能会影响多个索引分区</p>
+<p>为了避免增加写入延迟，在实践中，全局索引多为异步更新。但由此会带来短暂（有时可能会比较长）的数据和索引不一致。如果想要保证强一致性，需要引入跨分区的分布式事务（实现复杂度高，且会带来较大的性能损耗）</p>
+<h2 id="4-分片均衡"><a href="#4-分片均衡" class="headerlink" title="4 分片均衡"></a>4 分片均衡</h2><p>数据库在运行过程中，数据和机器都会发生一些变化：</p>
+<ol>
+<li>查询吞吐增加，需要增加机器以应对增加的负载。</li>
+<li>数据集变大，需要增加磁盘和 RAM 来存储增加数据。</li>
+<li>有机器故障，需要其他机器来接管故障机器数据。</li>
+</ol>
+<p>这些问题都会引起数据分片在节点间的迁移，我们将之称为：<strong>均衡（rebalancing）</strong>。对于 rebalancing 我们期望：</p>
+<ol>
+<li>均衡后负载（存储、读写）在节点间均匀分布</li>
+<li>均衡时不能禁止读写，并且尽量减小影响</li>
+<li>尽量减少不必要的数据移动，尽量降低网络和磁盘 IO</li>
+</ol>
+<h3 id="4-1-均衡策略"><a href="#4-1-均衡策略" class="headerlink" title="4.1 均衡策略"></a>4.1 均衡策略</h3><p>分区策略会影响均衡策略。比如动态分区、静态分区，对应的均衡策略就不太一样；此外，分区的粒度和数量也会影响均衡策略。</p>
+<h3 id="4-2-不要使用：hash-mod-N"><a href="#4-2-不要使用：hash-mod-N" class="headerlink" title="4.2 不要使用：hash mod N"></a>4.2 不要使用：hash mod N</h3><p>不能应对机器数量的变化，如果要增删节点，就会有大量的数据需要发生迁移，否则，就不能保证数据在 <code>hash(key) mod N</code> 标号的机器上。在大规模集群中，机器节点增删比较频繁，这种策略更是不可接受。</p>
+<h3 id="4-3-静态分区"><a href="#4-3-静态分区" class="headerlink" title="4.3 静态分区"></a>4.3 静态分区</h3><p>静态分区，即，逻辑分区阶段的<strong>分区数量是固定的</strong>，并且最好让分区数量大于（比如高一个数量级）机器节点。相比<strong>动态分区</strong>策略（比如，允许分区分裂和合并），固定数量分区更容易实现和维护。<br>对于数据量会超预期增长的数据集，静态分区策略就会让用户进退两难，已经有很多数据，重新分区代价很大，不重新分区又难以应对数据量的进一步增长。</p>
+<h3 id="4-4-动态分区"><a href="#4-4-动态分区" class="headerlink" title="4.4 动态分区"></a>4.4 动态分区</h3><p>动态分区好处在于，小数据量使用少量分区，减少开销；大数据量增加分区，以均摊负载。</p>
+<h3 id="4-5-与节点成比例分区"><a href="#4-5-与节点成比例分区" class="headerlink" title="4.5 与节点成比例分区"></a>4.5 与节点成比例分区</h3><ol>
+<li>静态均衡的分区数量一开始就固定的，但是单分区尺寸会随着总数量增大而增大。</li>
+<li>动态均衡会按着数据量多少进行动态切合，单分区尺寸相对保持不变，一直于某个设定的上下界。<br>他们的分区数量都和集群节点数量没有直接关系。而另一种均衡策略，则是保持<strong>总分区数量</strong>和节点数量成正比，也即，保持每个节点分区数量不变。</li>
+</ol>
+<h2 id="5-请求路由"><a href="#5-请求路由" class="headerlink" title="5 请求路由"></a>5 请求路由</h2><p>将分区放到节点上去后，当客户端请求到来时，我们如何决定将请求路由到哪台机器？这势必要求我们<strong>以某种方式</strong>记下：</p>
+<ol>
+<li>数据条目到逻辑分区的映射。</li>
+<li>逻辑分区到物理机器的映射。</li>
+</ol>
+<p>其次，是在哪里记下这些路由（映射）信息，泛化一下，是一个<strong>服务发现</strong>（service discovery）问题。概括来说，由内而外，有几种方案：</p>
+<ol>
+<li><strong>每个节点都有全局路由表</strong>。客户端可以连接集群中任意一个节点，如该节点恰有该分区，则处理后返回；否则，根据路由信息，将其路由合适节点。</li>
+<li><strong>由一个专门的路由层来记录</strong>。客户端所有请求都打到路由层，路由层依据分区路由信息，将请求转发给相关节点。路由层只负责请求路由，并不处理具体逻辑。</li>
+<li><strong>让客户端感知分区到节点映射</strong>。客户端可以直接根据该映射，向某个节点发送请求。</li>
+</ol>
+<p>如何让所有节点就路由信息快速达成一致？</p>
+<ul>
+<li><strong>依赖外部协调组件</strong>。如 Zookeeper、Etcd，他们各自使用某种共识协议保持高可用，可以维护轻量的路由表，并提供发布订阅接口，在有路由信息更新时，让外部所有节点快速达成一致。</li>
+<li><strong>使用内部元数据服务器</strong>。如三节点的 Meta 服务器，每个节点都存储一份路由数据，使用某种共识协议达成一致。如 TiDB 的 Placement Driver。</li>
+<li><strong>使用某种协议点对点同步</strong>。如 Dynamo、Cassandra 和 Riak 使用流言协议（Gossip Protocol），在集群内所有机器节点间就路由信息进行传播，并最终达成一致</li>
+</ul>
+<h3 id="5-1-并行查询执行"><a href="#5-1-并行查询执行" class="headerlink" title="5.1 并行查询执行"></a>5.1 并行查询执行</h3><p>对于关系型数据库产品，尤其是支持 <strong>大规模并行处理（MPP, Massively parallel processing）</strong> 数仓，一个查询语句在执行层要复杂的多，可能会：</p>
+<ol>
+<li>Stage：由多个阶段组成。</li>
+<li>Partition：每个阶段包含多个针对每个分区的并行的子查询计划。</li>
+</ol>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span>Author: </span>
+    <a href="https://stardustorz.github.io">draco</a>
+  </p>
+  <p class="copyright-item">
+    <span>Link: </span>
+    <a href="https://stardustorz.github.io/2023/06/18/DDIA/05%20%E5%88%86%E5%8C%BA/">https://stardustorz.github.io/2023/06/18/DDIA/05%20%E5%88%86%E5%8C%BA/</a>
+  </p>
+  <p class="copyright-item">
+    <span>License: </span>
+    
+    <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+  </p>
+</div>
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/DDIA/">DDIA</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/2023/06/20/DDIA/06%20%E4%BA%8B%E5%8A%A1/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">[DDIA] 事务</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/2023/06/14/DDIA/04%20%E5%86%97%E4%BD%99/">  
+        <span class="next-text nav-default">[DDIA] 冗余</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2019 - 2025      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">draco</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+</body>
+
+</html>

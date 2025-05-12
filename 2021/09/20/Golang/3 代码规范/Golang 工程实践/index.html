@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="[Go] 工程实践" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="Golang, Draco&#39;s Blog" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Draco's Blog" >
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://stardustorz.github.io/2021/09/20/Golang/3 代码规范/Golang 工程实践/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":false};
+</script>
+  
+  <title>[Go] 工程实践 - Draco&#39;s Blog</title>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Draco's Blog</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      [Go] 工程实践
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2021-09-20
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+        <a href="/categories/%E6%8A%80%E6%9C%AF/Golang/">Golang</a>
+        
+        <a href="/categories/%E6%8A%80%E6%9C%AF/Golang/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/">代码规范</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-number">1.</span> <span class="toc-text">1 最佳实践</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 目录结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-1-pkg"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1.1 &#x2F;pkg</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-2-internal"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.1.2 &#x2F;internal</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-3-src"><span class="toc-number">1.1.3.</span> <span class="toc-text">1.1.3 &#x2F;src</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-4-cmd"><span class="toc-number">1.1.4.</span> <span class="toc-text">1.1.4 &#x2F;cmd</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-5-api"><span class="toc-number">1.1.5.</span> <span class="toc-text">1.1.5 &#x2F;api</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-6-Makefile"><span class="toc-number">1.1.6.</span> <span class="toc-text">1.1.6 Makefile</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-7-%E5%B0%8F%E7%BB%93"><span class="toc-number">1.1.7.</span> <span class="toc-text">1.1.7 小结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%A8%A1%E5%9D%97%E6%8B%86%E5%88%86"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 模块拆分</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-1-%E6%8C%89%E5%B1%82%E6%8B%86%E5%88%86"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.2.1 按层拆分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-2-%E6%8C%89%E8%81%8C%E8%B4%A3%E6%8B%86%E5%88%86"><span class="toc-number">1.2.2.</span> <span class="toc-text">1.2.2 按职责拆分</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-3-%E5%B0%8F%E7%BB%93"><span class="toc-number">1.2.3.</span> <span class="toc-text">1.2.3 小结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E6%98%BE%E5%BC%8F%E4%B8%8E%E9%9A%90%E5%BC%8F"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 显式与隐式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-1-init"><span class="toc-number">1.3.1.</span> <span class="toc-text">1.3.1 init</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-2-error"><span class="toc-number">1.3.2.</span> <span class="toc-text">1.3.2 error</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-%E9%9D%A2%E5%90%91%E6%8E%A5%E5%8F%A3"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 面向接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-%E5%B0%8F%E7%BB%93"><span class="toc-number">1.5.</span> <span class="toc-text">1.5 小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95"><span class="toc-number">2.</span> <span class="toc-text">2 单元测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%8F%AF%E6%B5%8B%E8%AF%95%E6%80%A7"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 可测试性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-%E6%8E%A5%E5%8F%A3"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.1.1 接口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%AE%80%E5%8D%95"><span class="toc-number">2.1.2.</span> <span class="toc-text">函数简单</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E7%BB%87%E6%96%B9%E5%BC%8F"><span class="toc-number">2.2.</span> <span class="toc-text">组织方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Test"><span class="toc-number">2.2.1.</span> <span class="toc-text">Test</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-Suite"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.1.2 Suite</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <blockquote>
+<p>如何写优雅的 Go 语言代码</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="1-最佳实践"><a href="#1-最佳实践" class="headerlink" title="1 最佳实践"></a>1 最佳实践</h2><h3 id="1-1-目录结构"><a href="#1-1-目录结构" class="headerlink" title="1.1 目录结构"></a>1.1 目录结构</h3><p>目录结构基本上就是一个项目的门面，很多时候我们从目录结构中就能够看出开发者对这门语言是否有足够的经验。</p>
+<p>官方并没有给出一个推荐的目录划分方式，但是社区中还是有一些比较常见的约定：例如：<a target="_blank" rel="noopener" href="https://github.com/golang-standards/project-layout">golang-standards/project-layout</a> 项目中就定义了一个比较标准的目录结构。</p>
+<h4 id="1-1-1-pkg"><a href="#1-1-1-pkg" class="headerlink" title="1.1.1 /pkg"></a>1.1.1 /pkg</h4><p><code>/pkg</code> 目录是 Go 语言项目中非常常见的目录，我们几乎能够在所有知名的开源项目（非框架）中找到它的身影。</p>
+<p><strong>这个目录中存放的就是项目中可以被外部应用使用的代码库</strong>，其他的项目可以直接通过 <code>import</code> 引入这里的代码，所以当我们将代码放入 <code>pkg</code> 时一定要慎重。</p>
+<h4 id="1-1-2-internal"><a href="#1-1-2-internal" class="headerlink" title="1.1.2 /internal"></a>1.1.2 /internal</h4><p>私有代码推荐放到 <code>/internal</code> 目录中，真正的项目代码应该写在 <code>/internal/app</code> 里，同时这些内部应用依赖的代码库应该在 <code>/internal/pkg</code> 子目录和 <code>/pkg</code> 中。</p>
+<h4 id="1-1-3-src"><a href="#1-1-3-src" class="headerlink" title="1.1.3 /src"></a>1.1.3 /src</h4><p>作为一个 Go 语言的开发者，我们不应该允许项目中存在 <code>/src</code> 目录。</p>
+<blockquote>
+<p>社区中的一些项目确实有 <code>/src</code> 文件夹，但是这些项目的开发者之前大多数都有 Java 的编程经验。</p>
+</blockquote>
+<p>最重要的原因其实是 Go 语言的项目在默认情况下都会被放置到 <code>$GOPATH/src</code> 目录下，这个目录中存储着我们开发和依赖的全部项目代码，如果我们在自己的项目中使用 <code>/src</code> 目录，该项目的 <code>PATH</code> 中就会出现两个 <code>src</code></p>
+<p> $GOPATH/src/github.com/draveness/project/src/code.go</p>
+<h4 id="1-1-4-cmd"><a href="#1-1-4-cmd" class="headerlink" title="1.1.4 /cmd"></a>1.1.4 /cmd</h4><p><code>/cmd</code> 目录中存储的都是当前项目中的可执行文件，该目录下的每一个子目录都应该包含我们希望有的可执行文件。</p>
+<blockquote>
+<p>如果我们的项目是一个 <code>grpc</code> 服务的话，可能在 <code>/cmd/server/main.go</code> 中就包含了启动服务进程的代码，编译后生成的可执行文件就是 <code>server</code>。</p>
+</blockquote>
+<h4 id="1-1-5-api"><a href="#1-1-5-api" class="headerlink" title="1.1.5 /api"></a>1.1.5 /api</h4><p><code>/api</code> 目录中存放的就是当前项目对外提供的各种不同类型的 API 接口定义文件了。</p>
+<blockquote>
+<p>其中可能包含类似 <code>/api/protobuf-spec</code>、<code>/api/thrift-spec</code> 或者 <code>/api/http-spec</code> 的目录</p>
+</blockquote>
+<p> $ tree ./api<br> api<br> └── protobuf-spec<br>     └── oceanbookpb<br>         ├── oceanbook.pb.go<br>         └── oceanbook.proto</p>
+<h4 id="1-1-6-Makefile"><a href="#1-1-6-Makefile" class="headerlink" title="1.1.6 Makefile"></a>1.1.6 Makefile</h4><p>最后要介绍的 <code>Makefile</code> 文件也非常值得被关注，在任何一个项目中都会存在一些需要运行的脚本，这些脚本文件应该被放到 <code>/scripts</code> 目录中并由 <code>Makefile</code> 触发，将这些经常需要运行的命令固化成脚本减少『祖传命令』的出现。</p>
+<h4 id="1-1-7-小结"><a href="#1-1-7-小结" class="headerlink" title="1.1.7 小结"></a>1.1.7 小结</h4><p>总的来说，每一个项目都应该按照固定的组织方式进行实现，这种约定虽然并不是强制的，但是无论是组内、公司内还是整个 Go 语言社区中，只要达成了一致，对于其他工程师快速梳理和理解项目都是很有帮助的。</p>
+<h3 id="1-2-模块拆分"><a href="#1-2-模块拆分" class="headerlink" title="1.2 模块拆分"></a>1.2 模块拆分</h3><p>Go 语言的一些顶层设计最终导致了它在划分模块上与其他的编程语言有着非常明显的不同。</p>
+<h4 id="1-2-1-按层拆分"><a href="#1-2-1-按层拆分" class="headerlink" title="1.2.1 按层拆分"></a>1.2.1 按层拆分</h4><p><code>Java</code>中的<code>SpringMVC</code>深受 <a target="_blank" rel="noopener" href="https://draveness.me/mvx">MVC 架构模式</a> 的影响,这是一种 Web 框架的最常见架构方式，将服务中的不同组件分成了 Model、View 和 Controller 三层。</p>
+<p> app<br> ├── controllers<br> │   ├── application_controller.rb<br> │   └── concerns<br> ├── models<br> │   ├── application_record.rb<br> │   └── concerns<br> └── views<br>     └── layouts</p>
+<h4 id="1-2-2-按职责拆分"><a href="#1-2-2-按职责拆分" class="headerlink" title="1.2.2 按职责拆分"></a>1.2.2 按职责拆分</h4><p>Go 语言在拆分模块时就使用了完全不同的思路，虽然 MVC 架构模式是在我们写 Web 服务时无法避开的，但是相比于横向地切分不同的层级，Go 语言的项目往往都按照职责对模块进行拆分：</p>
+<p>对于一个比较常见的博客系统，使用 Go 语言的项目会按照不同的职责将其纵向拆分成 <code>post</code>、<code>user</code>、<code>comment</code> 三个模块，每一个模块都对外提供相应的功能，<code>post</code> 模块中就包含相关的模型和视图定义以及用于处理 API 请求的控制器（或者服务）：</p>
+<p> $ tree pkg<br> pkg<br> ├── comment<br> ├── post<br> │   ├── handler.go<br> │   └── post.go<br> └── user</p>
+<p>如果我们在 Go 语言中使用 <code>model</code>、<code>view</code> 和 <code>controller</code> 来划分层级，你会在其他的模块中看到非常多的 <code>model.Post</code>、<code>model.Comment</code> 和 <code>view.PostView</code>。</p>
+<blockquote>
+<p>这种划分层级的方法在 Go 语言中会显得非常冗余，并且如果对项目依赖包的管理不够谨慎时，很容易发生引用循环</p>
+</blockquote>
+<h4 id="1-2-3-小结"><a href="#1-2-3-小结" class="headerlink" title="1.2.3 小结"></a>1.2.3 小结</h4><p>项目是按照层级还是按照职责对模块进行拆分其实并没有绝对的好与不好，语言和框架层面的设计最终决定了我们应该采用哪种方式对项目和代码进行组织。</p>
+<p><strong>Go 语言项目的最佳实践就是按照职责对模块进行垂直拆分，将代码按照功能的方式分到多个 <code>package</code> 中。</strong></p>
+<blockquote>
+<p>因为 <code>package</code> 作为一个 Go 语言访问控制的最小粒度，所以我们应该遵循顶层的设计使用这种方式构建高内聚的模块。</p>
+</blockquote>
+<h3 id="1-3-显式与隐式"><a href="#1-3-显式与隐式" class="headerlink" title="1.3 显式与隐式"></a>1.3 显式与隐式</h3><p>Go 语言社区对于<strong>显式的初始化、方法调用和错误处理</strong>非常推崇，类似 Spring Boot 和 Rails 的框架其实都广泛地采纳了『约定优于配置』的中心思想，简化了开发者和工程师的工作量。</p>
+<blockquote>
+<p>虽然是社区达成的共识与约定，但是从语言的设计以及工具上的使用我们就能发现显式地调用方法和错误处理是被鼓励的。</p>
+</blockquote>
+<h4 id="1-3-1-init"><a href="#1-3-1-init" class="headerlink" title="1.3.1 init"></a>1.3.1 init</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">var</span> grpcClient *grpc.Client  </span><br><span class="line"> ​  </span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;  </span><br><span class="line">     <span class="keyword">var</span> err <span class="type">error</span>  </span><br><span class="line">     grpcClient, err = grpc.Dial(...)  </span><br><span class="line">     <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;  </span><br><span class="line">         <span class="built_in">panic</span>(err)  </span><br><span class="line">     &#125;  </span><br><span class="line"> &#125;  </span><br><span class="line"> ​  </span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="title">GetPost</span><span class="params">(postID <span class="type">int64</span>)</span></span> (*Post, <span class="type">error</span>) &#123;  </span><br><span class="line">     post, err := grpcClient.FindPost(context.Background(), &amp;pb.FindPostRequest&#123;PostID: postID&#125;)  </span><br><span class="line">     <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;  </span><br><span class="line">         <span class="keyword">return</span> <span class="literal">nil</span>, err  </span><br><span class="line">     &#125;  </span><br><span class="line">       </span><br><span class="line">     <span class="keyword">return</span> post, <span class="literal">nil</span>  </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>这种代码虽然能够通过编译并且正常工作，然而这里的 <code>init</code> 函数其实隐式地初始化了 grpc 的连接资源，如果另一个 <code>package</code> 依赖了当前的包，那么引入这个依赖的工程师可能会在遇到错误时非常困惑，因为在 <code>init</code> 函数中做这种资源的初始化是非常耗时并且容易出现问题的。</p>
+<p><strong>一种更加合理的做法显示地调用初始化方法。</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// cmd/grpc/main.go  </span></span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">     grpcClient, err := grpc.Dial(...)  </span><br><span class="line">     <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;  </span><br><span class="line">         <span class="built_in">panic</span>(err)  </span><br><span class="line">     &#125;  </span><br><span class="line">       </span><br><span class="line">     postClient := post.NewClient(grpcClient)  </span><br><span class="line">     <span class="comment">// ...  </span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>这样我们从 <code>main</code> 函数开始就能梳理出程序启动的整个过程。</p>
+<p>比较合理地用法是这样的</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;  </span><br><span class="line">     <span class="keyword">if</span> user == <span class="string">&quot;&quot;</span> &#123;  </span><br><span class="line">         log.Fatal(<span class="string">&quot;$USER not set&quot;</span>)  </span><br><span class="line">     &#125;  </span><br><span class="line">     <span class="keyword">if</span> home == <span class="string">&quot;&quot;</span> &#123;  </span><br><span class="line">         home = <span class="string">&quot;/home/&quot;</span> + user  </span><br><span class="line">     &#125;  </span><br><span class="line">     <span class="keyword">if</span> gopath == <span class="string">&quot;&quot;</span> &#123;  </span><br><span class="line">         gopath = home + <span class="string">&quot;/go&quot;</span>  </span><br><span class="line">     &#125;  </span><br><span class="line">     <span class="comment">// gopath may be overridden by --gopath flag on command line.  </span></span><br><span class="line">     flag.StringVar(&amp;gopath, <span class="string">&quot;gopath&quot;</span>, gopath, <span class="string">&quot;override default GOPATH&quot;</span>)  </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>我们不应该在 <code>init</code> 中做过重的初始化逻辑，而是做一些简单、轻量的前置条件判断</strong></p>
+<h4 id="1-3-2-error"><a href="#1-3-2-error" class="headerlink" title="1.3.2 error"></a>1.3.2 error</h4><p>当我们在 Go 语言中处理错误相关的逻辑时，最重要的其实就是以下几点：</p>
+<ul>
+<li><ol>
+<li><strong>使用 <code>error</code> 实现错误处理</strong> — 尽管这看起来非常啰嗦；</li>
+</ol>
+</li>
+<li><ol>
+<li><strong>将错误抛给上层处理</strong> — 对于一个方法是否需要返回 <code>error</code> 也需要我们仔细地思考，向上抛出错误时可以通过 <code>errors.Wrap</code> 携带一些额外的信息方便上层进行判断；</li>
+</ol>
+</li>
+<li><ol>
+<li><strong>处理所有可能返回的错误</strong> — 所有可能返回错误的地方最终一定会返回错误，考虑全面才能帮助我们构建更加健壮的项目；</li>
+</ol>
+</li>
+</ul>
+<h3 id="1-4-面向接口"><a href="#1-4-面向接口" class="headerlink" title="1.4 面向接口"></a>1.4 面向接口</h3><p>接口的作用其实就是为不同层级的模块提供了一个定义好的中间层，上游不再需要依赖下游的具体实现，充分地对上下游进行了解耦。</p>
+<p>这种编程方式不仅是在 Go 语言中是被推荐的，在几乎所有的编程语言中，我们都会推荐这种编程的方式。它为我们的程序提供了非常强的<code>灵活性</code>，想要构建一个稳定、健壮的 Go 语言项目，不使用接口是完全无法做到的。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">package</span> post  </span><br><span class="line"> ​  </span><br><span class="line"> <span class="keyword">var</span> client *grpc.ClientConn  </span><br><span class="line"> ​  </span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;  </span><br><span class="line">     <span class="keyword">var</span> err <span class="type">error</span>  </span><br><span class="line">     client, err = grpc.Dial(...）  </span><br><span class="line">     <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;  </span><br><span class="line">         <span class="built_in">panic</span>(err)  </span><br><span class="line">     &#125;  </span><br><span class="line"> &#125;  </span><br><span class="line"> ​  </span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="title">ListPosts</span><span class="params">()</span></span> ([]*Post, <span class="type">error</span>) &#123;  </span><br><span class="line">     posts, err := client.ListPosts(...)  </span><br><span class="line">     <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;  </span><br><span class="line">         <span class="keyword">return</span> []*Post&#123;&#125;, err  </span><br><span class="line">     &#125;  </span><br><span class="line">       </span><br><span class="line">     <span class="keyword">return</span> posts, <span class="literal">nil</span>  </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码其实就不是一个设计良好的代码，它不仅在 <code>init</code> 函数中隐式地初始化了 grpc 连接这种全局变量，而且没有将 <code>ListPosts</code> 通过接口的方式暴露出去，这会让依赖 <code>ListPosts</code> 的上层模块难以测试。</p>
+<p>我们可以使用下面的代码改写原有的逻辑，使得同样地逻辑变得更容易测试和维护：</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> post  </span><br><span class="line"> ​  </span><br><span class="line"> <span class="keyword">type</span> Service <span class="keyword">interface</span> &#123;  </span><br><span class="line">     ListPosts() ([]*Post, <span class="type">error</span>)  </span><br><span class="line"> &#125;  </span><br><span class="line"> ​  </span><br><span class="line"> <span class="keyword">type</span> service <span class="keyword">struct</span> &#123;  </span><br><span class="line">     conn *grpc.ClientConn  </span><br><span class="line"> &#125;  </span><br><span class="line"> ​  </span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="title">NewService</span><span class="params">(conn *grpc.ClientConn)</span></span> Service &#123;  </span><br><span class="line">     <span class="keyword">return</span> &amp;service&#123;  </span><br><span class="line">         conn: conn,  </span><br><span class="line">     &#125;  </span><br><span class="line"> &#125;  </span><br><span class="line"> ​  </span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="params">(s *service)</span></span> ListPosts() ([]*Post, <span class="type">error</span>) &#123;  </span><br><span class="line">     posts, err := s.conn.ListPosts(...)  </span><br><span class="line">     <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;  </span><br><span class="line">         <span class="keyword">return</span> []*Post&#123;&#125;, err  </span><br><span class="line">     &#125;  </span><br><span class="line">       </span><br><span class="line">     <span class="keyword">return</span> posts, <span class="literal">nil</span>  </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><ol>
+<li>通过接口 <code>Service</code> 暴露对外的 <code>ListPosts</code> 方法；</li>
+</ol>
+</li>
+<li><ol>
+<li>使用 <code>NewService</code> 函数初始化 <code>Service</code> 接口的实现并通过私有的结构体 <code>service</code> 持有 grpc 连接；</li>
+</ol>
+</li>
+<li><ol>
+<li><code>ListPosts</code> 不再依赖全局变量，而是依赖接口体 <code>service</code> 持有的连接；</li>
+</ol>
+</li>
+</ul>
+<p>当我们使用这种方式重构代码之后，就可以在 <code>main</code> 函数中显式的初始化 grpc 连接、创建 <code>Service</code> 接口的实现并调用 <code>ListPosts</code> 方法：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">package</span> main  </span><br><span class="line"> ​  </span><br><span class="line"> <span class="keyword">import</span> ...  </span><br><span class="line"> ​  </span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">     conn, err = grpc.Dial(...）  </span><br><span class="line">     <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;  </span><br><span class="line">         <span class="built_in">panic</span>(err)  </span><br><span class="line">     &#125;  </span><br><span class="line">       </span><br><span class="line">     svc := post.NewService(conn)  </span><br><span class="line">     posts, err := svc.ListPosts()  </span><br><span class="line">     <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;  </span><br><span class="line">         <span class="built_in">panic</span>(err)  </span><br><span class="line">     &#125;  </span><br><span class="line">       </span><br><span class="line">     fmt.Println(posts)  </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>这种使用接口组织代码的方式在 Go 语言中非常常见，我们应该在代码中尽可能地使用这种思想和模式对外提供功能：</p>
+<ul>
+<li><ol>
+<li>使用大写的 <code>Service</code> 对外暴露方法；</li>
+</ol>
+</li>
+<li><ol>
+<li>使用小写的 <code>service</code> 实现接口中定义的方法；</li>
+</ol>
+</li>
+<li><ol>
+<li>通过 <code>NewService</code> 函数初始化 <code>Service</code> 接口；</li>
+</ol>
+</li>
+</ul>
+<p>当我们使用上述方法组织代码之后，其实就对不同模块的依赖进行了解耦，也正遵循了软件设计中经常被提到的一句话 — 『依赖接口，不要依赖实现』，也就是<strong>面向接口编程</strong>。</p>
+<h3 id="1-5-小结"><a href="#1-5-小结" class="headerlink" title="1.5 小结"></a>1.5 小结</h3><p>在这一小节中总共介绍了 Go 语言中三个经常会打交道的『元素』— <code>init</code> 函数、<code>error</code> 和接口，我们在这里主要是想通过三个不同的例子为大家传达的一个主要思想就是尽量使用<strong>显式的（explicit）的方式</strong>编写 Go 语言代码。</p>
+<h2 id="2-单元测试"><a href="#2-单元测试" class="headerlink" title="2 单元测试"></a>2 单元测试</h2><p>一个代码质量和工程质量有保证的项目一定有比较合理的单元测试覆盖率，没有单元测试的项目一定是不合格的或者不重要的，单元测试应该是所有项目都必须有的代码，每一个单元测试都表示一个可能发生的情况，<strong>单元测试就是业务逻辑</strong>。</p>
+<h3 id="2-1-可测试性"><a href="#2-1-可测试性" class="headerlink" title="2.1 可测试性"></a>2.1 可测试性</h3><p>如何控制待测试方法中依赖的模块是写单元测试时至关重要的，控制依赖也就是对目标函数的依赖进行 <code>Mock</code> 消灭不确定性，为了减少每一个单元测试的复杂度，我们需要：</p>
+<ul>
+<li>1）尽可能减少目标方法的依赖，让目标方法只依赖必要的模块；</li>
+<li>2）依赖的模块也应该非常容易地进行 <code>Mock</code>；<h4 id="2-1-1-接口"><a href="#2-1-1-接口" class="headerlink" title="2.1.1 接口"></a>2.1.1 接口</h4></li>
+</ul>
+<p>接口的使用能够为我们带来更清晰的抽象，帮助我们思考如何对代码进行设计，也能让我们更方便地对依赖进行 <code>Mock</code>。</p>
+<p>接口常见用法</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Service <span class="keyword">interface</span> &#123; ... &#125;  </span><br><span class="line"> ​  </span><br><span class="line"><span class="keyword">type</span> service <span class="keyword">struct</span> &#123; ... &#125;  </span><br><span class="line"> ​  </span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewService</span><span class="params">(...)</span></span> (Service, <span class="type">error</span>) &#123;  </span><br><span class="line">   <span class="keyword">return</span> &amp;service&#123;...&#125;, <span class="literal">nil</span>  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>果你不知道应不应该使用接口对外提供服务，这时就应该无脑地使用上述模式对外暴露方法了，这种模式可以在绝大多数的场景下工作。</p>
+<h4 id="函数简单"><a href="#函数简单" class="headerlink" title="函数简单"></a>函数简单</h4><p>另一个建议就是保证每一个函数尽可能简单，这里的简单不止是指功能上的简单、单一，还意味着函数容易理解并且命名能够自解释。</p>
+<h3 id="组织方式"><a href="#组织方式" class="headerlink" title="组织方式"></a>组织方式</h3><p>Go 语言中的单元测试文件和代码都是与源代码放在同一个目录下按照 <code>package</code> 进行组织的，<code>server.go</code> 文件对应的测试代码应该放在同一目录下的 <code>server_test.go</code> 文件中。</p>
+<h4 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h4><p>单元测试的最常见以及默认组织方式就是写在以 <code>_test.go</code> 结尾的文件中，所有的测试方法也都是以 <code>Test</code> 开头并且只接受一个 <code>testing.T</code> 类型的参数：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">func</span> <span class="title">TestAuthor</span><span class="params">(t *testing.T)</span></span> &#123;  </span><br><span class="line">     author := blog.Author()  </span><br><span class="line">     assert.Equal(t, <span class="string">&quot;draveness&quot;</span>, author)  </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-1-2-Suite"><a href="#2-1-2-Suite" class="headerlink" title="2.1.2 Suite"></a>2.1.2 Suite</h4><p>第二种比较常见的方式是按照簇进行组织，其实就是对 Go 语言默认的测试方式进行简单的封装，我们可以使用 <a target="_blank" rel="noopener" href="https://github.com/stretchr/testify">stretchr/testify</a> 中的 <code>suite</code> 包对测试进行组织:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">import</span> (  </span><br><span class="line">     <span class="string">&quot;testing&quot;</span>  </span><br><span class="line">     <span class="string">&quot;github.com/stretchr/testify/suite&quot;</span>  </span><br><span class="line"> )  </span><br><span class="line"> ​  </span><br><span class="line"> <span class="keyword">type</span> ExampleTestSuite <span class="keyword">struct</span> &#123;  </span><br><span class="line">     suite.Suite  </span><br><span class="line">     VariableThatShouldStartAtFive <span class="type">int</span>  </span><br><span class="line"> &#125;  </span><br><span class="line"> ​  </span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="params">(suite *ExampleTestSuite)</span></span> SetupTest() &#123;  </span><br><span class="line">     suite.VariableThatShouldStartAtFive = <span class="number">5</span>  </span><br><span class="line"> &#125;  </span><br><span class="line"> ​  </span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="params">(suite *ExampleTestSuite)</span></span> TestExample() &#123;  </span><br><span class="line">     suite.Equal(suite.VariableThatShouldStartAtFive, <span class="number">5</span>)  </span><br><span class="line"> &#125;  </span><br><span class="line"> ​  </span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="title">TestExampleTestSuite</span><span class="params">(t *testing.T)</span></span> &#123;  </span><br><span class="line">     suite.Run(t, <span class="built_in">new</span>(ExampleTestSuite))  </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以使用 <code>suite</code> 包，以结构体的方式对测试簇进行组织，<code>suite</code> 提供的 <code>SetupTest</code>/<code>SetupSuite</code> 和 <code>TearDownTest</code>/<code>TearDownSuite</code> 是执行测试前后以及执行测试簇前后的钩子方法，我们能在其中完成一些共享资源的初始化，减少测试中的初始化代码。</p>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span>Author: </span>
+    <a href="https://stardustorz.github.io">draco</a>
+  </p>
+  <p class="copyright-item">
+    <span>Link: </span>
+    <a href="https://stardustorz.github.io/2021/09/20/Golang/3%20%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/Golang%20%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">https://stardustorz.github.io/2021/09/20/Golang/3%20%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/Golang%20%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/</a>
+  </p>
+  <p class="copyright-item">
+    <span>License: </span>
+    
+    <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+  </p>
+</div>
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/Golang/">Golang</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/2021/10/11/Golang/4%20%E5%85%B6%E4%BB%96/time%20rate%E4%BD%BF%E7%94%A8/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">[Go] Golang Time/rate使用</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/2021/09/16/Golang/0%20%E5%9F%BA%E7%A1%80/%E5%85%B3%E9%94%AE%E5%AD%97/Panic%20Recover/">  
+        <span class="next-text nav-default">[Go] Panic Recover</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2019 - 2025      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">draco</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+</body>
+
+</html>

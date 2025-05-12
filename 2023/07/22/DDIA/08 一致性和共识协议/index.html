@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="[DDIA] 一致性和共识协议" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="DDIA, Draco&#39;s Blog" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Draco's Blog" >
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://stardustorz.github.io/2023/07/22/DDIA/08 一致性和共识协议/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":false};
+</script>
+  
+  <title>[DDIA] 一致性和共识协议 - Draco&#39;s Blog</title>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Draco's Blog</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      [DDIA] 一致性和共识协议
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2023-07-22
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">阅读笔记</a>
+        
+        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/DDIA/">DDIA</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%80%E8%87%B4%E6%80%A7%E4%BF%9D%E8%AF%81"><span class="toc-number">1.</span> <span class="toc-text">1 一致性保证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%BA%BF%E6%80%A7%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">2.</span> <span class="toc-text">2 线性一致性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%A6%82%E4%BD%95%E8%AE%A9%E7%B3%BB%E7%BB%9F%E6%BB%A1%E8%B6%B3%E7%BA%BF%E6%80%A7%E4%B8%80%E8%87%B4%EF%BC%9F"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 如何让系统满足线性一致？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%BA%94%E7%94%A8%E7%BA%BF%E6%80%A7%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 应用线性一致性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E4%B8%80%E8%87%B4%E7%9A%84%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 实现线性一致的系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E7%BA%BF%E6%80%A7%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E4%BB%A3%E4%BB%B7"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 线性一致性的代价</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-1-CAP-%E5%AE%9A%E7%90%86"><span class="toc-number">2.4.1.</span> <span class="toc-text">2.4.1 CAP 定理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-2-%E7%BA%BF%E6%80%A7%E4%B8%80%E8%87%B4%E6%80%A7%E5%92%8C%E7%BD%91%E7%BB%9C%E5%BB%B6%E8%BF%9F"><span class="toc-number">2.4.2.</span> <span class="toc-text">2.4.2 线性一致性和网络延迟</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%A1%BA%E5%BA%8F%E4%BF%9D%E8%AF%81"><span class="toc-number">3.</span> <span class="toc-text">3 顺序保证</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E9%A1%BA%E5%BA%8F%E5%92%8C%E5%9B%A0%E6%9E%9C%EF%BC%88Ordering-and-Causality%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 顺序和因果（Ordering and Causality）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-1-%E5%9B%A0%E6%9E%9C%E5%BA%8F%E9%9D%9E%E5%85%A8%E5%BA%8F"><span class="toc-number">3.1.1.</span> <span class="toc-text">3.1.1 因果序非全序</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%BA%8F%E5%88%97%E5%8F%B7%E5%AE%9A%E5%BA%8F"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 序列号定序</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-1-%E9%9D%9E%E5%9B%A0%E6%9E%9C%E5%BA%8F%E7%94%9F%E6%88%90%E5%99%A8"><span class="toc-number">3.2.1.</span> <span class="toc-text">3.2.1 非因果序生成器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-2-Lamport-%E6%97%B6%E9%97%B4%E6%88%B3"><span class="toc-number">3.2.2.</span> <span class="toc-text">3.2.2 Lamport 时间戳</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%85%A8%E5%BA%8F%E5%B9%BF%E6%92%AD"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 全序广播</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-1-%E4%BD%BF%E7%94%A8%E5%85%A8%E5%BA%8F%E5%B9%BF%E6%92%AD%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E4%B8%80%E8%87%B4%E6%80%A7%E5%AD%98%E5%82%A8"><span class="toc-number">3.3.1.</span> <span class="toc-text">3.3.1 使用全序广播实现线性一致性存储</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-2-%E4%BD%BF%E7%94%A8%E7%BA%BF%E6%80%A7%E4%B8%80%E8%87%B4%E5%AD%98%E5%82%A8%E5%AE%9E%E7%8E%B0%E5%85%A8%E5%BA%8F%E5%B9%BF%E6%92%AD"><span class="toc-number">3.3.2.</span> <span class="toc-text">3.3.2 使用线性一致存储实现全序广播</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E5%92%8C%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.</span> <span class="toc-text">4 分布式事务和共识协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%8E%9F%E5%AD%90%E6%8F%90%E4%BA%A4%E5%92%8C%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 原子提交和两阶段提交</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-1-%E4%BB%8E%E5%8D%95%E6%9C%BA%E5%88%B0%E5%88%86%E5%B8%83%E5%BC%8F%E7%9A%84%E5%8E%9F%E5%AD%90%E6%8F%90%E4%BA%A4"><span class="toc-number">4.1.1.</span> <span class="toc-text">4.1.1 从单机到分布式的原子提交</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-2-%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4"><span class="toc-number">4.1.2.</span> <span class="toc-text">4.1.2 两阶段提交</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-3-%E5%9F%BA%E4%BA%8E%E6%89%BF%E8%AF%BA%E7%9A%84%E7%B3%BB%E7%BB%9F"><span class="toc-number">4.1.3.</span> <span class="toc-text">4.1.3 基于承诺的系统</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-4-%E5%8D%8F%E8%B0%83%E8%80%85%E6%95%85%E9%9A%9C"><span class="toc-number">4.1.4.</span> <span class="toc-text">4.1.4 协调者故障</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-5-%E4%B8%89%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4"><span class="toc-number">4.1.5.</span> <span class="toc-text">4.1.5 三阶段提交</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%AE%9E%E8%B7%B5%E4%B8%AD%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 实践中的分布式事务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-1-%E6%81%B0%E5%A5%BD%E4%B8%80%E6%AC%A1%E7%9A%84%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86"><span class="toc-number">4.2.1.</span> <span class="toc-text">4.2.1 恰好一次的消息处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-2-XA-%E4%BA%8B%E5%8A%A1"><span class="toc-number">4.2.2.</span> <span class="toc-text">4.2.2 XA 事务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-3-%E9%98%BB%E5%A1%9E%E6%97%B6%E6%8C%81%E6%9C%89%E9%94%81"><span class="toc-number">4.2.3.</span> <span class="toc-text">4.2.3 阻塞时持有锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-4-%E4%BB%8E%E5%8D%8F%E8%B0%83%E8%80%85%E6%95%85%E9%9A%9C%E4%B8%AD%E6%81%A2%E5%A4%8D"><span class="toc-number">4.2.4.</span> <span class="toc-text">4.2.4 从协调者故障中恢复</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-5-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%99%90%E5%88%B6"><span class="toc-number">4.2.5.</span> <span class="toc-text">4.2.5 分布式事务的限制</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E5%AE%B9%E9%94%99%E7%9A%84%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 容错的共识算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-1-%E5%85%A8%E5%BA%8F%E5%B9%BF%E6%92%AD%E4%B8%AD%E7%9A%84%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95"><span class="toc-number">4.3.1.</span> <span class="toc-text">4.3.1 全序广播中的共识算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-2-%E5%8D%95%E4%B8%BB%E5%A4%8D%E5%88%B6%E5%92%8C%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.3.2.</span> <span class="toc-text">4.3.2 单主复制和共识协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-3-%E7%BA%AA%E5%85%83%E7%BC%96%E5%8F%B7%E5%92%8C%E6%B3%95%E5%AE%9A%E4%BA%BA%E6%95%B0"><span class="toc-number">4.3.3.</span> <span class="toc-text">4.3.3 纪元编号和法定人数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-4-%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7"><span class="toc-number">4.3.4.</span> <span class="toc-text">4.3.4 共识算法的局限性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E6%88%90%E5%91%98%E5%85%B3%E7%B3%BB%E5%92%8C%E5%8D%8F%E8%B0%83%E6%9C%8D%E5%8A%A1"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 成员关系和协调服务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-1-%E4%B8%BA%E8%8A%82%E7%82%B9%E5%88%86%E9%85%8D%E4%BB%BB%E5%8A%A1"><span class="toc-number">4.4.1.</span> <span class="toc-text">4.4.1 为节点分配任务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-2-%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0"><span class="toc-number">4.4.2.</span> <span class="toc-text">4.4.2 服务发现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-3-%E6%88%90%E5%91%98%E6%9C%8D%E5%8A%A1"><span class="toc-number">4.4.3.</span> <span class="toc-text">4.4.3 成员服务</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <blockquote>
+<p><strong>共识</strong>（consensus），即，<em>让所有节点在<strong>某件事情</strong>上达成一致</em>。</p>
+</blockquote>
+<span id="more"></span>
+<p>大部分<strong>数据系统</strong>都可以抽象为一系列<strong>数据操作</strong>的依次施加，即状态机模型。而共识协议可以让多机对某个<strong>确定</strong>的<strong>操作序列</strong>达成共识，进而对系统的任意状态达成共识。</p>
+<h2 id="1-一致性保证"><a href="#1-一致性保证" class="headerlink" title="1 一致性保证"></a>1 一致性保证</h2><p><strong>收敛性</strong>（<em>convergence</em>），即最终，所有副本都会收敛到相同的值。</p>
+<h2 id="2-线性一致性"><a href="#2-线性一致性" class="headerlink" title="2 线性一致性"></a>2 线性一致性</h2><p>一个系统对外表现的像所有数据<strong>只有一个副本</strong>，作用于数据上的操作都可以<strong>原子地完成</strong>。<br>在一个提供线性一致性的系统中，只要某个客户端成功的进行了写入某值，其他所有客户端都可以在数据库中读到该值。提供单副本的抽象，意味着客户端任何时刻读到的都是<strong>最近、最新</strong>（up-to-date）的值，而不会是过期缓存、副本中的旧值。换句话说，线性一致性是一种数据<strong>新鲜度保证</strong>（recency guarantee）。</p>
+<h3 id="2-1-如何让系统满足线性一致？"><a href="#2-1-如何让系统满足线性一致？" class="headerlink" title="2.1 如何让系统满足线性一致？"></a>2.1 如何让系统满足线性一致？</h3><p><strong>让系统表现得好像只有一个数据副本</strong>。</p>
+<p>线性一致性要求所有操作标记组成序列是<strong>永远向前的</strong>，即满足数据<strong>新鲜度要求：一旦我们写入或者读取到某值，所有稍后的读请求都能看到该值，直到有人再次将其改写。</strong></p>
+<p><strong>线性一致性和可串行化</strong></p>
+<p><strong>线性一致性</strong>（Linearizability）很容易和<strong>可串行化</strong>（serializability）相混淆，因为他们看起来都像是：可以进行拓扑化组织。但他们是不同维度的约束，我们很有必要对其进行区分：</p>
+<p><strong>可串行化</strong>（Serializability）。可串行化是事务的一种隔离级别。每个事务可能会涉及<strong>多个数据对象</strong>（行、文档、记录）的读写，<a target="_blank" rel="noopener" href="https://ddia.qtmuniao.com/#/ch07?id=%e5%8d%95%e5%af%b9%e8%b1%a1%e5%92%8c%e5%a4%9a%e5%af%b9%e8%b1%a1%e6%93%8d%e4%bd%9c">之前</a>有讨论过单对象和多对象。可串行化可以保证所有事务好像按<strong>某种顺序依次执行</strong>（后一个事务在前一个事务结束后才开始）。需要注意的是，如果某种串行顺序和实际执行顺序不一致也没事，只要是串行执行就行。举个例子，如果 A、B、C 三个事务并发执行，真实顺序是 A-&gt;B-&gt;C，但如果对应用层表现为 C-&gt;A-&gt;B 的执行顺序（可能由于多机时间戳不同步），也可以叫可串行化，但 C-&gt;A-&gt;B 的执行顺序在<strong>某个</strong>对象上可能不满足线性一致性。</p>
+<p><strong>线性一致性</strong>（Linearizability）。线性一致性是一种针对寄存器（register，<strong>单个数据对象</strong>）的读写新鲜度保证。它不会将多个操作打包成事务，因此不能避免像之前提到的<a target="_blank" rel="noopener" href="https://ddia.qtmuniao.com/#/ch07?id=%e5%86%99%e5%81%8f%e5%ba%8f%e5%92%8c%e5%b9%bb%e8%af%bb">写偏序</a>等问题，除非使用某些辅助手段，如<a target="_blank" rel="noopener" href="https://ddia.qtmuniao.com/#/ch07?id=%e7%89%a9%e5%8c%96%e5%86%b2%e7%aa%81">物化冲突</a>。</p>
+<p>一个数据库可以同时提供可串行化和线性一致性保证，我们称之为<strong>严格可串行化</strong>（<em>strict serializability</em>）或者<strong>单副本可串行化</strong>（strong one-copy serializability）。使用两阶段锁或者真正串行化执行实现的可串行化，通常都是线性一致的。</p>
+<p>然而，基于快照隔离的串行化<strong>通常</strong>不是线性一致的。为了避免读写互相阻塞，所有的读取都会基于某个一致性的快照，则该快照之后的写入不会反映到读请求上，因此，快照读不满足线性一致性。</p>
+<h3 id="2-2-应用线性一致性"><a href="#2-2-应用线性一致性" class="headerlink" title="2.2 应用线性一致性"></a>2.2 应用线性一致性</h3><p>在使用单主模型的系统中，需要保证任何时刻只有一个主副本，而非多个（脑裂）。一种进行主选举的方法是使用锁：每个节点在启动时都试图去获取锁，最终只有一个节点会成功并且变为主。不论使用什么方式实现锁，都必须<strong>满足线性一致性</strong>：所有节点必须就某节点拥有锁达成一致，否则这样的锁服务是不能用的。</p>
+<p><strong>唯一性约束</strong>在数据库中很常见：比如用户名和邮箱可以用来唯一的标识一个用户、在同一个文件系统中不可能有多个文件具有相同的路径和文件名。如果你想在数据写入时<strong>维持这些约束</strong>（比如两个人使用相同的用户名并发地创建账户，其中一个会失败而报错），你需要线性一致性。</p>
+<p>要求所有节点在<strong>单个最新值</strong>（账户余额、股票水位、座位预定）上达成一致。</p>
+<h3 id="2-3-实现线性一致的系统"><a href="#2-3-实现线性一致的系统" class="headerlink" title="2.3 实现线性一致的系统"></a>2.3 实现线性一致的系统</h3><p>可以通过牺牲部分性能来让 Dynamo 风格的 Quorum 读写变成线性一致的：</p>
+<ol>
+<li>每个读请求必须进行同步的<a target="_blank" rel="noopener" href="https://ddia.qtmuniao.com/#/ch05?id=%e8%af%bb%e6%97%b6%e4%bf%ae%e5%a4%8d%e5%92%8c%e5%8f%8d%e7%86%b5">读取修复</a>。</li>
+<li>发送任意写请求之前要先读取最新值。</li>
+</ol>
+<h3 id="2-4-线性一致性的代价"><a href="#2-4-线性一致性的代价" class="headerlink" title="2.4 线性一致性的代价"></a>2.4 线性一致性的代价</h3><p>如果应用层要求线性一致的读写，则<strong>数据中心间的网络中断会造成服务的不可用</strong>。</p>
+<h4 id="2-4-1-CAP-定理"><a href="#2-4-1-CAP-定理" class="headerlink" title="2.4.1 CAP 定理"></a>2.4.1 CAP 定理</h4><ul>
+<li>如果应用层要求系统提供线性一致性，此时如果某些数据副本由于网络问题和系统其他部分<strong>断开了连接</strong>，则这些数据副本就<strong>不再能够正常地处理请求</strong>：要么等待网络恢复、要么进行报错。但这都意味着系统不可用。</li>
+<li>如果应用不要求系统的线性一致，则即使多副本间遇到连接问题，每个副本可以独立的进行写入。从而，即使出现了网络故障，系统仍然能够保持可用，但其行为不是线性一致的。</li>
+</ul>
+<p>CAP 有时候被表述为，在做系统设计时，一致性（consistency）、可用性（Availability）、分区容错性（Partition tolerance），只能三取其二。<br><strong>当网络出现分区时，一致性和可用性只能二选其一</strong>（<em>either Consistent or Available when Partitioned</em>）。</p>
+<h4 id="2-4-2-线性一致性和网络延迟"><a href="#2-4-2-线性一致性和网络延迟" class="headerlink" title="2.4.2 线性一致性和网络延迟"></a>2.4.2 线性一致性和网络延迟</h4><p>很多分布式系统选择不提供线性一致性的原因也在于此：<strong>是为了提升系统性能而非进行容错</strong>。在任何时候，提供线性一致性都会严重拖慢系统。而非在网络故障发生时，才需要对线性一致性进行牺牲。</p>
+<p>如果你想要保证线性一致，读写请求的响应时间是<strong>正比于网络延迟</strong>的。</p>
+<p><strong>顺序性</strong>（ordering）、<strong>线性一致性</strong>（linearizability）和<strong>共识协议</strong>（consensus）三个概念间有很深的联系。</p>
+<h2 id="3-顺序保证"><a href="#3-顺序保证" class="headerlink" title="3 顺序保证"></a>3 顺序保证</h2><h3 id="3-1-顺序和因果（Ordering-and-Causality）"><a href="#3-1-顺序和因果（Ordering-and-Causality）" class="headerlink" title="3.1 顺序和因果（Ordering and Causality）"></a>3.1 顺序和因果（Ordering and Causality）</h3><p><strong>顺序可以维持因果性</strong><br>因果将顺序施加于<strong>事件</strong>（event）：</p>
+<ol>
+<li>先有因，后有果</li>
+<li>先有消息发送，然后该消息被收到</li>
+<li>先有问题，后有答案<br>如果一个系统遵循因果约束，则我们称其为<strong>因果一致的</strong>（<em>causally consistent</em>）。比如，快照隔离就可以提供因果一致性：当从数据库读取数据的时候，如果你能读到某个时间点的数据，就一定能读到其之前的数据</li>
+</ol>
+<h4 id="3-1-1-因果序非全序"><a href="#3-1-1-因果序非全序" class="headerlink" title="3.1.1 因果序非全序"></a>3.1.1 因果序非全序</h4><p><strong>全序</strong>（total order）意味着<strong>系统内任意两个元素可比大小</strong>。<br>反之，集合是<strong>偏序</strong>（partially ordered）：在某些情况下，我们可以说一个集合比另一个集合大（两个集合间有包含关系）；但在另外一些情况下，两个集合间没有可比关系。</p>
+<p><strong>线性一致性</strong>（Linearizability）：对于任意两个操作，我们总是可以确定其发生的先后关系，也即在可线性化系统中，所有的操作顺序满足全序关系。<br><strong>因果一致性</strong>（Causality）。如果我们无从判定两个操作的先后关系，则称之为<strong>并发的</strong>（concurrent，参见<a target="_blank" rel="noopener" href="https://ddia.qtmuniao.com/#/ch05?id=%e5%8f%91%e7%94%9f%e4%ba%8e%e4%b9%8b%e5%89%8d%ef%bc%88happens-before%ef%bc%89%e5%92%8c%e5%b9%b6%e5%8f%91%e5%85%b3%e7%b3%bb">发生于之前和并发关系</a>）。因果性定义了一种<strong>偏序</strong>（partial order）关系，而非全序关系：有些操作存在因果，因此可比；而另外一些操作则是并发的，即不可比。</p>
+<h3 id="3-2-序列号定序"><a href="#3-2-序列号定序" class="headerlink" title="3.2 序列号定序"></a>3.2 序列号定序</h3><p><strong>使用序列号（sequence numbers）或者时间戳（timestamps）来给事件定序</strong>。<br>在使用单主模型的多副本系统中，主节点上<strong>操作日志的追加顺序</strong>确定了一个对所有操作的全序，且满足操作发生的因果关系。主节点可以为每条日志按顺序关联一个全局递增的序列号，如果从节点上也按都按此序列号顺序应用操作日志到状态机，则每个副本总能保持一致的状态（但有可能稍落后于主节点）。</p>
+<h4 id="3-2-1-非因果序生成器"><a href="#3-2-1-非因果序生成器" class="headerlink" title="3.2.1 非因果序生成器"></a>3.2.1 非因果序生成器</h4><p>如果系统中没有唯一的单主节点（比如你用的是多主模型或无主模型，又或者你的系统存在多个分区），则如何为每个操作产生一个序列号就变得不那么简单直观了。常用的方式有以下几种：</p>
+<ol>
+<li><strong>每个节点独立地生成不相交的序列集</strong>。如，你的系统中有两个节点，一个节点只产生奇数序号，另一个节点只产生偶数序号。更通用一些，我们可以在生成的序号中保留一些位来编码对节点的标识，从而让不同的节点永远不会产生相同的序号。</li>
+<li><strong>可以为每个操作关联一个日历时钟</strong>（或者说物理时钟）。这些时间戳不是有序的（因为回拨？），但如果有足够的精读，就可以让任意两个操作关联的时间戳不同，依次也可以达到全序的目的。此种方法有时候会被用在解决冲突使用后者胜的策略（但会有风险）。</li>
+<li><strong>每次可以批量产生一组序列号</strong>。比如，在请求序列号时，节点 A 可以一次性声明占用 1 ~ 1000 的序列号，节点 B 会一次占用 1001~2000 的序列号。则本地的操作可以从拿到的这批序列号中直接分配，仅在快耗尽时再去请求一批。这种方法常被用在 TSO（timestamp oracle，单点授时）的优化中。<br><strong>都存在因果问题：</strong></li>
+<li><strong>不同节点上处理操作的速率很难完全同步</strong>。因此，如果一个节点使用奇数序号，另一个节点时用偶数序号，则两个序号消耗的速率也会不一致。此时，当你有两个奇偶性不同的序号时，就难以通过比较大小来确定操作发生的先后顺序。</li>
+<li><strong>物理时间戳会由于多机时钟偏差，而不满足因果一致</strong>。例如，在图 8-3 中（参见<a target="_blank" rel="noopener" href="https://ddia.qtmuniao.com/#/ch08?id=%e6%97%b6%e9%97%b4%e6%88%b3%e4%bb%a5%e5%ae%9a%e5%ba%8f">时间戳以定序</a>），就出现了发生在之后的操作被分配了一个较小的时间戳。</li>
+<li>对于批量分配方式，有可能发生较早的操作被分配了 1001-2000 的序列号，而较晚的操作被分配了 1-1000 的序列号。如此一来，序列号的分配不满足因果一致。</li>
+</ol>
+<h4 id="3-2-2-Lamport-时间戳"><a href="#3-2-2-Lamport-时间戳" class="headerlink" title="3.2.2 Lamport 时间戳"></a>3.2.2 Lamport 时间戳</h4><p>在该系统中，每个节点有一个唯一的 <strong>id</strong> 和一个记录处理过多少个操作的计数器，Lamport 时间戳是上述两者组成的二元组：<code>(counter, node ID)</code> 。不同的节点可能会有相同的 counter 值，但通过引入 node ID，可以使所有时间戳都是全局唯一的。</p>
+<p>让 Lamport 时间戳能够满足因果一致性的核心点在于：<strong>每个节点和客户端都会让 counter 追踪当前所看到（包括本机的和通信的）的最大值</strong>。当节点看到请求或者回复中携带的 counter 值比自己大，就会立即用其值设置本地 counter。</p>
+<p><strong>只有在收集到系统中所有操作之后，才能真正确定所有操作的全序</strong>。</p>
+<h3 id="3-3-全序广播"><a href="#3-3-全序广播" class="headerlink" title="3.3 全序广播"></a>3.3 全序广播</h3><p>使用单主模型的系统会面临两个问题：</p>
+<ol>
+<li>当系统负载超过单机可以处理的尺度，如何进行扩容。</li>
+<li>当主节点宕机时如何进行故障转移（failover）。<br>在分布式系统的语境下，该问题也被称为<strong>全序广播</strong>（total order broadcast）或者<strong>原子广播</strong>（atomic broadcast）。</li>
+</ol>
+<p>全序广播是一种多个节点间交换消息的协议。它要求系统满足两个安全性质：</p>
+<ol>
+<li><strong>可靠交付</strong>。如果一个节点收到了消息，则系统内所有的相关节点都要收到该消息。</li>
+<li><strong>全序交付</strong>。每个节点接收到消息的顺序一致。</li>
+</ol>
+<p>全序广播的一个重要性质是：<strong>当收到消息时，其顺序已经确定</strong>。</p>
+<p>可以从另外一个角度来理解全序广播——用来写日志（比如复制日志、事务日志或者写前日志）：<strong>投递消息就像追加日志</strong>。由于所有节点都会按照同样的顺序发送消息，则所有节点在读取日志的时候也会得到同样的消息序列。</p>
+<h4 id="3-3-1-使用全序广播实现线性一致性存储"><a href="#3-3-1-使用全序广播实现线性一致性存储" class="headerlink" title="3.3.1 使用全序广播实现线性一致性存储"></a>3.3.1 使用全序广播实现线性一致性存储</h4><p>全序广播是<strong>异步的</strong>：系统保证以同样的<strong>顺序</strong>交付消息，但并不保证消息的交付<strong>时刻</strong>（即，有的消息接收者间可能存在着滞后）。与之相对，线性一致性是一种<strong>新鲜度保证</strong>：读取一定能看到最新成功的写。</p>
+<ol>
+<li>向服务中追加一个带有某用户名的消息条目，表明你想使用该用户名。</li>
+<li>（由于全序广播是异步的）不断读取日志，直到能够读到刚才你追加的消息条目。</li>
+<li>检查所有想要使用该用户名的消息，这时你可能会得到多条消息，如果你当初写下的消息在第一条，则你是成功的。此时，你可以“确认”（持久化，比如追加日志，比如写入数据库）占有该用户名的信息，然后给客户端返回成功。如果第一条消息不是你的，则终止请求。</li>
+</ol>
+<h4 id="3-3-2-使用线性一致存储实现全序广播"><a href="#3-3-2-使用线性一致存储实现全序广播" class="headerlink" title="3.3.2 使用线性一致存储实现全序广播"></a>3.3.2 使用线性一致存储实现全序广播</h4><p>对于每一个发给全序广播系统的消息，使用整数寄存器 increment-and-get 操作关联一个序列号；然后将消息发送给所有节点（重试任何丢失的消息）。每个节点接收到消息后利用序列号顺序对外交付消息。这种机制很像 TCP，但并不是描述通信双方，而是一个分布式系统。</p>
+<h2 id="4-分布式事务和共识协议"><a href="#4-分布式事务和共识协议" class="headerlink" title="4 分布式事务和共识协议"></a>4 分布式事务和共识协议</h2><p>在很多场景下让多个节点达成共识是非常重要的。比如：</p>
+<ul>
+<li><strong>Leader 选举</strong> 在使用单主模型的数据库中，所有节点需要对谁是主节点达成一致。当网络问题导致有些节点不能正常通信时，领导权就会出现争议。在这种情形下，共识对于避免错误的故障转移非常重要。引入如果出现两个领导者可以同时接受写入（<strong>脑裂</strong>），所有副本上的数据就会产生分叉，从而变得不一致甚而数据丢失。</li>
+<li><strong>原子提交</strong> 在一个横跨多节点或具有多分区的数据库中，可能会出现某个事务在一些节点执行成功，但在另外一些节点却运行失败。如果我们想保持事务的原子性（ACID 中的 A，参见<a target="_blank" rel="noopener" href="https://ddia.qtmuniao.com/#/ch07?id=%e5%8e%9f%e5%ad%90%e6%80%a7%ef%bc%88atomicity%ef%bc%89">原子性</a>），我们就必须让所有节点就事务的结果达成一致：要么全部回滚（只要有故障），要么提交（没有任何故障）。这个共识的特例也被称为<strong>原子提交</strong>（atomic commit）。<h3 id="4-1-原子提交和两阶段提交"><a href="#4-1-原子提交和两阶段提交" class="headerlink" title="4.1 原子提交和两阶段提交"></a>4.1 原子提交和两阶段提交</h3>原子性能够避免失败的事务通过半完成（half-finished）或者半更新（half-updated）的结果来破坏数据库系统。</li>
+</ul>
+<p>二级索引是独立于<strong>原始数据</strong>的一种数据结构，因此如果你更新了原始数据，对应的二级索引也需要进行同步更新。原子性能够保证二级索引和原始数据时刻保持一致。</p>
+<h4 id="4-1-1-从单机到分布式的原子提交"><a href="#4-1-1-从单机到分布式的原子提交" class="headerlink" title="4.1.1 从单机到分布式的原子提交"></a>4.1.1 从单机到分布式的原子提交</h4><p>简单地在提交事务时给每个节点发送提交请求让其提交事务，是不能够满足事务基本要求的。这是因为，可能有的节点成功提交了，有的节点却提交失败了，从而违反了原子性保证：</p>
+<ul>
+<li>有些节点在提交时检测到完整性约束被破坏了，因此中止事务；但另外一些节点却能够成功提交。</li>
+<li>有些提交请求由于网络过慢而超时丢弃，另外一些提交请求却成功抵达。</li>
+<li>有一些节点在写入提交记录前宕机重启，导致事务回滚；另外一些节点却成功提交。</li>
+</ul>
+<p><strong>事务提交后是不可撤销的</strong>——在事务提交后，你不能再改变主意说，我要重新中止这个事务。这是因为，一旦事务提交了，就会对其他事务可见，从而可能让其他事务依赖于该事务的结果做出一些新的决策；这个原则构成了<strong>读已提交</strong>（read commited）隔离级别的基础（参见<a target="_blank" rel="noopener" href="https://ddia.qtmuniao.com/#/ch07?id=%e8%af%bb%e5%b7%b2%e6%8f%90%e4%ba%a4">读已提交</a>）。如果事务允许在提交后中止，其他已经读取了该事务结果的事务也会失效，从而引起事务的级联中止。</p>
+<p>当然，事务所造成的<strong>结果</strong>在事实上是可以被撤销的，比如，通过<strong>补偿事务</strong>（<em>compensating transaction</em>）。但，从数据库的视角</p>
+<h4 id="4-1-2-两阶段提交"><a href="#4-1-2-两阶段提交" class="headerlink" title="4.1.2 两阶段提交"></a>4.1.2 <em>两阶段提交</em></h4><p><strong>两阶段提交</strong>（2PC，two-phase commit）是一种在多个节点上实现原子事务的算法——即，保证所有节点要么都提交，要么都中止。   相比单机事务的一次提交请求，2PC 中的提交、中止过程被拆分成了两个阶段</p>
+<p><strong>2PC</strong> 引入了一个单机事务中没有的角色：<strong>协调者</strong>（coordinator，有时也被称为事务管理器，transaction manager）。</p>
+<p><strong>2PC 事务</strong>通常也由应用层对多个节点上的数据读写开始。和协调者相对，我们将这些数据节点称为事务的<strong>参与者</strong>（participants）。当应用层准备好提交后，协调者开始阶段一：向每个参与者发送 <strong>prepare</strong> 请求，询问他们是否能够提交。然后，协调者会根据参与者的返回而进行下一步动作：</p>
+<ol>
+<li>如果<strong>所有参与者</strong>都回复“可以”（yes），表示能够提交，则协调者就会进入第二阶段发出<strong>提交</strong>（ <strong>commit</strong> ）请求，此时，提交事实上才开始执行。</li>
+<li><p>如果有任何参与者回复“不行”（no），或者请求超时了，协调者就会进入第二阶段并发送一个 <strong>中止</strong>（abort）请求，中止事务。</p>
+<h4 id="4-1-3-基于承诺的系统"><a href="#4-1-3-基于承诺的系统" class="headerlink" title="4.1.3 基于承诺的系统"></a>4.1.3 基于承诺的系统</h4></li>
+<li><p>当应用想开启一个分布式事务时，它会首先向协调者要一个<strong>事务 ID</strong>。该事务 ID 是全局唯一的。</p>
+</li>
+<li>应用会使用前述事务 ID 向所有的参与者发起一个单机事务，所有节点会各自完成读写请求，在此过程中，如果有任何出错（比如节点宕机或者请求超时），协调者或者任意参与者都可以中止事务。</li>
+<li>当应用层准备好提交事务时，协调者会向所有参与者发送<strong>准备提交</strong>（prepare）请求，并在请求中打上事务 ID 标记。如果有请求失败或者超时，则协调者会对所有参与者发送带有该事务 ID 的中止请求。</li>
+<li>当参与者收到<strong>准备提交</strong>请求时，它必须确认该事务能够在任何情况下都能被提交，才能回复“<strong>可以</strong>”。这包括，将所有写入刷到磁盘（一旦承诺了，就不能反悔，即使之后遇到宕机、断电或者磁盘空间不足）、检查是否有冲突或者违反约束的情况。换句话说，如果回复“可以”，意味着参与者<strong>让渡了中止事务的权利（给协调者）</strong>，但此时并没有真正地提交。</li>
+<li>当协调者收到所有参与者准备提交的回复后，会决定提交还是中止该事务（只有在所有参与者都回复“可以”时，才会提交）。协调者需要将该决策写入事务日志，并下刷到磁盘，以保证即使宕机重启，该决策也不会丢失。这被称为<strong>提交点</strong>（commit point）。</li>
+<li>协调者将决策刷入了磁盘后，就会将决策（提交或者中止）请求发给所有参与方。如果某个请求失败或者超时，则协调者会对其进行无限重试，直到成功。不允许走回头路：如果协调者决定了提交，则不管要进行多少次的重试，也必须要保证该决策的执行。如果参与者在此时宕机了，则当重启时也必须进行提交——因为它<strong>承诺过要提交</strong>，因此在重启后不能拒绝提交。</li>
+</ol>
+<p>该协议有两个重要的“不可回退点”：</p>
+<ol>
+<li>当某个参与者回复“可以”时，就做出了（将来无论发生什么）肯定可以提交的承诺。（当然，协调者可以中止事务）</li>
+<li>当协调者决定提交时，该决定一旦做出（写入磁盘），就是不可撤回的。</li>
+</ol>
+<h4 id="4-1-4-协调者故障"><a href="#4-1-4-协调者故障" class="headerlink" title="4.1.4 协调者故障"></a>4.1.4 协调者故障</h4><p>如果协调者在准备提交请求发送前故障，则参与者可以放心的中止事务。然而，一旦参与者收到准备提交请求，并且回复“可以”，则根据 2PC 设定，它<strong>不能单方面的中止事务</strong>——而必须等待协调者的提交或者中止请求。如果此时协调者宕机或者网络故障，则参与者只能<strong>死等</strong>。参与者事务的这种状态称为<strong>存疑</strong>（in doubt）或者<strong>未定</strong>（uncertain）。</p>
+<p>在 2PC 中，唯一使算法能够完成的方法就是等待协调者恢复。这也是为什么，协调者在给参与者发送提交或者中止消息时，需要先将该决策写入事务日志中：当协调者恢复时，他就能从事务日志中读取该决策，以让所有处于未决状态的参与者状态确定下来。如果协调者恢复了，发现并没有写入任何决策到事务日志中，则中止该事务。因此，2PC 的<strong>提交点</strong>（commit point）最终可以归结到协调者上的单机原子提交。</p>
+<h4 id="4-1-5-三阶段提交"><a href="#4-1-5-三阶段提交" class="headerlink" title="4.1.5 三阶段提交"></a>4.1.5 三阶段提交</h4><p>由于 2PC 在等待协调者宕机恢复时系统可能会卡住，因此两阶段提交又称为<strong>阻塞式原子提交协议</strong>（blocking atomic commit protocol）。<br>作为 2PC 的替代，人们又提出了三阶段提交（three-phase commit）。然而，3PC 对系统有一定假设：网络具有有界延迟，请求延迟也是有界的（bounded，参见<a target="_blank" rel="noopener" href="https://ddia.qtmuniao.com/#/ch08?id=%e8%b6%85%e6%97%b6%e5%92%8c%e6%97%a0%e7%95%8c%e5%bb%b6%e8%bf%9f%ef%bc%88unbounded-delays%ef%bc%89">超时和无界延迟</a>）。在具有无界网络延迟进程停顿的实际系统中，3PC 无法保证原子性。<br>在具有无界延迟的网络中，超时机制就不是一个可靠的故障检测方法，即使没有任何节点故障，一个请求仍会由于网络问题而超时。出于这个原因，即使 2PC 可能会因为协调者宕机卡住，但人们仍然在使用它，而没有转向 3PC。</p>
+<h3 id="4-2-实践中的分布式事务"><a href="#4-2-实践中的分布式事务" class="headerlink" title="4.2 实践中的分布式事务"></a>4.2 实践中的分布式事务</h3><p>分布式事务，尤其是使用两阶段提交实现的分布式事务，毁誉参半。一方面，他们可以提供其他方式难以实现的<strong>安全保证</strong>；另一方面，由于运维复杂、降低性能、承诺过多，他们广受诟病。为了避免分布式事务带来的运维复杂度，很多云服务选择不支持分布式事务。</p>
+<p>两种完全不同的分布式事务经常被混淆：</p>
+<ul>
+<li><strong>数据库内部分布式事务</strong> 在一些分布式数据中（标配支持多分区和多副本的数据库），支持跨节点的<strong>内部分布式事务</strong>。如，VoltDB 和 MySQL 集群的 NDB 存储引擎就有这样的内部事务支持。在这种情况下，所有事务参与节点都运行着同样的二进制代码。</li>
+<li><strong>异构的分布式事务</strong> 在异构的分布式事务中，所有参与者使用了两种以上的技术栈：如，来自不同厂家的两种数据库实例，甚至可能包含非数据库系统，如消息队列。即使每个子系统内部实现完全不同，构建于其上的分布式事务也能够保证原子提交。</li>
+</ul>
+<p>数据库内部的事务不需要考虑和其他系统的相容性，因此在实现时可以使用任何协议、可以针对特定技术栈进行任何优化。因此，数据库内部的分布式事务通常能够很好地工作。相反，横跨多个异构系统的事务实现则充满了挑战。</p>
+<h4 id="4-2-1-恰好一次的消息处理"><a href="#4-2-1-恰好一次的消息处理" class="headerlink" title="4.2.1 恰好一次的消息处理"></a>4.2.1 恰好一次的消息处理</h4><p>异构的分布式事务系统可以将多种异构的系统，以强大的方式进行整合。例如，<strong>当且仅当</strong>数据库中处理消息的事务成功提交时，消息队列才会将该消息标记为<strong>已处理</strong>。可以将消息确认和数据库写入打包在单个事务里进行原子提交，来实现上述行为。</p>
+<h4 id="4-2-2-XA-事务"><a href="#4-2-2-XA-事务" class="headerlink" title="4.2.2 XA 事务"></a>4.2.2 XA 事务</h4><p>XA 不是一个网络协议——它定义了一组和事务协调者交互的 C 语言 API 接口。<br>使用事务的<strong>应用层</strong>会以网络驱动（network driver）或者客户端库（client library）来使用 XA 的 API 与参与者服务（数据库或者消息队列）进行交互。如果驱动程序支持 XA 协议，则意味着应用侧可以调用 XA 的 API 来确定一个操作是否是分布式事务的一部分（即通过 XA 定义的接口来确定事务所涵盖<strong>操作的边界</strong>）；如果是，则会发送必要的消息给参与者。XA 驱动也提供了一些回调，协调者可以使用这些回调要求参与者进行准备、提交或者中止。</p>
+<p>事务的<strong>协调者</strong>实现了 XA API。XA 的标椎并没规定协调者该如何实现，并且在实践中协调者通常以<strong>库的形式</strong>被加载进应用程序中（作为应用程序的一部分，而非额外单独的一个服务）。它会追踪事务中的所有参与者，在要求参与者准备提交（prepare）后收集其回复，使用本地磁盘上的日志来跟踪每个事务的<strong>提交/中止</strong>决策。</p>
+<h4 id="4-2-3-阻塞时持有锁"><a href="#4-2-3-阻塞时持有锁" class="headerlink" title="4.2.3 阻塞时持有锁"></a>4.2.3 阻塞时持有锁</h4><p>问题的关键点在于存在<strong>锁</strong>（locking）。数据库中的事务通常会使用行级别的互斥锁来保护对某一行的修改，以防止脏写。更进一步，如果想获得可串行化隔离级别，数据库在使用两阶段锁进行实现时，会对事务所有读过的行加共享锁（参见<a target="_blank" rel="noopener" href="https://ddia.qtmuniao.com/#/ch07?id=%e4%b8%a4%e9%98%b6%e6%ae%b5%e9%94%81">两阶段锁</a>）。<br>数据库在提交或者中止事务前<strong>不能够释放获取的这些锁</strong>。因此，在使用两阶段提交时，一个事务必须在其处于未定状态期间一直持有锁。如果协调者在宕机后花了 20 分钟才重新启动起来，则对应参与者的锁就要持有 20 分钟。如果参与者日志由于某种原因丢掉了，这些锁会被永远的持有——除非系统管理员会手动释放它们。</p>
+<h4 id="4-2-4-从协调者故障中恢复"><a href="#4-2-4-从协调者故障中恢复" class="headerlink" title="4.2.4 从协调者故障中恢复"></a>4.2.4 从协调者故障中恢复</h4><p>在实践中，常会产生一些孤立的（orphaned）未定事务——即，由于某种原因，<strong>事务的协调者</strong>（比如由于软件 bug 事务日志丢失或者损坏）<strong>无从判断事务的最终结果是提交还是回滚</strong>。由是，这些事务不能够被自动的处理，从而永久的卡在那里，持有锁并且阻塞其他事务。<br>唯一的出路是让管理员手动的来提交或者中止事务。<br>很多 XA 事务的实现会留有紧急后门，称为<strong>启发式决策</strong>（<em>heuristic decisions</em>）：允许一个参与者不用等待协调者的决策，而<strong>单方面</strong>决定中止还是提交一个未定事务。需要说明的是，这里的启发式仅仅是<strong>可能打破原子性</strong>（probably breaking atomicity）的一种委婉说法。因为这么做可能会违反两阶段提交所提供的保证。因此这种启发式决策仅是为了救急，而不能进行日常使用。<em>**</em></p>
+<h4 id="4-2-5-分布式事务的限制"><a href="#4-2-5-分布式事务的限制" class="headerlink" title="4.2.5 分布式事务的限制"></a>4.2.5 分布式事务的限制</h4><p>分布式事务有<strong>放大故障</strong>的嫌疑，这与我们构建容错系统的目标背道而驰（这就是 tradeoff，为上层提供的更多的一致性保证，就会牺牲性能，降低可用性）。</p>
+<h3 id="4-3-容错的共识算法"><a href="#4-3-容错的共识算法" class="headerlink" title="4.3 容错的共识算法"></a>4.3 容错的共识算法</h3><p>共识协议通常被描述为：一个或者多个节点可能会各自<strong>提议</strong>（propose）一些值，共识协议需要在这些值中间做出唯一的<strong>决策</strong>（decide）。</p>
+<ul>
+<li><strong>全局一致性</strong>（<em>Uniform agreement</em>） 没有任何两个节点最终做出不同决策。</li>
+<li><strong>正直性</strong>（<em>Integrity</em>） 没有任何节点会做出两次决策（不会反复横跳）</li>
+<li><strong>有效性</strong>（<em>Validity</em>） 如果一个节点做出了决策，该决策所对应的值一定来自系统内某个节点的提议</li>
+<li><strong>可终止性</strong>（<em>Termination</em>） 任何没有宕机的节点，最终都会给出对某个值的决策<br>全局一致和正直性定义了共识协议的核心概念：<strong>所有节点都要决策出同样的结果，并且一旦做出决策，就不能反悔</strong>。加入有效性更多的是为了排除一些无效（trivial）结果</li>
+</ul>
+<p><strong>可终止性是对容错的一种形式化描述</strong>（从结果来描述）。它本质上是在说，一个共识算法不能让系统陷入一种卡在那、啥也不干，直到永远的状态。换句话说，系统必须能够正常运作，即使有些节点宕机，其他节点也必须能够继续做出决策。（可结束性是存活性，liveness，而其他三个性质是安全性，safety，</p>
+<p>可终止性受限于少于半数节点宕机或不可达的假设。然而，大多数共识算法的实现在大多数节点都宕机或者网络出现大范围故障时仍然能保持安全性——一致性，正直性和有效性。也即，大范围的节点下线可能会让系统<strong>不能继续处理请求</strong>，但<strong>不会因此破坏共识协议</strong>，让其做出不合法决策。</p>
+<h4 id="4-3-1-全序广播中的共识算法"><a href="#4-3-1-全序广播中的共识算法" class="headerlink" title="4.3.1 全序广播中的共识算法"></a>4.3.1 全序广播中的共识算法</h4><p>全序广播等价于多轮次的共识协议（每个轮次，会使用共识协议对全序广播中的一条消息的全局顺序做出决策）：</p>
+<p>由于共识协议的全局一致性，所有节点会以同样的顺序投递同样的消息。<br>由于正直性，具有同样 id 的消息不会重复。<br>由于有效性，消息不会是损坏的，也不会是凭空捏造的。<br>由于可终止性，消息不会丢失。</p>
+<h4 id="4-3-2-单主复制和共识协议"><a href="#4-3-2-单主复制和共识协议" class="headerlink" title="4.3.2 单主复制和共识协议"></a>4.3.2 单主复制和共识协议</h4><p>核心点在于<strong>主节点（领导者）是怎样选出的</strong>。如果主节点由运维团队的管理员手动配置，你本质上就获得了一个“共识算法”的独裁变种：只有一个节点允许接受写入（决定复制日志中所有日志的顺序），并且一旦该主节点宕机，系统便会陷入不可用的状态，直到运维人员手动的配置另外一个节点为主节点。这样的系统在实践中也可以正常运作，但是并不满足共识算法中的可终止性，因为它在停顿后要求运维人员的干预，才能继续运转。</p>
+<p>有些数据库在遇到主节点故障时，会自动地重新进行主选举，将一个从节点提升为新的主节点（参见<a target="_blank" rel="noopener" href="https://ddia.qtmuniao.com/#/ch05?id=%e5%ae%95%e6%9c%ba%e5%a4%84%e7%90%86">宕机处理</a>）。这就让我们进一步逼近了可容错的全序广播，并且解决了共识问题。</p>
+<h4 id="4-3-3-纪元编号和法定人数"><a href="#4-3-3-纪元编号和法定人数" class="headerlink" title="4.3.3 纪元编号和法定人数"></a>4.3.3 纪元编号和法定人数</h4><p>协议会定义一个<strong>纪元编号</strong>，且保证在每一个纪元（epoch）内，主节点是唯一的。</p>
+<p>每次当前的主节点被认为下线时（可能是宕机，也可能只是网络不通），所有认为该主下线的节点就会发起选举，以选出新的主节点。每次选举会使用一个更高的纪元编号，因此所有的纪元编号是全序且单调递增的。如果不同纪元中有两个节点都认为自己是主（比如之前的主节点并没有宕机），则具有较高纪元编号的主节点胜出。</p>
+<p>在一个主节点被授权做任何事之前，它必须要确认不会有更权威的主节点（具有更高的纪元编号）会做出不同决策</p>
+<p>因此，主节点在决策前需要首先从所有节点获得法定票数（参见<a target="_blank" rel="noopener" href="https://ddia.qtmuniao.com/#/ch05?id=quorum-%e8%af%bb%e5%86%99">Quorum 读写</a>）。对于每个决策，主节点都必须将其作为提案发给其他所有节点，并且等待法定节点的同意。法定节点通常来说，会包含多数派节点，但也不绝对（<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1608.06696">Flexible Paxos</a>介绍了一种不需要多数节点的放宽的 Paxos 算法）。如果法定节点的回复中没有任何更高纪元的，则当前主节点可以放心的认为没有发生新纪元的主选举，并可以据此认为他仍然“握有领导权”。从而，可以安全的对提案进行决策。</p>
+<p>投票过程非常像两阶段提交提交算法。最大的区别在于：</p>
+<ol>
+<li>2PC 中的协调者不是被选出来的。</li>
+<li>2PC 要求每一个参与者都回复“可以”，而可容错的共识算法只要求多数节点的投票。</li>
+</ol>
+<h4 id="4-3-4-共识算法的局限性"><a href="#4-3-4-共识算法的局限性" class="headerlink" title="4.3.4 共识算法的局限性"></a>4.3.4 共识算法的局限性</h4><p><strong>同步复制损失性能</strong>。每次进行决策（更改数据）前都要让多数节点进行投票，意味着这是一个同步复制系统。在<a target="_blank" rel="noopener" href="https://ddia.qtmuniao.com/#/ch05?id=%e5%90%8c%e6%ad%a5%e5%a4%8d%e5%88%b6%e5%92%8c%e5%bc%82%e6%ad%a5%e5%a4%8d%e5%88%b6">同步复制和异步复制</a>一节中我们讲过，很多数据库都会配置为异步复制。在这种配置下，有些已经提交的数据在进行恢复时可能会丢失，但很多人仍然选择这种模式——承担这种风险，以换取更好的性能。</p>
+<p><strong>多数派会增加系统冗余</strong>。共识系统总是要求有<strong>严格多数节点</strong>存活才能正常运行。这意味着，如果你要容忍单节点故障就至少需要三个节点（三节点中的两个节点可以组成多数派），如果要容忍两个节点故障就至少需要五个节点（五个节点中的三个节点组成多数派）。如果网络故障切断了其中一些节点和其他节点的联系，则只有连通的多数派节点可以正常运行，其他节点都会被阻塞。</p>
+<p><strong>动态成员变更复杂</strong>。很多共识算法会假定有固定的数目节点参与投票，这意味着你不能往集群中增删节点。共识算法的<strong>动态成员变更</strong>（dynamic membership）扩展允许集群的节点集随时间推移而发生变动，但相对于静态成员算法，这种扩展版本非常难以理解。</p>
+<p><strong>复杂网络环境性能很差</strong>。共识系统通常通过超时机制来对故障节点进行检测。在延迟高度变化的网络中，尤其是多地部署的分布式系统中，某些存活节点由于网络的瞬时抖动常被误认为发生了故障。尽管这些问题并不会破坏安全性，但频繁的领导者选举会导致极差的性能表现——系统可能会大部分时间都在选主而不是正常干活上。</p>
+<p><strong>共识算法对网络故障非常敏感</strong>。</p>
+<h3 id="4-4-成员关系和协调服务"><a href="#4-4-成员关系和协调服务" class="headerlink" title="4.4 成员关系和协调服务"></a>4.4 成员关系和协调服务</h3><p>Zookeeper 和 etcd 设计目标为<strong>存储小尺度的数据</strong>，比如能装进内存里的</p>
+<p>这些系统使用可容错的全序广播算法，将小尺寸的数据被复制到所有节点上。如前所述，我们做数据库复制的时候真正需要的东西其实是全序广播：如果每条消息代表针对数据库的一个修改，以相同的顺序对所有副本应用相同的改动，能够将数据库保持在一致的状态。</p>
+<p>Zookeeper 是模仿 Google 的 Chunk 锁服务实现的，不仅实现了全序广播算法（进而实现了共识），也实现了其他一些对分布式系统非常有用的功能集：</p>
+<ul>
+<li><strong>线性化的原子操作（lock）</strong> 使用原子的 CAS 操作，可以实现锁：如果多个节点并发执行同一个操作，只有一个会成功。共识协议能够保证，即使随时可能出现节点宕机或者网络故障，操作仍然是原子和线性化的。一个分布式锁通常实现为具有<strong>过期时间的“租约”</strong>（lease），这样即使客户端宕机，锁也能够被最终释放。</li>
+<li><strong>操作的全序保证（zxid）</strong> 在<a target="_blank" rel="noopener" href="https://ddia.qtmuniao.com/#/ch08?id=%e9%a2%86%e5%af%bc%e8%80%85%e5%92%8c%e9%94%81">领导者和锁</a>一节中我们讨论过，当某个资源被锁或者租约保护时，你需要<strong>防护令牌机制</strong>来防止由于进程停顿而造成的加锁冲突。防护令牌一个在每次获取锁都会单调自增的数值。Zookeeper 通过给每个操作赋予一个全局自增的事务 id（zxid）和一个版本号（cversion）来提供该功能。</li>
+<li><strong>故障检测（ephemeral node）</strong> 客户端和 ZooKeeper 的服务器间维持着一个长会话，客户端和服务端通过周期性的心跳来检测对端是否仍然存活。即使该连接短暂断掉，或者 ZooKeeper 节点故障，该会话仍然能够存活。但如果，心跳停顿间隔过长，超过了会话的超时阈值，ZooKeeper 会标记该会话死亡。所有该会话关联的锁在超时都将会被释放（ZooKeeper 将其称为<strong>暂态节点</strong>，ephemeral nodes，这类节点可以将生命周期与会话进行绑定）。</li>
+<li><strong>变动通知（watch）</strong> 客户端不仅可以读取其他节点创建的锁或者值，也可以直接对这些对象的变化进行<strong>守望</strong>（watch）。通过守望机制，客户端可以立即发现是否有其他客户端加入集群（通过这些客户端写入 ZooKeeper 的值）、其他客户端是否故障（通过这些客户端注册到 ZooKeeper 中的暂态节点的消失）。通过订阅这些通知，客户端可以避免频繁地去 ZooKeeper 拉取信息，比对以确定是否发生了某些变化。</li>
+</ul>
+<h4 id="4-4-1-为节点分配任务"><a href="#4-4-1-为节点分配任务" class="headerlink" title="4.4.1 为节点分配任务"></a>4.4.1 为节点分配任务</h4><p>ooKeeper 通常运行在固定节点的集群上（通常是三个或者五个），并且只须在这几个节点间达成共识，然后就可以支持非常多的客户端访问。这样，ZooKeeper 提供了一种可以将<strong>部分功能</strong>（共识算法、外包定序、故障检测）“<strong>外包</strong>”（outsouring）给外部服务的方法。</p>
+<h4 id="4-4-2-服务发现"><a href="#4-4-2-服务发现" class="headerlink" title="4.4.2 服务发现"></a>4.4.2 服务发现</h4><p>即根据服务名称找到其对应的 IP 地址以进行连接。在数据中心的环境中，虚拟机的来来去去非常普遍，因此很难事先知道某个服务的 IP 地址。因此，你可以对服务进行配置，让其在启动的时候在<strong>某个服务</strong>（通常是名字服务器，nameserver）注册自己的地址和端口，其他人就能使用名字来找到该服务的最终地址。</p>
+<h4 id="4-4-3-成员服务"><a href="#4-4-3-成员服务" class="headerlink" title="4.4.3 成员服务"></a>4.4.3 成员服务</h4><p>成员服务可以确定当前<strong>集群中哪些节点当前是存活的</strong>。</p>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span>Author: </span>
+    <a href="https://stardustorz.github.io">draco</a>
+  </p>
+  <p class="copyright-item">
+    <span>Link: </span>
+    <a href="https://stardustorz.github.io/2023/07/22/DDIA/08%20%E4%B8%80%E8%87%B4%E6%80%A7%E5%92%8C%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/">https://stardustorz.github.io/2023/07/22/DDIA/08%20%E4%B8%80%E8%87%B4%E6%80%A7%E5%92%8C%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/</a>
+  </p>
+  <p class="copyright-item">
+    <span>License: </span>
+    
+    <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+  </p>
+</div>
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/DDIA/">DDIA</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/2023/08/10/DDIA/09%20%E6%89%B9%E5%A4%84%E7%90%86/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">[DDIA] 批处理</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/2023/07/14/DDIA/07%20%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E9%BA%BB%E7%83%A6%E4%BA%8B/">  
+        <span class="next-text nav-default">[DDIA] 分布式系统中的麻烦事</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2019 - 2025      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">draco</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+</body>
+
+</html>

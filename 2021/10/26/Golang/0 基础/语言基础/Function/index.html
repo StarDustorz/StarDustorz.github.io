@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="[Go] Function" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="Golang, Draco&#39;s Blog" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Draco's Blog" >
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://stardustorz.github.io/2021/10/26/Golang/0 基础/语言基础/Function/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":false};
+</script>
+  
+  <title>[Go] Function - Draco&#39;s Blog</title>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Draco's Blog</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      [Go] Function
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2021-10-26
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/Golang/">Golang</a>
+        
+        <a href="/categories/Golang/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/">语言基础</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#function"><span class="toc-number">1.</span> <span class="toc-text">function</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">1 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%80%BC-%E6%8C%87%E9%92%88%E6%8E%A5%E6%94%B6%E8%80%85"><span class="toc-number">1.2.</span> <span class="toc-text">2 2.值&#x2F;指针接收者</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%B5%8B%E5%80%BC%E7%BB%99%E5%8F%98%E9%87%8F"><span class="toc-number">1.3.</span> <span class="toc-text">3 赋值给变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%81%9A%E4%B8%BA%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="toc-number">1.4.</span> <span class="toc-text">4 做为返回值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%B0%8F%E7%BB%93"><span class="toc-number">1.5.</span> <span class="toc-text">5 小结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%8F%82%E8%80%83"><span class="toc-number">1.6.</span> <span class="toc-text">6 参考</span></a></li></ol></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <blockquote>
+<p>Go 语言中 function 是一等公民，可以用作参数、返回值，也可以赋值给变量。</p>
+</blockquote>
+<span id="more"></span>
+<h1 id="function"><a href="#function" class="headerlink" title="function"></a>function</h1><h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> A <span class="keyword">struct</span> &#123;</span><br><span class="line">	name <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a A)</span></span> GetName() <span class="type">string</span> &#123;</span><br><span class="line">	a.name = <span class="string">&quot;Hi &quot;</span> + a.name</span><br><span class="line">	<span class="keyword">return</span> a.name</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := A&#123;name: <span class="string">&quot;17x&quot;</span>&#125;</span><br><span class="line">	fmt.Println(a.GetName())</span><br><span class="line">	fmt.Println(A.GetName(a))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到<code>a.Name()</code>和 <code>A.Name(a)</code> 两种写法效果是一样的，前者只是 Go 语言提供的语法糖。</p>
+<p>具体证明如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	t1 := reflect.TypeOf(A.GetName)</span><br><span class="line">	t2 := reflect.TypeOf(NameOfA)</span><br><span class="line">	fmt.Println(t1 == t2) <span class="comment">// true</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NameOfA</span><span class="params">(a A)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">	a.name = <span class="string">&quot;Hi &quot;</span> + a.name</span><br><span class="line">	<span class="keyword">return</span> a.name</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>t1 t2 分别为A.Name方法 和 NameOfA 函数的类型，t1=t2 说明二者是相同的。</p>
+<p><strong>Go 语言中函数类型只与参数和返回值有关</strong>。所以这两个类型值相等就可以证明，<strong>方法本质上就是普通的函数</strong>，而方法接收者就是隐含的第一个参数。</p>
+<h2 id="2-2-值-指针接收者"><a href="#2-2-值-指针接收者" class="headerlink" title="2 2.值/指针接收者"></a>2 2.值/指针接收者</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> A <span class="keyword">struct</span> &#123;</span><br><span class="line">	name <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a A)</span></span> GetName() <span class="type">string</span> &#123;</span><br><span class="line">	a.name = <span class="string">&quot;Hi &quot;</span> + a.name</span><br><span class="line">	<span class="keyword">return</span> a.name</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a *A)</span></span> SetName() <span class="type">string</span> &#123;</span><br><span class="line">	a.name = <span class="string">&quot;Hi &quot;</span> + a.name</span><br><span class="line">	<span class="keyword">return</span> a.name</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们已经知道了，方法本质上就是普通的函数，而<strong>方法接收者就是隐含的第一个参数</strong>。</p>
+<p>Go 语言中只有值拷贝，不存在引用拷贝的说法。所以 GetName() 第一个参数为 A 类型，SetName 则为 *A 类型。</p>
+<p>虽然都是值拷贝，但是指针接收者拷贝的是地址，所以可以修改外部变量的值。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">   a := A&#123;name: <span class="string">&quot;17x&quot;</span>&#125;</span><br><span class="line">   pa:=&amp;a</span><br><span class="line">   <span class="comment">// 通过值调用指针接收者的方法</span></span><br><span class="line">   fmt.Println(a.SetName())</span><br><span class="line">   <span class="comment">// </span></span><br><span class="line">   fmt.Println(pa.GetName())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>通过值调用指针接收者的方法，通过指针调用值接收者的方法 都是可以的？这又是什么情况？</strong></p>
+<p>如果没有涉及到接口的话，这也是 Go 语言提供的语法糖。</p>
+<p><strong>编译阶段</strong>就会转换成对应的形式：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pa.GetName()--&gt;(*pa).GetName()</span><br><span class="line">a.SetName()--&gt;(&amp;a).SetName()</span><br></pre></td></tr></table></figure>
+<p>由于该语法糖是在<strong>编译期间</strong>发挥作用的，编译期间无法获取地址的字面量，也就不能借助语法糖进行转换了，如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 无法进行转换导致编译失败 </span></span><br><span class="line">A&#123;name: <span class="string">&quot;17x&quot;</span>&#125;.SetName()</span><br></pre></td></tr></table></figure>
+<h2 id="3-赋值给变量"><a href="#3-赋值给变量" class="headerlink" title="3 赋值给变量"></a>3 赋值给变量</h2><p><strong>把 function 赋值给变量是怎么回事？</strong></p>
+<p>Go 语言中把函数作为变量、参数和返回值时都是以 Function Value 的形式存在的，闭包也只是一个有捕获列表的 Function Value 而已。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> A <span class="keyword">struct</span> &#123;</span><br><span class="line">	name <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a A)</span></span> GetName() <span class="type">string</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> a.name</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := A&#123;name: <span class="string">&quot;17x&quot;</span>&#125;</span><br><span class="line">	<span class="comment">// 这样赋值后 f1 叫做 方法表达式</span></span><br><span class="line">	f1 := A.GetName</span><br><span class="line">    f1(a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>把 一个类型的方法赋值给变量后，该变量就称之为 <strong>方法表达式</strong>。</p>
+<p>同时方法就是一个带有隐含参数的普通函数，所以以上代码等价于：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetName</span> <span class="params">(a A)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> a.name</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := A&#123;name: <span class="string">&quot;17x&quot;</span>&#125;</span><br><span class="line">	f11 := GetName</span><br><span class="line">    f11(a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>所以 f1 本质上也是一个 Function Value。</strong></p>
+<p>之前已经证明了 f1 和 f11 是等价的，所以 调用 f1 的时候也要传入一个 A 类型的变量 a 作为第一个参数。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Fourth</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := A&#123;name: <span class="string">&quot;17x&quot;</span>&#125;</span><br><span class="line">	<span class="comment">// 这样赋值后 f2 叫做 方法变量</span></span><br><span class="line">	f2 := a.GetName</span><br><span class="line">	f2()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>f2 以这样的方式赋值，被称作 <strong>方法变量</strong>。</p>
+<p>因为<code>a.GetName()</code> 这样调用的时候，会把变量 a 作为 GetName()的第一个参数传入，所以可以想到 <strong>f2 理论上应该是一个 闭包</strong>，即一个由捕获列表的 Function Value。</p>
+<p>但是因为这里 f2 仅作为局部变量，它的生命周期和a的生命周期相同，所以<strong>编译器会做出优化</strong>。转换为类型A的方法调用并传入a作为参数，具体如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A.GetName(a)</span><br></pre></td></tr></table></figure>
+<h2 id="4-做为返回值"><a href="#4-做为返回值" class="headerlink" title="4 做为返回值"></a>4 做为返回值</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> A <span class="keyword">struct</span> &#123;</span><br><span class="line">	name <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a A)</span></span> GetName() <span class="type">string</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> a.name</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetFunc</span><span class="params">()</span></span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> <span class="type">string</span> &#123;</span><br><span class="line">	a := A&#123;name: <span class="string">&quot;17x in GetFunc&quot;</span>&#125;</span><br><span class="line">	<span class="keyword">return</span> a.GetName</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	a := A&#123;name: <span class="string">&quot;17x in main&quot;</span>&#125;</span><br><span class="line">	f2 := a.GetName</span><br><span class="line">	fmt.Println(f2()) <span class="comment">// 17x in main</span></span><br><span class="line"></span><br><span class="line">	f3 := GetFunc()</span><br><span class="line">	fmt.Println(f3()) <span class="comment">// 17x in GetFunc</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>f2 和上个例子相同，会被编译器优化为<code>A.GetName(a)</code> 这样的调用，所以打印出的是 17x in main。</p>
+<p>而 f3 的 GetFunc() 等价于如下函数：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetFunc</span><span class="params">()</span></span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> <span class="type">string</span> &#123;</span><br><span class="line">	a := A&#123;name: <span class="string">&quot;17x in GetFunc&quot;</span>&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> <span class="type">string</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> A.GetName(a)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以清晰的看到，<strong>GetFunc() 中的局部变量 a 直接被 A.GetName() 引用而形成了闭包</strong>。</p>
+<blockquote>
+<p>f3 为闭包对象，捕获了GetFunc() 中的局部变量 a 。</p>
+</blockquote>
+<p>所以 f3 打印出的是 17x in GetFunc。</p>
+<h2 id="5-小结"><a href="#5-小结" class="headerlink" title="5 小结"></a>5 小结</h2><p><strong>从本质上讲，方法表达式 Method Expression 和方法变量 Method Value 都是 Function Value。</strong></p>
+<blockquote>
+<p>一个没有捕获列表，一个有捕获列表。当然有时候编译器会做出优化。</p>
+</blockquote>
+<h2 id="6-参考"><a href="#6-参考" class="headerlink" title="6 参考"></a>6 参考</h2><p><code>https://www.bilibili.com/video/BV1hv411x7we?p=8</code></p>
+<p><code>https://draveness.me/golang/docs/part2-foundation/ch04-basic/golang-function-call/</code></p>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span>Author: </span>
+    <a href="https://stardustorz.github.io">draco</a>
+  </p>
+  <p class="copyright-item">
+    <span>Link: </span>
+    <a href="https://stardustorz.github.io/2021/10/26/Golang/0%20%E5%9F%BA%E7%A1%80/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/Function/">https://stardustorz.github.io/2021/10/26/Golang/0%20%E5%9F%BA%E7%A1%80/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/Function/</a>
+  </p>
+  <p class="copyright-item">
+    <span>License: </span>
+    
+    <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+  </p>
+</div>
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/Golang/">Golang</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/2021/10/26/Golang/0%20%E5%9F%BA%E7%A1%80/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/Map/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">[Go] Map</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/2021/10/26/Golang/0%20%E5%9F%BA%E7%A1%80/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E6%8E%A5%E5%8F%A3/">  
+        <span class="next-text nav-default">[Go] 接口</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2019 - 2025      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">draco</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+</body>
+
+</html>

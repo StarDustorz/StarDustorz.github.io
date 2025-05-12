@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="字符串总结" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="Algorithm, Draco&#39;s Blog" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/default" title="Draco's Blog" >
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://stardustorz.github.io/2021/06/12/Algorithm/String/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":false};
+</script>
+  
+  <title>[Algorithm] String - Draco&#39;s Blog</title>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Draco's Blog</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      [Algorithm] String
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2021-06-12
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/Algorithm/">Algorithm</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#0-1-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">0.1 字符串常用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-2-%E5%89%91%E6%8C%87-Offer-58-I-%E7%BF%BB%E8%BD%AC%E5%8D%95%E8%AF%8D%E9%A1%BA%E5%BA%8F"><span class="toc-number">2.</span> <span class="toc-text">0.2 剑指 Offer 58 - I. 翻转单词顺序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-3-409-%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E4%B8%B2"><span class="toc-number">3.</span> <span class="toc-text">0.3 409. 最长回文串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-4-205-%E5%90%8C%E6%9E%84%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">4.</span> <span class="toc-text">0.4 205. 同构字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-5-647-%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2"><span class="toc-number">5.</span> <span class="toc-text">0.5 647. 回文子串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-6-696-%E8%AE%A1%E6%95%B0%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AD%90%E4%B8%B2"><span class="toc-number">6.</span> <span class="toc-text">0.6 696. 计数二进制子串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-7-%E5%89%91%E6%8C%87-Offer-19-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%8C%B9%E9%85%8D"><span class="toc-number">7.</span> <span class="toc-text">0.7 剑指 Offer 19. 正则表达式匹配</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-8-%E5%89%91%E6%8C%87-Offer-48-%E6%9C%80%E9%95%BF%E4%B8%8D%E5%90%AB%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E7%9A%84%E5%AD%90%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">8.</span> <span class="toc-text">0.8 剑指 Offer 48. 最长不含重复字符的子字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-9-%E5%89%91%E6%8C%87-Offer-67-%E6%8A%8A%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2%E6%88%90%E6%95%B4%E6%95%B0"><span class="toc-number">9.</span> <span class="toc-text">0.9 剑指 Offer 67. 把字符串转换成整数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-10-%E5%89%91%E6%8C%87-Offer-44-%E6%95%B0%E5%AD%97%E5%BA%8F%E5%88%97%E4%B8%AD%E6%9F%90%E4%B8%80%E4%BD%8D%E7%9A%84%E6%95%B0%E5%AD%97"><span class="toc-number">10.</span> <span class="toc-text">0.10 剑指 Offer 44. 数字序列中某一位的数字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-11-%E6%97%A0%E9%87%8D%E5%A4%8D%E7%9A%84%E6%9C%80%E9%95%BF%E5%AD%90%E4%B8%B2"><span class="toc-number">11.</span> <span class="toc-text">0.11 无重复的最长子串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-12-%E6%9C%80%E5%B0%8F%E8%A6%86%E7%9B%96%E5%AD%90%E4%B8%B2"><span class="toc-number">12.</span> <span class="toc-text">0.12 最小覆盖子串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-13-%E5%89%91%E6%8C%87-Offer-57-II-%E5%92%8C%E4%B8%BAs%E7%9A%84%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B0%E5%BA%8F%E5%88%97"><span class="toc-number">13.</span> <span class="toc-text">0.13 剑指 Offer 57 - II. 和为s的连续正数序列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-14-%E5%89%91%E6%8C%87-Offer-59-I-%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC"><span class="toc-number">14.</span> <span class="toc-text">0.14 剑指 Offer 59 - I. 滑动窗口的最大值</span></a></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <span id="more"></span>
+<h3 id="0-1-字符串常用方法"><a href="#0-1-字符串常用方法" class="headerlink" title="0.1 字符串常用方法"></a>0.1 字符串常用方法</h3><ul>
+<li>不必考虑到线程同步问题，我们应该优先使用StringBuilder类；如果要保证线程安全，自然是StringBuffer。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//String的方法</span></span><br><span class="line"><span class="type">char</span>	  <span class="title function_">charAt</span><span class="params">(<span class="type">int</span> index)</span> 		<span class="comment">//返回指定索引处的值</span></span><br><span class="line">String	  <span class="title function_">concat</span><span class="params">(String str)</span>  		<span class="comment">//将指定的字符串连接到该字符串的末尾</span></span><br><span class="line"><span class="type">boolean</span>   <span class="title function_">contentEquals</span><span class="params">(StringBuffer sb)</span>  	<span class="comment">//将此字符串与指定的StringBuffer进行比较</span></span><br><span class="line"><span class="type">int</span> 	  <span class="title function_">indexOf</span><span class="params">(<span class="type">int</span> ch)</span>  			<span class="comment">//返回指定字符第一次出现的字符串内的索引</span></span><br><span class="line"><span class="type">int</span> 	  <span class="title function_">indexOf</span><span class="params">(String str)</span>  		<span class="comment">//返回指定子字符串第一次出现的字符串内的索引</span></span><br><span class="line"><span class="type">boolean</span>	  <span class="title function_">isEmpty</span><span class="params">()</span> </span><br><span class="line"><span class="type">int</span>		  <span class="title function_">length</span><span class="params">()</span></span><br><span class="line">String 	  <span class="title function_">valueOf</span><span class="params">(<span class="type">int</span> i)</span>  			<span class="comment">//将 int 变量 i 转换成字符串(使用于其他数据类型)</span></span><br><span class="line">String[]  split(String regex)  		<span class="comment">//按regex将String切分成数组</span></span><br><span class="line"><span class="type">char</span>[] 	  toCharArray()  			<span class="comment">//将此字符串转换为新的字符数组</span></span><br><span class="line">String 	  <span class="title function_">trim</span><span class="params">()</span>  					<span class="comment">//删除前后的空格</span></span><br><span class="line">String    <span class="title function_">substring</span><span class="params">(<span class="type">int</span> beginIndex, <span class="type">int</span> endIndex)</span>  <span class="comment">//获得子串，是左闭右开区间</span></span><br><span class="line">  </span><br><span class="line">StringBuffer  方法</span><br><span class="line"><span class="type">StringBuilder</span> <span class="variable">res</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line"><span class="type">StringBuffer</span> <span class="variable">sb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuffer</span>();</span><br><span class="line"><span class="type">StringBuffer</span> <span class="variable">sb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuffer</span>(<span class="number">50</span>);  <span class="comment">// 容量为50</span></span><br><span class="line"><span class="type">StringBuffer</span> <span class="variable">sb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuffer</span>(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">sb.append(<span class="string">&quot; World&quot;</span>);  <span class="comment">// &quot;Hello World&quot;</span></span><br><span class="line">sb.insert(<span class="number">5</span>, <span class="string">&quot; Java&quot;</span>);  <span class="comment">// &quot;Hello Java World&quot;</span></span><br><span class="line">sb.replace(<span class="number">6</span>, <span class="number">10</span>, <span class="string">&quot;Beautiful&quot;</span>);  <span class="comment">// &quot;Hello Beautiful World&quot;</span></span><br><span class="line">sb.delete(<span class="number">6</span>, <span class="number">15</span>);  <span class="comment">// &quot;Hello World&quot;</span></span><br><span class="line">sb.deleteCharAt(<span class="number">5</span>);  <span class="comment">// &quot;HelloWorld&quot;</span></span><br><span class="line">sb.reverse();  <span class="comment">// &quot;dlroWolleH&quot;</span></span><br><span class="line">sb.setCharAt(<span class="number">0</span>, <span class="string">&#x27;h&#x27;</span>);  <span class="comment">// &quot;helloWorld&quot;</span></span><br><span class="line"><span class="type">String</span> <span class="variable">sub</span> <span class="operator">=</span> sb.substring(<span class="number">5</span>);  <span class="comment">// &quot;World&quot;</span></span><br><span class="line"><span class="type">String</span> <span class="variable">sub</span> <span class="operator">=</span> sb.substring(<span class="number">0</span>, <span class="number">5</span>);  <span class="comment">// &quot;hello&quot;</span></span><br><span class="line"><span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> sb.length();  <span class="comment">// 10</span></span><br><span class="line">res.toString()   <span class="comment">//转换成string</span></span><br></pre></td></tr></table></figure>
+<h3 id="0-2-剑指-Offer-58-I-翻转单词顺序"><a href="#0-2-剑指-Offer-58-I-翻转单词顺序" class="headerlink" title="0.2 剑指 Offer 58 - I. 翻转单词顺序"></a>0.2 <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/fan-zhuan-dan-ci-shun-xu-lcof/">剑指 Offer 58 - I. 翻转单词顺序</a></h3><p>输入一个英文句子，翻转句子中单词的顺序，但单词内字符的顺序不变。为简单起见，标点符号和普通字母一样处理</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//split()将字符串按空格分割，倒序遍历，将单词拼接到StringBuilder，去空格后返回</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">reverseWords</span><span class="params">(String s)</span> &#123;</span><br><span class="line">        String[] strs = s.trim().split(<span class="string">&quot; &quot;</span>); <span class="comment">// 删除首尾空格，分割字符串</span></span><br><span class="line">        <span class="type">StringBuilder</span> <span class="variable">res</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> strs.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123; <span class="comment">// 倒序遍历单词列表</span></span><br><span class="line">            <span class="keyword">if</span>(strs[i].equals(<span class="string">&quot;&quot;</span>)) <span class="keyword">continue</span>; <span class="comment">// 遇到空单词则跳过</span></span><br><span class="line">            res.append(strs[i] + <span class="string">&quot; &quot;</span>); <span class="comment">// 将单词拼接至 StringBuilder</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res.toString().trim(); <span class="comment">// 转化为字符串，删除尾部空格，并返回</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//倒序，逐个确定每个单词的边界</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">reverseWords</span><span class="params">(String s)</span> &#123;</span><br><span class="line">        s = s.trim(); <span class="comment">// 删除首尾空格</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> s.length() - <span class="number">1</span>, i = j;</span><br><span class="line">        <span class="type">StringBuilder</span> <span class="variable">res</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line">        <span class="keyword">while</span>(i &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">while</span>(i &gt;= <span class="number">0</span> &amp;&amp; s.charAt(i) != <span class="string">&#x27; &#x27;</span>) i--; <span class="comment">// 搜索首个空格</span></span><br><span class="line">            res.append(s.substring(i + <span class="number">1</span>, j + <span class="number">1</span>) + <span class="string">&quot; &quot;</span>); <span class="comment">// 添加单词</span></span><br><span class="line">            <span class="keyword">while</span>(i &gt;= <span class="number">0</span> &amp;&amp; s.charAt(i) == <span class="string">&#x27; &#x27;</span>) i--; <span class="comment">// 跳过单词间空格</span></span><br><span class="line">            j = i; <span class="comment">// j 指向下个单词的尾字符</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res.toString().trim(); <span class="comment">// 转化为字符串并返回</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0-3-409-最长回文串"><a href="#0-3-409-最长回文串" class="headerlink" title="0.3 409. 最长回文串"></a>0.3 <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-palindrome/">409. 最长回文串</a></h3><p>给定一个包含大写字母和小写字母的字符串，找到通过这些字母构造成的最长的回文串。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//统计每个字符的个数</span></span><br><span class="line"><span class="comment">//每对字符都可以组成回文串，因为中间的可以是单个，如果还有剩余的单个，可以加一个上去</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">longestPalindrome</span><span class="params">(String s)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">res</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        HashMap&lt;Character,Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span> ; i &lt; s.length() ; i++)&#123;</span><br><span class="line">            <span class="type">char</span> <span class="variable">c</span> <span class="operator">=</span> s.charAt(i);</span><br><span class="line">            map.put(c, map.getOrDefault(c,<span class="number">0</span>) + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">char</span> c: map.keySet())&#123;</span><br><span class="line">            res += (map.get(c) / <span class="number">2</span>) * <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(res &lt; s.length())&#123;</span><br><span class="line">            res++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//用数组统计</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">longestPalindrome</span><span class="params">(String s)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] cnt = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">256</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">char</span> c : s.toCharArray())&#123;</span><br><span class="line">            cnt[c]++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> <span class="variable">result</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i : cnt)&#123;</span><br><span class="line">            result += (i/<span class="number">2</span>)*<span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(result &lt; s.length())&#123;</span><br><span class="line">            result++;<span class="comment">//这种情况有单独的字符</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">            </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0-4-205-同构字符串"><a href="#0-4-205-同构字符串" class="headerlink" title="0.4 205. 同构字符串"></a>0.4 <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/isomorphic-strings/">205. 同构字符串</a></h3><p>给定两个字符串 s 和 t，判断它们是否是同构的。</p>
+<p>如果 s 中的字符可以被替换得到 t ，那么这两个字符串是同构的。</p>
+<p>所有出现的字符都必须用另一个字符替换，同时保留字符的顺序。两个字符不能映射到同一个字符上，但字符可以映射自己本身。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//记录一个字符上次出现的位置，如果两个字符串中上次出现的位置一样，那么就是同构</span></span><br><span class="line"><span class="comment">//如 egg add g上次出现在2，d也上次出现在2，那么它们就是同构的</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isIsomorphic</span><span class="params">(String s, String t)</span> &#123;</span><br><span class="line">        <span class="type">int</span>[] indexOft = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">256</span>];</span><br><span class="line">        <span class="type">int</span>[] indexOfs = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">256</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; s.length(); i++)&#123;</span><br><span class="line">            <span class="type">char</span> <span class="variable">cs</span> <span class="operator">=</span> s.charAt(i);</span><br><span class="line">            <span class="type">char</span> <span class="variable">ct</span> <span class="operator">=</span> t.charAt(i);</span><br><span class="line">            <span class="keyword">if</span>(indexOfs[cs] != indexOft[ct])&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//防止一开始放进去的是0，无法区分</span></span><br><span class="line">            indexOfs[cs] = i + <span class="number">1</span>;</span><br><span class="line">            indexOft[ct] = i + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0-5-647-回文子串"><a href="#0-5-647-回文子串" class="headerlink" title="0.5 647. 回文子串"></a>0.5 <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/palindromic-substrings/">647. 回文子串</a></h3><p>给定一个字符串，你的任务是计算这个字符串中有多少个回文子串。</p>
+<p>具有不同开始位置或结束位置的子串，即使是由相同的字符组成，也会被视作不同的子串。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">countSubstrings</span><span class="params">(String s)</span> &#123;</span><br><span class="line">        <span class="comment">// 中心扩展法</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">ans</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="comment">//可以从一个字符向两侧扩展，也可以从两个相邻字符开始扩展，这样可以覆盖所有可能的子串</span></span><br><span class="line">        <span class="comment">//这样的单个字符有n个，两个有n-1个，所以合计有2n-1个中心点</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">center</span> <span class="operator">=</span> <span class="number">0</span>; center &lt; <span class="number">2</span> * s.length() - <span class="number">1</span>; center++) &#123;</span><br><span class="line">            <span class="comment">// left和right指针和中心点的关系是？</span></span><br><span class="line">            <span class="comment">// 首先是left，有一个很明显的2倍关系的存在，其次是right，可能和left指向同一个（偶数时），也可能往后移动一个（奇数）</span></span><br><span class="line">            <span class="comment">// 大致的关系出来了，可以选择带两个特殊例子进去看看是否满足。</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> center / <span class="number">2</span>;</span><br><span class="line">            <span class="type">int</span> <span class="variable">right</span> <span class="operator">=</span> left + center % <span class="number">2</span>;</span><br><span class="line">            <span class="comment">//在字符串范围内向两侧拓展</span></span><br><span class="line">            <span class="keyword">while</span> (left &gt;= <span class="number">0</span> &amp;&amp; right &lt; s.length() &amp;&amp; s.charAt(left) == s.charAt(right)) &#123;</span><br><span class="line">                ans++;</span><br><span class="line">                left--;</span><br><span class="line">                right++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0-6-696-计数二进制子串"><a href="#0-6-696-计数二进制子串" class="headerlink" title="0.6 696. 计数二进制子串"></a>0.6 <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/count-binary-substrings/">696. 计数二进制子串</a></h3><p>给定一个字符串 s，计算具有相同数量0和1的非空(连续)子字符串的数量，并且这些子字符串中的所有0和所有1都是组合在一起的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//统计相同连续数字的个数，取其中的较小</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">countBinarySubstrings</span><span class="params">(String s)</span> &#123;</span><br><span class="line">        <span class="comment">//统计当前数字连续的个数</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">curCnt</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">        <span class="comment">//记录上一个数字连续的个数</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">preCnt</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">result</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; s.length(); i++)&#123;</span><br><span class="line">            <span class="comment">//如果和前一个一样，当前连续个数++</span></span><br><span class="line">            <span class="keyword">if</span>(s.charAt(i) == s.charAt(i-<span class="number">1</span>))&#123;</span><br><span class="line">                curCnt++;</span><br><span class="line">            <span class="comment">//否则，记录下，作为前一个连续数字个数，然后重置当前</span></span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                preCnt = curCnt;</span><br><span class="line">                curCnt = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">			<span class="comment">//前一个数连续的个数大于当前，那么就多一种子串</span></span><br><span class="line">            <span class="keyword">if</span>(preCnt &gt;= curCnt)&#123;</span><br><span class="line">                result++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0-7-剑指-Offer-19-正则表达式匹配"><a href="#0-7-剑指-Offer-19-正则表达式匹配" class="headerlink" title="0.7 剑指 Offer 19. 正则表达式匹配"></a>0.7 <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/zheng-ze-biao-da-shi-pi-pei-lcof/">剑指 Offer 19. 正则表达式匹配</a></h3><p>请实现一个函数用来匹配包含’. ‘和’/<em>‘的正则表达式。模式中的字符’.’表示任意一个字符，而’</em>‘表示它前面的字符可以出现任意次（含0次）。在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串”aaa”与模式”a.a”和”ab<em>ac</em>a”匹配，但与”aa.a”和”ab*a”均不匹配。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//&#x27;.&#x27;可以表示任意一个字符</span></span><br><span class="line"><span class="comment">//&#x27;*&#x27;表示前面的字符可以出现任意次</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">有三种情况：</span></span><br><span class="line"><span class="comment">1.B的最后一个是正常字符，那么比较AB最后一个，相等则往前一位</span></span><br><span class="line"><span class="comment">2.B的最后是&#x27;.&#x27;，可以直接往前一位</span></span><br><span class="line"><span class="comment">3.B的最后是&#x27;*&#x27;，代表B的倒数第二个可以重复一次，或者多次</span></span><br><span class="line"><span class="comment">	如果A的最后匹配失败，那么B往前两位</span></span><br><span class="line"><span class="comment">	如果匹配成功，那么A匹配完往前，B继续</span></span><br><span class="line"><span class="comment">f[i][j] 代表 A 的前 i 个和 B 的前 j 个能否匹配</span></span><br><span class="line"><span class="comment">对于前面两个情况，可以合并成一种情况 f[i][j] = f[i-1][j-1]</span></span><br><span class="line"><span class="comment">对于第三种情况，对于 c*c∗ 分为看和不看两种情况</span></span><br><span class="line"><span class="comment">不看：直接砍掉正则串的后面两个， f[i][j] = f[i][j-2]</span></span><br><span class="line"><span class="comment">看：正则串不动，主串前移一个，f[i][j] = f[i-1][j] </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isMatch</span><span class="params">(String s, String p)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> s.length();</span><br><span class="line">        <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> p.length();</span><br><span class="line">        <span class="type">boolean</span>[][] f = <span class="keyword">new</span> <span class="title class_">boolean</span>[n+<span class="number">1</span>][m+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt;= n ; i++ )&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span> ; j &lt;= m; j++)&#123;</span><br><span class="line">                <span class="comment">//如果j=0，那么只有i也是0的情况匹配成功</span></span><br><span class="line">                <span class="keyword">if</span>(j == <span class="number">0</span>) f[i][j] = i == <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">//如果p最后一位不是&#x27;*&#x27;</span></span><br><span class="line">                    <span class="keyword">if</span>(p.charAt(j-<span class="number">1</span>) != <span class="string">&#x27;*&#x27;</span>)&#123;</span><br><span class="line">                        <span class="comment">//如果相等，或者p的最后是&#x27;.&#x27;，那么都向前</span></span><br><span class="line">                        <span class="keyword">if</span>(i &gt; <span class="number">0</span> &amp;&amp; (s.charAt(i-<span class="number">1</span>) == p.charAt(j-<span class="number">1</span>) || p.charAt(j-<span class="number">1</span>) == <span class="string">&#x27;.&#x27;</span>))&#123;</span><br><span class="line">                            f[i][j] = f[i-<span class="number">1</span>][j-<span class="number">1</span>];</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                        <span class="comment">//碰到&#x27;*&#x27;</span></span><br><span class="line">                        <span class="comment">//不看，能否匹配取决于B串砍两位后能否匹配成功</span></span><br><span class="line">                        <span class="keyword">if</span>(j &gt;= <span class="number">2</span>)&#123;</span><br><span class="line">                            <span class="comment">//只要有一个成立就都成立</span></span><br><span class="line">                            f[i][j] |= f[i][j-<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">                        &#125;</span><br><span class="line">						<span class="comment">//看，正则串不动，主串前移</span></span><br><span class="line">                        <span class="keyword">if</span>(i &gt;= <span class="number">1</span> &amp;&amp; j &gt;= <span class="number">2</span> &amp;&amp; (s.charAt(i-<span class="number">1</span>) == p.charAt(j-<span class="number">2</span>) || p.charAt(j-<span class="number">2</span>) == <span class="string">&#x27;.&#x27;</span>))&#123;</span><br><span class="line">                            f[i][j] |= f[i-<span class="number">1</span>][j];</span><br><span class="line">                        &#125;</span><br><span class="line"> </span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> f[n][m];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0-8-剑指-Offer-48-最长不含重复字符的子字符串"><a href="#0-8-剑指-Offer-48-最长不含重复字符的子字符串" class="headerlink" title="0.8 剑指 Offer 48. 最长不含重复字符的子字符串"></a>0.8 <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/zui-chang-bu-han-zhong-fu-zi-fu-de-zi-zi-fu-chuan-lcof/">剑指 Offer 48. 最长不含重复字符的子字符串</a></h3><p>给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//滑动窗口实现</span></span><br><span class="line"><span class="comment">//维护一个left，表示窗口的最左侧</span></span><br><span class="line"><span class="comment">//维护一个HashMap，记录窗口内的元素和位置</span></span><br><span class="line"><span class="comment">//当加入了一个当前窗口内已有的值，直接通过HashMap获取位置，重置left</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">lengthOfLongestSubstring</span><span class="params">(String s)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (s.length()==<span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        HashMap&lt;Character, Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;Character, Integer&gt;();</span><br><span class="line">        <span class="type">int</span> <span class="variable">max</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; s.length(); i ++)&#123;</span><br><span class="line">            <span class="comment">//如果这个元素出现过</span></span><br><span class="line">            <span class="keyword">if</span>(map.containsKey(s.charAt(i)))&#123;</span><br><span class="line">                <span class="comment">//如果在窗口内，left跳转到它的下一个</span></span><br><span class="line">                left = Math.max(left,map.get(s.charAt(i)) + <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//放入当前</span></span><br><span class="line">            map.put(s.charAt(i),i);</span><br><span class="line">            <span class="comment">//计算当前窗口值是否最大</span></span><br><span class="line">            max = Math.max(max,i-left+<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> max;   </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0-9-剑指-Offer-67-把字符串转换成整数"><a href="#0-9-剑指-Offer-67-把字符串转换成整数" class="headerlink" title="0.9 剑指 Offer 67. 把字符串转换成整数"></a>0.9 <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/ba-zi-fu-chuan-zhuan-huan-cheng-zheng-shu-lcof/">剑指 Offer 67. 把字符串转换成整数</a></h3><p>写一个函数 StrToInt，实现把字符串转换成整数这个功能。不能使用 atoi 或者其他类似的库函数。</p>
+<p>首先，该函数会根据需要丢弃无用的开头空格字符，直到寻找到第一个非空格的字符为止。</p>
+<p>当我们寻找到的第一个非空字符为正或者负号时，则将该符号与之后面尽可能多的连续数字组合起来，作为该整数的正负号；假如第一个非空字符是数字，则直接将其与之后连续的数字字符组合起来，形成整数。</p>
+<p>该字符串除了有效的整数部分之后也可能会存在多余的字符，这些字符可以被忽略，它们对于函数不应该造成影响。</p>
+<p>注意：假如该字符串中的第一个非空格字符不是一个有效整数字符、字符串为空或字符串仅包含空白字符时，则你的函数不需要进行转换。</p>
+<p>在任何情况下，若函数不能进行有效的转换时，请返回 0。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">strToInt</span><span class="params">(String str)</span> &#123;</span><br><span class="line">        <span class="comment">//去除两端空格</span></span><br><span class="line">        str = str.trim();</span><br><span class="line">        <span class="comment">//判空</span></span><br><span class="line">        <span class="keyword">if</span>(str.length() == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span>  <span class="variable">res</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="comment">//标记是否为负</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">flag</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">        <span class="comment">//记录当前所指字符位置</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span>(str.charAt(<span class="number">0</span>) == <span class="string">&#x27;-&#x27;</span>) flag = -<span class="number">1</span>;</span><br><span class="line">        <span class="comment">//有符号，前进一位</span></span><br><span class="line">        <span class="keyword">if</span> (str.charAt(<span class="number">0</span>) == <span class="string">&#x27;-&#x27;</span> || str.charAt(<span class="number">0</span>) == <span class="string">&#x27;+&#x27;</span>) i++;</span><br><span class="line">        <span class="comment">//如果是数字，循环继续 </span></span><br><span class="line">        <span class="keyword">while</span>(i &lt; str.length() &amp;&amp; isNum(str.charAt(i)))&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">r</span> <span class="operator">=</span> str.charAt(i) - <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">            <span class="comment">//判断在加上之后是否会越界</span></span><br><span class="line">            <span class="keyword">if</span> ((res &gt; Integer.MAX_VALUE/<span class="number">10</span>) || (res == Integer.MAX_VALUE/<span class="number">10</span> &amp;&amp; r &gt; <span class="number">7</span>)) &#123;</span><br><span class="line">                <span class="keyword">return</span> flag &gt; <span class="number">0</span> ? Integer.MAX_VALUE : Integer.MIN_VALUE;</span><br><span class="line">            &#125;</span><br><span class="line">            res = res *<span class="number">10</span> + r;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> flag&gt;<span class="number">0</span>? res:-res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//判断是不是数字</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">isNum</span><span class="params">(<span class="type">char</span> c)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(c - <span class="string">&#x27;0&#x27;</span> &gt;=<span class="number">0</span> &amp;&amp; c - <span class="string">&#x27;9&#x27;</span> &lt;= <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">else</span>  <span class="keyword">return</span> <span class="literal">false</span>; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0-10-剑指-Offer-44-数字序列中某一位的数字"><a href="#0-10-剑指-Offer-44-数字序列中某一位的数字" class="headerlink" title="0.10 剑指 Offer 44. 数字序列中某一位的数字"></a>0.10 <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/shu-zi-xu-lie-zhong-mou-yi-wei-de-shu-zi-lcof/">剑指 Offer 44. 数字序列中某一位的数字</a></h3><p>数字以0123456789101112131415…的格式序列化到一个字符序列中。在这个序列中，第5位（从下标0开始计数）是5，第13位是1，第19位是4，等等。</p>
+<p>请写一个函数，求任意第n位对应的数字。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">findNthDigit</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">        <span class="comment">//特殊情况</span></span><br><span class="line">       <span class="keyword">if</span>(n&lt;<span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	   <span class="keyword">else</span> <span class="keyword">if</span>(n&gt;=<span class="number">0</span> &amp;&amp; n&lt;=<span class="number">9</span>) <span class="keyword">return</span> n; </span><br><span class="line">	   <span class="keyword">else</span> &#123;</span><br><span class="line">           <span class="comment">//防止越界</span></span><br><span class="line">		   <span class="type">long</span> <span class="variable">m</span> <span class="operator">=</span> n;</span><br><span class="line">		   <span class="type">long</span> <span class="variable">temp</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">           <span class="comment">//当前数字的长度</span></span><br><span class="line">		   <span class="type">long</span> <span class="variable">base</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">           <span class="comment">//当前数字的个数</span></span><br><span class="line">		   <span class="type">long</span> <span class="variable">num</span> <span class="operator">=</span> <span class="number">9</span>;</span><br><span class="line">		   <span class="type">char</span> <span class="variable">res</span> <span class="operator">=</span> <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">           <span class="comment">//当前占的位数，循环到包含第n位数字</span></span><br><span class="line">		   <span class="keyword">while</span>((temp+base*num) &lt; m) &#123;</span><br><span class="line">               <span class="comment">//长度</span></span><br><span class="line">			   temp += base*num;</span><br><span class="line">               <span class="comment">//数字长度加一</span></span><br><span class="line">			   base += <span class="number">1</span>;</span><br><span class="line">               <span class="comment">//长度为base的数字个数</span></span><br><span class="line">			   num *= <span class="number">10</span>;</span><br><span class="line">		   &#125;</span><br><span class="line">           <span class="comment">//a用来确定所在数字的大小</span></span><br><span class="line">		   <span class="type">long</span> <span class="variable">a</span> <span class="operator">=</span> (m-temp)/base;</span><br><span class="line">           <span class="comment">//b用来确定在这个数字的第几位</span></span><br><span class="line">		   <span class="type">long</span> <span class="variable">b</span> <span class="operator">=</span> (m-temp)%base;</span><br><span class="line">           </span><br><span class="line">		   <span class="keyword">if</span>(b!=<span class="number">0</span>) &#123;</span><br><span class="line">               <span class="comment">//计算出这个数</span></span><br><span class="line">			   <span class="type">long</span> <span class="variable">c</span> <span class="operator">=</span> (<span class="type">long</span>) (Math.pow(<span class="number">10</span>, base-<span class="number">1</span>) + a);</span><br><span class="line">               <span class="comment">//找到答案</span></span><br><span class="line">			   res = String.valueOf(c).charAt((<span class="type">int</span>)b-<span class="number">1</span>);</span><br><span class="line">            <span class="comment">//b=0，说明是在前一个数的最后一位上</span></span><br><span class="line">		   &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">			   <span class="type">long</span> <span class="variable">c</span> <span class="operator">=</span> (<span class="type">long</span>) (Math.pow(<span class="number">10</span>, base-<span class="number">1</span>) + a - <span class="number">1</span>);</span><br><span class="line">			   res = String.valueOf(c).charAt((<span class="type">int</span>)base-<span class="number">1</span>);</span><br><span class="line">		   &#125;</span><br><span class="line">		   <span class="keyword">return</span> Integer.parseInt(String.valueOf(res));</span><br><span class="line">	   &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0-11-无重复的最长子串"><a href="#0-11-无重复的最长子串" class="headerlink" title="0.11 无重复的最长子串"></a>0.11 无重复的最长子串</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//双指针，如果已经包含就不断前移</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">lengthOfLongestSubstring</span><span class="params">(String s)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> s.length();</span><br><span class="line">        Set&lt;Character&gt; set = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line">        <span class="type">int</span> <span class="variable">res</span> <span class="operator">=</span> <span class="number">0</span>,i = <span class="number">0</span>,j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(i &lt; n &amp;&amp; j &lt; n)&#123;</span><br><span class="line">            <span class="keyword">if</span>(!set.contains(s.charAt(j)))&#123;</span><br><span class="line">                set.add(s.charAt(j));</span><br><span class="line">                j++;</span><br><span class="line">                res = Math.max(res,j-i);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                set.remove(s.charAt(i));</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//定义一个 map 数据结构存储 (k, v)，其中 key 值为字符，value 值为字符位置 +1，加 1 表示从字符位置后一个才开始不重复</span></span><br><span class="line"><span class="comment">//我们定义不重复子串的开始位置为 start，结束位置为 end</span></span><br><span class="line"><span class="comment">//随着 end 不断遍历向后，会遇到与 [start, end] 区间内字符相同的情况，此时将字符作为 key 值，获取其 value 值，并更新 start，此时 [start, end] 区间内不存在重复字符</span></span><br><span class="line"><span class="comment">//无论是否更新 start，都会更新其 map 数据结构和结果 ans。</span></span><br><span class="line"><span class="comment">//时间复杂度：O(n)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">lengthOfLongestSubstring</span><span class="params">(String s)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> s.length();</span><br><span class="line">        <span class="type">int</span> <span class="variable">res</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        Map&lt;Character,Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">right</span> <span class="operator">=</span> <span class="number">0</span> ,left = <span class="number">0</span>; right &lt; n ;right++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(map.containsKey(s.charAt(right)))&#123;</span><br><span class="line">                left = Math.max(map.get(s.charAt(right)),left);  </span><br><span class="line">            &#125;</span><br><span class="line">            res = Math.max(res,right-left+<span class="number">1</span>);</span><br><span class="line">            map.put(s.charAt(right),right+<span class="number">1</span>);  		<span class="comment">//加一是为了返回重复字符的后一位</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0-12-最小覆盖子串"><a href="#0-12-最小覆盖子串" class="headerlink" title="0.12 最小覆盖子串"></a>0.12 最小覆盖子串</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">minWindow</span><span class="params">(String s, String t)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (s == <span class="literal">null</span> || s == <span class="string">&quot;&quot;</span> || t == <span class="literal">null</span> || t == <span class="string">&quot;&quot;</span> || s.length() &lt; t.length()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//用来统计t中每个字符出现次数  char型可以转换成0-128的int，对应字符的ASCII码,也就是用字符对应的int值作为下标</span></span><br><span class="line">        <span class="type">int</span>[] needs = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">128</span>];    <span class="comment">//标记字符串t中字符</span></span><br><span class="line">        </span><br><span class="line">        <span class="type">int</span>[] window = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">128</span>];  <span class="comment">//标记滑动窗口中的字符</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; t.length(); i++) &#123;	<span class="comment">//加入数组中</span></span><br><span class="line">            needs[t.charAt(i)]++;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">right</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">res</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">        <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;		<span class="comment">//当前有多少个字符匹配成功</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//用来记录最短需要多少个字符。</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">minLength</span> <span class="operator">=</span> s.length() + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (right &lt; s.length()) &#123;</span><br><span class="line">            <span class="type">char</span> <span class="variable">ch</span> <span class="operator">=</span> s.charAt(right);	</span><br><span class="line">            window[ch]++;	</span><br><span class="line">            <span class="keyword">if</span> (needs[ch] &gt; <span class="number">0</span> &amp;&amp; needs[ch] &gt;= window[ch]) &#123;	<span class="comment">//如果字符匹配成功，count++</span></span><br><span class="line">                count++;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span> (count == t.length()) &#123;		<span class="comment">//当匹配整个字符串都匹配成功，记录下当前的最短覆盖子串，然后从左侧缩小窗口，如果最左是有效的字符，右移右侧的指针直到再次匹配成功</span></span><br><span class="line">                ch = s.charAt(left);	</span><br><span class="line">                <span class="keyword">if</span> (needs[ch] &gt; <span class="number">0</span> &amp;&amp; needs[ch] &gt;= window[ch]) &#123;	<span class="comment">//如果最左的元素属于有效字符，减少count</span></span><br><span class="line">                    count--;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (right - left + <span class="number">1</span> &lt; minLength) &#123;		<span class="comment">//如果当前窗口的大小小于最短，更新minlength</span></span><br><span class="line">                    minLength = right - left + <span class="number">1</span>;</span><br><span class="line">                    res = s.substring(left, right + <span class="number">1</span>);		<span class="comment">//截取当前最短的子串作为答案</span></span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line">                window[ch]--;	<span class="comment">//将最左元素从窗口中去除</span></span><br><span class="line">                left++;		<span class="comment">//左指针右移</span></span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">            right++;	<span class="comment">//右指针右移</span></span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0-13-剑指-Offer-57-II-和为s的连续正数序列"><a href="#0-13-剑指-Offer-57-II-和为s的连续正数序列" class="headerlink" title="0.13 剑指 Offer 57 - II. 和为s的连续正数序列"></a>0.13 <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/he-wei-sde-lian-xu-zheng-shu-xu-lie-lcof/">剑指 Offer 57 - II. 和为s的连续正数序列</a></h3><p>输入一个正整数 target ，输出所有和为 target 的连续正整数序列（至少含有两个数）。</p>
+<p>序列内的数字由小到大排列，不同序列按照首个数字从小到大排列。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span>[][] findContinuousSequence(<span class="type">int</span> target) &#123;</span><br><span class="line">        <span class="comment">//左右边界</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>, j = <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        List&lt;<span class="type">int</span>[]&gt; res = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">while</span>(i &lt;= target / <span class="number">2</span>)&#123;</span><br><span class="line">            <span class="comment">//如果和小于目标，右边界右移</span></span><br><span class="line">            <span class="keyword">if</span>(sum &lt; target)&#123;</span><br><span class="line">                sum += j;</span><br><span class="line">                j++;</span><br><span class="line">            <span class="comment">//如果和大于目标，左边界右移</span></span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span>(sum &gt; target)&#123;</span><br><span class="line">                sum -= i;</span><br><span class="line">                i++;</span><br><span class="line">            <span class="comment">//否则，将答案加入</span></span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="type">int</span>[] a = <span class="keyword">new</span> <span class="title class_">int</span>[j-i];</span><br><span class="line">                <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> i ; k &lt; j; k++)&#123;</span><br><span class="line">                    a[k - i] = k;</span><br><span class="line">                &#125;</span><br><span class="line">                res.add(a);</span><br><span class="line">                <span class="comment">//以i为起点已经没有答案了，左边界右移</span></span><br><span class="line">                sum -= i;</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res.toArray(<span class="keyword">new</span> <span class="title class_">int</span>[res.size()][] );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0-14-剑指-Offer-59-I-滑动窗口的最大值"><a href="#0-14-剑指-Offer-59-I-滑动窗口的最大值" class="headerlink" title="0.14 剑指 Offer 59 - I. 滑动窗口的最大值"></a>0.14 <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/hua-dong-chuang-kou-de-zui-da-zhi-lcof/">剑指 Offer 59 - I. 滑动窗口的最大值</a></h3><p>给定一个数组 <code>nums</code> 和滑动窗口的大小 <code>k</code>，请找出所有滑动窗口里的最大值。</p>
+<p>思路：怎么样在每次窗口滑动后在O(1)的时间获得最大值——-单调队列，队列头就是最大的元素</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span>[] maxSlidingWindow(<span class="type">int</span>[] nums, <span class="type">int</span> k) &#123;</span><br><span class="line">        <span class="keyword">if</span>(nums.length == <span class="number">0</span> || k == <span class="number">0</span>) <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">0</span>];</span><br><span class="line">        <span class="comment">//维护一个单调递减的双端队列</span></span><br><span class="line">        Deque&lt;Integer&gt; deque = <span class="keyword">new</span> <span class="title class_">LinkedList</span>&lt;&gt;();</span><br><span class="line">        <span class="type">int</span>[] res = <span class="keyword">new</span> <span class="title class_">int</span>[nums.length - k + <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>,i = <span class="number">1</span>-k ; j &lt; nums.length ; i++,j++)&#123;</span><br><span class="line">            <span class="comment">//如果窗口已经成型，并且滑动时移除的是最大值</span></span><br><span class="line">            <span class="keyword">if</span>(i &gt; <span class="number">0</span> &amp;&amp; deque.peekFirst() == nums[i-<span class="number">1</span>])&#123;</span><br><span class="line">                deque.removeFirst();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//移除队列中所有小于新加入的值</span></span><br><span class="line">            <span class="keyword">while</span>(!deque.isEmpty() &amp;&amp; deque.peekLast() &lt; nums[j])&#123;</span><br><span class="line">                deque.removeLast();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//加入队列</span></span><br><span class="line">            deque.add(nums[j]);</span><br><span class="line">            <span class="comment">//记录最大值</span></span><br><span class="line">            <span class="keyword">if</span>(i &gt;= <span class="number">0</span>)&#123;</span><br><span class="line">                res[i] = deque.peekFirst();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span>Author: </span>
+    <a href="https://stardustorz.github.io">draco</a>
+  </p>
+  <p class="copyright-item">
+    <span>Link: </span>
+    <a href="https://stardustorz.github.io/2021/06/12/Algorithm/String/">https://stardustorz.github.io/2021/06/12/Algorithm/String/</a>
+  </p>
+  <p class="copyright-item">
+    <span>License: </span>
+    
+    <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+  </p>
+</div>
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/Algorithm/">Algorithm</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/2021/06/12/Algorithm/Sort/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">[Algorithm] Sort</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/2021/06/12/Algorithm/Tree/">  
+        <span class="next-text nav-default">[Algorithm] Tree</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+          
+  <div class="comments" id="comments">  
+      
+  </div>  
+  
+
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2019 - 2025      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">draco</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+    
+    
+    
+    
+    
+    
+  
+
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+</body>
+
+</html>
