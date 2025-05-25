@@ -207,594 +207,6 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      <a class="post-link" href="/2022/07/14/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/Channel/">[Go] Channel</a>
-      
-    </h1>
-
-    <div class="post-meta">
-      <span class="post-time">
-        2022-07-14
-      </span>
-      
-      
-      <span class="post-category">
-        
-        <a href="/categories/Golang/">Golang</a>
-        
-        <a href="/categories/Golang/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a>
-        
-      </span>
-      
-      
-    </div>
-  </header>
-
-  
-
-  <div class="post-content">
-    
-    
-    
-    
-    
-
-    
-    <blockquote>
-<p>学习 golang 中的 chan，并分析其具体实现，包括创建 channel，发送数据，接收数据以及相关调度等。</p>
-</blockquote>
-    <div class="read-more">
-      <a href="/2022/07/14/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/Channel/" class="read-more-link">Read more..</a>
-    </div>
-    
-    
-  </div>
-
-  
-
-  
-
-</article>
-  
-  <article class="post">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-      <a class="post-link" href="/2022/07/14/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/sync.Cond/">[Go] sync.Cond</a>
-      
-    </h1>
-
-    <div class="post-meta">
-      <span class="post-time">
-        2022-07-14
-      </span>
-      
-      
-      <span class="post-category">
-        
-        <a href="/categories/Golang/">Golang</a>
-        
-        <a href="/categories/Golang/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a>
-        
-      </span>
-      
-      
-    </div>
-  </header>
-
-  
-
-  <div class="post-content">
-    
-    
-    
-
-    
-    <h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h2><p>Golang 的 sync 包中的 Cond 实现了一种条件变量，可以使用在<strong>多个Reader</strong>等待共享资源 ready 的场景（如果只有一读一写，一个锁或者channel就搞定了）。<br>Cond的汇合点：多个goroutines等待、1个goroutine通知事件发生。<br>比较适合任务调用场景，一个 Master goroutine 通知事件发生，多个 Worker goroutine 在资源没准备好的时候就挂起，等待通知。<br><strong>使用方法</strong></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Cond</span></span><br><span class="line">cond := sync.NewCond(<span class="built_in">new</span>(sync.Mutex))</span><br><span class="line"><span class="comment">// 挂起goroutine</span></span><br><span class="line">cond.L.Lock()</span><br><span class="line">cond.Wait()</span><br><span class="line"><span class="comment">// 唤醒一个</span></span><br><span class="line">cond.Signal()</span><br><span class="line"><span class="comment">// 唤醒所有</span></span><br><span class="line">cond.Broadcast()</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>基本使用大概是需要等待的时候通过 Wait() 将 Goroutine 挂起，资源准备好的时候再通过 Signal() 或者 Broadcast() 将挂起中的 Goroutine 唤醒。</p>
-</blockquote>
-<p>一个简单的 Demo<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> (</span><br><span class="line">		locker sync.Mutex</span><br><span class="line">		cond   = sync.NewCond(&amp;locker)</span><br><span class="line">		wg     sync.WaitGroup</span><br><span class="line">	)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		wg.Add(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(number <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">			<span class="comment">// wait()方法内部是先释放锁 然后在加锁 所以这里需要先 Lock()</span></span><br><span class="line">			cond.L.Lock()</span><br><span class="line">			<span class="keyword">defer</span> cond.L.Unlock()</span><br><span class="line">			cond.Wait() <span class="comment">// 等待通知,阻塞当前 goroutine</span></span><br><span class="line">			fmt.Printf(<span class="string">&quot;g %v ok~ \n&quot;</span>, number)</span><br><span class="line">			wg.Done()</span><br><span class="line">		&#125;(i)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">		<span class="comment">// 每过 50毫秒 唤醒一个 goroutine</span></span><br><span class="line">		cond.Signal()</span><br><span class="line">		time.Sleep(time.Millisecond * <span class="number">50</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	time.Sleep(time.Millisecond * <span class="number">50</span>)</span><br><span class="line">	<span class="comment">// 剩下5个 goroutine 一起唤醒</span></span><br><span class="line">	cond.Broadcast()</span><br><span class="line">	fmt.Println(<span class="string">&quot;Broadcast...&quot;</span>)</span><br><span class="line">	wg.Wait()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="2-源码分析"><a href="#2-源码分析" class="headerlink" title="2 源码分析"></a>2 源码分析</h2><blockquote>
-<p>go version 1.14.7</p>
-</blockquote>
-<h3 id="2-1-Cond"><a href="#2-1-Cond" class="headerlink" title="2.1 Cond"></a>2.1 Cond</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： cond.go</span></span><br><span class="line"><span class="comment">line: 21</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Cond <span class="keyword">struct</span> &#123;</span><br><span class="line">    noCopy noCopy</span><br><span class="line">    L Locker</span><br><span class="line">    notify  notifyList</span><br><span class="line">    checker copyChecker</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// NewCond() 返回指针，保证多 goroutine 获取到的是同一个实例。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewCond</span><span class="params">(l Locker)</span></span> *Cond &#123;</span><br><span class="line">	<span class="keyword">return</span> &amp;Cond&#123;L: l&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><strong>noCopy</strong>：noCopy对象，实现了<code>sync.Locker</code>接口，使得内嵌 noCopy 的对象在进行 go vet 静态检查的时候，可以检查出是否被复制。</p>
-<blockquote>
-<p>noCopy 具体见 <a target="_blank" rel="noopener" href="https://github.com/golang/go/issues/8005">Go issues 8005</a></p>
-</blockquote>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： cond.go</span></span><br><span class="line"><span class="comment">line: 94</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">type</span> noCopy <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(*noCopy)</span></span> Lock()   &#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(*noCopy)</span></span> Unlock() &#123;&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>L</strong>：实现了 <code>sync.Locker</code> 接口的锁对象，通常使用 Mutex 或 RWMutex 。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： mutex.go</span></span><br><span class="line"><span class="comment">line: 31</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">type</span> Locker <span class="keyword">interface</span> &#123;</span><br><span class="line">     Lock()</span><br><span class="line">     Unlock()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>notify</strong>：notifyList 对象，维护等待唤醒的 goroutine 队列,使用链表实现。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： runtime.go</span></span><br><span class="line"><span class="comment">line: 33    </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">type</span> notifyList <span class="keyword">struct</span> &#123;</span><br><span class="line">	wait   <span class="type">uint32</span></span><br><span class="line">	notify <span class="type">uint32</span></span><br><span class="line">	lock   <span class="type">uintptr</span></span><br><span class="line">	head   unsafe.Pointer</span><br><span class="line">	tail   unsafe.Pointer</span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
-<p><strong>checker</strong>：copyChecker 对象，实际上是 uintptr 对象，保存自身对象地址。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： cond.go</span></span><br><span class="line"><span class="comment">line: 79    </span></span><br><span class="line"><span class="comment">*/</span>    </span><br><span class="line"><span class="keyword">type</span> copyChecker <span class="type">uintptr</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *copyChecker)</span></span> check() &#123;</span><br><span class="line">     <span class="keyword">if</span> <span class="type">uintptr</span>(*c) != <span class="type">uintptr</span>(unsafe.Pointer(c)) &amp;&amp;</span><br><span class="line">            !atomic.CompareAndSwapUintptr((*<span class="type">uintptr</span>)(c), <span class="number">0</span>, <span class="type">uintptr</span>(unsafe.Pointer(c))) &amp;&amp;</span><br><span class="line">            <span class="type">uintptr</span>(*c) != <span class="type">uintptr</span>(unsafe.Pointer(c)) &#123;</span><br><span class="line">            <span class="built_in">panic</span>(<span class="string">&quot;sync.Cond is copied&quot;</span>)</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>1）检查当前 checker 对象的地址是否等于保存在 checker 中的地址</p>
-<ul>
-<li>由于第一次比较的时候 checker 中没有存地址所以第一次比较肯定是不相等的，于是有了后续 2 3步。</li>
-</ul>
-</li>
-<li><p>2）对 checker 进行 CAS 操作，如果 checker 中存储的地址值为空（就是0）就把当前 checker 对象的地址值存进去</p>
-</li>
-<li>3）第三步和第一步一样，再比较一下。<ul>
-<li>主要是防止在第一步比较发现不相等之后，第二步 CAS 之前，其他 goroutine 也在执行这个方法，并发的将 checker 赋值了，导致这里判定的时候第二步 CAS 失败，返回 false，然后错误的抛出一个 panic，所以执行第三步在比较一下是否相等。如果其他 goroutine 抢先执行 CAS 修改了 checker 中的值导致这里第二步也返回 false 的话，第三步的判定也会是相等的，不会抛出 panic</li>
-</ul>
-</li>
-<li>4）如果 3 个条件都成立，那 checker 肯定是被复制了，就是由于 cond 被复制引起的。</li>
-</ul>
-<blockquote>
-<p>check 方法在第一次调用的时候，会将 checker 对象地址赋值给 checker，也就是将自身内存地址赋值给自身。<br>再次调用 checker 方法的时候，会将当前 checker 对象地址值与 checker 中保存的地址值（原始地址）进行比较，若不相同则表示当前 checker 的地址不是第一次调用 check 方法时候的地址，即 cond 对象被复制了，导致checker 被重新分配了内存地址。</p>
-</blockquote>
-<h3 id="2-2-Wait"><a href="#2-2-Wait" class="headerlink" title="2.2 Wait"></a>2.2 Wait</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： cond.go</span></span><br><span class="line"><span class="comment">line: 52    </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Cond)</span></span> Wait() &#123;</span><br><span class="line">    <span class="comment">// 1.每次操作之前都要检测一下 cond 是否被复制了。</span></span><br><span class="line">    c.checker.check() </span><br><span class="line">    <span class="comment">// 2.将 notifyList 中的 wait 值加1并返回之前的值</span></span><br><span class="line">    t := runtime_notifyListAdd(&amp;c.notify) </span><br><span class="line">    <span class="comment">// 3.释放锁，因此在调用Wait方法前，必须保证获取到了cond的锁，否则会报错</span></span><br><span class="line">    c.L.Unlock()</span><br><span class="line">    <span class="comment">// 4.将当前goroutine挂起，等待唤醒信号</span></span><br><span class="line">    runtime_notifyListWait(&amp;c.notify, t) </span><br><span class="line">    <span class="comment">// 5.gorountine被唤醒，重新获取锁</span></span><br><span class="line">    c.L.Lock()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>第二步代码如下：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">/*</span></span><br><span class="line"><span class="comment"> package: runtime</span></span><br><span class="line"><span class="comment"> file： sema.go</span></span><br><span class="line"><span class="comment"> line: 479  </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">notifyListAdd</span><span class="params">(l *notifyList)</span></span> <span class="type">uint32</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> atomic.Xadd(&amp;l.wait, <span class="number">1</span>) - <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>第四步代码如下：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: runtime</span></span><br><span class="line"><span class="comment">file： sema.go</span></span><br><span class="line"><span class="comment">line: 488  </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// 获取当前 goroutine 添加到链表末端，然后 goparkunlock 函数休眠阻塞当前 goroutine</span></span><br><span class="line"><span class="comment">// goparkunlock 函数会让出当前处理器的使用权并等待调度器的唤醒</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">notifyListWait</span><span class="params">(l *notifyList, t <span class="type">uint32</span>)</span></span> &#123;</span><br><span class="line">    <span class="comment">// 1.锁住 notify 队列</span></span><br><span class="line">    lock(&amp;l.lock)</span><br><span class="line">    <span class="comment">// 2.判断传入的等待序号t是否小于当前已经唤醒的序号notify</span></span><br><span class="line">    <span class="comment">// 如果是则说明当前 goroutine 不需要阻塞了 直接解锁并返回</span></span><br><span class="line">    <span class="comment">// 有可能执行这步之前 goroutine 就已经被唤醒了</span></span><br><span class="line">    <span class="keyword">if</span> less(t, l.notify) &#123;</span><br><span class="line">        unlock(&amp;l.lock)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 3.获取当前 goroutine，设置相关参数，将当前等待数赋值给 ticket</span></span><br><span class="line">    s := acquireSudog()</span><br><span class="line">    s.g = getg()</span><br><span class="line">    s.ticket = t</span><br><span class="line">    s.releasetime = <span class="number">0</span></span><br><span class="line">    t0 := <span class="type">int64</span>(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">if</span> blockprofilerate &gt; <span class="number">0</span> &#123;</span><br><span class="line">        t0 = cputicks()</span><br><span class="line">        s.releasetime = <span class="number">-1</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 4.将当前 goroutine 写入到链表尾部</span></span><br><span class="line">    <span class="keyword">if</span> l.tail == <span class="literal">nil</span> &#123;</span><br><span class="line">        l.head = s</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        l.tail.next = s</span><br><span class="line">    &#125;</span><br><span class="line">    l.tail = s</span><br><span class="line">    <span class="comment">// 5. 调用 goparkunlock 函数将当前 goroutine 挂起，等待唤醒信号</span></span><br><span class="line">    goparkunlock(&amp;l.lock, <span class="string">&quot;semacquire&quot;</span>, traceEvGoBlockCond, <span class="number">3</span>)</span><br><span class="line">    <span class="keyword">if</span> t0 != <span class="number">0</span> &#123;</span><br><span class="line">        blockevent(s.releasetime-t0, <span class="number">2</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    releaseSudog(s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="2-3-Signal"><a href="#2-3-Signal" class="headerlink" title="2.3 Signal"></a>2.3 Signal</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： cond.go</span></span><br><span class="line"><span class="comment">line: 64  </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Cond)</span></span> Signal() &#123;</span><br><span class="line">    <span class="comment">// 1.复制检查</span></span><br><span class="line">    c.checker.check() </span><br><span class="line">    <span class="comment">// 2.顺序唤醒一个等待的gorountine</span></span><br><span class="line">    runtime_notifyListNotifyOne(&amp;c.notify)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: runtime</span></span><br><span class="line"><span class="comment">file： sema.go</span></span><br><span class="line"><span class="comment">line: 554  </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">notifyListNotifyOne</span><span class="params">(l *notifyList)</span></span> &#123;</span><br><span class="line">   <span class="comment">// 1.等待序号和唤醒序号相同则说明没有需要唤醒的 goroutine 直接返回</span></span><br><span class="line">   <span class="keyword">if</span> atomic.Load(&amp;l.wait) == atomic.Load(&amp;l.notify) &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// 2.锁住队列后再检查一遍等待序号和唤醒序号是否相同即判断有没有需要唤醒的 goroutine，没有则解锁后直接返回</span></span><br><span class="line">   lock(&amp;l.lock) </span><br><span class="line">   t := l.notify</span><br><span class="line">   <span class="keyword">if</span> t == atomic.Load(&amp;l.wait) &#123;</span><br><span class="line">        unlock(&amp;l.lock)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// 3.到这里就说明有需要唤醒的 goroutine，于是先将 notify序号+1</span></span><br><span class="line">   atomic.Store(&amp;l.notify, t+<span class="number">1</span>)  </span><br><span class="line">   <span class="comment">// 4.然后就开始唤醒 goroutine 了</span></span><br><span class="line">   <span class="keyword">for</span> p, s := (*sudog)(<span class="literal">nil</span>), l.head; s != <span class="literal">nil</span>; p, s = s, s.next &#123;</span><br><span class="line">        <span class="comment">// 4.1 找到 ticket等于当前唤醒序号的 goroutine</span></span><br><span class="line">        <span class="keyword">if</span> s.ticket == t &#123;</span><br><span class="line">           <span class="comment">// 4.2 然后将其从等待唤醒链表中移除（因为这个 goroutine 马上就要被唤醒了）</span></span><br><span class="line">           n := s.next</span><br><span class="line">           <span class="keyword">if</span> p != <span class="literal">nil</span> &#123;</span><br><span class="line">               p.next = n</span><br><span class="line">           &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">               l.head = n</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">if</span> n == <span class="literal">nil</span> &#123;</span><br><span class="line">               l.tail = p</span><br><span class="line">           &#125;</span><br><span class="line">           unlock(&amp;l.lock)</span><br><span class="line">           s.next = <span class="literal">nil</span></span><br><span class="line">           <span class="comment">// 4.3 然后唤醒这个 goroutine </span></span><br><span class="line">           readyWithTime(s, <span class="number">4</span>)</span><br><span class="line">           <span class="keyword">return</span></span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// 4.4 最后解锁队列 </span></span><br><span class="line">   unlock(&amp;l.lock)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="2-4-Broadcast"><a href="#2-4-Broadcast" class="headerlink" title="2.4 Broadcast"></a>2.4 Broadcast</h3><p>唤醒链表中所有的阻塞中的goroutine，还是使用readyWithTime来实现这个功能</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： cond.go</span></span><br><span class="line"><span class="comment">line: 73  </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Cond)</span></span> Broadcast() &#123;</span><br><span class="line">    <span class="comment">// 1.复制检查</span></span><br><span class="line">    c.checker.check()</span><br><span class="line">    <span class="comment">// 2.唤醒所有在等待的 goroutine</span></span><br><span class="line">    runtime_notifyListNotifyAll(&amp;c.notify)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这里和 <code>notifyListNotifyOne()</code>差不多，只是一次性唤醒所有 goroutine。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: runtime</span></span><br><span class="line"><span class="comment">file： sema.go</span></span><br><span class="line"><span class="comment">line: 522 </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">notifyListNotifyAll</span><span class="params">(l *notifyList)</span></span> &#123;</span><br><span class="line">    <span class="comment">// 1.等待序号和唤醒序号相同则说明没有需要唤醒的 goroutine 直接返回</span></span><br><span class="line">    <span class="keyword">if</span> atomic.Load(&amp;l.wait) == atomic.Load(&amp;l.notify) &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 将链表头尾指针置为空（可以看做是清空整个等待队列）</span></span><br><span class="line">    <span class="comment">// 但是需要将当前的链表头保存下来，不然等会找不到链表中的数据了</span></span><br><span class="line">    lock(&amp;l.lock)</span><br><span class="line">    s := l.head</span><br><span class="line">    l.head = <span class="literal">nil</span></span><br><span class="line">    l.tail = <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3.直接将notify需要赋值成等待序号（这样表示当前没有需要唤醒的 goroutine 了）</span></span><br><span class="line">    <span class="comment">// 前面唤醒一个的时候这里是+1</span></span><br><span class="line">    atomic.Store(&amp;l.notify, atomic.Load(&amp;l.wait))</span><br><span class="line">    unlock(&amp;l.lock)</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 4.最后 for 循环唤醒链表中所有等待状态的 goroutine</span></span><br><span class="line">    <span class="keyword">for</span> s != <span class="literal">nil</span> &#123;</span><br><span class="line">        next := s.next</span><br><span class="line">        s.next = <span class="literal">nil</span></span><br><span class="line">        readyWithTime(s, <span class="number">4</span>)</span><br><span class="line">        s = next</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3 小结"></a>3 小结</h2><p><strong>基本使用</strong></p>
-<ul>
-<li>1）资源未准备好时，使用 Wait() 方法将 goroutine 挂起，由底层实现，会让出 CPU 时间片，从而避免使用无意义的循环浪费系统资源。</li>
-<li>2）资源准备好时通过 Signal() 或者 Broadcast() 方法唤醒一个或多个被挂起的 goroutine。</li>
-</ul>
-<p><strong>等待唤醒流程</strong></p>
-<ul>
-<li>1）所有相关数据都是存在 notifyList 中的，包括 goroutine 和一些计数信息。</li>
-<li>2）其中的 wait 和 notify 可以理解为等待序号和唤醒序号，都是自增值，wait 在有新 goroutine 等待时+1，notify 则在唤醒一个 goroutine 时+1。</li>
-<li>3）等待状态的 goroutine 信息则存放在链表中，等待时加入链表尾部，唤醒时移除。</li>
-<li>4）每个等待链表的 goroutine  都会将当前的 wait（等待序号）赋值给 ticket 字段，唤醒的时候会将 ticket=唤醒序号的 goroutine 唤醒。</li>
-<li>5）当 wait==notify 时表示没有 goroutine 需要被唤醒，wait&gt;notify 时表示有 goroutine 需要被唤醒，wait 恒大于等于 notify。</li>
-</ul>
-<p><strong>noCopy</strong><br>Cond在内部持有一个等待队列 notifyList ，这个队列维护所有等待在这个 Cond 的 goroutine。如果 Cond 被复制则会导致其中的等待队列也被复制，最终可能会导致在唤醒 goroutine 的时候出现错误。<br>Kubernetes 的调度中也用到了 sync.Cond 有兴趣的可以研究一下。</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/rKLiazgWzneJfpfgHay8cA">https://mp.weixin.qq.com/s/rKLiazgWzneJfpfgHay8cA</a><br><a target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes/blob/0599ca2bcfcae7d702f95284f3c2e2c2978c7772/pkg/scheduler/internal/queue/scheduling_queue.go">https://github.com/kubernetes/kubernetes/blob/0599ca2bcfcae7d702f95284f3c2e2c2978c7772/pkg/scheduler/internal/queue/scheduling_queue.go</a></p>
-<h2 id="4-参考"><a href="#4-参考" class="headerlink" title="4 参考"></a>4 参考</h2><p><code>https://ieevee.com/tech/2019/06/15/cond.html</code></p>
-</blockquote>
-<p><code>https://segmentfault.com/a/1190000019957459</code></p>
-<p><code>https://www.jianshu.com/p/7b59d1d92a95</code></p>
-<p><code>http://www.pydevops.com/2016/12/04/go-cond源码剖析-3/</code></p>
-
-    
-    
-  </div>
-
-  
-
-  
-
-</article>
-  
-  <article class="post">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-      <a class="post-link" href="/2022/07/14/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/sync.Mutex/">[Go] sync.Mutex</a>
-      
-    </h1>
-
-    <div class="post-meta">
-      <span class="post-time">
-        2022-07-14
-      </span>
-      
-      
-      <span class="post-category">
-        
-        <a href="/categories/Golang/">Golang</a>
-        
-        <a href="/categories/Golang/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a>
-        
-      </span>
-      
-      
-    </div>
-  </header>
-
-  
-
-  <div class="post-content">
-    
-    
-    
-
-    
-    <p>Go 语言在 <code>sync</code> 包中提供了用于同步的一些基本原语,<code>sync.Mutex</code> 就是其中最常用的一个。</p>
-<blockquote>
-<p>本文基于 Go 1.17.1</p>
-<h2 id="1-基本结构"><a href="#1-基本结构" class="headerlink" title="1 基本结构"></a>1 基本结构</h2><p>Go 语言的 <code>sync.Mutex</code>由两个字段 <code>state</code> 和 <code>sema</code> 组成。其中 <code>state</code> 表示当前互斥锁的状态，而 <code>sema</code> 是用于控制锁状态的信号量。</p>
-</blockquote>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sync/mutex.go 25行</span></span><br><span class="line"><span class="keyword">type</span> Mutex <span class="keyword">struct</span> &#123;</span><br><span class="line">	state <span class="type">int32</span></span><br><span class="line">	sema  <span class="type">uint32</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上述两个字段加起来只占 8 字节空间的结构体表示了 Go 语言中的互斥锁。</p>
-<h3 id="1-1-状态"><a href="#1-1-状态" class="headerlink" title="1.1 状态"></a>1.1 状态</h3><p>互斥锁的状态比较复杂，如下图所示，最低三位分别表示 <code>mutexLocked</code>、<code>mutexWoken</code> 和 <code>mutexStarving</code>，剩下的位置用来表示当前有多少个 Goroutine 在等待互斥锁的释放：<br>![[mutex-state.png]]<br><code>int32</code> 中的不同位分别表示了不同的状态：</p>
-<ul>
-<li><code>mutexLocked</code> — 表示互斥锁的锁定状态；</li>
-<li><code>mutexWoken</code> — 表示从正常模式被从唤醒；</li>
-<li><code>mutexStarving</code> — 当前的互斥锁进入饥饿状态；</li>
-<li><code>waitersCount</code> — 当前互斥锁上等待的 Goroutine 个数</li>
-</ul>
-<p>在默认情况下，互斥锁的所有状态位都是 0，即默认为未锁定状态。</p>
-<blockquote>
-<p>同时也表明 Mutex 是不需要初始化的</p>
-</blockquote>
-<p>源码中也提供了相关常量</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sync/mutex.go 36</span></span><br><span class="line"><span class="keyword">const</span> (</span><br><span class="line"></span><br><span class="line">    mutexLocked = <span class="number">1</span> &lt;&lt; <span class="literal">iota</span> <span class="comment">// 1 0001 含义：用最后一位表示当前对象锁的状态，0-未锁住 1-已锁住</span></span><br><span class="line"></span><br><span class="line">    mutexWoken <span class="comment">// 2 0010 含义：用倒数第二位表示当前对象是否被唤醒 0-唤醒 1-未唤醒</span></span><br><span class="line"></span><br><span class="line">    mutexStarving <span class="comment">// 4 0100 含义：用倒数第三位表示当前对象是否为饥饿模式，0为正常模式，1为饥饿模式。</span></span><br><span class="line"></span><br><span class="line">    mutexWaiterShift = <span class="literal">iota</span> <span class="comment">// 3，从倒数第四位往前的bit位表示在排队等待的goroutine数</span></span><br><span class="line"></span><br><span class="line">    starvationThresholdNs = <span class="number">1e6</span> <span class="comment">// 1ms 切换到饥饿模式的阈值</span></span><br><span class="line"></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<h3 id="1-2-正常模式和饥饿模式"><a href="#1-2-正常模式和饥饿模式" class="headerlink" title="1.2 正常模式和饥饿模式"></a>1.2 正常模式和饥饿模式</h3><p>Mutex 有两种模式：</p>
-<ul>
-<li>正常模式；</li>
-<li>饥饿模式。</li>
-</ul>
-<p><strong>在正常模式下</strong>，锁的等待者会按照先进先出的顺序获取锁。但是刚被唤起的 Goroutine 与新创建的 Goroutine 竞争时，大概率会获取不到锁，为了减少这种情况的出现，一旦 Goroutine 超过 1ms 没有获取到锁，它就会将当前互斥锁切换饥饿模式，防止部分 Goroutine 被<strong>饿死</strong>。</p>
-<blockquote>
-<p><strong>引入饥饿模式的目的是保证互斥锁的公平性。</strong></p>
-<p>说明 Mutex 是公平锁。</p>
-</blockquote>
-<p><strong>在饥饿模式中</strong>，互斥锁会直接交给等待队列最前面的 Goroutine。新的 Goroutine 在该状态下不能获取锁、也不会进入自旋状态，它们只会在队列的末尾等待。如果一个 Goroutine 获得了互斥锁并且它在队列的末尾或者它等待的时间少于 1ms，那么当前的互斥锁就会切换回正常模式。</p>
-<blockquote>
-<p>与饥饿模式相比，正常模式下的互斥锁能够提供更好地性能，饥饿模式的能避免 Goroutine 由于陷入等待无法获取锁而造成的高尾延时。</p>
-</blockquote>
-<p>这里贴一下源码中的注释</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Mutex fairness.</span><br><span class="line"></span><br><span class="line">Mutex can be in 2 modes of operations: normal and starvation.</span><br><span class="line">In normal mode waiters are queued in FIFO order, but a woken up waiter</span><br><span class="line">does not own the mutex and competes with new arriving goroutines over</span><br><span class="line">the ownership. New arriving goroutines have an advantage -- they are</span><br><span class="line">already running on CPU and there can be lots of them, so a woken up</span><br><span class="line">waiter has good chances of losing. In such case it is queued at front</span><br><span class="line">of the wait queue. If a waiter fails to acquire the mutex for more than 1ms,</span><br><span class="line">it switches mutex to the starvation mode.</span><br><span class="line"></span><br><span class="line">In starvation mode ownership of the mutex is directly handed off from</span><br><span class="line">the unlocking goroutine to the waiter at the front of the queue.</span><br><span class="line">New arriving goroutines don&#x27;t try to acquire the mutex even if it appears</span><br><span class="line">to be unlocked, and don&#x27;t try to spin. Instead they queue themselves at</span><br><span class="line">the tail of the wait queue.</span><br><span class="line"></span><br><span class="line">If a waiter receives ownership of the mutex and sees that either</span><br><span class="line">(1) it is the last waiter in the queue, or (2) it waited for less than 1 ms,</span><br><span class="line">it switches mutex back to normal operation mode.</span><br><span class="line"></span><br><span class="line">Normal mode has considerably better performance as a goroutine can acquire</span><br><span class="line">a mutex several times in a row even if there are blocked waiters.</span><br><span class="line">Starvation mode is important to prevent pathological cases of tail latency.</span><br></pre></td></tr></table></figure>
-<h2 id="2-加解锁过程"><a href="#2-加解锁过程" class="headerlink" title="2 加解锁过程"></a>2 加解锁过程</h2><p>在<code>sync</code>包中 中定义了 Locker 接口：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sync/mutex.go 31 行</span></span><br><span class="line"><span class="keyword">type</span> Locker <span class="keyword">interface</span> &#123;</span><br><span class="line">        Lock()</span><br><span class="line">        Unlock()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Mutex 实现了 Locker 接口。除了互斥锁 Mutex 之外读写锁 RWMutex，也实现了 Locker 接口。</p>
-<h3 id="2-1-Lock"><a href="#2-1-Lock" class="headerlink" title="2.1 Lock"></a>2.1 Lock</h3><p>互斥锁的加锁是靠 Mutex.Lock 方法完成的，以下代码进行了简化，省略了 race 相关代码，只保留主干部分：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sync/mutex.go 72 行</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Mutex)</span></span> Lock() &#123;</span><br><span class="line">	<span class="comment">// Fast path: grab unlocked mutex.</span></span><br><span class="line">	<span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;m.state, <span class="number">0</span>, mutexLocked) &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// Slow path (outlined so that the fast path can be inlined)</span></span><br><span class="line">	m.lockSlow()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到，整个加锁过程分为 Fast path 和 Slow Path。</p>
-<h4 id="2-1-1-Fast-path"><a href="#2-1-1-Fast-path" class="headerlink" title="2.1.1 Fast path"></a>2.1.1 Fast path</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;m.state, <span class="number">0</span>, mutexLocked) &#123;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果 m.state 为 0,说明当前锁为未锁定状态，将其设置为 1。</p>
-<p>这也是最简单的部分，直接通过一个 CAS 操作，尝试获取锁。</p>
-<h4 id="2-1-2-Slow-Path"><a href="#2-1-2-Slow-Path" class="headerlink" title="2.1.2 Slow Path"></a>2.1.2 Slow Path</h4><p>如果互斥锁的状态不是 0 时就会进入 Slow Path。尝试通过自旋（Spinnig）等方式等待锁的释放，该方法的主体是一个非常大 for 循环，这里将它分成几个部分介绍获取锁的过程：</p>
-<ul>
-<li>1）判断当前 Goroutine 能否进入自旋；</li>
-<li>2）通过自旋等待互斥锁的释放；</li>
-<li>3）计算互斥锁的最新状态；</li>
-<li>4）更新互斥锁的状态并获取锁；</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Mutex)</span></span> lockSlow() &#123;</span><br><span class="line">   <span class="keyword">var</span> waitStartTime <span class="type">int64</span></span><br><span class="line">   starving := <span class="literal">false</span></span><br><span class="line">   awoke := <span class="literal">false</span></span><br><span class="line">   iter := <span class="number">0</span></span><br><span class="line">   old := m.state</span><br><span class="line">   <span class="keyword">for</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> old&amp;(mutexLocked|mutexStarving) == mutexLocked &amp;&amp; runtime_canSpin(iter) &#123;</span><br><span class="line">         <span class="keyword">if</span> !awoke &amp;&amp; old&amp;mutexWoken == <span class="number">0</span> &amp;&amp; old&gt;&gt;mutexWaiterShift != <span class="number">0</span> &amp;&amp;</span><br><span class="line">            atomic.CompareAndSwapInt32(&amp;m.state, old, old|mutexWoken) &#123;</span><br><span class="line">            awoke = <span class="literal">true</span></span><br><span class="line">         &#125;</span><br><span class="line">         runtime_doSpin()</span><br><span class="line">         iter++</span><br><span class="line">         old = m.state</span><br><span class="line">         <span class="keyword">continue</span></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="built_in">new</span> := old</span><br><span class="line">   </span><br><span class="line">      <span class="keyword">if</span> old&amp;mutexStarving == <span class="number">0</span> &#123;</span><br><span class="line">         <span class="built_in">new</span> |= mutexLocked</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> old&amp;(mutexLocked|mutexStarving) != <span class="number">0</span> &#123;</span><br><span class="line">         <span class="built_in">new</span> += <span class="number">1</span> &lt;&lt; mutexWaiterShift</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> starving &amp;&amp; old&amp;mutexLocked != <span class="number">0</span> &#123;</span><br><span class="line">         <span class="built_in">new</span> |= mutexStarving</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> awoke &#123;</span><br><span class="line">         <span class="keyword">if</span> <span class="built_in">new</span>&amp;mutexWoken == <span class="number">0</span> &#123;</span><br><span class="line">            throw(<span class="string">&quot;sync: inconsistent mutex state&quot;</span>)</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="built_in">new</span> &amp;^= mutexWoken</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;m.state, old, <span class="built_in">new</span>) &#123;</span><br><span class="line">         <span class="keyword">if</span> old&amp;(mutexLocked|mutexStarving) == <span class="number">0</span> &#123;</span><br><span class="line">            <span class="keyword">break</span> <span class="comment">// locked the mutex with CAS</span></span><br><span class="line">         &#125;</span><br><span class="line">         queueLifo := waitStartTime != <span class="number">0</span></span><br><span class="line">         <span class="keyword">if</span> waitStartTime == <span class="number">0</span> &#123;</span><br><span class="line">            waitStartTime = runtime_nanotime()</span><br><span class="line">         &#125;</span><br><span class="line">         runtime_SemacquireMutex(&amp;m.sema, queueLifo, <span class="number">1</span>)</span><br><span class="line">         starving = starving || runtime_nanotime()-waitStartTime &gt; starvationThresholdNs</span><br><span class="line">         old = m.state</span><br><span class="line">         <span class="keyword">if</span> old&amp;mutexStarving != <span class="number">0</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> old&amp;(mutexLocked|mutexWoken) != <span class="number">0</span> || old&gt;&gt;mutexWaiterShift == <span class="number">0</span> &#123;</span><br><span class="line">               throw(<span class="string">&quot;sync: inconsistent mutex state&quot;</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            delta := <span class="type">int32</span>(mutexLocked - <span class="number">1</span>&lt;&lt;mutexWaiterShift)</span><br><span class="line">            <span class="keyword">if</span> !starving || old&gt;&gt;mutexWaiterShift == <span class="number">1</span> &#123;</span><br><span class="line">               delta -= mutexStarving</span><br><span class="line">            &#125;</span><br><span class="line">            atomic.AddInt32(&amp;m.state, delta)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">         &#125;</span><br><span class="line">         awoke = <span class="literal">true</span></span><br><span class="line">         iter = <span class="number">0</span></span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">         old = m.state</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>1）判断当前 Goroutine 能否进入自旋；</strong></p>
-<p><strong>自旋是一种多线程同步机制</strong>，当前的进程在进入自旋的过程中会一直保持 CPU 的占用，持续检查某个条件是否为真。<strong>在多核的 CPU 上，自旋可以避免 Goroutine 的切换</strong>，使用恰当会对性能带来很大的增益，但是使用的不恰当就会拖慢整个程序，所以 Goroutine 进入自旋的条件非常苛刻：</p>
-<ul>
-<li>1）互斥锁只有在普通模式才能进入自旋；</li>
-<li>2）<code>runtime.sync_runtime_canSpin</code>需要返回 true<ul>
-<li>运行在多 CPU 的机器上；</li>
-<li>当前 Goroutine 为了获取该锁进入自旋的次数小于四次；</li>
-<li>当前机器上至少存在一个正在运行的处理器 P 并且处理的运行队列为空；</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// runtime/proc.go 6364 行</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sync_runtime_canSpin</span><span class="params">(i <span class="type">int</span>)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> i &gt;= active_spin || ncpu &lt;= <span class="number">1</span> || gomaxprocs &lt;= <span class="type">int32</span>(sched.npidle+sched.nmspinning)+<span class="number">1</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> p := getg().m.p.ptr(); !runqempty(p) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>2）通过自旋等待互斥锁的释放；</strong></p>
-<p>一旦当前 Goroutine 能够进入自旋就会调用<code>runtime.sync_runtime_doSpin</code>和<code>runtime.procyield</code>执行 30 次的 <code>PAUSE</code> 指令，该指令只会占用 CPU 并消耗 CPU 时间：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// runtime/proc.go 6381 行</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sync_runtime_doSpin</span><span class="params">()</span></span> &#123;</span><br><span class="line">	procyield(active_spin_cnt)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// runtime/asm_386.s 574 行</span><br><span class="line">TEXT runtime·procyield(SB),NOSPLIT,$0-0</span><br><span class="line">	MOVL	cycles+0(FP), AX</span><br><span class="line">again:</span><br><span class="line">	PAUSE</span><br><span class="line">	SUBL	$1, AX</span><br><span class="line">	JNZ	again</span><br><span class="line">	RET</span><br></pre></td></tr></table></figure>
-<p><strong>3）计算互斥锁的最新状态；</strong></p>
-<p> 处理了自旋相关的特殊逻辑之后，互斥锁会根据上下文计算当前互斥锁最新的状态。几个不同的条件分别会更新 <code>state</code> 字段中存储的不同信息 — <code>mutexLocked</code>、<code>mutexStarving</code>、<code>mutexWoken</code> 和 <code>mutexWaiterShift</code>：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">new</span> := old</span><br><span class="line"><span class="keyword">if</span> old&amp;mutexStarving == <span class="number">0</span> &#123;</span><br><span class="line">    <span class="built_in">new</span> |= mutexLocked</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> old&amp;(mutexLocked|mutexStarving) != <span class="number">0</span> &#123;</span><br><span class="line">    <span class="built_in">new</span> += <span class="number">1</span> &lt;&lt; mutexWaiterShift</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> starving &amp;&amp; old&amp;mutexLocked != <span class="number">0</span> &#123;</span><br><span class="line">    <span class="built_in">new</span> |= mutexStarving</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> awoke &#123;</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">new</span>&amp;mutexWoken == <span class="number">0</span> &#123;</span><br><span class="line">        throw(<span class="string">&quot;sync: inconsistent mutex state&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">new</span> &amp;^= mutexWoken</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>4）更新互斥锁的状态并获取锁；</strong></p>
-<p>计算了新的互斥锁状态之后，会使用 CAS 函数更新状态</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;m.state, old, <span class="built_in">new</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> old&amp;(mutexLocked|mutexStarving) == <span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">break</span> <span class="comment">// locked the mutex with CAS</span></span><br><span class="line">    &#125;</span><br><span class="line">    queueLifo := waitStartTime != <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> waitStartTime == <span class="number">0</span> &#123;</span><br><span class="line">        waitStartTime = runtime_nanotime()</span><br><span class="line">    &#125;</span><br><span class="line">    runtime_SemacquireMutex(&amp;m.sema, queueLifo, <span class="number">1</span>)</span><br><span class="line">    starving = starving || runtime_nanotime()-waitStartTime &gt; starvationThresholdNs</span><br><span class="line">    old = m.state</span><br><span class="line">    <span class="keyword">if</span> old&amp;mutexStarving != <span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> old&amp;(mutexLocked|mutexWoken) != <span class="number">0</span> || old&gt;&gt;mutexWaiterShift == <span class="number">0</span> &#123;</span><br><span class="line">            throw(<span class="string">&quot;sync: inconsistent mutex state&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        delta := <span class="type">int32</span>(mutexLocked - <span class="number">1</span>&lt;&lt;mutexWaiterShift)</span><br><span class="line">        <span class="keyword">if</span> !starving || old&gt;&gt;mutexWaiterShift == <span class="number">1</span> &#123;</span><br><span class="line">            delta -= mutexStarving</span><br><span class="line">        &#125;</span><br><span class="line">        atomic.AddInt32(&amp;m.state, delta)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    &#125;</span><br><span class="line">    awoke = <span class="literal">true</span></span><br><span class="line">    iter = <span class="number">0</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    old = m.state</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果没有通过 CAS 获得锁，会调用 <code>runtime.sync_runtime_SemacquireMutex</code> 通过信号量保证资源不会被两个 Goroutine 获取。</p>
-<p><code>runtime.sync_runtime_SemacquireMutex</code> 会在方法中不断尝试获取锁并陷入休眠等待信号量的释放，一旦当前 Goroutine 可以获取信号量，它就会立刻返回，<code>sync.Mutex.Lock</code>的剩余代码也会继续执行。</p>
-<ul>
-<li>在正常模式下，这段代码会设置唤醒和饥饿标记、重置迭代次数并重新执行获取锁的循环；</li>
-<li>在饥饿模式下，当前 Goroutine 会获得互斥锁，如果等待队列中只存在当前 Goroutine，互斥锁还会从饥饿模式中退出；</li>
-</ul>
-<p>其中还包含了状态切换的部分逻辑:</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> waitStartTime <span class="type">int64</span></span><br><span class="line"><span class="keyword">for</span>&#123; <span class="comment">// for 循环里尝试获取锁</span></span><br><span class="line">    <span class="keyword">if</span> waitStartTime == <span class="number">0</span> &#123; <span class="comment">// waitStartTime 只有第一次执行时才会赋值</span></span><br><span class="line">        waitStartTime = runtime_nanotime()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 如果等待时间超过 1ms 则切换到饥饿模式</span></span><br><span class="line">    starving = starving || runtime_nanotime()-waitStartTime &gt; starvationThresholdNs</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="2-2-Unlock"><a href="#2-2-Unlock" class="headerlink" title="2.2 Unlock"></a>2.2 Unlock</h3><p>相比之下互斥锁的解锁过程就比较简单,同样分为 Fast path 和 Slow path。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Mutex)</span></span> Unlock() &#123;</span><br><span class="line">	<span class="comment">// Fast path: drop lock bit.</span></span><br><span class="line">	<span class="built_in">new</span> := atomic.AddInt32(&amp;m.state, -mutexLocked)</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">new</span> != <span class="number">0</span> &#123;</span><br><span class="line">		<span class="comment">// Outlined slow path to allow inlining the fast path.</span></span><br><span class="line">		<span class="comment">// To hide unlockSlow during tracing we skip one extra frame when tracing GoUnblock.</span></span><br><span class="line">		m.unlockSlow(<span class="built_in">new</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="2-2-1-Fast-path"><a href="#2-2-1-Fast-path" class="headerlink" title="2.2.1 Fast path"></a>2.2.1 Fast path</h4><p>该过程会先使用<code>atomic.AddInt32函数快速解锁，这时会发生下面的两种情况：</code></p>
-<ul>
-<li>如果该函数返回的新状态等于 0，当前 Goroutine 就成功解锁了互斥锁；</li>
-<li>如果该函数返回的新状态不等于 0，则进入 Slow path。</li>
-</ul>
-<h4 id="2-2-2-Slow-path"><a href="#2-2-2-Slow-path" class="headerlink" title="2.2.2 Slow path"></a>2.2.2 Slow path</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Mutex)</span></span> unlockSlow(<span class="built_in">new</span> <span class="type">int32</span>) &#123;</span><br><span class="line">   <span class="keyword">if</span> (<span class="built_in">new</span>+mutexLocked)&amp;mutexLocked == <span class="number">0</span> &#123;</span><br><span class="line">      throw(<span class="string">&quot;sync: unlock of unlocked mutex&quot;</span>)</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span> <span class="built_in">new</span>&amp;mutexStarving == <span class="number">0</span> &#123;</span><br><span class="line">      old := <span class="built_in">new</span></span><br><span class="line">      <span class="keyword">for</span> &#123;</span><br><span class="line">         <span class="keyword">if</span> old&gt;&gt;mutexWaiterShift == <span class="number">0</span> || old&amp;(mutexLocked|mutexWoken|mutexStarving) != <span class="number">0</span> &#123;</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">         &#125;</span><br><span class="line">         <span class="built_in">new</span> = (old - <span class="number">1</span>&lt;&lt;mutexWaiterShift) | mutexWoken</span><br><span class="line">         <span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;m.state, old, <span class="built_in">new</span>) &#123;</span><br><span class="line">            runtime_Semrelease(&amp;m.sema, <span class="literal">false</span>, <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">         &#125;</span><br><span class="line">         old = m.state</span><br><span class="line">      &#125;</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      runtime_Semrelease(&amp;m.sema, <span class="literal">true</span>, <span class="number">1</span>)</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>先校验锁状态的合法性 — 如果当前互斥锁已经被解锁过了会直接抛出异常 “sync: unlock of unlocked mutex” 中止当前程序。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="built_in">new</span>+mutexLocked)&amp;mutexLocked == <span class="number">0</span> &#123;</span><br><span class="line">    throw(<span class="string">&quot;sync: unlock of unlocked mutex&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然后根据当前锁模式分别处理</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="built_in">new</span>&amp;mutexStarving == <span class="number">0</span> &#123; <span class="comment">// 正常模式</span></span><br><span class="line">    </span><br><span class="line">&#125;<span class="keyword">else</span>&#123; <span class="comment">// 饥饿模式</span></span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在正常模式下，上述代码会使用如下所示的处理过程：</p>
-<ul>
-<li>如果互斥锁不存在等待者或者互斥锁的 <code>mutexLocked</code>、<code>mutexStarving</code>、<code>mutexWoken</code> 状态不都为 0，那么当前方法可以直接返回，不需要唤醒其他等待者；</li>
-<li>如果互斥锁存在等待者，会通过<code>runtime_Semrelease</code>唤醒等待者并移交锁的所有权；</li>
-</ul>
-<p>在饥饿模式下，上述代码会直接调用<code>runtime_Semrelease</code>将当前锁交给下一个正在尝试获取锁的等待者，等待者被唤醒后会得到锁，在这时互斥锁还不会退出饥饿状态；</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// runtime/sema.go 65行</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sync_runtime_Semrelease</span><span class="params">(addr *<span class="type">uint32</span>, handoff <span class="type">bool</span>, skipframes <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">	semrelease1(addr, handoff, skipframes)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">semrelease1</span><span class="params">(addr *<span class="type">uint32</span>, handoff <span class="type">bool</span>, skipframes <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">	root := semroot(addr)</span><br><span class="line">	atomic.Xadd(addr, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> atomic.Load(&amp;root.nwait) == <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Harder case: search for a waiter and wake it.</span></span><br><span class="line">	lockWithRank(&amp;root.lock, lockRankRoot)</span><br><span class="line">	<span class="keyword">if</span> atomic.Load(&amp;root.nwait) == <span class="number">0</span> &#123;</span><br><span class="line">		unlock(&amp;root.lock)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	s, t0 := root.dequeue(addr)</span><br><span class="line">	<span class="keyword">if</span> s != <span class="literal">nil</span> &#123;</span><br><span class="line">		atomic.Xadd(&amp;root.nwait, <span class="number">-1</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	unlock(&amp;root.lock)</span><br><span class="line">	<span class="keyword">if</span> s != <span class="literal">nil</span> &#123; <span class="comment">// May be slow or even yield, so unlock first</span></span><br><span class="line">		acquiretime := s.acquiretime</span><br><span class="line">		<span class="keyword">if</span> acquiretime != <span class="number">0</span> &#123;</span><br><span class="line">			mutexevent(t0-acquiretime, <span class="number">3</span>+skipframes)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> s.ticket != <span class="number">0</span> &#123;</span><br><span class="line">			throw(<span class="string">&quot;corrupted semaphore ticket&quot;</span>)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> handoff &amp;&amp; cansemacquire(addr) &#123;</span><br><span class="line">			s.ticket = <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">		readyWithTime(s, <span class="number">5</span>+skipframes)</span><br><span class="line">		<span class="keyword">if</span> s.ticket == <span class="number">1</span> &amp;&amp; getg().m.locks == <span class="number">0</span> &#123;</span><br><span class="line">			goyield()</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3 小结"></a>3 小结</h2><p>互斥锁的<strong>加锁过程</strong>比较复杂，它涉及自旋、信号量以及调度等概念：</p>
-<ul>
-<li>如果互斥锁处于初始化状态，会通过置位 <code>mutexLocked</code> 加锁；</li>
-<li>如果互斥锁处于 <code>mutexLocked</code> 状态并且在普通模式下工作，会进入自旋，执行 30 次 <code>PAUSE</code> 指令消耗 CPU 时间等待锁的释放；</li>
-<li>如果当前 Goroutine 等待锁的时间超过了 1ms，互斥锁就会切换到饥饿模式；</li>
-<li>互斥锁在正常情况下会通过<code>sync_runtime_SemacquireMutex</code>将尝试获取锁的 Goroutine 切换至休眠状态，等待锁的持有者唤醒；</li>
-<li>如果当前 Goroutine 是互斥锁上的最后一个等待的协程或者等待的时间小于 1ms，那么它会将互斥锁切换回正常模式；</li>
-</ul>
-<p>互斥锁的<strong>解锁过程</strong>与之相比就比较简单：</p>
-<ul>
-<li>当互斥锁已经被解锁时，调用 Mutex.Lock 会直接抛出异常；</li>
-<li>当互斥锁处于饥饿模式时，将锁的所有权交给队列中的下一个等待者，等待者会负责设置 <code>mutexLocked</code> 标志位；</li>
-<li>当互斥锁处于普通模式时，如果没有 Goroutine 等待锁的释放或者已经有被唤醒的 Goroutine 获得了锁，会直接返回；在其他情况下会通过<code>sync.runtime_Semrelease</code> 唤醒对应的 Goroutine；</li>
-</ul>
-
-    
-    
-  </div>
-
-  
-
-  
-
-</article>
-  
-  <article class="post">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-      <a class="post-link" href="/2022/07/10/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/Context/">[Go] Context</a>
-      
-    </h1>
-
-    <div class="post-meta">
-      <span class="post-time">
-        2022-07-10
-      </span>
-      
-      
-      <span class="post-category">
-        
-        <a href="/categories/Golang/">Golang</a>
-        
-        <a href="/categories/Golang/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a>
-        
-      </span>
-      
-      
-    </div>
-  </header>
-
-  
-
-  <div class="post-content">
-    
-    
-    
-    
-    
-
-    
-    <blockquote>
-<p>Context 主要用于在异步场景中用于实现并发协调以及对 goroutine 的生命周期控制. 除此之外，context 还兼有一定的数据存储能力.</p>
-</blockquote>
-    <div class="read-more">
-      <a href="/2022/07/10/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/Context/" class="read-more-link">Read more..</a>
-    </div>
-    
-    
-  </div>
-
-  
-
-  
-
-</article>
-  
-  <article class="post">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-      <a class="post-link" href="/2022/07/03/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/GMP/">[Go] GMP</a>
-      
-    </h1>
-
-    <div class="post-meta">
-      <span class="post-time">
-        2022-07-03
-      </span>
-      
-      
-      <span class="post-category">
-        
-        <a href="/categories/Golang/">Golang</a>
-        
-        <a href="/categories/Golang/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a>
-        
-      </span>
-      
-      
-    </div>
-  </header>
-
-  
-
-  <div class="post-content">
-    
-    
-    
-    
-    
-
-    
-    <blockquote>
-<p>gmp = goroutine + machine + processor</p>
-</blockquote>
-    <div class="read-more">
-      <a href="/2022/07/03/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/GMP/" class="read-more-link">Read more..</a>
-    </div>
-    
-    
-  </div>
-
-  
-
-  
-
-</article>
-  
-  <article class="post">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-      <a class="post-link" href="/2021/12/13/Golang/0%20%E5%9F%BA%E7%A1%80/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E7%B1%BB%E5%9E%8B%E6%96%AD%E8%A8%80/">[Go] 类型断言</a>
-      
-    </h1>
-
-    <div class="post-meta">
-      <span class="post-time">
-        2021-12-13
-      </span>
-      
-      
-      <span class="post-category">
-        
-        <a href="/categories/Golang/">Golang</a>
-        
-        <a href="/categories/Golang/%E5%85%B3%E9%94%AE%E5%AD%97/">关键字</a>
-        
-      </span>
-      
-      
-    </div>
-  </header>
-
-  
-
-  <div class="post-content">
-    
-    
-    
-    
-    
-
-    
-    <blockquote>
-<p>类型断言的关键是明确接口的动态类型以及对应的类型实现了哪些方法</p>
-</blockquote>
-    <div class="read-more">
-      <a href="/2021/12/13/Golang/0%20%E5%9F%BA%E7%A1%80/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E7%B1%BB%E5%9E%8B%E6%96%AD%E8%A8%80/" class="read-more-link">Read more..</a>
-    </div>
-    
-    
-  </div>
-
-  
-
-  
-
-</article>
-  
-  <article class="post">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-      <a class="post-link" href="/2021/12/04/Golang/0%20%E5%9F%BA%E7%A1%80/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E5%8F%8D%E5%B0%84/">[Go] 反射</a>
-      
-    </h1>
-
-    <div class="post-meta">
-      <span class="post-time">
-        2021-12-04
-      </span>
-      
-      
-      <span class="post-category">
-        
-        <a href="/categories/Golang/">Golang</a>
-        
-        <a href="/categories/Golang/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/">语言基础</a>
-        
-      </span>
-      
-      
-    </div>
-  </header>
-
-  
-
-  <div class="post-content">
-    
-    
-    
-    
-    
-
-    
-    <blockquote>
-<p>反射的作用就是将类型元数据暴露给用户使用</p>
-</blockquote>
-    <div class="read-more">
-      <a href="/2021/12/04/Golang/0%20%E5%9F%BA%E7%A1%80/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E5%8F%8D%E5%B0%84/" class="read-more-link">Read more..</a>
-    </div>
-    
-    
-  </div>
-
-  
-
-  
-
-</article>
-  
-  <article class="post">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-      <a class="post-link" href="/2021/12/04/Golang/0%20%E5%9F%BA%E7%A1%80/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E9%97%AD%E5%8C%85/">[Go] 闭包</a>
-      
-    </h1>
-
-    <div class="post-meta">
-      <span class="post-time">
-        2021-12-04
-      </span>
-      
-      
-      <span class="post-category">
-        
-        <a href="/categories/Golang/">Golang</a>
-        
-        <a href="/categories/Golang/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/">语言基础</a>
-        
-      </span>
-      
-      
-    </div>
-  </header>
-
-  
-
-  <div class="post-content">
-    
-    
-    
-    
-    
-
-    
-    <blockquote>
-<p>闭包是有状态函数</p>
-</blockquote>
-    <div class="read-more">
-      <a href="/2021/12/04/Golang/0%20%E5%9F%BA%E7%A1%80/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E9%97%AD%E5%8C%85/" class="read-more-link">Read more..</a>
-    </div>
-    
-    
-  </div>
-
-  
-
-  
-
-</article>
-  
-  <article class="post">
-  <header class="post-header">
-    <h1 class="post-title">
-      
       <a class="post-link" href="/2021/12/04/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/sync.Pool/">[Go] sync.Pool</a>
       
     </h1>
@@ -1133,6 +545,424 @@ atomic.StorePointer(&amp;slot.typ, nil)
 <li>被唤醒的 goroutine 正常返回，Wait 流程结束</li>
 </ul>
 
+    
+    
+  </div>
+
+  
+
+  
+
+</article>
+  
+  <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      <a class="post-link" href="/2021/10/26/Golang/4%20%E5%85%B6%E4%BB%96/Golang%20Test%20%E5%B7%A5%E5%85%B7%E6%8C%87%E4%BB%A4/">[Go] Golang Test 工具指令</a>
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2021-10-26
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+        <a href="/categories/%E6%8A%80%E6%9C%AF/Golang/">Golang</a>
+        
+        <a href="/categories/%E6%8A%80%E6%9C%AF/Golang/Packages/">Packages</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+
+  <div class="post-content">
+    
+    
+    
+    
+    
+
+    
+    <blockquote>
+<p>Golang Test 工具指令</p>
+</blockquote>
+    <div class="read-more">
+      <a href="/2021/10/26/Golang/4%20%E5%85%B6%E4%BB%96/Golang%20Test%20%E5%B7%A5%E5%85%B7%E6%8C%87%E4%BB%A4/" class="read-more-link">Read more..</a>
+    </div>
+    
+    
+  </div>
+
+  
+
+  
+
+</article>
+  
+  <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      <a class="post-link" href="/2021/10/26/Golang/4%20%E5%85%B6%E4%BB%96/http.Client%E8%AF%B7%E6%B1%82%E7%A8%8B%E5%BA%8F%E9%81%87%E5%88%B0%20Connection%20Reset%20by%20Peer%20%E6%88%96%20EOF%20%E9%97%AE%E9%A2%98/">[Go] Golang Connection Reset by Peer 或 EOF 问题</a>
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2021-10-26
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+        <a href="/categories/%E6%8A%80%E6%9C%AF/Golang/">Golang</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+
+  <div class="post-content">
+    
+    
+    
+    
+    
+
+    
+    <blockquote>
+<p>Golang http.Client请求程序遇到Connection Reset by peer 或 EOF 问题</p>
+</blockquote>
+    <div class="read-more">
+      <a href="/2021/10/26/Golang/4%20%E5%85%B6%E4%BB%96/http.Client%E8%AF%B7%E6%B1%82%E7%A8%8B%E5%BA%8F%E9%81%87%E5%88%B0%20Connection%20Reset%20by%20Peer%20%E6%88%96%20EOF%20%E9%97%AE%E9%A2%98/" class="read-more-link">Read more..</a>
+    </div>
+    
+    
+  </div>
+
+  
+
+  
+
+</article>
+  
+  <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      <a class="post-link" href="/2021/10/26/Golang/0%20%E5%9F%BA%E7%A1%80/%E5%85%B3%E9%94%AE%E5%AD%97/Defer/">[Go] Defer</a>
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2021-10-26
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/Golang/">Golang</a>
+        
+        <a href="/categories/Golang/%E5%85%B3%E9%94%AE%E5%AD%97/">关键字</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+
+  <div class="post-content">
+    
+    
+    
+    
+    
+
+    
+    <blockquote>
+<p>Defer 和栈比较相似，<strong>先进后出</strong>，即先注册的 defer 会后执行。</p>
+</blockquote>
+    <div class="read-more">
+      <a href="/2021/10/26/Golang/0%20%E5%9F%BA%E7%A1%80/%E5%85%B3%E9%94%AE%E5%AD%97/Defer/" class="read-more-link">Read more..</a>
+    </div>
+    
+    
+  </div>
+
+  
+
+  
+
+</article>
+  
+  <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      <a class="post-link" href="/2021/10/26/Golang/0%20%E5%9F%BA%E7%A1%80/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/Map/">[Go] Map</a>
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2021-10-26
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/Golang/">Golang</a>
+        
+        <a href="/categories/Golang/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+
+  <div class="post-content">
+    
+    
+    
+    
+    
+
+    
+    <blockquote>
+<p>map 的底层数据结构和实现原理</p>
+</blockquote>
+    <div class="read-more">
+      <a href="/2021/10/26/Golang/0%20%E5%9F%BA%E7%A1%80/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/Map/" class="read-more-link">Read more..</a>
+    </div>
+    
+    
+  </div>
+
+  
+
+  
+
+</article>
+  
+  <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      <a class="post-link" href="/2021/10/26/Golang/0%20%E5%9F%BA%E7%A1%80/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/Function/">[Go] Function</a>
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2021-10-26
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/Golang/">Golang</a>
+        
+        <a href="/categories/Golang/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/">语言基础</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+
+  <div class="post-content">
+    
+    
+    
+    
+    
+
+    
+    <blockquote>
+<p>Go 语言中 function 是一等公民，可以用作参数、返回值，也可以赋值给变量。</p>
+</blockquote>
+    <div class="read-more">
+      <a href="/2021/10/26/Golang/0%20%E5%9F%BA%E7%A1%80/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/Function/" class="read-more-link">Read more..</a>
+    </div>
+    
+    
+  </div>
+
+  
+
+  
+
+</article>
+  
+  <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      <a class="post-link" href="/2021/10/26/Golang/0%20%E5%9F%BA%E7%A1%80/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E6%8E%A5%E5%8F%A3/">[Go] 接口</a>
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2021-10-26
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/Golang/">Golang</a>
+        
+        <a href="/categories/Golang/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/">语言基础</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+
+  <div class="post-content">
+    
+    
+    
+    
+    
+
+    
+    <blockquote>
+<p>接口是一组方法的签名</p>
+</blockquote>
+    <div class="read-more">
+      <a href="/2021/10/26/Golang/0%20%E5%9F%BA%E7%A1%80/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E6%8E%A5%E5%8F%A3/" class="read-more-link">Read more..</a>
+    </div>
+    
+    
+  </div>
+
+  
+
+  
+
+</article>
+  
+  <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      <a class="post-link" href="/2021/10/22/Golang/0%20%E5%9F%BA%E7%A1%80/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/Slice/">[Go] Slice</a>
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2021-10-22
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/Golang/">Golang</a>
+        
+        <a href="/categories/Golang/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+
+  <div class="post-content">
+    
+    
+    
+    
+    
+
+    
+    <blockquote>
+<p>切片的实现原理使用</p>
+</blockquote>
+    <div class="read-more">
+      <a href="/2021/10/22/Golang/0%20%E5%9F%BA%E7%A1%80/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/Slice/" class="read-more-link">Read more..</a>
+    </div>
+    
+    
+  </div>
+
+  
+
+  
+
+</article>
+  
+  <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      <a class="post-link" href="/2021/09/20/Golang/3%20%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/Golang%20%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">[Go] 工程实践</a>
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2021-09-20
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/Golang/">Golang</a>
+        
+        <a href="/categories/Golang/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/">代码规范</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+
+  <div class="post-content">
+    
+    
+    
+    
+    
+
+    
+    <blockquote>
+<p>如何写优雅的 Go 语言代码</p>
+</blockquote>
+    <div class="read-more">
+      <a href="/2021/09/20/Golang/3%20%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/Golang%20%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" class="read-more-link">Read more..</a>
+    </div>
     
     
   </div>
