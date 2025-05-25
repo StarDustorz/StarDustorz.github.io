@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+
+<!-- Website keywords -->
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/atom.xml" title="Draco's Blog" type="application/atom+xml">
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://stardustorz.github.io/2025/05/07/Golang/1 并发编程/go-sync.Mutex/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":false};
+</script>
+  
+  <title> - Draco&#39;s Blog</title>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/links/">
+      <li class="mobile-menu-item">
+        
+        
+        Links              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Draco's Blog</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/links/">  
+              
+              
+              Links  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2025-05-07
+      </span>
+      
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-state%E5%AD%97%E6%AE%B5"><span class="toc-number">1.</span> <span class="toc-text">1.1 state字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%AD%A3%E5%B8%B8%E6%A8%A1%E5%BC%8F%E5%92%8C%E9%A5%A5%E9%A5%BF%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">1.2 正常模式和饥饿模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%8A%A0%E8%A7%A3%E9%94%81%E8%BF%87%E7%A8%8B"><span class="toc-number"></span> <span class="toc-text">2 加解锁过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%8A%A0%E9%94%81"><span class="toc-number">1.</span> <span class="toc-text">2.1 加锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-Fast-path"><span class="toc-number">1.1.</span> <span class="toc-text">2.1.1 Fast path</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-Slow-Path"><span class="toc-number">1.2.</span> <span class="toc-text">2.1.2 Slow Path</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-2-1-%E5%88%A4%E6%96%AD%E5%BD%93%E5%89%8D-Goroutine-%E8%83%BD%E5%90%A6%E8%BF%9B%E5%85%A5%E8%87%AA%E6%97%8B"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1.2.1 判断当前 Goroutine 能否进入自旋</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-2-2-%E9%80%9A%E8%BF%87%E8%87%AA%E6%97%8B%E7%AD%89%E5%BE%85%E4%BA%92%E6%96%A5%E9%94%81%E7%9A%84%E9%87%8A%E6%94%BE"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.1.2.2 通过自旋等待互斥锁的释放</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-2-3-%E8%AE%A1%E7%AE%97%E4%BA%92%E6%96%A5%E9%94%81%E7%9A%84%E6%9C%80%E6%96%B0%E7%8A%B6%E6%80%81"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.1.2.3 计算互斥锁的最新状态</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-2-4-%E6%9B%B4%E6%96%B0%E4%BA%92%E6%96%A5%E9%94%81%E7%9A%84%E7%8A%B6%E6%80%81%E5%B9%B6%E8%8E%B7%E5%8F%96%E9%94%81"><span class="toc-number">1.2.4.</span> <span class="toc-text">2.1.2.4 更新互斥锁的状态并获取锁</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E8%A7%A3%E9%94%81"><span class="toc-number">2.</span> <span class="toc-text">2.2 解锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-Fast-path"><span class="toc-number">2.1.</span> <span class="toc-text">2.2.1 Fast path</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-Slow-path"><span class="toc-number">2.2.</span> <span class="toc-text">2.2.2 Slow path</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%B0%8F%E7%BB%93"><span class="toc-number"></span> <span class="toc-text">3 小结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Sync-RWMutex"><span class="toc-number"></span> <span class="toc-text">4 Sync.RWMutex</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">4.1 数据结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E8%AF%BB%E9%94%81%E6%B5%81%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">4.2 读锁流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-1-RLock"><span class="toc-number">2.1.</span> <span class="toc-text">4.2.1 RLock</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-2-RUnlock"><span class="toc-number">2.2.</span> <span class="toc-text">4.2.2 RUnlock</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-3-rUnlockSlow"><span class="toc-number">2.3.</span> <span class="toc-text">4.2.3 rUnlockSlow</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E5%86%99%E9%94%81%E6%B5%81%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">4.3 写锁流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-1-Lock"><span class="toc-number">3.1.</span> <span class="toc-text">4.3.1 Lock</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-2-Unlock"><span class="toc-number">3.2.</span> <span class="toc-text">4.3.2 Unlock</span></a></li></ol></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line">## 1 基本结构</span><br><span class="line">```go</span><br><span class="line">// sync/mutex.go 25行</span><br><span class="line">type Mutex struct &#123;</span><br><span class="line">	state int32      // 当前互斥锁的状态</span><br><span class="line">	sema  uint32     // 控制锁状态的信号量</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="1-1-state字段"><a href="#1-1-state字段" class="headerlink" title="1.1 state字段"></a>1.1 state字段</h3><p>![[Pasted image 20230901043018.png]]<br>低三位分别标识</p>
+<ul>
+<li>mutexLocked（是否上锁）</li>
+<li>mutexWoken（是否有协程在抢锁）</li>
+<li>mutexStarving（是否处于饥饿模式）</li>
+<li>高 29 位的值聚合为一个范围为 0~2^29-1 的整数，表示在阻塞队列中等待的协程个数.</li>
+</ul>
+<h3 id="1-2-正常模式和饥饿模式"><a href="#1-2-正常模式和饥饿模式" class="headerlink" title="1.2 正常模式和饥饿模式"></a>1.2 正常模式和饥饿模式</h3><blockquote>
+<p>mutex 是公平锁</p>
+</blockquote>
+<p><code>正常模式</code>：锁的等待者会按照<code>先进先出</code>的顺序获取锁。但是刚被唤起的 Goroutine 与新创建的 Goroutine 竞争时，大概率会获取不到锁，为了减少这种情况的出现，一旦 Goroutine <code>超过 1ms</code> 没有获取到锁，它就会将当前互斥锁切换饥饿模式，防止部分 Goroutine 被<strong>饿死</strong>。<br><code>饥饿模式</code>：互斥锁会直接交给等待队列最前面的 Goroutine。新的 Goroutine 在该状态下不能获取锁、也不会进入自旋状态，它们只会在队列的末尾等待。如果一个 Goroutine 获得了互斥锁并且它在队列的末尾或者它等待的时间<code>少于 1ms</code>，那么当前的互斥锁就会切换回正常模式。</p>
+<h2 id="2-加解锁过程"><a href="#2-加解锁过程" class="headerlink" title="2 加解锁过程"></a>2 加解锁过程</h2><h3 id="2-1-加锁"><a href="#2-1-加锁" class="headerlink" title="2.1 加锁"></a>2.1 加锁</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sync/mutex.go 72 行</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Mutex)</span></span> Lock() &#123;</span><br><span class="line">	<span class="comment">// Fast path: grab unlocked mutex.</span></span><br><span class="line">	<span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;m.state, <span class="number">0</span>, mutexLocked) &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// Slow path (outlined so that the fast path can be inlined)</span></span><br><span class="line">	m.lockSlow()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-1-1-Fast-path"><a href="#2-1-1-Fast-path" class="headerlink" title="2.1.1 Fast path"></a>2.1.1 Fast path</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;m.state, <span class="number">0</span>, mutexLocked) &#123;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>首先进行 <code>CAS</code> 操作，假如当前未上锁且锁内不存在阻塞协程，则直接 CAS 抢锁成功返回</p>
+</blockquote>
+<h4 id="2-1-2-Slow-Path"><a href="#2-1-2-Slow-Path" class="headerlink" title="2.1.2 Slow Path"></a>2.1.2 Slow Path</h4><p>如果互斥锁的状态不是 0 时就会进入 Slow Path。尝试通过自旋（Spinnig）等方式等待锁的释放，该方法的主体是一个非常大 for 循环，这里将它分成几个部分介绍获取锁的过程：</p>
+<h5 id="2-1-2-1-判断当前-Goroutine-能否进入自旋"><a href="#2-1-2-1-判断当前-Goroutine-能否进入自旋" class="headerlink" title="2.1.2.1 判断当前 Goroutine 能否进入自旋"></a>2.1.2.1 判断当前 Goroutine 能否进入自旋</h5><p><strong>自旋是一种多线程同步机制</strong>，当前的进程在进入自旋的过程中会一直保持 CPU 的占用，持续检查某个条件是否为真。<strong>在多核的 CPU 上，自旋可以避免 Goroutine 的切换</strong>，使用恰当会对性能带来很大的增益，但是使用的不恰当就会拖慢整个程序，所以 Goroutine 进入自旋的条件非常苛刻：</p>
+<ul>
+<li>互斥锁只有在普通模式才能进入自旋；</li>
+<li><code>runtime.sync_runtime_canSpin</code>需要返回 true<ul>
+<li>运行在多 CPU 的机器上；</li>
+</ul>
+<ul>
+<li>当前 Goroutine 为了获取该锁进入自旋的次数小于四次；</li>
+<li>当前机器上至少存在一个正在运行的处理器 P 并且处理的运行队列为空；</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-1-2-2-通过自旋等待互斥锁的释放"><a href="#2-1-2-2-通过自旋等待互斥锁的释放" class="headerlink" title="2.1.2.2 通过自旋等待互斥锁的释放"></a>2.1.2.2 通过自旋等待互斥锁的释放</h5><p>一旦当前 Goroutine 能够进入自旋就会调用<code>runtime.sync_runtime_doSpin</code>和<code>runtime.procyield</code>执行 30 次的 <code>PAUSE</code> 指令，该指令只会占用 CPU 并消耗 CPU 时间：</p>
+<h5 id="2-1-2-3-计算互斥锁的最新状态"><a href="#2-1-2-3-计算互斥锁的最新状态" class="headerlink" title="2.1.2.3 计算互斥锁的最新状态"></a>2.1.2.3 计算互斥锁的最新状态</h5><p>处理了自旋相关的特殊逻辑之后，互斥锁会根据上下文计算当前互斥锁最新的状态。几个不同的条件分别会更新 <code>state</code> 字段中存储的不同信息 — <code>mutexLocked</code>、<code>mutexStarving</code>、<code>mutexWoken</code> 和 <code>mutexWaiterShift</code>：</p>
+<h5 id="2-1-2-4-更新互斥锁的状态并获取锁"><a href="#2-1-2-4-更新互斥锁的状态并获取锁" class="headerlink" title="2.1.2.4 更新互斥锁的状态并获取锁"></a>2.1.2.4 更新互斥锁的状态并获取锁</h5><p>计算了新的互斥锁状态之后，会使用 CAS 函数更新状态<br>如果没有通过 CAS 获得锁，会调用 <code>runtime.sync_runtime_SemacquireMutex</code> 通过信号量保证资源不会被两个 Goroutine 获取。<br><code>runtime.sync_runtime_SemacquireMutex</code> 会在方法中不断尝试获取锁并陷入休眠等待信号量的释放，一旦当前 Goroutine 可以获取信号量，它就会立刻返回，<code>sync.Mutex.Lock</code>的剩余代码也会继续执行。</p>
+<ul>
+<li>在正常模式下，这段代码会设置唤醒和饥饿标记、重置迭代次数并重新执行获取锁的循环；</li>
+<li>在饥饿模式下，当前 Goroutine 会获得互斥锁，如果等待队列中只存在当前 Goroutine，互斥锁还会从饥饿模式中退出；</li>
+</ul>
+<h3 id="2-2-解锁"><a href="#2-2-解锁" class="headerlink" title="2.2 解锁"></a>2.2 解锁</h3><h4 id="2-2-1-Fast-path"><a href="#2-2-1-Fast-path" class="headerlink" title="2.2.1 Fast path"></a>2.2.1 Fast path</h4><p>该过程会先使用<code>atomic.AddInt32函数快速解锁，这时会发生下面的两种情况：</code></p>
+<ul>
+<li>如果该函数返回的新状态等于 0，当前 Goroutine 就成功解锁了互斥锁；</li>
+<li>如果该函数返回的新状态不等于 0，则进入 Slow path。<h4 id="2-2-2-Slow-path"><a href="#2-2-2-Slow-path" class="headerlink" title="2.2.2 Slow path"></a>2.2.2 Slow path</h4>先校验锁状态的<code>合法性</code> — 如果当前互斥锁已经被解锁过了会直接抛出异常 “sync: unlock of unlocked mutex” 中止当前程序。<br>在正常模式下，上述代码会使用如下所示的处理过程：</li>
+<li>如果互斥锁不存在等待者或者互斥锁的 <code>mutexLocked</code>、<code>mutexStarving</code>、<code>mutexWoken</code> 状态不都为 0，那么当前方法可以直接返回，不需要唤醒其他等待者；</li>
+<li>如果互斥锁存在等待者，会通过<code>runtime_Semrelease</code>唤醒等待者并移交锁的所有权；<br>在饥饿模式下，上述代码会直接调用<code>runtime_Semrelease</code>将当前锁交给下一个正在尝试获取锁的等待者，等待者被唤醒后会得到锁，在这时互斥锁还不会退出饥饿状态；</li>
+</ul>
+<h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3 小结"></a>3 小结</h2><p>互斥锁的<strong>加锁过程</strong>比较复杂，它涉及自旋、信号量以及调度等概念：</p>
+<ul>
+<li>如果互斥锁处于初始化状态，会通过置位 <code>mutexLocked</code> 加锁；</li>
+<li>如果互斥锁处于 <code>mutexLocked</code> 状态并且在普通模式下工作，会进入自旋，执行 30 次 <code>PAUSE</code> 指令消耗 CPU 时间等待锁的释放；</li>
+<li>如果当前 Goroutine 等待锁的时间超过了 1ms，互斥锁就会切换到饥饿模式；</li>
+<li>互斥锁在正常情况下会通过<code>sync_runtime_SemacquireMutex</code>将尝试获取锁的 Goroutine 切换至休眠状态，等待锁的持有者唤醒；</li>
+<li>如果当前 Goroutine 是互斥锁上的最后一个等待的协程或者等待的时间小于 1ms，那么它会将互斥锁切换回正常模式；</li>
+</ul>
+<p>互斥锁的<strong>解锁过程</strong>与之相比就比较简单：</p>
+<ul>
+<li>当互斥锁已经被解锁时，调用 Mutex.Lock 会直接抛出异常；</li>
+<li>当互斥锁处于饥饿模式时，将锁的所有权交给队列中的下一个等待者，等待者会负责设置 <code>mutexLocked</code> 标志位；</li>
+<li>当互斥锁处于普通模式时，如果没有 Goroutine 等待锁的释放或者已经有被唤醒的 Goroutine 获得了锁，会直接返回；在其他情况下会通过<code>sync.runtime_Semrelease</code> 唤醒对应的 Goroutine；</li>
+</ul>
+<h2 id="4-Sync-RWMutex"><a href="#4-Sync-RWMutex" class="headerlink" title="4 Sync.RWMutex"></a>4 Sync.RWMutex</h2><blockquote>
+<p>从逻辑上，可以把 RWMutex 理解为一把读锁加一把写锁；<br>写锁具有<code>严格的排他性</code>，当其被占用，其他试图取写锁或者读锁的 goroutine 均阻塞；<br>读锁具有<code>有限的共享性</code>，当其被占用，试图取写锁的 goroutine 会阻塞，试图取读锁的 goroutine 可与当前 goroutine 共享读锁；<br>RWMutex 适用于<code>读多写少</code>的场景，最理想化的情况，当所有操作均使用读锁，则可实现无锁化；最悲观的情况，倘若所有操作均使用写锁，则 RWMutex 退化为普通的 Mutex.</p>
+</blockquote>
+<h3 id="4-1-数据结构"><a href="#4-1-数据结构" class="headerlink" title="4.1 数据结构"></a>4.1 数据结构</h3><p>![[Pasted image 20230901163649.png]]<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> rwmutexMaxReaders = <span class="number">1</span> &lt;&lt; <span class="number">30</span>   <span class="comment">// 共享读锁的 goroutine 数量上限，值为 2^29；</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> RWMutex <span class="keyword">struct</span> &#123;</span><br><span class="line">    w           Mutex  <span class="comment">// 内置的一把普通互斥锁 sync.Mutex；</span></span><br><span class="line">    writerSem   <span class="type">uint32</span> <span class="comment">// 关联写锁阻塞队列的信号量；</span></span><br><span class="line">    readerSem   <span class="type">uint32</span> <span class="comment">// 关联读锁阻塞队列的信号量；</span></span><br><span class="line">    readerCount <span class="type">int32</span>  <span class="comment">// 正常情况下等于介入读锁流程的 goroutine 数量；当 goroutine 接入写锁流程时，该值为实际介入读锁流程的 goroutine 数量减 rwmutexMaxReaders.</span></span><br><span class="line">    readerWait  <span class="type">int32</span>  <span class="comment">// 记录在当前 goroutine 获取写锁前，还需要等待多少个 goroutine 释放读锁.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-2-读锁流程"><a href="#4-2-读锁流程" class="headerlink" title="4.2 读锁流程"></a>4.2 读锁流程</h3><h4 id="4-2-1-RLock"><a href="#4-2-1-RLock" class="headerlink" title="4.2.1 RLock"></a>4.2.1 RLock</h4><p>• 基于原子操作，将 RWMutex 的 readCount 变量加一，表示占用或等待读锁的 goroutine 数加一；<br>• 倘若 RWMutex.readCount 的新值仍小于 0，说明有 goroutine 未释放写锁，因此将当前 goroutine 添加到读锁的阻塞队列中并阻塞挂起.</p>
+<h4 id="4-2-2-RUnlock"><a href="#4-2-2-RUnlock" class="headerlink" title="4.2.2 RUnlock"></a>4.2.2 RUnlock</h4><p>• 基于原子操作，将 RWMutex 的 readCount 变量加一，表示占用或等待读锁的 goroutine 数减一；<br>• 倘若 RWMutex.readCount 的新值小于 0，说明有 goroutine 在等待获取写锁，则走入 RWMutex.rUnlockSlow 的流程中.</p>
+<h4 id="4-2-3-rUnlockSlow"><a href="#4-2-3-rUnlockSlow" class="headerlink" title="4.2.3 rUnlockSlow"></a>4.2.3 rUnlockSlow</h4><p>• 对 RWMutex.readerCount 进行校验，倘若发现当前协程此前未抢占过读锁，或者介入读锁流程的 goroutine 数量达到上限，则抛出 fatal；<br>(倘若 r+1 == -rwmutexMaxReaders，说明此时有 goroutine 介入写锁流程，但当前此前未加过读锁，具体原因见 2.3 小节；倘若 r+1=0，则要么此前未加过读锁，要么介入读锁流程的 goroutine 数量达到上限</p>
+<p>• 基于原子操作，对 RWMutex.readerWait 进行减一操作，倘若其新值为 0，说明当前 goroutine 是最后一个介入读锁流程的协程，因此需要唤醒一个等待写锁的阻塞队列的 goroutine.（综合 RWMutex.readerCount 为负值，可以确定存在等待写锁的 goroutine，具体原因见 2.3 小节.）</p>
+<h3 id="4-3-写锁流程"><a href="#4-3-写锁流程" class="headerlink" title="4.3 写锁流程"></a>4.3 写锁流程</h3><h4 id="4-3-1-Lock"><a href="#4-3-1-Lock" class="headerlink" title="4.3.1 Lock"></a>4.3.1 Lock</h4><p>• 对 RWMutex 内置的互斥锁进行加锁操作；<br>• 基于原子操作，对 RWMutex.readerCount 进行减少 -rwmutexMaxReaders 的操作；<br>• 倘若此时存在未释放读锁的 gouroutine，则基于原子操作在 RWMutex.readerWait 的基础上加上介入读锁流程的 goroutine 数量，并将当前 goroutine 添加到写锁的阻塞队列中挂起.</p>
+<h4 id="4-3-2-Unlock"><a href="#4-3-2-Unlock" class="headerlink" title="4.3.2 Unlock"></a>4.3.2 Unlock</h4><p>• 基于原子操作，将 RWMutex.readerCount 的值加上 rwmutexMaxReaders；<br>• 倘若发现 RWMutex.readerCount 的新值大于 rwmutexMaxReaders，则说明要么当前 RWMutex 未上过写锁，要么介入读锁流程的 goroutine 数量已经超限，因此直接抛出 fatal；<br>• 因此唤醒读锁阻塞队列中的所有 goroutine；(可见，竞争读锁的 goroutine 更具备优势)<br>• 解开 RWMutex 内置的互斥锁.</p>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span>Author: </span>
+    <a href="https://stardustorz.github.io">draco</a>
+  </p>
+  <p class="copyright-item">
+    <span>Link: </span>
+    <a href="https://stardustorz.github.io/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/go-sync.Mutex/">https://stardustorz.github.io/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/go-sync.Mutex/</a>
+  </p>
+  <p class="copyright-item">
+    <span>License: </span>
+    
+    <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+  </p>
+</div>
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/02-cond/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default"></span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/go-sync.WaitGroup/">  
+        <span class="next-text nav-default"></span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2019 - 2025      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">draco</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+</body>
+
+</html>

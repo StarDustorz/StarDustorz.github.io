@@ -207,23 +207,15 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      <a class="post-link" href="/2023/08/10/DDIA/09%20%E6%89%B9%E5%A4%84%E7%90%86/">[DDIA] 批处理</a>
+      <a class="post-link" href="/2025/05/22/Golang/Go%E9%9D%A2%E8%AF%95%E9%A2%98%E6%80%BB%E7%BB%93/"></a>
       
     </h1>
 
     <div class="post-meta">
       <span class="post-time">
-        2023-08-10
+        2025-05-22
       </span>
       
-      
-      <span class="post-category">
-        
-        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">阅读笔记</a>
-        
-        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/DDIA/">DDIA</a>
-        
-      </span>
       
       
     </div>
@@ -235,16 +227,588 @@
     
     
     
-    
-    
 
     
-    <blockquote>
-<p>批处理系统通常会接受大量数据作为输入，然后基于这些数据执行任务，进而产生一些数据作为输出。</p>
+    <h2 id="1-常见问题总结"><a href="#1-常见问题总结" class="headerlink" title="1 常见问题总结"></a>1 常见问题总结</h2><ul>
+<li><code>map</code><ul>
+<li>map 的底层数据结构和实现？是否并发安全？扩容过程？`2</li>
+<li>Map的并发检测是怎么做的</li>
+<li>map如何顺序读取?按key从小到大的顺序打印出来?</li>
+<li>实现set</li>
+<li>map 和 slice 在类型上的区别?  值类型还是引用类型</li>
+<li>map，如果不初始化就赋值，会有什么问题？</li>
+<li>如果我去map中删除了某个key，它的内存会释放吗？</li>
+<li>多线程同时读写map中不同的key，一个线程只会读写一个key，会发生什么</li>
+</ul>
+</li>
+<li><code>slice</code><ul>
+<li>slice 的底层数据结构和实现？slice 和数组的区别？slice 的扩容规则？<code>2</code></li>
+<li>Golang的值传递，slice作为函数参数（值传递）在函数内append是否会影响到外面，如果是对slice的值修改呢？ <code>2</code></li>
+<li>并发读写安全吗? 会 panic 吗</li>
+<li>初始化和不初始化使用 slice 的区别，哪种情况可以不初始化直接用？</li>
+</ul>
+</li>
+<li><code>channel</code><ul>
+<li>如何判断一个 channel 是否已关闭？</li>
+<li>channel 的类型？之间区别？应用场景？底层数据结构与实现？ <code>2</code></li>
+<li>关闭一个已经关闭的 channel 会发生什么？对一个已经关闭的 channel 进行读写会发生什么？</li>
+<li>如果通道里头没数据了，那些go 协程会怎样？</li>
+<li>channel 优雅关闭方面，有什么好的实践？</li>
+<li>Channel 什么情况下会出现死锁，有遇到过吗？</li>
+<li>容量为1的 channel 在什么情况下会堵塞（除了常见的）</li>
+</ul>
+</li>
+<li><code>GMP</code><ul>
+<li>像协程，线程，进程随着计算机发展的演变，从你个人的视角和理解，讲讲这个改变的历程，触发这种演变的原因是什么?</li>
+<li>GMP模型中有几种调度类型？Go的调度机制发生了怎么样的演变历程?</li>
+<li>GPM 调度模型，如果一个 P 的本地 G 队列执行完了，会发生什么  1</li>
+<li>GMP中协程的调度，是抢占式还是时间片？会饥饿吗？怎么处理？  1</li>
+<li>如何初始化</li>
+<li>假如有一个M挂掉了，或者发生io 阻塞，这时候会发生什么？</li>
+<li>发生网络io,会怎么调度？发生阻塞的IO会怎么调度？epoll详解？</li>
+</ul>
+</li>
+<li><code>struct</code><ul>
+<li>go struct能不能比较</li>
+<li>go结构体和结构体指针的区别</li>
+</ul>
+</li>
+<li><code>select</code><ul>
+<li>select可以用于什么?</li>
+<li>说一下select的底层实现</li>
+</ul>
+</li>
+<li><code>context</code><ul>
+<li>context 协程安全吗？   `2</li>
+<li>项目中 context 如何使用的？有使用过 context 哪些方法？`2</li>
+<li>一个异常程序，一直往这个valueContext中添加不同的数据，会有什么问题吗？</li>
+<li>如果现在设置了很多value，我现在通过Context去取这些值的时候，效率上会有什么问题吗？</li>
+<li>context包内部如何实现的？</li>
+</ul>
+</li>
+<li><code>goroutine</code><ul>
+<li>goroutine 数据结构、创建过程及生命周期？<code>2</code></li>
+<li>goroutine 创建过程？`2</li>
+<li>父goroutine退出，如何使得子goroutine也退出？ <code>2</code></li>
+<li>子goroutine的panic会导致主goroutine的panic吗，为什么 <code>2</code></li>
+<li>多个协程等待一个协程执行完，除了WaitGroup 还有什么方式？</li>
+<li>如果收到一个请求，里头有100个子任务，用 go 编码时直接创建100个协程并发处理，是否合适呢，会导致什么问题？<ul>
+<li>不合适  资源消耗 调度开销 阻塞 控制困难  用协程池 限制并发数量</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>并发控制</code><ul>
+<li>RW 锁的底层实现？ 1</li>
+<li>go 中sync.Mutex 的底层如何实现的？抢占算法是怎样的？如何避免饥饿现象？1</li>
+<li>waitgroup 实现 ? errGroup 是用来干什么的</li>
+</ul>
+</li>
+<li><code>内存分配机制</code><ul>
+<li>有mcentral为啥要mcache?</li>
+<li>Go语言内存分配，什么分配在堆上，什么分配在栈上</li>
+</ul>
+</li>
+<li><code>垃圾回收</code><ul>
+<li>go的内存泄漏遇到过吗，大概会有哪些场景容易发生，怎么去避免？go的GC会自动关闭channel吗？</li>
+<li>Go 的垃圾回收机制，和 Java 比有什么区别</li>
+</ul>
+</li>
+<li><code>defer</code><ul>
+<li>多个defer的执行顺序是怎么样的？有什么注意事项？</li>
+<li>defer可以捕获到子Goroutine的panic吗？  <code>2</code></li>
+<li>defer在什么情况下会修改函数返回值</li>
+</ul>
+</li>
+<li><code>interface</code> <ul>
+<li>底层数据结构和实现？如何判断一个接口变量是否为空（Type 和 Value？）<code>2</code></li>
+<li>go什么场景使用接口</li>
+</ul>
+</li>
+<li><code>其他go 相关</code><ul>
+<li>Go 的反射机制</li>
+<li>go怎么实现封装继承多态</li>
+<li>golang 其他语言比较的特点?</li>
+<li>有哪些你熟悉的golang中的第三方包包？</li>
+<li>golang开发中遇到过什么内存占用比较高的问题吗，一般是用什么工具排查，是如何优化的？</li>
+<li>go这门语言在你看来有没有什么设计上的缺陷？</li>
+<li>工作中有没有遇到过一些go性能方面的问题？</li>
+<li>For range的使用中，地址会发生变化吗</li>
+<li>make和new有什么区别</li>
+<li>golang 的赋值和传参是值传递还是引用传递？</li>
+<li>go的变量申请类型</li>
+<li>go深拷贝，什么时候需要深拷贝</li>
+<li>go如何避免panic</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-数据结构"><a href="#2-数据结构" class="headerlink" title="2 数据结构"></a>2 数据结构</h2><h3 id="2-1-channel"><a href="#2-1-channel" class="headerlink" title="2.1 channel"></a>2.1 channel</h3><ol>
+<li>不要通过共享内存来通信，而要通过通信来实现内存共享 [[go-Channel]]</li>
+<li><code>数据结构</code><ol>
+<li>hchan 是 channel 的数据结构,其中 buf 指向存放数据的环形缓冲区</li>
+<li>waitq 是阻塞的协程队列</li>
+<li>sudog 是用于包装协程的节点</li>
+</ol>
+</li>
+<li>构造:根据有无缓冲进行申请和初始化,本质是值的拷贝</li>
+<li><code>写流程</code>: 不能写入未初始和已经关闭的 chan<ol>
+<li><strong>存在阻塞读的协程</strong>: 加锁后从阻塞读队列中取出 goroutine 的封装对象 sudog,send 直接把元素拷贝给对应的 goroutine</li>
+<li><strong>无阻塞读协程但环形缓冲区仍有空间</strong>:添加到环形缓冲区 sendx 位置</li>
+<li><strong>写时无阻塞读协程且环形缓冲区无空间</strong>: 构造当前 goroutine 的 sudog 对象,并添加到阻塞写队列中</li>
+</ol>
+</li>
+<li><code>读流程</code><ol>
+<li>读空 chan , park 挂起,死锁</li>
+<li>读已经关闭且无元素的,直接解锁返回</li>
+<li>读时有阻塞的写,直接读缓冲区同步,然后唤醒写协程</li>
+<li>读时无阻塞写,缓冲区无元素,构造 sudog 加入阻塞读队列</li>
+</ol>
+</li>
+<li><code>关闭</code>:<ol>
+<li>关闭未初始化的会 panic</li>
+<li>重复关闭会 panic</li>
+<li>优雅关闭: 向一个 closed channel 发送数据会导致 panic。因此原则是 发送端进行关闭,可以增加一个用于通知的中间信号 chan</li>
+</ol>
+</li>
+<li><code>应用场景</code><ol>
+<li>停止信号</li>
+<li>任务定时</li>
+<li>控制并发</li>
+</ol>
+</li>
+</ol>
+<h3 id="2-2-map"><a href="#2-2-map" class="headerlink" title="2.2 map"></a>2.2 map</h3><p><strong>用于 kv 储存的字典</strong></p>
+<ol>
+<li><code>注意点</code><ol>
+<li>初始化  <code>myMap1 := make(map[int]int,2)</code>,不初始化就赋值会导致 panic</li>
+<li>key必须可比较，不能是<code>chan、map、func</code>,也就是要求 hash 后的值和字面值都相等,float 会有精度转换,最好别作为 key</li>
+<li>遍历是<code>无序</code>的，可以借助 slice 先排序；并发写<strong>不安全</strong></li>
+<li>时间复杂度： O(1) 常数；大量的键值冲突，扩容会影响</li>
+<li>map 的比较必须,非空, 长度相等 每个元素都相等</li>
+</ol>
+</li>
+<li><code>底层数据结构与实现</code><ol>
+<li>map 是一个指针,指向  [[go-hmap]] 结构体, hmap 中有 buckets 桶数组,bucket 指向 [[go-bmap]] 结构体 , 每个桶可存放八个 k-v 对,如果超过则会创建桶链表,通过溢出桶指针连接,结合了拉链法和开放地址法</li>
+<li>写入流程<ol>
+<li>获取 key 的 hash 值,共 64 个 bit 位</li>
+<li>用最后的 B 个 bit 位,hash 值对桶数组长度取模,确定所属的桶 (<code>B</code> 是 buckets 数组的长度的对数)</li>
+<li>再用哈希值的高8位,找到 key 在 bucket 中的位置</li>
+<li>在桶中插入 kv 对 , key 和 value 是分别存放的</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><code>扩容流程</code><ol>
+<li><strong>触发条件</strong><ol>
+<li>通过 overLoadFactor 方法分辨</li>
+<li>map 预分配容量小于等于 8，B 取 0，桶的个数为 1；</li>
+<li>保证 map 预分配容量小于等于<code>桶数组长度 * 6.5</code>.</li>
+</ol>
+</li>
+<li><strong>扩容方式</strong><ol>
+<li><strong>增量扩容</strong>：当桶内 元素总数/桶数组长度 &gt; 6.5 时发生增量扩容，桶数组长度增长为原值的两倍<ol>
+<li>举例：B = 5，根据它 hash 的后五位决定位置，扩容后 B=6，其低六位决定位置；这就是 rehash</li>
+</ol>
+</li>
+<li><strong>等量扩容</strong>：当桶内溢出桶数量大于等于 2^B 时( B 为桶数组长度的指数，B 最大取 15)，发生等量扩容，桶的长度保持为原值； <code>可以解决剧烈的 hash 冲突,不是因为元素太多,而是溢出桶太多</code></li>
+<li>采用渐进扩容的方式，每次最多搬两个,当桶被实际操作到时，由使用者负责完成数据迁移，避免因为一次性的全量数据迁移引发性能抖动.</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><code>读写过程</code><ol>
+<li><strong>读流程</strong>  [[mapacess]]<ol>
+<li>根据 key 取 hash 值；</li>
+<li>根据 hash 值对桶数组取模，确定所在的桶；</li>
+<li>沿着桶链表依次遍历各个桶内的 key-value 对；</li>
+<li>命中相同的 key，则返回 value；倘若 key 不存在，则返回零值.</li>
+</ol>
+</li>
+<li><strong>写流程</strong> [[mapassgin]]<ol>
+<li>确定所在的桶；</li>
+<li>如果 map 处于扩容，则迁移命中的桶，帮助推进渐进式扩容；</li>
+<li>沿着桶链表依次遍历各个桶内的 key-value 对；</li>
+<li>如果命中相同的 key，则对 value 中进行更新；否则插入</li>
+<li>如果发现 map 达成扩容条件，则会开启扩容模式，并重新返回第（2）步.</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><code>并发安全？</code><ol>
+<li>map不能同时读写或写写，会引起<code>fatal</code> 错误</li>
+<li>map.flags 的第 3 个 bit 位是<code>写标记</code></li>
+<li><code>sync.Mutex</code> 降低性能来保证并发安全，读写都加</li>
+<li><code>sync.RWMutex</code> 读写锁，运行并发读，提高性能</li>
+<li><code>sync.Map</code>  [[00-Inbox/A-Golang/代码引用/sync.Map]]<ol>
+<li>适用于读多、更新多、删多、写少的场景</li>
+<li>读写 read，全程无锁，dirty 需要加锁，多用 read</li>
+<li>CAS 当前值A、内存值V、要修改的新值B</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><code>注意问题？</code><ol>
+<li>记得初始化，否则会 panic，这个 panic 可以 recover吗？<ol>
+<li><strong>不能</strong>，调用的是 <code>runtime.fatalthrow()</code>，然后调用 <code>exit(2)</code>结束进程</li>
+<li>[[panic 机制]]</li>
+</ol>
+</li>
+<li>遍历是无序的</li>
+<li>key 是否存在，校验一下 ok</li>
+<li>map 是引用类型的，用 make 来构造</li>
+<li>可以通过定义 value 为 struct 来节约内存；[[go-struct]]</li>
+<li>map 中删除一个 key，它的内存会释放么？</li>
+<li>map 取一个 key，然后修改这个值，原 map 数据的值会不会变化</li>
+</ol>
+</li>
+</ol>
+<h3 id="2-3-slice"><a href="#2-3-slice" class="headerlink" title="2.3 slice"></a>2.3 slice</h3><ol>
+<li><code>底层数据</code>：[[go-slice]]<ol>
+<li>slice 是对数组的封装,描述一个数组的片段;</li>
+<li>结构体中有三个字段：长度、容量、<strong>底层数组</strong></li>
+<li>底层数组可以被多个 slice 持有,因此会互相影响</li>
+</ol>
+</li>
+<li><code>扩容</code>:<ol>
+<li>append 向 slice 添加元素达到底层数组最大值后就要扩容</li>
+<li>当原 slice 容量小于 <code>1024</code> 的时候，新 slice 容量变成原来的 <code>2</code> 倍；原 slice 容量超过 <code>1024</code>，新 slice 容量变成原来的<code>1.25</code>倍。  </li>
+<li>1.18 版本更新: 当原slice容量(oldcap)小于256的时候，新slice(newcap)容量为原来的2倍；原slice容量超过256，新slice容量newcap = oldcap+(oldcap+3✖️256)/4</li>
+<li>还有一个内存对齐的操作,可能会偏大</li>
+</ol>
+</li>
+<li><code>作为函数参数</code><ol>
+<li>在该函数中修改切片中变量值，会影响到外部，而向这个切片添加元素则不影响；？why</li>
+<li>因为传递过去的是 array，len，cap 的拷贝，指针指向 array 因此修改可以感知到，而添加修改的只是函数内的 len，外部的 len 没变。</li>
+<li>Go 语言的函数参数传递，只有值传递，没有引用传递。</li>
+</ol>
+</li>
+</ol>
+<h3 id="2-4-interface"><a href="#2-4-interface" class="headerlink" title="2.4 interface"></a>2.4 interface</h3><ol>
+<li>底层实现[[go-interface]]<ol>
+<li>iface：非空接口，包括指向具体值的 <code>data</code> 数据指针，和指向 itab 实体的<code>tab</code>指针,中有 <code>fun</code> 方法集合和<code>interfacetype</code> 描述类型信息</li>
+<li>eface：空接口，只有类型信息和数据指针</li>
+</ol>
+</li>
+<li>比较<ol>
+<li>先将 nil 转换成 interface<code>(type=nil, data=nil)</code> ，然后分别比较 type 和 data</li>
+</ol>
+</li>
+</ol>
+<h3 id="2-5-defer"><a href="#2-5-defer" class="headerlink" title="2.5 defer"></a>2.5 defer</h3><ol>
+<li>[[go-defer]] </li>
+<li>实现: 底层是使用链表实现,每次新注册的都是头插法注册到链表头部</li>
+<li>原理：deferproc()注册到<code>_defer</code> 链表头，并在 return前插入了函数deferreturn()</li>
+<li>执行顺序：<code>延迟函数参数</code>在defer语句<code>出现时</code>就已经确定下来,后进先出的</li>
+<li><strong>参数求值</strong>：defer 语句中的参数在声明时就会被计算</li>
+<li>defer只能捕获<code>本层的panic</code></li>
+<li>作用: 资源,连接的关闭和清除缓存</li>
+</ol>
+<h3 id="2-6-select"><a href="#2-6-select" class="headerlink" title="2.6 select"></a>2.6 select</h3><ul>
+<li>select 是 Go 中的一个控制结构，类似于 switch 语句。</li>
+<li>select 语句只能用于通道操作，每个 case 必须是一个通道操作，要么是发送要么是接收。</li>
+<li>select 语句会监听所有指定的通道上的操作，一旦其中一个通道准备好就会执行相应的代码块。</li>
+<li>如果多个通道都准备好，那么 select 语句会随机选择一个通道执行。如果所有通道都没有准备好，那么执行 default 块中的代码。</li>
+</ul>
+<h2 id="3-GMP原理"><a href="#3-GMP原理" class="headerlink" title="3 GMP原理"></a>3 GMP原理</h2><h3 id="3-1-协程"><a href="#3-1-协程" class="headerlink" title="3.1 协程"></a>3.1 协程</h3><ol>
+<li><code>进程</code>、<code>线程</code>、<code>协程</code>的概念与区别<ol>
+<li><strong>进程</strong>：<pre><code>1. 进程是程序的一次执行过程；由程序，数据和进程控制块组成
+2. 进程是系统进行资源分配和调度的一个独立单位。
+3. 每个进程都有自己的独立内存空间，不同进程通过`进程间通信`来通信
+</code></pre></li>
+<li><strong>线程</strong>：<pre><code>1. 线程是进程的一个实体,是CPU调度和分派的基本单位,是比进程更小的能独立运行的基本单位.
+2. 线程自己基本上不拥有系统资源,只拥有一点在运行中必不可少的资源(如程序计数器,一组寄存器和栈),但是它可与同属一个进程的其他的线程共享进程所拥有的全部资源。
+3. 线程间通信主要通过`共享内存`，上下文切换很快。
+</code></pre></li>
+<li><strong>协程</strong>：<pre><code>1. 协程是一种`用户态`的轻量级线程，协程的调度完全由用户控制，类似于函数调用。
+2. 协程拥有自己的寄存器上下文和栈。直接操作栈则基本没有**内核切换**的开销，可以不加锁的访问全局变量，所以切换非常快。
+3. 实现：协程是基于线程的，就是 GMP
+4. `Goroutine`
+    1. 创建、销毁、调度在用户态完成，对内核透明，足够轻便；
+    2. 可利用多个线程，实现`并行`；
+    3. 通过调度器的斡旋，实现和线程间的`动态绑定`和`灵活调度`；
+    4. 栈空间大小可动态扩缩，因地制宜.
+</code></pre></li>
+<li><strong>区别：</strong><pre><code>1. `内存消耗`：goroutine 2kb    线程 MB
+2. `创建和销毁`:线程的创建销毁是内核级的,小号较大,goroutine 是用户级的
+3. `切换`: 线程切换要保存各种寄存器,goroutine 只要三个 Program Counter, Stack Pointer and BP,  只要 200ns 大概五分之一
+</code></pre></li>
+</ol>
+</li>
+<li><code>Goroutine</code> 详解  [[go-Goroutine]]<ol>
+<li>数据结构:<ol>
+<li>m：在 p 的代理，负责执行当前 g 的 m</li>
+<li>保存各种寄存器和系统调用返回值的 sched</li>
+</ol>
+</li>
+<li>生命周期<ol>
+<li>未初始化  待执行 执行中 系统调用 挂起 已销毁 栈扩容中  被抢占</li>
+</ol>
+</li>
+<li>创建过程:  newproc函数创建一个新的 goroutine</li>
+<li>子goroutine的panic会导致主goroutine的panic吗，为什么<ol>
+<li>不会，panic 只会导致程序退出</li>
+</ol>
+</li>
+<li>父goroutine退出，如何使得子goroutine也退出？  <ol>
+<li>可以通过channel 或者 Context 实现</li>
+</ol>
+</li>
+<li>控制：协程池，Semaphore，waitgroup<ol>
+<li>多个协程同步等待,除了 waitgroup 还可以用通道</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="3-2-GMP-调度"><a href="#3-2-GMP-调度" class="headerlink" title="3.2 GMP 调度"></a>3.2 GMP 调度</h3><ol>
+<li>[[go-GMP]]</li>
+<li>GMP 调度模型<ol>
+<li>G(goroutine协程)  :有自己的运行栈、状态、以及执行的任务函数</li>
+<li>P(Processor调度器)：承上启下，调度 g 并代理 m，决定了 g 最大并行数量，最多有<code>GOMAXPROCS</code>(可配置)个，超过 cpu 核数的无效</li>
+<li>M( machine,thread线程) ：不直接执行 g，而是先和 p 绑定，由其实现代理</li>
+<li>数量关系<ol>
+<li>P的数量问题：由启动时环境变量$GOMAXPROCS或者是由runtime的方法GOMAXPROCS()决定。 最多只有这么多个。一般建议是<strong>逻辑 CPU 数量的 2 倍</strong></li>
+<li>M的数量：默认是 1000；SetMaxThreads函数设置；M 阻塞会创建新的</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>调度策略：<ol>
+<li>G的存放队列有三类：P的本地队列；全局队列；和wait队列</li>
+<li>M调度G时，优先取P本地队列，其次取全局队列，最后取wait队列；这样的好处是，取本地队列时，可以接近于<code>无锁化</code>，减少全局锁竞争；</li>
+<li>为防止不同P的闲忙差异过大，设立 <code>work-stealing</code> 机制，本地队列为空的P可以尝试从其他P本地队列偷取一半的G补充到自身队列.</li>
+</ol>
+</li>
+</ol>
+<h2 id="4-内存模型"><a href="#4-内存模型" class="headerlink" title="4 内存模型"></a>4 内存模型</h2><h3 id="4-1-go-内存模型与分配机制"><a href="#4-1-go-内存模型与分配机制" class="headerlink" title="4.1 go-内存模型与分配机制"></a>4.1 go-内存模型与分配机制</h3><ol>
+<li>[[go-内存模型与分配机制]]</li>
+<li>内存模型<ol>
+<li>从大到小：mheap，mcentral，mcache，mspan</li>
+</ol>
+</li>
+<li>分配流程<ol>
+<li>从 P 专属 mcache 的 tiny 分配器取内存（无锁）</li>
+<li>根据所属的 spanClass，从 P 专属 mcache 缓存的 mspan 中取内存（无锁）</li>
+<li>根据所属的 spanClass 从对应的 mcentral 中取 mspan 填充到 mcache，然后从 mspan 中取内存（spanClass 粒度锁）</li>
+<li>根据所属的 spanClass，从 mheap 的页分配器 pageAlloc 取得足够数量空闲页组装成 mspan 填充到 mcache，然后从 mspan 中取内存（全局锁）</li>
+<li>mheap 向操作系统申请内存，更新页分配器的索引信息，然后重复（4）.</li>
+</ol>
+</li>
+</ol>
+<h3 id="4-2-内存泄露"><a href="#4-2-内存泄露" class="headerlink" title="4.2 内存泄露"></a>4.2 内存泄露</h3><ol>
+<li>谈谈内存泄露，什么情况下内存会泄露？怎么定位排查内存泄漏问题？</li>
+<li>分配的内存资源没有被正确释放或回收，导致程序占用的内存不断增加，最终可能导致程序性能下降或崩溃。</li>
+<li>原因：未关闭文件或网络连接；不释放资源；协程泄漏；通道阻塞；保持对对象的引用；循环引用</li>
+<li>怎么排查：<code>go vet</code>、<code>go tool pprof</code>和<code>go tool trace</code>等</li>
+</ol>
+<h3 id="4-3-内存逃逸"><a href="#4-3-内存逃逸" class="headerlink" title="4.3 内存逃逸"></a>4.3 内存逃逸</h3><ol>
+<li>谈谈内存逃逸？什么情况下会发生内存逃逸？</li>
+<li>在函数或方法中分配的内存在函数的生命周期结束后仍然被引用或访问，使得该内存块无法在函数的栈上分配并在函数退出时自动回收，而<code>必须分配在堆上</code>，并由垃圾回收器负责回收。</li>
+<li><code>原因</code>：<pre><code>1. **返回指针到局部变量**:如果一个函数返回了一个指向局部变量的指针，并且这个指针在函数外部被引用，那么该局部变量就会逃逸到堆上。
+2. **闭包引用**：如果一个闭包（函数值）引用了函数内部的变量，并且该闭包在函数外部被执行，那么这些变量就会逃逸到堆上。
+3. **使用`go`关键字启动协程**：使用`go`关键字启动协程时，被协程引用的变量可能会逃逸到堆上，因为协程的生命周期不受限制，可能会在函数退出后继续执行。
+4. 栈空间不足逃逸：比如切片过大
+5. **向函数传递指针或切片**：如果将指针或切片传递给函数，并且在函数内部对它们进行修改后，它们可能会逃逸到堆上。
+</code></pre></li>
+<li><code>闭包</code>：<pre><code>1. 是一种函数值（Function Value），它包含了一个函数体和一个引用了外部变量的词法环境。
+2. **函数体**：闭包包含了一个函数体，这个函数体可以有参数和返回值，就像普通函数一样。
+3. **词法环境**：闭包引用了一个或多个外部变量，这些外部变量存在于闭包创建时的作用域中，而不是在闭包被调用时的作用域中。这些外部变量可以在闭包内部被访问和修改。
+4. **独立性**：每个闭包都有自己的词法环境，因此闭包之间的外部变量不会相互影响。
+</code></pre></li>
+</ol>
+<h3 id="4-4-内存分配"><a href="#4-4-内存分配" class="headerlink" title="4.4 内存分配"></a>4.4 内存分配</h3><p>Go 是如何分配内存的？  Channel 分配在栈上还是堆上？哪些对象分配在堆上，哪些对象分配在栈上？</p>
+<pre><code>1. 通道（Channel）本身是一个`引用类型`，它在栈上分配的是通道的`描述符`，而实际的通道数据结构（包括通道的缓冲区和其他管理信息）是在堆上分配的。这是因为通道的大小是动态的，无法在编译时确定，因此通道的数据结构需要在运行时进行`动态分配`。
+2. **栈上分配**：
+    1. 局部变量：函数内部定义的局部变量通常分配在栈上，它们在函数执行结束时自动释放。
+    2. 函数参数：函数参数也分配在栈上，它们的生命周期与函数调用关联。
+3. **堆上分配**：
+    1. 动态分配：使用`new()`、`make()`、`append()`等内建函数动态分配的对象通常分配在堆上，因为它们的生命周期不受限制，需要在程序的其他部分继续访问。
+    2. 逃逸对象：如果编译器无法确定对象的生命周期，或者对象被引用超出了其定义的作用域，那么这些对象可能会逃逸到堆上分配。
+</code></pre><h2 id="5-GC-原理"><a href="#5-GC-原理" class="headerlink" title="5 GC 原理"></a>5 GC 原理</h2><ol>
+<li>[[go-GC 原理]]</li>
+<li>垃圾回收算法：三色标记法</li>
+<li>屏障机制</li>
+<li>GC 中 stw 时机，各个阶段是如何解决的？<ol>
+<li>通过屏障技术解决</li>
+</ol>
+</li>
+<li>GC 的触发时机？<ol>
+<li>手动触发，调用 <code>runtime.GC</code></li>
+<li>系统触发：<ol>
+<li>gcTriggerHeap：当所分配的堆大小达到阈值时，将会触发。</li>
+<li>gcTriggerTime：当距离上一个 GC 周期的时间超过一定时间时，将会触发。默认 2 分钟。</li>
+<li>gcTriggerCycle：如果没有开启 GC，则启动 GC。</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>介绍一下大对象小对象，为什么小对象多了会造成 gc 压力<ol>
+<li>Go 的内存分配用的是 tcmalloc 算法，传统的 tcmalloc，会为每个分配请求执行一个比较完整的 malloc GC 方法</li>
+<li>通常小对象过多会导致GC三色法消耗过多的CPU。优化思路是，减少对象分配。</li>
+</ol>
+</li>
+</ol>
+<h2 id="6-并发编程"><a href="#6-并发编程" class="headerlink" title="6 并发编程"></a>6 并发编程</h2><h3 id="6-1-内存模型"><a href="#6-1-内存模型" class="headerlink" title="6.1 内存模型"></a>6.1 内存模型</h3><h3 id="6-2-context"><a href="#6-2-context" class="headerlink" title="6.2 context"></a>6.2 context</h3><ol>
+<li>[[go-context]]</li>
+<li>用途：超时控制和传递 traceid<ol>
+<li>WithCancel：可以手动调用 cancel() 方法以取消</li>
+<li>WithDeadline &amp; WithTimeout：可以自定义超时时间</li>
+<li>WithValue：可以携带信息，比如 traceid 等,父节点不能获取子节点存储的值</li>
+</ol>
+</li>
+<li>context 并发安全</li>
+</ol>
+<h3 id="6-3-sync-Map"><a href="#6-3-sync-Map" class="headerlink" title="6.3 sync.Map"></a>6.3 sync.Map</h3><ol>
+<li>使用场景: 读多、更新多、删多、写少</li>
+<li>底层实现: <ul>
+<li>read 和 dirty 两个字段将读写分离</li>
+<li>最新写入的数据则存在 dirty 字段上</li>
+<li>读取时会先查询 read，不存在再查询 dirty，写入时则只写入 dirty</li>
+<li>读取 read 并不需要加锁，而读或写 dirty 都需要加锁</li>
+<li>另外有 misses 字段来统计 read 被穿透的次数（被穿透指需要读 dirty 的情况），超过一定次数则将 dirty 数据同步到 read 上,因为读是在 read 上的,所以 read 是最新的,然后 dirty 为 nil</li>
+<li>对于删除数据则直接通过标记来延迟删除</li>
+</ul>
+</li>
+<li>和直接加锁的区别?  读写分离 提高并发</li>
+<li>删: 先读 read,有的话标记删除,没有就去 dirty 中直接删除,标记删除可以缓存</li>
+<li>读: Load() ,先去 read 查,没有就去 dirty加锁查,miss 加一</li>
+<li>写: Store() <ol>
+<li>倘若 read map 存在拟写入的 key，且 entry 不为 expunged 状态，说明这次操作属于更新而非插入，直接基于 CAS 操作进行 entry 值的更新，并直接返回（存活态或者软删除，直接覆盖更新）；</li>
+<li>倘若未命中（1）的分支，则需要加锁 double check；</li>
+<li>倘若第二轮检查中发现 read map 或者 dirty map 中存在 key-entry 对，则直接将 entry 更新为新值即可（存活态或者软删除，直接覆盖更新）；</li>
+<li>在第（3）步中，如果发现 read map 中该 key-entry 为 expunged 态，需要在 dirty map 先补齐 key-entry 对，再更新 entry 值（从硬删除中恢复，然后覆盖更新）；</li>
+<li>倘若 read map 和 dirty map 均不存在，则在 dirty map 中插入新 key-entry 对，并且保证 read map 的 amended flag 为 true.（插入）</li>
+<li>第（5）步的分支中，倘若发现 dirty map 未初始化，需要前置执行 dirtyLocked 流程；</li>
+</ol>
+</li>
+<li>value 状态<ol>
+<li>存活态很好理解，即 key-entry 对仍未删除；</li>
+<li>nil 态表示软删除，read map 和 dirty map 底层的 map 结构仍存在 key-entry 对，但在逻辑上该 key-entry 对已经被删除，因此无法被用户查询到；</li>
+<li>expunged 态表示硬删除，dirty map 中已不存在该 key-entry 对.</li>
+</ol>
+</li>
+<li>总结<ol>
+<li>为什么需要使用 expunged 态来区分软硬删除呢？软删除可以 CAS,硬删除态要加锁</li>
+<li>总体思想，希望能多用 read map，少用 dirty map，因为操作前者无锁，后者需要加锁；</li>
+<li>除了 expunged 态的 entry 之外，read map 的内容为 dirty map 的子集；</li>
+<li>dirtyLocked: dirty 为空,访问 readmiss,遍历 read,拷贝到 dirty 去</li>
+<li>sync.Map 适用于读多、更新多、删多、写少的场景；</li>
+<li>倘若写操作过多，sync.Map 基本等价于互斥锁 + map；</li>
+<li>sync.Map 可能存在性能抖动问题，主要发生于在读/删流程 miss 只读 map 次数过多时（触发 missLocked 流程），下一次插入操作的过程当中（dirtyLocked 流程）.</li>
+</ol>
+</li>
+</ol>
+<h3 id="6-4-sync-WaitGroup"><a href="#6-4-sync-WaitGroup" class="headerlink" title="6.4 sync.WaitGroup"></a>6.4 sync.WaitGroup</h3><ol>
+<li>[[00-Inbox/A-Golang/代码引用/go-sync.WaitGroup]]</li>
+<li>主要方法：add done wait</li>
+<li>其他实现方法？   channel 信号量这些并发安全的进行计数，然后主协程进行汇总</li>
+</ol>
+<h3 id="6-5-sync-mutex"><a href="#6-5-sync-mutex" class="headerlink" title="6.5 sync.mutex"></a>6.5 sync.mutex</h3><ol>
+<li>[[00-Inbox/A-Golang/代码引用/go-sync.Mutex]]</li>
+<li>底层实现<ol>
+<li>state 字段标识当前互斥锁的状态</li>
+<li>sema 信号量 控制锁状态的信号量</li>
+</ol>
+</li>
+<li>抢占算法<ul>
+<li>如果互斥锁处于初始化状态，会通过 <code>CAS</code> 置位 <code>mutexLocked</code> 加锁；</li>
+<li>如果互斥锁处于 <code>mutexLocked</code> 状态并且在普通模式下工作，会进入自旋，执行 30 次 <code>PAUSE</code> 指令消耗 CPU 时间等待锁的释放；</li>
+<li>如果当前 Goroutine 等待锁的时间超过了 1ms，互斥锁就会切换到饥饿模式；</li>
+<li>互斥锁在正常情况下会通过<code>sync_runtime_SemacquireMutex</code>将尝试获取锁的 Goroutine 切换至休眠状态，等待锁的持有者唤醒；</li>
+<li>如果当前 Goroutine 是互斥锁上的最后一个等待的协程或者等待的时间小于 1ms，那么它会将互斥锁切换回正常模式；</li>
+</ul>
+</li>
+<li>如何避免饥饿： 一旦 Goroutine <code>超过 1ms</code> 没有获取到锁，它就会将当前互斥锁切换<code>饥饿模式</code>，防止部分 Goroutine 被<strong>饿死</strong>。</li>
+</ol>
+<h3 id="6-6-sync-RWMutex"><a href="#6-6-sync-RWMutex" class="headerlink" title="6.6 sync.RWMutex"></a>6.6 sync.RWMutex</h3><h3 id="6-7-sync-Cond"><a href="#6-7-sync-Cond" class="headerlink" title="6.7 sync.Cond"></a>6.7 sync.Cond</h3><h3 id="6-8-sync-Once"><a href="#6-8-sync-Once" class="headerlink" title="6.8 sync.Once"></a>6.8 sync.Once</h3><h3 id="6-9-sync-Pool"><a href="#6-9-sync-Pool" class="headerlink" title="6.9 sync.Pool"></a>6.9 sync.Pool</h3><h3 id="6-10-拾遗"><a href="#6-10-拾遗" class="headerlink" title="6.10 拾遗"></a>6.10 拾遗</h3><ol>
+<li><code>Go 如何实现原子操作</code> ：Go语言的标准库代码包sync/atomic提供了原子的读取（Load为前缀的函数）或写入（Store为前缀的函数）某个值</li>
+</ol>
+<h2 id="7-拾遗"><a href="#7-拾遗" class="headerlink" title="7 拾遗"></a>7 拾遗</h2><h3 id="7-1-反射"><a href="#7-1-反射" class="headerlink" title="7.1 反射"></a>7.1 反射</h3><ul>
+<li><code>reflect</code> 包提供了反射机制，可以在运行时获取变量的类型信息、值信息、方法信息等等。</li>
+<li>go 中的 <code>interface&#123;&#125;</code> 实际上包含了两个指针，一个指向类型信息，一个指向值信息。正因如此，我们可以在运行时通过 <code>interface&#123;&#125;</code> 来获取变量的类型信息、值信息。</li>
+<li><code>reflect.Type</code> 代表一个类型，<code>reflect.Value</code> 代表一个值。通过 <code>reflect.Type</code> 可以获取类型信息，通过 <code>reflect.Value</code> 可以获取值信息。</li>
+<li>反射三定律：<ul>
+<li>反射可以将 <code>interface</code> 类型变量转换成反射对象。</li>
+<li>反射可以将反射对象还原成 <code>interface</code> 对象。</li>
+<li>如果要修改反射对象，那么反射对象必须是可设置的（<code>CanSet</code>）。</li>
+</ul>
+</li>
+<li><code>reflect.Value</code> 和 <code>reflect.Type</code> 里面都有 <code>Elem</code> 方法，但是它们的作用不一样：<ul>
+<li><code>reflect.Type</code> 的 <code>Elem</code> 方法返回的是元素类型，只适用于 array、chan、map、pointer 和 slice 类型的 <code>reflect.Type</code>。</li>
+<li><code>reflect.Value</code> 的 <code>Elem</code> 方法返回的是值，只适用于接口或指针类型的 <code>reflect.Value</code>。</li>
+</ul>
+</li>
+<li>通过 <code>reflect.Value</code> 的 <code>Interface</code> 方法可以获取到反射对象的原始变量，但是是 <code>interface&#123;&#125;</code> 类型的。</li>
+<li><code>Type</code> 和 <code>Kind</code> 都表示类型，但是 <code>Type</code> 是类型的反射对象，<code>Kind</code> 是 go 类型系统中最基本的一些类型，比如 <code>int</code>、<code>string</code>、<code>struct</code> 等等。</li>
+<li>如果我们想通过 <code>reflect.Value</code> 来修改变量的值，那么 <code>reflect.Value</code> 必须是可设置的（<code>CanSet</code>）。同时如果想要 <code>CanSet</code> 为 true，那么我们的变量必须是可寻址的。</li>
+<li>我们有很多方法可以创建 <code>reflect.Type</code> 和 <code>reflect.Value</code>，我们需要根据具体的场景来选择合适的方法。</li>
+<li><code>reflect.Type</code> 和 <code>reflect.Value</code> 里面，都有一部分方法是通用的，也有一部分只适用于特定的类型。如果我们想要调用那些适用于特定类型的方法，那么我们必须先判断 <code>reflect.Type</code> 或 <code>reflect.Value</code> 的类型（这里说的是 <code>Kind</code>），然后再调用。</li>
+</ul>
+<h3 id="7-2-select-通道选择器"><a href="#7-2-select-通道选择器" class="headerlink" title="7.2 select 通道选择器"></a>7.2 select 通道选择器</h3><p>随机选择可读取或者写入的通道执行</p>
+<ol>
+<li>多个case分支的通道可以执行，随机选择一个case分支执行</li>
+<li>如果存在default，执行；否则阻塞到有分支可以执行</li>
+</ol>
+<h3 id="7-3-make-和-new-的区别？"><a href="#7-3-make-和-new-的区别？" class="headerlink" title="7.3 make 和 new 的区别？"></a>7.3 make 和 new 的区别？</h3><ol>
+<li><strong>make</strong> ：用于创建内置数据结构的实例，返回一个已初始化的实例(因为他们本来就是引用类型)。；<strong>只用于slice，map，channel的创建</strong></li>
+<li><strong>new</strong>：根据传入的类型分配一片内存空间并返回指向零值的<strong>指针</strong>;  它不会对这些数据结构进行初始化。</li>
+<li>make只用于创建map，slice和channel等内置的数据结构，并且不返回指针。要获得一个显式的指针，使用new进行分配，或者显式地使用一个变量的地址。</li>
+<li>make和new都是golang用来分配内存的內建函数，且在堆上分配内存，make 即分配内存，也初始化内存。new只是将内存清零，并没有初始化内存。</li>
+<li>make返回的还是引用类型本身；而new返回的是指向类型的指针。</li>
+<li>make只能用来分配及初始化类型为slice，map，channel的数据；new可以分配任意类型的数据。</li>
+</ol>
+<h3 id="7-4-协程泄露"><a href="#7-4-协程泄露" class="headerlink" title="7.4 协程泄露"></a>7.4 协程泄露</h3><blockquote>
+<p>创建的协程（Goroutine）没有被正确地释放或终止，导致这些协程一直存在于程序中，却无法被垃圾回收，从而占用了系统资源。</p>
 </blockquote>
-    <div class="read-more">
-      <a href="/2023/08/10/DDIA/09%20%E6%89%B9%E5%A4%84%E7%90%86/" class="read-more-link">Read more..</a>
-    </div>
+<p><code>产生原因</code></p>
+<ul>
+<li>协程没有正常退出</li>
+<li>协程被阻塞而无法退出</li>
+<li>协程泄露的循环引用<br><code>解决方法</code></li>
+<li>使用<code>defer</code>确保资源释放</li>
+<li>使用通道来通知协程退出</li>
+<li>使用<code>context</code>包 ^890b65</li>
+<li>避免循环引用</li>
+<li>使用工具进行检查：可以使用一些工具和分析器，如<code>go vet</code>、<code>go race</code>和<code>go tool trace</code>来检测协程泄露和并发问题</li>
+</ul>
+<h3 id="7-5-struct"><a href="#7-5-struct" class="headerlink" title="7.5 struct"></a>7.5 struct</h3><p>[[go-struct]]<br><code>go struct 能不能比较？</code></p>
+<ul>
+<li>可以比较的结构体<ul>
+<li>前提：结构体内的字段都是可以比较的</li>
+<li>如果两个结构体的字段相同并且相等，那么它们被认为是相等的。</li>
+</ul>
+</li>
+<li>不可比较的结构体<ul>
+<li>结构体中包含不可比较的字段，例如切片（slice）、映射（map）或函数类型</li>
+<li>结构体中包含指针字段，比较的是指针的值而不是指针指向的内容</li>
+</ul>
+</li>
+</ul>
+<h3 id="7-6-泛型"><a href="#7-6-泛型" class="headerlink" title="7.6 泛型"></a>7.6 泛型</h3><ol>
+<li>在函数和方法中使用类型参数：你可以编写可以接受不同类型参数的函数和方法，这样可以大大提高代码的复用性。</li>
+<li>创建泛型数据结构：你可以创建可以处理多种数据类型的数据结构，例如通用的切片、映射或链表等。</li>
+<li>提供类型安全性：泛型在编译时进行类型检查，确保类型参数的一致性，避免了运行时的类型错误。</li>
+</ol>
+<h3 id="7-7-for-range-原理与要点"><a href="#7-7-for-range-原理与要点" class="headerlink" title="7.7 for range 原理与要点"></a>7.7 for range 原理与要点</h3><ol>
+<li>for range 是 Go 语言用来遍历的一种方式，它可以操作数组、切片、map、channel 等</li>
+<li>遍历 map 为随机序输出，slice 为索引序输出；</li>
+<li>range v 是值拷贝，且只会声明初始化一次；</li>
+<li>在<code>for-range</code>循环过程中，<code>v</code>的地址保持不变，而<code>v</code>地址对应的值是<code>最后一次循环</code>对应的<code>v</code>的值。</li>
+<li>对<code>map</code>遍历时删除元素能遍历到吗？——不会</li>
+<li>对<code>map</code>遍历时新增元素会被遍历到吗——可能会</li>
+<li><code>range</code>操作的对象都是在复制的对象中操作，而不是原对象上<ol>
+<li>由于数组是值拷贝，中间过程中对原对象做任何改变，都不会改变拷贝对象的值。</li>
+<li>由于切片是地址拷贝，即<code>range</code>拷贝出来的值和原来变量的值都是指向了同一个对象，当一个地方改变了对象的值，另外一个地方来访问对象的值时也会随之发生变化。</li>
+</ol>
+</li>
+</ol>
+<h3 id="7-8-数据类型-rune-uint"><a href="#7-8-数据类型-rune-uint" class="headerlink" title="7.8 数据类型 rune uint"></a>7.8 数据类型 rune uint</h3><ul>
+<li><p>rune：是一种整数类型，用于表示Unicode字符。具体来说，<code>rune</code>是一个32位的整数类型，可以存储任何有效的Unicode代码点（Unicode code point）。因此，<code>rune</code>类型通常用于处理和操作Unicode字符，例如在字符串中遍历和索引字符。</p>
+</li>
+<li><p><code>uint32</code>是一个32位无符号整数类型，表示的范围是从0到2^32-1，即0到4294967295。当一个<code>uint32</code>类型的变量的值超过了这个范围时，就会发生溢出（Overflow）。溢出是指一个数值超过了其数据类型所能表示的最大值，或者低于其数据类型所能表示的最小值。在<code>uint32</code>的情况下，当一个变量的值超过了4294967295，即2^32-1时，它会从0开始重新计数，继续增加。</p>
+</li>
+</ul>
+
     
     
   </div>
@@ -259,23 +823,15 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      <a class="post-link" href="/2023/07/22/DDIA/08%20%E4%B8%80%E8%87%B4%E6%80%A7%E5%92%8C%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/">[DDIA] 一致性和共识协议</a>
+      <a class="post-link" href="/2025/05/07/Basic/Linux/"></a>
       
     </h1>
 
     <div class="post-meta">
       <span class="post-time">
-        2023-07-22
+        2025-05-07
       </span>
       
-      
-      <span class="post-category">
-        
-        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">阅读笔记</a>
-        
-        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/DDIA/">DDIA</a>
-        
-      </span>
       
       
     </div>
@@ -287,16 +843,43 @@
     
     
     
-    
-    
 
     
-    <blockquote>
-<p><strong>共识</strong>（consensus），即，<em>让所有节点在<strong>某件事情</strong>上达成一致</em>。</p>
-</blockquote>
-    <div class="read-more">
-      <a href="/2023/07/22/DDIA/08%20%E4%B8%80%E8%87%B4%E6%80%A7%E5%92%8C%E5%85%B1%E8%AF%86%E5%8D%8F%E8%AE%AE/" class="read-more-link">Read more..</a>
-    </div>
+    <h2 id="1-常用命令"><a href="#1-常用命令" class="headerlink" title="1 常用命令"></a>1 常用命令</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">查看进程  ps -ef| grep A</span><br><span class="line">复制文件  scp -r /home/a.txt root@B_ip:/home  <span class="comment">//将A服务器中/home/a.txt 复制到B服务器的/home中</span></span><br><span class="line">动态查看命令执行结果  watch</span><br><span class="line">网络相关  tcpdump</span><br><span class="line">列出当前系统打开的文件描述符  lsof</span><br><span class="line">网络信息统计    netstat</span><br><span class="line">系统的进程信息，内存使用等资源使用情况   vmstat</span><br><span class="line">cpu的使用情况   mpstat</span><br><span class="line"> </span><br><span class="line"><span class="string">``</span><span class="string">`  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">## 2 升级 openssh</span></span><br><span class="line"><span class="string">一、升级背景：</span></span><br><span class="line"><span class="string">漏洞扫描显示linux服务器openssh有高危漏洞，需要进行修复。openssh是远程登录到linux服务器</span></span><br><span class="line"><span class="string">的重要工具，要修复此漏洞需升级到最高版本（2021年5月中旬最新版本为8.6p1）。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">二、升级说明：</span></span><br><span class="line"><span class="string">1、所有升级文件均从官网下载。</span></span><br><span class="line"><span class="string">2、linux服务器系统为Centos7可适用此方案。</span></span><br><span class="line"><span class="string">3、Centos7系统需要有yum源，方便解决依赖关系问题。如无法实现，则需上传同系统版本安装映</span></span><br><span class="line"><span class="string">像文件，作为本地yum源。</span></span><br><span class="line"><span class="string">4、安装过程受网络影响极大，一旦出现不可抗因素致网络断开，可能会导致升级中断，无法远程</span></span><br><span class="line"><span class="string">连接，出现此情况需现场人员配合解决。</span></span><br><span class="line"><span class="string">5、升级过程出现问题需现场人员根据回退方案进行恢复操作。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">三、升级过程：</span></span><br><span class="line"><span class="string">（0）安装并启用telnet</span></span><br><span class="line"><span class="string">1、安装telnet</span></span><br><span class="line"><span class="string">`</span>yum install telnet-server telnet xinet</span><br><span class="line"><span class="number">2</span>、修改配置文件</span><br><span class="line"><span class="string">`vi /etc/xinetd.d/telnet</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">`</span>disable= no       <span class="comment">//将yes改为no</span></span><br><span class="line"><span class="string">``</span>#让root可以登录</span><br><span class="line"><span class="string">``</span>#mv /etc/securetty /etc/securetty.bak</span><br><span class="line">重启服务</span><br><span class="line"><span class="string">`service xinetd restart</span></span><br><span class="line"><span class="string">3、启动相应服务，然后使用telnet登录到服务器</span></span><br><span class="line"><span class="string">`</span>systemctl start telnet.socket</span><br><span class="line"><span class="string">`systemctl start xinetd</span></span><br><span class="line"><span class="string">`</span>chkconfig --list</span><br><span class="line">（一）配置yum源</span><br><span class="line"><span class="number">1</span>、上传与生产环境相同的centos7版本的iso和openssh8<span class="number">.6</span>p1的安装包到服务器。</span><br><span class="line"></span><br><span class="line"><span class="number">2</span>、挂载iso</span><br><span class="line">创建iso存放目录和挂载目录，并上传iso镜像文件到iso存放目录/mnt/iso下</span><br><span class="line"><span class="string">`mkdir /mnt/iso </span></span><br><span class="line"><span class="string">`</span>mkdir /mnt/cdrom</span><br><span class="line"><span class="string">`mv CentOS-7.6-x86_64-DVD-1810.iso /mnt/iso/</span></span><br><span class="line"><span class="string">挂载iso镜像到挂载目录/mnt/cdrom下</span></span><br><span class="line"><span class="string">`</span>mount -o loop /mnt/iso/CentOS<span class="number">-7.6</span>-x86_64-DVD<span class="number">-1810.i</span>so /mnt/cdrom</span><br><span class="line">使用df -h命令查询挂载是否成功</span><br><span class="line"><span class="string">`df -h</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">3、备份原本地源</span></span><br><span class="line"><span class="string">进入repos配置目录</span></span><br><span class="line"><span class="string">`</span>cd /etc/yum.repos.d/</span><br><span class="line">创建备份文件夹</span><br><span class="line"><span class="string">`mkdir repobak</span></span><br><span class="line"><span class="string">移动配置文件到repobak文件夹中</span></span><br><span class="line"><span class="string">`</span>mv *.repo repobak/</span><br><span class="line"></span><br><span class="line"><span class="number">4</span>、新建光盘源配置文件</span><br><span class="line"><span class="string">`vi CentOS-Media.repo</span></span><br><span class="line"><span class="string">输入下列内容</span></span><br></pre></td></tr></table></figure>
+<p>[c7-media]<br>name=CentOS-$releasever - Media<br>baseurl=file:///mnt/cdrom/</p>
+<p>gpgcheck=0<br>enabled=1<br><code>``
+5、测试安装源</code>yum clean all<br><code>yum makecache
+（二）升级openssh版本到8.6p1
+1、下载或上传安装包openssh-8.6p1.tar.gz到/root目录下
+进入安装包所在文件夹</code>cd /root/linshi</p>
+<p>2、关闭Selinux<br><code>setenforce 0</code>sed -i “s/SELINUX=enforcing/SELINUX=disabled/g” /etc/selinux/config</p>
+<p>3、安装依赖关系<br><code>yum install -y gcc pam-devel rpm-build wget zlib-devel openssl-devel net-tools</code>tar -xvf openssh-8.6p1.tar.gz<br>`cd openssh-8.6p1</p>
+<p>4、卸载旧版openssh<br><code>rpm -qa |grep openssh
+ps:下一步骤为删除原有ssh，但不会影响现在进行的ssh会话，所以整个操作过程不要断开ssh会话，
+否则无法再次连接，只能由现场人员进行回退后重新操作（推荐使用telnet进行升级）。</code>for i in $(rpm -qa |grep openssh);do rpm -e $i —nodeps;done</p>
+<p>5、设置、编译、安装<br><code>`./configure --prefix=/usr --sysconfdir=/etc/ssh --with-md5-passwords --with-pam --with-tcp-wrappers  --with-ssl-dir=/usr/local/ssl/lib --without-hardening</code>mv /etc/ssh /etc/ssh.old<br>`cp contrib/redhat/sshd.pam /etc/pam.d/sshd</p>
+<h1 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h1><p>`make</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>`make install</p>
+<p>6、设置自启动<br><code>复制启动脚本到/etc/init.d</code>cp contrib/redhat/sshd.init /etc/init.d/sshd<br><code>chkconfig --add sshd</code>chkconfig sshd on<br><code>chkconfig --list|grep sshd</code>sed -i “32a PermitRootLogin yes” /etc/ssh/sshd_config<br><code>`重启ssh服务</code>service sshd restart</p>
+<p>7、检查升级情况<br>`ssh -V<br>输出版本号为“OpenSSH_8.6p1”，说明更新成功</p>
+<p>(三)关闭telnet<br>关闭服务<br><code>systemctl stop telnet.socket</code>systemctl stop xinetd<br><code>#root可以登录</code>#mv /etc/securetty.bak /etc/securetty</p>
+<p>卸载telnet<br>`yum remove telnet-server  xinetd</p>
+<p>ps：此时ssh是可以连接状态，不要断开连接防止修改出错无法连接服务器。测试新端口是否打开<br>`telnet 127.0.0.1 22</p>
+<h1 id="出现如下显示表示端口正常打开"><a href="#出现如下显示表示端口正常打开" class="headerlink" title="出现如下显示表示端口正常打开"></a>出现如下显示表示端口正常打开</h1><p><code>Trying 127.0.0.1...</code>Connected to 127.0.0.1.<br><code>Escape character is &#39;^]&#39;.</code>SSH-2.0-OpenSSH_8.6<br>使用远程工具新开窗口，连接新端口测试修改是否成功，如有问题马上使用之前的连接进行检查修改。</p>
+<p>（四）回退方案<br>1、挂载iso文件作为yum源<br><code>mount -o loop /mnt/iso/CentOS-7.6-x86_64-DVD-1810.iso /mnt/cdrom
+2、安装openssh</code>yum install openssh*<br>3、启动ssh<br>`service sshd start<br>4、重新连接ssh，然后从（二）4开始做。</p>
+<h2 id="3-查看CPU信息："><a href="#3-查看CPU信息：" class="headerlink" title="3 查看CPU信息："></a>3 查看CPU信息：</h2><p>内存文件：</p>
+<p>/proc/meminfo</p>
+<p>/proc/cpuinfo</p>
+<p>命令：</p>
+<p>lscpu lsmem</p>
+<p>查看CPU使用最高的进程：</p>
+<p>ps -aux | sort -k3nr | head -n</p>
+<h2 id="4-查看端口："><a href="#4-查看端口：" class="headerlink" title="4 查看端口："></a>4 查看端口：</h2><p>netstat -anp | grep port_number</p>
+<h2 id="5-查看硬盘空间："><a href="#5-查看硬盘空间：" class="headerlink" title="5 查看硬盘空间："></a>5 查看硬盘空间：</h2><p>df -aTh</p>
+<p>du -h -d 1</p>
+<p>作者：赵先生<br>链接：<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/483668258/answer/3048322619">https://www.zhihu.com/question/483668258/answer/3048322619</a><br>来源：知乎<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+
     
     
   </div>
@@ -311,23 +894,15 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      <a class="post-link" href="/2023/07/14/DDIA/07%20%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E9%BA%BB%E7%83%A6%E4%BA%8B/">[DDIA] 分布式系统中的麻烦事</a>
+      <a class="post-link" href="/2025/05/07/Basic/Linux%20%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"></a>
       
     </h1>
 
     <div class="post-meta">
       <span class="post-time">
-        2023-07-14
+        2025-05-07
       </span>
       
-      
-      <span class="post-category">
-        
-        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">阅读笔记</a>
-        
-        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/DDIA/">DDIA</a>
-        
-      </span>
       
       
     </div>
@@ -339,16 +914,548 @@
     
     
     
-    
-    
 
     
-    <blockquote>
-<p>是否要在目标场景下解决这些问题、还是为了降低系统复杂度忽略这些问题</p>
+    <h2 id="1-一、文件和目录"><a href="#1-一、文件和目录" class="headerlink" title="1 一、文件和目录"></a>1 一、文件和目录</h2><blockquote>
+<p>查看路径</p>
 </blockquote>
-    <div class="read-more">
-      <a href="/2023/07/14/DDIA/07%20%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E9%BA%BB%E7%83%A6%E4%BA%8B/" class="read-more-link">Read more..</a>
-    </div>
+<h3 id="1-1-pwd"><a href="#1-1-pwd" class="headerlink" title="1.1 pwd"></a>1.1 <strong>pwd</strong></h3><p><strong>显示当前目录的路径</strong></p>
+<h3 id="1-2-which"><a href="#1-2-which" class="headerlink" title="1.2 which"></a>1.2 <strong>which</strong></h3><p>查看命令的可执行文件所在路径， Linux 下，每一条命令其实都对应一个可执行程序，在终端中输入命令，按回车的时候，就是执行了对应的那个程序， which 命令本身对应的程序也存在于 Linux 中。</p>
+<p>总的来说一个命令就是一个可执行程序。</p>
+<blockquote>
+<p><em>浏览和切换目录</em></p>
+</blockquote>
+<h3 id="1-3-ls"><a href="#1-3-ls" class="headerlink" title="1.3 ls"></a>1.3 <strong>ls</strong></h3><p><strong>列出文件和目录，它是 Linux 最常用的命令之一。</strong></p>
+<p>【常用参数】</p>
+<ul>
+<li>-a 显示所有文件和目录包括隐藏的</li>
+<li>-l 显示详细列表</li>
+<li>-h 适合人类阅读的</li>
+<li>-t 按文件最近一次修改时间排序</li>
+<li>-i 显示文件的 inode （ inode 是文件内容的标识）</li>
+</ul>
+<h3 id="1-4-cd"><a href="#1-4-cd" class="headerlink" title="1.4 cd"></a>1.4 <strong>cd</strong></h3><p><strong>cd 是英语 change directory 的缩写，表示切换目录。</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cd / --&gt; 跳转到根目录</span><br><span class="line">cd ~ --&gt; 跳转到家目录</span><br><span class="line">cd .. --&gt; 跳转到上级目录</span><br><span class="line">cd ./home --&gt; 跳转到当前目录的home目录下</span><br><span class="line">cd /home/lion --&gt; 跳转到根目录下的home目录下的lion目录</span><br><span class="line">cd --&gt; 不添加任何参数，也是回到家目录</span><br></pre></td></tr></table></figure>
+<p>[注意] 输入cd /ho + 单次 tab 键会自动补全路径 + 两次 tab 键会列出所有可能的目录列表。</p>
+<h3 id="1-5-du"><a href="#1-5-du" class="headerlink" title="1.5 du"></a>1.5 <strong>du</strong></h3><p><strong>列举目录大小信息。</strong></p>
+<p>【常用参数】</p>
+<ul>
+<li>-h 适合人类阅读的；</li>
+<li>-a 同时列举出目录下文件的大小信息；</li>
+<li>-s 只显示总计大小，不显示具体信息。</li>
+</ul>
+<h3 id="1-6-浏览和创建文件"><a href="#1-6-浏览和创建文件" class="headerlink" title="1.6 浏览和创建文件"></a>1.6 浏览和创建文件</h3><h3 id="1-7-cat"><a href="#1-7-cat" class="headerlink" title="1.7 cat"></a>1.7 <strong>cat</strong></h3><p><strong>一次性显示文件所有内容，更适合查看小的文件。</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cat cloud-init.log</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>【常用参数】</p>
+<ul>
+<li>-n 显示行号。  </li>
+</ul>
+<h3 id="1-8-less"><a href="#1-8-less" class="headerlink" title="1.8 less"></a>1.8 <strong>less</strong></h3><p><strong>分页显示文件内容，更适合查看大的文件。</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">less cloud-init.log</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>【快捷操作】</p>
+<ul>
+<li>空格键：前进一页（一个屏幕）；</li>
+<li>b 键：后退一页；</li>
+<li>回车键：前进一行；</li>
+<li>y 键：后退一行；</li>
+<li>上下键：回退或前进一行；</li>
+<li>d 键：前进半页；</li>
+<li>u 键：后退半页；</li>
+<li>q 键：停止读取文件，中止 less 命令；</li>
+<li>= 键：显示当前页面的内容是文件中的第几行到第几行以及一些其它关于本页内容的详细信息；</li>
+<li>h 键：显示帮助文档；</li>
+<li>/ 键：进入搜索模式后，按 n 键跳到一个符合项目，按 N 键跳到上一个符合项目，同时也可以输入<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A2717297135%7D">正则表达式</a>匹配。</li>
+</ul>
+<h3 id="1-9-head"><a href="#1-9-head" class="headerlink" title="1.9 head"></a>1.9 <strong>head</strong></h3><p><strong>显示文件的开头几行（默认是10行）</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">head cloud-init.log</span><br></pre></td></tr></table></figure>
+<p>【参数】</p>
+<ul>
+<li>-n 指定行数 head cloud-init.log -n 2  </li>
+</ul>
+<h3 id="1-10-tail"><a href="#1-10-tail" class="headerlink" title="1.10 tail"></a>1.10 <strong>tail</strong></h3><p><strong>显示文件的结尾几行（默认是10行）</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail cloud-init.log复制代码</span><br></pre></td></tr></table></figure>
+<p>【参数】</p>
+<ul>
+<li>-n 指定行数 tail cloud-init.log -n 2</li>
+<li>-f 会每过1秒检查下文件是否有更新内容，也可以用 -s 参数指定间隔时间 tail -f -s 4 xxx.log</li>
+</ul>
+<h3 id="1-11-touch"><a href="#1-11-touch" class="headerlink" title="1.11 touch"></a>1.11 <strong>touch</strong></h3><p><strong>创建一个文件</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch new_file复制代码</span><br></pre></td></tr></table></figure>
+<h3 id="1-12-mkdir"><a href="#1-12-mkdir" class="headerlink" title="1.12 mkdir"></a>1.12 <strong>mkdir</strong></h3><p><strong>创建一个目录</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir new_folder复制代码</span><br></pre></td></tr></table></figure>
+<p>【常用参数】</p>
+<ul>
+<li>-p 递归的创建目录结构 mkdir -p one/two/three  </li>
+</ul>
+<blockquote>
+<p>文件的复制和移动</p>
+</blockquote>
+<h3 id="1-13-cp"><a href="#1-13-cp" class="headerlink" title="1.13 cp"></a>1.13 <strong>cp</strong></h3><p><strong>拷贝文件和目录</strong></p>
+<p>cp file file_copy —&gt; file 是目标文件，file_copy 是拷贝出来的文件cp file one —&gt; 把 file 文件拷贝到 one 目录下，并且文件名依然为 file</p>
+<p>cp file one/file_copy —&gt; 把 file 文件拷贝到 one 目录下，文件名为file_copy</p>
+<p>cp *.txt folder —&gt; 把当前目录下所有 txt 文件拷贝到 folder 目录下</p>
+<p>【常用参数】</p>
+<ul>
+<li>-r 递归的拷贝，常用来拷贝一整个目录  </li>
+</ul>
+<h3 id="1-14-mv"><a href="#1-14-mv" class="headerlink" title="1.14 mv"></a>1.14 <strong>mv</strong></h3><p><strong>移动（重命名）文件或目录，与cp命令用法相似。</strong></p>
+<p>mv file one —&gt; 将 file 文件移动到 one 目录下</p>
+<p>mv new_folder one —&gt; 将 new_folder 文件夹移动到one目录下mv *.txt folder —&gt; 把当前目录下所有 txt 文件移动到 folder 目录下mv file new_file —&gt; file 文件重命名为 new_file</p>
+<blockquote>
+<p>文件的删除和链接</p>
+</blockquote>
+<h3 id="1-15-rm"><a href="#1-15-rm" class="headerlink" title="1.15 rm"></a>1.15 <strong>rm</strong></h3><p><strong>删除文件和目录，由于 Linux 下没有回收站，一旦删除非常难恢复，因此需要谨慎操作</strong></p>
+<p>rm new_file —&gt; 删除 new_file 文件</p>
+<p>rm f1 f2 f3 —&gt; 同时删除 f1 f2 f3 3个文件</p>
+<p>【常用参数】</p>
+<ul>
+<li>-i 向用户确认是否删除；</li>
+<li>-f 文件强制删除；</li>
+<li>-r 递归删除文件夹，著名的删除操作 rm -rf 。  </li>
+</ul>
+<h3 id="1-16-ln"><a href="#1-16-ln" class="headerlink" title="1.16 ln"></a>1.16 <strong>ln</strong></h3><p><strong>英文 Link 的缩写，表示创建链接。</strong></p>
+<p>学习创建链接之前，首先要理解链接是什么，我们先来看看 Linux 的文件是如何存储的：</p>
+<p>Linux 文件的存储方式分为3个部分，文件名、文件内容以及权限，其中文件名的列表是存储在硬盘的其它地方和文件内容是分开存放的，每个文件名通过 inode 标识绑定到文件内容。</p>
+<p>Linux 下有两种链接类型：硬链接和软链接。</p>
+<h3 id="1-17-硬链接"><a href="#1-17-硬链接" class="headerlink" title="1.17 硬链接"></a>1.17 硬链接</h3><p>使链接的两个文件共享同样文件内容，就是同样的 inode ，一旦文件1和文件2之间有了硬链接，那么修改任何一个文件，修改的都是同一块内容，它的缺点是，只能创建指向文件的硬链接，不能创建指向目录的（其实也可以，但比较复杂）而软链接都可以，<strong>因此软链接使用更加广泛</strong>。</p>
+<p>这个部分暂时不展开。  </p>
+<h2 id="2-二、用户与权限"><a href="#2-二、用户与权限" class="headerlink" title="2 二、用户与权限"></a>2 二、用户与权限</h2><blockquote>
+<p>用户</p>
+</blockquote>
+<p>Linux 是一个多用户的操作系统。在 Linux 中，理论上来说，我们可以创建无数个用户，但是这些用户是被划分到不同的群组里面的，有一个用户，名叫 root ，是一个很特殊的用户，它是超级用户，拥有最高权限。</p>
+<h3 id="2-1-sudo"><a href="#2-1-sudo" class="headerlink" title="2.1 sudo"></a>2.1 <strong>sudo</strong></h3><p><strong>以 root 身份运行命令</strong></p>
+<h3 id="2-2-useradd-passwd"><a href="#2-2-useradd-passwd" class="headerlink" title="2.2 useradd + passwd"></a>2.2 <strong>useradd + passwd</strong></h3><ul>
+<li>useradd 添加新用户</li>
+<li>passwd 修改用户密码</li>
+</ul>
+<p>这两个命令需要 root 用户权限</p>
+<h3 id="2-3-userdel"><a href="#2-3-userdel" class="headerlink" title="2.3 userdel"></a>2.3 <strong>userdel</strong></h3><p><strong>删除用户，需要 root 用户权限</strong></p>
+<h3 id="2-4-su"><a href="#2-4-su" class="headerlink" title="2.4 su"></a>2.4 <strong>su</strong></h3><p><strong>切换用户</strong>，需要 root 用户权限</p>
+<blockquote>
+<p>群组的管理</p>
+</blockquote>
+<p>Linux 中每个用户都属于一个特定的群组，如果你不设置用户的群组，默认会创建一个和它的用户名一样的群组，并且把用户划归到这个群组。</p>
+<h3 id="2-5-groupadd"><a href="#2-5-groupadd" class="headerlink" title="2.5 groupadd"></a>2.5 <strong>groupadd</strong></h3><p><strong>创建群组，</strong>用法和 useradd 类似</p>
+<h3 id="2-6-groupdel"><a href="#2-6-groupdel" class="headerlink" title="2.6 groupdel"></a>2.6 <strong>groupdel</strong></h3><p><strong>删除一个已存在的群组</strong></p>
+<h3 id="2-7-groups"><a href="#2-7-groups" class="headerlink" title="2.7 groups"></a>2.7 <strong>groups</strong></h3><p><strong>查看用户所在群组</strong></p>
+<h3 id="2-8-usermod"><a href="#2-8-usermod" class="headerlink" title="2.8 usermod"></a>2.8 <strong>usermod</strong></h3><p><strong>用于修改用户的账户。</strong></p>
+<p>【常用参数】</p>
+<ul>
+<li>-l 对用户重命名。需要注意的是 /home 中的用户家目录的名字不会改变，需要手动修改。</li>
+<li>-g 修改用户所在的群组，例如 usermod -g friends lion修改 lion 用户的群组为 friends 。</li>
+<li>-G 一次性让用户添加多个群组，例如 usermod -G friends,foo,bar lion 。</li>
+<li>-a -G 会让你离开原先的群组，如果你不想这样做的话，就得再添加 -a 参数，意味着append 追加的意思。  </li>
+</ul>
+<h3 id="2-9-chgrp"><a href="#2-9-chgrp" class="headerlink" title="2.9 chgrp"></a>2.9 <strong>chgrp</strong></h3><p><strong>用于修改文件的群组。</strong></p>
+<h3 id="2-10-chown"><a href="#2-10-chown" class="headerlink" title="2.10 chown"></a>2.10 <strong>chown</strong></h3><p><strong>改变文件的所有者</strong>，需要 root 身份才能运行。</p>
+<p>【常用参数】</p>
+<ul>
+<li>-R 递归设置子目录和子文件， chown -R lion:lion /home/frank 把 frank 文件夹的用户和群组都改为 lion 。</li>
+</ul>
+<blockquote>
+<p>文件权限管理</p>
+</blockquote>
+<h3 id="2-11-chmod"><a href="#2-11-chmod" class="headerlink" title="2.11 chmod"></a>2.11 <strong>chmod</strong></h3><p><strong>修改访问权限。</strong></p>
+<p>【常用参数】</p>
+<ul>
+<li>-R 可以递归地修改文件访问权限，例如 chmod -R 777 /home/lion</li>
+</ul>
+<p>其中 drwxr-xr-x 表示文件或目录的权限。让我们一起来解读它具体代表什么？</p>
+<ul>
+<li>d ：表示目录，就是说这是一个目录，普通文件是 - ，链接是 l 。</li>
+<li>r ：read 表示文件可读。</li>
+<li>w ：write 表示文件可写，一般有写的权限，就有删除的权限。</li>
+<li>x ：execute 表示文件可执行。</li>
+<li><ul>
+<li>：表示没有相应权限。</li>
+</ul>
+</li>
+</ul>
+<p>现在再来理解这句权限 drwxr-xr-x 的意思：</p>
+<ul>
+<li>它是一个文件夹；</li>
+<li>它的所有者具有：读、写、执行权限；</li>
+<li>它的群组用户具有：读、执行的权限，没有写的权限；</li>
+<li>它的其它用户具有：读、执行的权限，没有写的权限。  </li>
+</ul>
+<p>现在理解了权限，我们使用 chmod 来尝试修改权限。chmod 它不需要是 root 用户才能运行的，只要你是此文件所有者，就可以用 chmod 来修改文件的访问权限。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-419fd37f2018837b1ffd75925e24901e_1440w.webp?source=1940ef5c" alt=""></p>
+<p>chmod 640 hello.c</p>
+<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>6 = 4 + 2 + 0 表示所有者具有 rw 权限</p>
+<p>4 = 4 + 0 + 0 表示群组用户具有 r 权限</p>
+<p>0 = 0 + 0 + 0 表示其它用户没有权限</p>
+<p>对应文字权限为：-rw-r——-</p>
+<h3 id="0-1-用字母来分配权限"><a href="#0-1-用字母来分配权限" class="headerlink" title="0.1 用字母来分配权限"></a>0.1 用字母来分配权限</h3><ul>
+<li>u ：user 的缩写，用户的意思，表示所有者。</li>
+<li>g ：group 的缩写，群组的意思，表示群组用户。</li>
+<li>o ：other 的缩写，其它的意思，表示其它用户。</li>
+<li>a ：all 的缩写，所有的意思，表示所有用户。</li>
+<li><ul>
+<li>：加号，表示添加权限。</li>
+</ul>
+</li>
+<li><ul>
+<li>：减号，表示去除权限。</li>
+</ul>
+</li>
+<li>= ：等于号，表示分配权限。</li>
+</ul>
+<p>chmod u+rx file —&gt; 文件file的所有者增加读和运行的权限</p>
+<p>chmod g+r file —&gt; 文件file的群组用户增加读的权限</p>
+<p>chmod o-r file—&gt; 文件file的其它用户移除读的权限</p>
+<p>chmod g+r file —&gt; 文件file的群组用户增加读的权限，其它用户移除读的权限</p>
+<p>chmod go-r file —&gt; 文件file的群组和其他用户移除读的权限</p>
+<p>chmod +x file —&gt; 文件file的所有用户增加运行的权限</p>
+<p>chmod u=rwx,g=r,o=- file —&gt; 文件file的所有者分配读写和执行的权限，群组其它用户分配读的权限，其他用户没有任何权限</p>
+<h2 id="1-三、查找文件"><a href="#1-三、查找文件" class="headerlink" title="1 三、查找文件"></a>1 三、查找文件</h2><h3 id="1-1-locate"><a href="#1-1-locate" class="headerlink" title="1.1 locate"></a>1.1 <strong>locate</strong></h3><p><strong>搜索包含关键字的所有文件和目录。后接需要查找的文件名，也可以用正则表达式。</strong></p>
+<h3 id="1-2-安装-locate"><a href="#1-2-安装-locate" class="headerlink" title="1.2 安装 locate"></a>1.2 安装 locate</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install mlocate --&gt; 安装包updatedb --&gt; 更新数据库复制代码locate file.txtlocate fil*.txt</span><br></pre></td></tr></table></figure>
+<p>[注意] locate 命令会去<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E6%96%87%E4%BB%B6%E6%95%B0%E6%8D%AE%E5%BA%93&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A2717297135%7D">文件数据库</a>中查找命令，而不是全磁盘查找，因此刚创建的文件并不会更新到数据库中，所以无法被查找到，可以执行 updatedb 命令去更新数据库。</p>
+<blockquote>
+<p>find</p>
+</blockquote>
+<p>用于查找文件，它会去遍历你的实际硬盘进行查找，而且它允许我们对每个找到的文件进行后续操作，功能非常强大。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find &lt;何处&gt; &lt;何物&gt; &lt;做什么&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>何处：指定在哪个目录查找，此目录的所有子目录也会被查找。</li>
+<li>何物：查找什么，可以根据文件的名字来查找，也可以根据其大小来查找，还可以根据其最近访问时间来查找。</li>
+<li>做什么：找到文件后，可以进行后续处理，如果不指定这个参数， find 命令只会显示找到的文件。  </li>
+</ul>
+<h3 id="1-3-根据文件名查找"><a href="#1-3-根据文件名查找" class="headerlink" title="1.3 根据文件名查找"></a>1.3 <strong>根据文件名查找</strong></h3><p>find -name “file.txt” —&gt; 当前目录以及子目录下通过名称查找文件</p>
+<p>find . -name “syslog” —&gt; 当前目录以及子目录下通过名称查找文件</p>
+<p>find / -name “syslog” —&gt; 整个硬盘下查找syslog</p>
+<p>find /var/log -name “syslog” —&gt; 在指定的目录/var/log下查找syslog文件find /var/log -name “syslog*” —&gt; 查找syslog1、syslog2 … 等文件，通配符表示所有</p>
+<p>find /var/log -name “<em>syslog</em>“ —&gt; 查找包含syslog的文件</p>
+<p>[注意] find 命令只会查找完全符合 “何物” 字符串的文件，而 locate 会查找所有包含关键字的文件。</p>
+<h3 id="1-4-根据文件大小查找"><a href="#1-4-根据文件大小查找" class="headerlink" title="1.4 根据文件大小查找"></a>1.4 <strong>根据文件大小查找</strong></h3><p>find /var -size +10M —&gt; /var 目录下查找文件大小超过 10M 的文件</p>
+<p>find /var -size -50k —&gt; /var 目录下查找文件大小小于 50k 的文件</p>
+<p>find /var -size +1G —&gt; /var 目录下查找文件大小查过 1G 的文件</p>
+<p>find /var -size 1M —&gt; /var 目录下查找文件大小等于 1M 的文件</p>
+<h3 id="1-5-根据文件最近访问时间查找"><a href="#1-5-根据文件最近访问时间查找" class="headerlink" title="1.5 根据文件最近访问时间查找"></a>1.5 <strong>根据文件最近访问时间查找</strong></h3><p>find -name “*.txt” -atime -7</p>
+<p>—&gt; 近 7天内访问过的.txt结尾的文件</p>
+<h3 id="1-6-仅查找目录或文件-根据类型查找"><a href="#1-6-仅查找目录或文件-根据类型查找" class="headerlink" title="1.6 仅查找目录或文件,根据类型查找"></a>1.6 <strong>仅查找目录或文件,根据类型查找</strong></h3><p>find . -name “file” -type f</p>
+<p>—&gt; 只查找当前目录下的file文件</p>
+<p>find . -name “file” -type d</p>
+<p>—&gt; 只查找当前目录下的file目录</p>
+<blockquote>
+<p>软件仓库</p>
+</blockquote>
+<p>Linux 下软件是以包的形式存在，一个软件包其实就是软件的所有文件的压缩包，是二进制的形式，包含了安装软件的所有指令。Red Hat 家族的软件包后缀名一般为 .rpm ，Debian 家族的软件包后缀是 .deb 。</p>
+<p>Linux 的包都存在一个仓库，叫做软件仓库，它可以使用 yum 来管理软件包， yum 是 CentOS 中默认的包管理工具，适用于 Red Hat 一族。可以理解成 Node.js 的 npm 。</p>
+<blockquote>
+<p>yum 常用命令</p>
+</blockquote>
+<ul>
+<li>yum update | yum upgrade 更新软件包</li>
+<li>yum search xxx 搜索相应的软件包</li>
+<li>yum install xxx 安装软件包</li>
+<li>yum remove xxx 删除软件包</li>
+</ul>
+<h2 id="2-四、文本操作"><a href="#2-四、文本操作" class="headerlink" title="2 四、文本操作"></a>2 四、文本操作</h2><blockquote>
+<p>grep</p>
+</blockquote>
+<p><strong>全局搜索一个正则表达式，并且打印到屏幕。简单来说就是，在文件中查找关键字，并显示关键字所在行。</strong></p>
+<h3 id="2-1-基础语法"><a href="#2-1-基础语法" class="headerlink" title="2.1 基础语法"></a>2.1 基础语法</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep text file # text代表要搜索的文本，file代表供搜索的文件</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-常用参数"><a href="#2-2-常用参数" class="headerlink" title="2.2 常用参数"></a>2.2 常用参数</h3><ul>
+<li>-i 忽略大小写， grep -i path /etc/profile</li>
+<li>-n 显示行号，grep -n path /etc/profile</li>
+<li>-v 只显示搜索文本不在的那些行，grep -v path /etc/profile</li>
+<li>-r 递归查找， grep -r hello /etc ，Linux 中还有一个 rgrep 命令，作用相当于 grep -r</li>
+</ul>
+<h3 id="2-3-sort"><a href="#2-3-sort" class="headerlink" title="2.3 sort"></a>2.3 sort</h3><p><strong>对文件的行进行排序。</strong></p>
+<h3 id="2-4-基础语法"><a href="#2-4-基础语法" class="headerlink" title="2.4 基础语法"></a>2.4 基础语法</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sort name.txt # 对name.txt文件进行排序</span><br></pre></td></tr></table></figure>
+<h3 id="2-5-实例用法"><a href="#2-5-实例用法" class="headerlink" title="2.5 实例用法"></a>2.5 实例用法</h3><p>为了演示方便，我们首先创建一个文件 name.txt ，放入以下内容：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ChristopherShawnTedRockNoahZacharyBella</span><br></pre></td></tr></table></figure>
+<p>执行 sort name.txt 命令，会对文本内容进行排序。</p>
+<h3 id="2-6-常用参数"><a href="#2-6-常用参数" class="headerlink" title="2.6 常用参数"></a>2.6 常用参数</h3><ul>
+<li>-o 将排序后的文件写入新文件， sort -o name_sorted.txt name.txt ；</li>
+<li>-r 倒序排序， sort -r name.txt ；</li>
+<li>-R 随机排序， sort -R name.txt ；</li>
+<li>-n 对数字进行排序，默认是把数字识别成字符串的，因此 138 会排在 25 前面，如果添加了 -n 数字排序的话，则 25 会在 138 前面。</li>
+</ul>
+<h3 id="2-7-wc"><a href="#2-7-wc" class="headerlink" title="2.7 wc"></a>2.7 wc</h3><p><strong>word count 的缩写，用于文件的统计。它可以统计单词数目、行数、字符数，字节数等。</strong></p>
+<h3 id="2-8-基础语法"><a href="#2-8-基础语法" class="headerlink" title="2.8 基础语法"></a>2.8 基础语法</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wc name.txt # 统计name.txt</span><br></pre></td></tr></table></figure>
+<h3 id="2-9-实例用法"><a href="#2-9-实例用法" class="headerlink" title="2.9 实例用法"></a>2.9 实例用法</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@lion ~]# wc name.txt 13 13 91 name.txt</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第一个13，表示行数；</li>
+<li>第二个13，表示单词数；</li>
+<li>第三个91，表示字节数。</li>
+</ul>
+<h3 id="2-10-常用参数"><a href="#2-10-常用参数" class="headerlink" title="2.10 常用参数"></a>2.10 常用参数</h3><ul>
+<li>-l 只统计行数， wc -l name.txt ；</li>
+<li>-w 只统计单词数， wc -w name.txt ；</li>
+<li>-c 只统计字节数， wc -c name.txt ；</li>
+<li>-m 只统计字符数， wc -m name.txt 。  </li>
+</ul>
+<h3 id="2-11-uniq"><a href="#2-11-uniq" class="headerlink" title="2.11 uniq"></a>2.11 uniq</h3><p><strong>删除文件中的重复内容。</strong></p>
+<h3 id="2-12-基础语法"><a href="#2-12-基础语法" class="headerlink" title="2.12 基础语法"></a>2.12 基础语法</h3><p>uniq name.txt # 去除name.txt重复的行数，并打印到屏幕上</p>
+<p>【注意】它只能去除连续重复的行数。</p>
+<h3 id="2-13-常用参数"><a href="#2-13-常用参数" class="headerlink" title="2.13 常用参数"></a>2.13 常用参数</h3><ul>
+<li>-c 统计重复行数， uniq -c name.txt ；</li>
+<li>-d 只显示重复的行数， uniq -d name.txt 。  </li>
+</ul>
+<h3 id="2-14-cut"><a href="#2-14-cut" class="headerlink" title="2.14 cut"></a>2.14 <strong>cut</strong></h3><p><strong>剪切文件的一部分内容。</strong></p>
+<h3 id="2-15-基础语法"><a href="#2-15-基础语法" class="headerlink" title="2.15 基础语法"></a>2.15 基础语法</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cut -c 2-4 name.txt # 剪切每一行第二到第四个字符</span><br></pre></td></tr></table></figure>
+<h3 id="2-16-常用参数"><a href="#2-16-常用参数" class="headerlink" title="2.16 常用参数"></a>2.16 常用参数</h3><ul>
+<li>-d 用于指定用什么分隔符（比如逗号、分号、双引号等等） cut -d , name.txt ；</li>
+<li>-f 表示剪切下用分隔符分割的哪一块或哪几块区域， cut -d , -f 1 name.txt 。  </li>
+</ul>
+<h2 id="3-五、重定向-管道-流"><a href="#3-五、重定向-管道-流" class="headerlink" title="3 五、重定向 管道 流"></a>3 五、重定向 管道 流</h2><p>在 Linux 中一个命令的去向可以有3个地方：终端、文件、作为另外一个命令的入参。</p>
+<p>命令一般都是通过键盘输入，然后输出到终端、文件等地方，它的标准用语是 stdin 、 stdout 以及 stderr 。</p>
+<ul>
+<li>标准输入 stdin ，终端接收键盘输入的命令，会产生两种输出；</li>
+<li>标准输出 stdout ，终端输出的信息（不包含错误信息）；</li>
+<li>标准错误输出 stderr ，终端输出的错误信息。</li>
+</ul>
+<h3 id="3-1-重定向"><a href="#3-1-重定向" class="headerlink" title="3.1 重定向"></a>3.1 重定向</h3><p>把本来要显示在终端的命令结果，输送到别的地方（到文件中或者作为其他命令的输入）。</p>
+<h3 id="3-2-输出重定向-gt"><a href="#3-2-输出重定向-gt" class="headerlink" title="3.2 输出重定向 &gt;"></a>3.2 <strong>输出重定向 &gt;</strong></h3><blockquote>
+<p>表示重定向到新的文件， cut -d , -f 1 notes.csv &gt; name.csv ，它表示通过逗号剪切notes.csv 文件（剪切完有3个部分）获取第一个部分，重定向到 name.csv 文件。</p>
+</blockquote>
+<p>我们来看一个具体示例，学习它的使用，假设我们有一个文件 notes.csv ，文件内容如下：</p>
+<p>Mark1,951/100,很不错1Mark2,952/100,很不错2Mark3,</p>
+<p>953/100,很不错3Mark4,954/100,很不错4Mark5,955/100,很不错5Mark6,956/100,很不错6</p>
+<p>执行命令：cut -d , -f 1 notes.csv &gt; name.csv 最后输出如下内容：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mark1Mark2Mark3Mark4Mark5Mark6</span><br></pre></td></tr></table></figure>
+<p>【注意】使用 &gt; 要注意，如果输出的文件不存在它会新建一个，如果输出的文件已经存在，则会覆盖。因此执行这个操作要非常小心，以免覆盖其它重要文件。</p>
+<h3 id="3-3-输出重定向-gt-gt"><a href="#3-3-输出重定向-gt-gt" class="headerlink" title="3.3 输出重定向 &gt;&gt;"></a>3.3 <strong>输出重定向 &gt;&gt;</strong></h3><p>表示重定向到文件末尾，因此它不会像 &gt; 命令这么危险，它是追加到文件的末尾（当然如果文件不存在，也会被创建）。</p>
+<p>再次执行 cut -d , -f 1 notes.csv &gt;&gt; name.csv ，则会把名字追加到 name.csv 里面。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mark1Mark2Mark3Mark4Mark5Mark6Mark1Mark2Mark3Mark4Mark5Mark6</span><br></pre></td></tr></table></figure>
+<p>我们平时读的 log 日志文件其实都是用这个命令输出的。</p>
+<h3 id="3-4-输出重定向-2-gt"><a href="#3-4-输出重定向-2-gt" class="headerlink" title="3.4 输出重定向 2&gt;"></a>3.4 <strong>输出重定向 2&gt;</strong></h3><p>标准错误输出</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat not_exist_file.csv &gt; res.txt 2&gt; errors.log</span><br></pre></td></tr></table></figure>
+<ul>
+<li>当我们 cat 一个文件时，会把文件内容打印到屏幕上，这个是标准输出；</li>
+<li>当使用了 &gt; res.txt 时，则不会打印到屏幕，会把标准输出写入文件 res.txt 文件中；</li>
+<li>2&gt; errors.log 当发生错误时会写入 errors.log 文件中。  </li>
+</ul>
+<h3 id="3-5-输出重定向-2-gt-gt"><a href="#3-5-输出重定向-2-gt-gt" class="headerlink" title="3.5 输出重定向 2&gt;&gt;"></a>3.5 <strong>输出重定向 2&gt;&gt;</strong></h3><p>标准错误输出（追加到文件末尾）同 &gt;&gt; 相似。</p>
+<h3 id="3-6-输入重定向-lt"><a href="#3-6-输入重定向-lt" class="headerlink" title="3.6 输入重定向 &lt;"></a>3.6 <strong>输入重定向 &lt;</strong></h3><p>&lt; 符号用于指定命令的输入。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat &lt; name.csv # 指定命令的输入为 name.csv</span><br></pre></td></tr></table></figure>
+<p>虽然它的运行结果与 cat name.csv 一样，但是它们的原理却完全不同。</p>
+<ul>
+<li>cat name.csv 表示 cat 命令接收的输入是 notes.csv 文件名，那么要先打开这个文件，然后打印出文件内容。</li>
+<li>cat &lt; name.csv 表示 cat 命令接收的输入直接是 notes.csv 这个文件的内容， cat命令只负责将其内容打印，打开文件并将文件内容传递给 cat 命令的工作则交给终端完成。  </li>
+</ul>
+<h3 id="3-7-输入重定向-lt-lt"><a href="#3-7-输入重定向-lt-lt" class="headerlink" title="3.7 输入重定向 &lt;&lt;"></a>3.7 <strong>输入重定向 &lt;&lt;</strong></h3><p>将键盘的输入重定向为某个命令的输入。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sort -n &lt;&lt; END # 输入这个命令之后，按下回车，终端就进入键盘输入模式，其中END为结束命令（这个可以自定义）wc -m &lt;&lt; END # 统计输入的单词复</span><br></pre></td></tr></table></figure>
+<h3 id="3-8-管道"><a href="#3-8-管道" class="headerlink" title="3.8 管道 |"></a>3.8 管道 |</h3><p>把两个命令连起来使用，一个命令的输出作为另外一个命令的输入，英文是 pipeline ，可以想象一个个水管连接起来，管道算是重定向流的一种。</p>
+<p>举几个实际用法案例：</p>
+<p>cut -d , -f 1 name.csv | sort &gt; sorted_name.txt</p>
+<h1 id="第一步获取到的-name-列表，通过管道符再进行排序，最后输出到sorted-name-txt"><a href="#第一步获取到的-name-列表，通过管道符再进行排序，最后输出到sorted-name-txt" class="headerlink" title="第一步获取到的 name 列表，通过管道符再进行排序，最后输出到sorted_name.txt"></a>第一步获取到的 name 列表，通过管道符再进行排序，最后输出到sorted_name.txt</h1><p>du | sort -nr | head</p>
+<h1 id="du-表示列举目录大小信息-sort-进行排序-n-表示按数字排序，-r-表示倒序-head-前10行文件"><a href="#du-表示列举目录大小信息-sort-进行排序-n-表示按数字排序，-r-表示倒序-head-前10行文件" class="headerlink" title="du 表示列举目录大小信息# sort 进行排序,-n 表示按数字排序，-r 表示倒序# head 前10行文件"></a>du 表示列举目录大小信息# sort 进行排序,-n 表示按数字排序，-r 表示倒序# head 前10行文件</h1><p>grep log -Ir /var/log | cut -d : -f 1 | sort | uniq</p>
+<h1 id="grep-log-Ir-var-log-表示在log文件夹下搜索-var-log-文本，-r-表示递归，-I-用于排除二进制文件-cut-d-f-1-表示通过冒号进行剪切，获取剪切的第一部分-sort-进行排序-uniq-进行去重复制代码"><a href="#grep-log-Ir-var-log-表示在log文件夹下搜索-var-log-文本，-r-表示递归，-I-用于排除二进制文件-cut-d-f-1-表示通过冒号进行剪切，获取剪切的第一部分-sort-进行排序-uniq-进行去重复制代码" class="headerlink" title="grep log -Ir /var/log 表示在log文件夹下搜索 /var/log 文本，-r 表示递归，-I 用于排除二进制文件# cut -d : -f 1 表示通过冒号进行剪切，获取剪切的第一部分# sort 进行排序# uniq 进行去重复制代码"></a>grep log -Ir /var/log 表示在log文件夹下搜索 /var/log 文本，-r 表示递归，-I 用于排除二进制文件# cut -d : -f 1 表示通过冒号进行剪切，获取剪切的第一部分# sort 进行排序# uniq 进行去重复制代码</h1><h2 id="1-六、查看进程"><a href="#1-六、查看进程" class="headerlink" title="1 六、查看进程"></a>1 六、查看进程</h2><p>在 Windows 中通过 Ctrl + Alt + Delete 快捷键查看软件进程。</p>
+<h3 id="1-1-w"><a href="#1-1-w" class="headerlink" title="1.1 w"></a>1.1 <strong>w</strong></h3><p><strong>帮助我们快速了解系统中目前有哪些用户登录着，以及他们在干什么。</strong></p>
+<h3 id="1-2-ps"><a href="#1-2-ps" class="headerlink" title="1.2 ps"></a>1.2 <strong>ps</strong></h3><p><strong>用于显示当前系统中的进程， ps 命令显示的进程列表不会随时间而更新，是静态的，是运行 ps 命令那个时刻的状态或者说是一个进程快照。</strong></p>
+<h3 id="1-3-常用参数"><a href="#1-3-常用参数" class="headerlink" title="1.3 常用参数"></a>1.3 常用参数</h3><ul>
+<li>-ef 列出所有进程;</li>
+<li>-efH 以乔木状列举出所有进程;</li>
+<li>-u 列出此用户运行的进程;</li>
+<li>-aux 通过 CPU 和内存使用来过滤进程 ps -aux | less ;</li>
+<li>-aux —sort -pcpu 按 CPU 使用降序排列， -aux —sort -pmem 表示按内存使用降序排列;</li>
+<li>-axjf 以树形结构显示进程， ps -axjf 它和 pstree 效果类似。  </li>
+</ul>
+<h3 id="1-4-top"><a href="#1-4-top" class="headerlink" title="1.4 top"></a>1.4 top</h3><p><strong>获取进程的动态列表。</strong></p>
+<h3 id="1-5-kill"><a href="#1-5-kill" class="headerlink" title="1.5 kill"></a>1.5 <strong>kill</strong></h3><p><strong>结束一个进程， kill + PID 。</strong></p>
+<h2 id="2-七、管理进程"><a href="#2-七、管理进程" class="headerlink" title="2 七、管理进程"></a>2 七、管理进程</h2><h3 id="2-1-进程状态"><a href="#2-1-进程状态" class="headerlink" title="2.1 进程状态"></a>2.1 进程状态</h3><p>主要是切换进程的状态。我们先了解下 Linux 下进程的五种状态：</p>
+<ol>
+<li>状态码 R ：表示正在运行的状态；</li>
+<li>状态码 S ：表示中断（休眠中，受阻，当某个条件形成后或接受到信号时，则脱离该状态）；</li>
+<li>状态码 D ：表示不可中断（进程不响应系统异步信号，即使用kill命令也不能使其中断）；</li>
+<li>状态码 Z ：表示僵死（进程已终止，但进程描述符依然存在，直到父进程调用 wait4()<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E7%B3%BB%E7%BB%9F%E5%87%BD%E6%95%B0&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A2717297135%7D">系统函数</a>后将进程释放）；</li>
+<li>状态码 T ：表示停止（进程收到 SIGSTOP 、 SIGSTP 、 SIGTIN 、 SIGTOU 等停止信号后停止运行）。  </li>
+</ol>
+<h3 id="2-2-前台进程-amp-后台进程"><a href="#2-2-前台进程-amp-后台进程" class="headerlink" title="2.2 前台进程 &amp; 后台进程"></a>2.2 前台进程 &amp; 后台进程</h3><p>默认情况下，用户创建的进程都是前台进程，前台进程从键盘读取数据，并把处理结果输出到显示器。例如运行 top 命令，这就是一个一直运行的前台进程。</p>
+<p>后台进程的优点是不必等待程序运行结束，就可以输入其它命令。在需要执行的命令后面添加&amp; 符号，就表示启动一个后台进程。</p>
+<h3 id="2-3-amp"><a href="#2-3-amp" class="headerlink" title="2.3 &amp;"></a>2.3 &amp;</h3><p>启动后台进程，它的缺点是后台进程与终端相关联，一旦关闭终端，进程就自动结束了。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp name.csv name-copy.csv &amp;</span><br></pre></td></tr></table></figure>
+<h3 id="2-4-nohup"><a href="#2-4-nohup" class="headerlink" title="2.4 nohup"></a>2.4 nohup</h3><p>使进程不受挂断（关闭终端等动作）的影响。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup cp name.csv name-copy.csv</span><br></pre></td></tr></table></figure>
+<p>nohup 命令也可以和 &amp; 结合使用。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup cp name.csv name-copy.csv &amp;</span><br></pre></td></tr></table></figure>
+<h3 id="2-5-bg"><a href="#2-5-bg" class="headerlink" title="2.5 bg"></a>2.5 bg</h3><p>使一个”后台暂停运行”的进程，状态改为”后台运行”。</p>
+<h3 id="2-6-jobs"><a href="#2-6-jobs" class="headerlink" title="2.6 jobs"></a>2.6 jobs</h3><p>显示当前终端后台进程状态。</p>
+<h3 id="2-7-fg"><a href="#2-7-fg" class="headerlink" title="2.7 fg"></a>2.7 fg</h3><p>fg 使进程转为前台运行，用法和 bg 命令类似。</p>
+<p>我们用一张图来表示前后台进程切换：</p>
+<p><img src="https://pic1.zhimg.com/80/v2-fda7a2872cecb93215a9b88f9ae71a29_1440w.webp?source=1940ef5c" alt=""></p>
+<p>我们可以使程序在后台运行，成为后台进程，这样在当前终端中我们就可以做其他事情了，而不必等待此进程运行结束。</p>
+<h2 id="3-八、文件压缩解压"><a href="#3-八、文件压缩解压" class="headerlink" title="3 八、文件压缩解压"></a>3 八、文件压缩解压</h2><ul>
+<li>打包：是将多个文件变成一个总的文件，它的学名叫存档、归档。</li>
+<li>压缩：是将一个大文件（通常指归档）压缩变成一个小文件。  </li>
+</ul>
+<p>我们常常使用 tar 将多个文件归档为一个总的文件，称为 archive 。然后用 gzip 或 bzip2 命令将 archive 压缩为更小的文件。</p>
+<h3 id="3-1-tar"><a href="#3-1-tar" class="headerlink" title="3.1 tar"></a>3.1 <strong>tar</strong></h3><p><strong>创建一个 tar 归档。</strong></p>
+<h3 id="3-2-基础用法"><a href="#3-2-基础用法" class="headerlink" title="3.2 基础用法"></a>3.2 基础用法</h3><p>tar -cvf sort.tar sort/</p>
+<h1 id="将sort文件夹归档为sort-tar"><a href="#将sort文件夹归档为sort-tar" class="headerlink" title="将sort文件夹归档为sort.tar"></a>将sort文件夹归档为sort.tar</h1><p>tar -cvf archive.tar file1 file2 file3</p>
+<h1 id="将-file1-file2-file3-归档为archive-tar复制代码"><a href="#将-file1-file2-file3-归档为archive-tar复制代码" class="headerlink" title="将 file1 file2 file3 归档为archive.tar复制代码"></a>将 file1 file2 file3 归档为archive.tar复制代码</h1><h3 id="0-1-常用参数"><a href="#0-1-常用参数" class="headerlink" title="0.1 常用参数"></a>0.1 常用参数</h3><ul>
+<li>-cvf 表示 create（创建）+ verbose（细节）+ file（文件），创建归档文件并显示操作细节；</li>
+<li>-tf 显示归档里的内容，并不解开归档；</li>
+<li>-rvf 追加文件到归档， tar -rvf archive.tar file.txt ；</li>
+<li>-xvf 解开归档， tar -xvf archive.tar 。</li>
+</ul>
+<h3 id="0-2-gzip-gunzip"><a href="#0-2-gzip-gunzip" class="headerlink" title="0.2 gzip / gunzip"></a>0.2 gzip / gunzip</h3><p>“压缩/解压”归档，默认用 gzip 命令，压缩后的<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E6%96%87%E4%BB%B6%E5%90%8E%E7%BC%80%E5%90%8D&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A2717297135%7D">文件后缀名</a>为 .tar.gz 。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gzip archive.tar # 压缩gunzip archive.tar.gz # 解压</span><br></pre></td></tr></table></figure>
+<h3 id="0-3-tar-归档-压缩"><a href="#0-3-tar-归档-压缩" class="headerlink" title="0.3 tar 归档+压缩"></a>0.3 tar 归档+压缩</h3><p>可以用 tar 命令同时完成归档和压缩的操作，就是给 tar 命令多加一个选项参数，使之完成归档操作后，还是调用 gzip 或 bzip2 命令来完成压缩操作。</p>
+<p>tar -zcvf archive.tar.gz archive/ # 将archive文件夹归档并压缩</p>
+<p>tar -zxvf archive.tar.gz # 将archive.tar.gz归档压缩文件解压</p>
+<h3 id="0-4-zcat、zless、zmore"><a href="#0-4-zcat、zless、zmore" class="headerlink" title="0.4 zcat、zless、zmore"></a>0.4 zcat、zless、zmore</h3><p>之前讲过使用 cat less more 可以查看文件内容，但是压缩文件的内容是不能使用这些命令进行查看的，而要使用 zcat、zless、zmore 进行查看。</p>
+<p>zcat archive.tar.gz</p>
+<h3 id="0-5-zip-unzip"><a href="#0-5-zip-unzip" class="headerlink" title="0.5 zip/unzip"></a>0.5 zip/unzip</h3><p>“压缩/解压” zip 文件（ zip 压缩文件一般来自 windows 操作系统）。</p>
+<h3 id="0-6-命令安装"><a href="#0-6-命令安装" class="headerlink" title="0.6 命令安装"></a>0.6 命令安装</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># Red Hat 一族中的安装方式yum install zip yum install unzip 复制代码</span><br></pre></td></tr></table></figure>
+<h3 id="0-7-基础用法"><a href="#0-7-基础用法" class="headerlink" title="0.7 基础用法"></a>0.7 基础用法</h3><p>unzip archive.zip</p>
+<h1 id="解压-zip-文件"><a href="#解压-zip-文件" class="headerlink" title="解压 .zip 文件"></a>解压 .zip 文件</h1><p>unzip -l archive.zip</p>
+<h1 id="不解开-zip-文件，只看其中内容"><a href="#不解开-zip-文件，只看其中内容" class="headerlink" title="不解开 .zip 文件，只看其中内容"></a>不解开 .zip 文件，只看其中内容</h1><p>zip -r sort.zip sort/</p>
+<h1 id="将sort文件夹压缩为-sort-zip，其中-r表示递归"><a href="#将sort文件夹压缩为-sort-zip，其中-r表示递归" class="headerlink" title="将sort文件夹压缩为 sort.zip，其中-r表示递归"></a>将sort文件夹压缩为 sort.zip，其中-r表示递归</h1><h3 id="0-1-编译安装"><a href="#0-1-编译安装" class="headerlink" title="0.1 编译安装"></a>0.1 编译安装</h3><p>简单来说，编译就是将程序的源代码转换成可执行文件的过程。大多数 Linux 的程序都是开放源码的，可以编译成适合我们的电脑和操纵系统属性的可执行文件。</p>
+<p>基本步骤如下：</p>
+<ol>
+<li>下载源代码</li>
+<li>解压压缩包</li>
+<li>配置</li>
+<li>编译</li>
+<li>安装  </li>
+</ol>
+<h3 id="0-2-实际案例"><a href="#0-2-实际案例" class="headerlink" title="0.2 实际案例"></a>0.2 实际案例</h3><h3 id="0-3-1、下载"><a href="#0-3-1、下载" class="headerlink" title="0.3 1、下载"></a>0.3 1、下载</h3><p>我们来编译安装 htop 软件，首先在它的官网下载源码：<strong><a href="https://link.zhihu.com/?target=http%3A//bintray.com/htop/source">http://bintray.com/htop/source</a>…</strong>[1]</p>
+<p>下载好的源码在本机电脑上使用如下命令同步到服务器上：</p>
+<p>scp 文件名 用户名@服务器ip:目标路径</p>
+<p>scp ~/Desktop/htop-3.0.0.tar.gz root@121.42.11.34:.</p>
+<p>也可以使用 wegt 进行下载：</p>
+<p>wegt+下载地址</p>
+<p>wegt <a href="https://link.zhihu.com/?target=https%3A//bintray.com/htop/source/download_file%3Ffile_path%3Dhtop-3.0.0.tar.gz">https://bintray.com/htop/source/download_file?file_path=htop-3.0.0.tar.gz</a></p>
+<h3 id="0-4-2、解压文件"><a href="#0-4-2、解压文件" class="headerlink" title="0.4 2、解压文件"></a>0.4 2、解压文件</h3><p>tar -zxvf htop-3.0.0.tar.gz</p>
+<h1 id="解压cd-htop-3-0-0-进入目录"><a href="#解压cd-htop-3-0-0-进入目录" class="headerlink" title="解压cd htop-3.0.0 # 进入目录"></a>解压cd htop-3.0.0 # 进入目录</h1><h3 id="0-1-3、配置"><a href="#0-1-3、配置" class="headerlink" title="0.1 3、配置"></a>0.1 3、配置</h3><p>执行 ./configure ，它会分析你的电脑去确认编译所需的工具是否都已经安装了。</p>
+<h3 id="0-2-4、编译"><a href="#0-2-4、编译" class="headerlink" title="0.2 4、编译"></a>0.2 4、编译</h3><p>执行 make 命令</p>
+<h3 id="0-3-5、安装"><a href="#0-3-5、安装" class="headerlink" title="0.3 5、安装"></a>0.3 5、安装</h3><p>执行 make install 命令，安装完成后执行 ls /usr/local/bin/ 查看是否有 htop 命令。如果有就可以执行 htop 命令查看系统进程了。</p>
+<h2 id="1-九、网络"><a href="#1-九、网络" class="headerlink" title="1 九、网络"></a>1 九、网络</h2><h3 id="1-1-ifconfig"><a href="#1-1-ifconfig" class="headerlink" title="1.1 ifconfig"></a>1.1 <strong>ifconfig</strong></h3><p><strong>查看 ip 网络相关信息，如果命令不存在的话， 执行命令 yum install net-tools 安装。</strong></p>
+<p>参数解析：</p>
+<ul>
+<li><p>eth0 对应有线连接（对应你的有线网卡），就是用网线来连接的上网。eth 是 Ethernet 的缩写，表示”<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E4%BB%A5%E5%A4%AA%E7%BD%91&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A2717297135%7D">以太网</a>“。有些电脑可能同时有好几条网线连着，例如服务器，那么除了eht0 ，你还会看到 eth1 、 eth2 等。  </p>
+</li>
+<li><p>lo 表示本地回环（ Local Loopback 的缩写，对应一个<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E8%99%9A%E6%8B%9F%E7%BD%91%E5%8D%A1&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A2717297135%7D">虚拟网卡</a>）可以看到它的 ip 地址是 127.0.0.1 。每台电脑都应该有这个接口，因为它对应着”连向自己的链接”。这也是被称之为”本地回环”的原因。所有经由这个接口发送的东西都会回到你自己的电脑。看起来好像并没有什么用，但有时为了某些缘故，我们需要连接自己。例如用来测试一个网络程序，但又不想让局域网或外网的用户查看，只能在此台主机上运行和查看所有的网络接口。例如在我们启动一个前端工程时，在浏览器输入 127.0.0.1:3000 启动项目就能查看到自己的 web 网站，并且它只有你能看到。  </p>
+</li>
+<li><p>wlan0 表示无线局域网</p>
+</li>
+</ul>
+<h3 id="1-2-host"><a href="#1-2-host" class="headerlink" title="1.2 host"></a>1.2 <strong>host</strong></h3><p><strong>ip 地址和主机名的互相转换。</strong></p>
+<h3 id="1-3-ssh-连接远程服务器"><a href="#1-3-ssh-连接远程服务器" class="headerlink" title="1.3 ssh 连接远程服务器"></a>1.3 <strong>ssh 连接远程服务器</strong></h3><p><strong>通过<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A2717297135%7D">非对称加密</a>以及对称加密的方式（同 HTTPS 安全连接原理相似）连接到远端服务器。</strong></p>
+<h3 id="1-4-h"><a href="#1-4-h" class="headerlink" title="1.4 *h"></a>1.4 <em>*</em>h</h3><p>config 文件可以<em>*</em>h ，方便批量管理多个 ssh 连接。</p>
+<p>配置文件分为以下几种：</p>
+<ul>
+<li>全局 ssh 服务端的配置：/etc/ssh/sshd_config ；</li>
+<li>全局 ssh 客户端的配置：/etc/ssh/ssh_config（很少修改）；</li>
+<li>当前用户 ssh 客户端的<em>*</em>h/config 。</li>
+</ul>
+<p><img src="https://pica.zhimg.com/80/v2-6822a5b5868d9e08fb6d9fbae94b6661_1440w.webp?source=1940ef5c" alt=""></p>
+<p>配置当前用户的 config ：</p>
+<h1 id="创建config"><a href="#创建config" class="headerlink" title="创建config"></a>创建config</h1><p>vim ~/.ssh/config</p>
+<h1 id="填写一下内容"><a href="#填写一下内容" class="headerlink" title="填写一下内容"></a>填写一下内容</h1><p>Host lion # 别名 HostName 172.x.x.x # ip 地址 Port 22 # 端口 User root # 用户</p>
+<p>这样配置完成后，下次登录时，可以这样登录 ssh lion 会自动识别为 root 用户。</p>
+<p>[注意] 这段配置不是在服务器上，而是你自己的机器上，它仅仅是设置了一个别名。</p>
+<h3 id="0-1-wget"><a href="#0-1-wget" class="headerlink" title="0.1 wget"></a>0.1 wget</h3><p>可以使我们直接从终端控制台下载文件，只需要给出文件的HTTP或FTP地址。</p>
+<h2 id="1-十-备份"><a href="#1-十-备份" class="headerlink" title="1 十 备份"></a>1 十 备份</h2><h3 id="1-1-scp"><a href="#1-1-scp" class="headerlink" title="1.1 scp"></a>1.1 scp</h3><p><strong>它是 Secure Copy 的缩写，表示安全拷贝。scp 可以使我们通过网络，把文件从一台电脑拷贝到另一台电脑。</strong></p>
+<p>scp 是基于 ssh 的原理来运作的， ssh 会在两台通过网络连接的电脑之间创建一条安全通信的管道， scp 就利用这条管道安全地拷贝文件。</p>
+<p>scp source_file destination_file</p>
+<h1 id="source-file-表示源文件，destination-file-表示目标文件"><a href="#source-file-表示源文件，destination-file-表示目标文件" class="headerlink" title="source_file 表示源文件，destination_file 表示目标文件"></a>source_file 表示源文件，destination_file 表示目标文件</h1><p>其中 source_file 和 destination_file 都可以这样表示：user@ip:file_name ， user 是登录名， ip 是域名或 ip 地址。file_name 是文件路径。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp root@192.168.1.5:/root/file.txt file.txt # 表示把远程电脑上的 file.txt 文件拷贝到本机</span><br><span class="line">scp file.txt root@192.168.1.5:/root # 表示把我的电脑中当前文件夹下的 file.txt 文件拷贝到远程电脑</span><br></pre></td></tr></table></figure>
+<h3 id="0-1-rsync"><a href="#0-1-rsync" class="headerlink" title="0.1 rsync"></a>0.1 rsync</h3><p>rsync 命令主要用于远程同步文件。它可以同步两个目录，不管它们是否处于同一台电脑。它应该是最常用于”<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E5%A2%9E%E9%87%8F%E5%A4%87%E4%BB%BD&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A2717297135%7D">增量备份</a>“的命令了。它就是智能版的 scp 命令。</p>
+<h3 id="0-2-软件安装"><a href="#0-2-软件安装" class="headerlink" title="0.2 软件安装"></a>0.2 软件安装</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install rsync复制代码</span><br></pre></td></tr></table></figure>
+<h3 id="0-3-基础用法"><a href="#0-3-基础用法" class="headerlink" title="0.3 基础用法"></a>0.3 基础用法</h3><p>rsync -arv Images/ backups/</p>
+<h1 id="将Images-目录下的所有文件备份到-backups-目录下"><a href="#将Images-目录下的所有文件备份到-backups-目录下" class="headerlink" title="将Images 目录下的所有文件备份到 backups 目录下"></a>将Images 目录下的所有文件备份到 backups 目录下</h1><p>rsync -arv Images/ root@192.x.x.x:backups/</p>
+<h1 id="同步到服务器的backups目录下"><a href="#同步到服务器的backups目录下" class="headerlink" title="同步到服务器的backups目录下"></a>同步到服务器的backups目录下</h1><h3 id="0-1-常用参数-1"><a href="#0-1-常用参数-1" class="headerlink" title="0.1 常用参数"></a>0.1 常用参数</h3><ul>
+<li>-a 保留文件的所有信息，包括权限，修改日期等；</li>
+<li>-r 递归调用，表示子目录的所有文件也都包括；</li>
+<li>-v 冗余模式，输出详细操作信息。</li>
+</ul>
+<p>默认地， rsync 在同步时并不会删除目标目录的文件，例如你在源目录中删除一个文件，但是用 rsync 同步时，它并不会删除同步目录中的相同文件。如果向删除也可以这么做：rsync -arv —delete Images/ backups/ 。</p>
+<h2 id="1-十一-系统"><a href="#1-十一-系统" class="headerlink" title="1 十一 系统"></a>1 十一 系统</h2><h3 id="1-1-halt"><a href="#1-1-halt" class="headerlink" title="1.1 halt"></a>1.1 halt</h3><p>关闭系统，需要 root 身份。</p>
+<h3 id="1-2-reboot"><a href="#1-2-reboot" class="headerlink" title="1.2 reboot"></a>1.2 reboot</h3><p>重启系统，需要 root 身份。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<h3 id="1-3-poweroff"><a href="#1-3-poweroff" class="headerlink" title="1.3 poweroff"></a>1.3 poweroff</h3><p>直接运行即可关机，不需要 root 身份。</p>
+<h2 id="2-十二-Vim-编辑器"><a href="#2-十二-Vim-编辑器" class="headerlink" title="2 十二 Vim 编辑器"></a>2 十二 Vim 编辑器</h2><h2 id="3-Vim-是什么？"><a href="#3-Vim-是什么？" class="headerlink" title="3 Vim 是什么？"></a>3 Vim 是什么？</h2><p>Vim 是从 vi 发展出来的一个<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A2717297135%7D">文本编辑器</a>。其代码补完、编译及错误跳转等方便编程的功能特别丰富，在程序员中被广泛使用。和 Emacs 并列成为类 Unix 系统用户最喜欢的编辑器。</p>
+<h2 id="4-Vim-常用模式"><a href="#4-Vim-常用模式" class="headerlink" title="4 Vim 常用模式"></a>4 Vim 常用模式</h2><ul>
+<li>交互模式</li>
+<li>插入模式</li>
+<li>命令模式</li>
+<li>可视模式  </li>
+</ul>
+<h3 id="4-1-交互模式"><a href="#4-1-交互模式" class="headerlink" title="4.1 交互模式"></a>4.1 交互模式</h3><p>也成为正常模式，这是 Vim 的默认模式，每次运行 Vim 程序的时候，就会进入这个模式。</p>
+<p>例如执行 vim name.txt 则会进入交互模式。</p>
+<p>交互模式特征：</p>
+<ul>
+<li>在这个模式下，你不能输入文本；</li>
+<li>它可以让我们在文本间移动，删除一行文本，复制黏贴文本，跳转到指定行，撤销操作，等等  </li>
+</ul>
+<h3 id="4-2-插入模式"><a href="#4-2-插入模式" class="headerlink" title="4.2 插入模式"></a>4.2 插入模式</h3><p>这个模式是我们熟悉的文本编辑器的模式，就是可以输入任何你想输入的内容。进入这个模式有几种方法，最常用的方法是按字母键 i （ i、I、a、A、o、O 都可以进入插入模式，只是所处的位置不同），退出这种模式，只需要按下 Esc 键。</p>
+<ul>
+<li>i, I 进入输入模式 Insert mode ：i 为”从目前光标所在处输入”， I 为”在目前所在行的第一个非空格符处开始输入”；</li>
+<li>a, A 进入输入模式 Insert mode ：a 为”从目前光标所在的下一个字符处开始输入”，A 为”从光标所在行的最后一个字符处开始输入”；</li>
+<li>o, O 进入输入模式 Insert mode ：o 为”在目前光标所在的下一行处输入新的一行”；O 为在目前光标所在处的上一行输入新的一行。</li>
+</ul>
+<h3 id="4-3"><a href="#4-3" class="headerlink" title="4.3"></a>4.3</h3><h3 id="4-4-命令模式"><a href="#4-4-命令模式" class="headerlink" title="4.4 命令模式"></a>4.4 命令模式</h3><p>命令模式也称为底线命令模式，这个模式下可以运行一些命令例如”退出”，”保存”，等动作。</p>
+<p>也可以用这个模式来激活一些 Vim 配置，例如语法高亮，显示行号，等。甚至还可以发送一些命令给终端命令行，例如 ls、cp 。</p>
+<p>为了进入命令模式，首先要进入交互模式，再按下冒号键。</p>
+<p>用一张图表示三种模式如何切换：</p>
+<p><img src="https://picx.zhimg.com/80/v2-ba2da86f7f9e710f75d2b52449458f07_1440w.webp?source=1940ef5c" alt=""></p>
+<p>基本操作</p>
+<h3 id="4-5-打开-Vim"><a href="#4-5-打开-Vim" class="headerlink" title="4.5 打开 Vim"></a>4.5 打开 Vim</h3><p>在终端命令行中输入 vim 回车后 Vim 就会被运行起来，也可以用 Vim 来打开一个文件，只需要在 vim 后面再加文件名。如 vim file.name ，如果文件不存在，那么会被创建。  </p>
+<h3 id="4-6-插入"><a href="#4-6-插入" class="headerlink" title="4.6 插入"></a>4.6 插入</h3><p>进入文件之后，此时处于交互模式，可以通过输入 i 进入插入模式  </p>
+<h3 id="4-7-移动"><a href="#4-7-移动" class="headerlink" title="4.7 移动"></a>4.7 移动</h3><p>在 Vim 的交互模式下，我们可以在文本中移动光标。</p>
+<ul>
+<li>h 向左移动一个字符</li>
+<li>j 向下移动一个字符</li>
+<li>k 向上移动一个字符</li>
+<li>i 向右移动一个字符</li>
+</ul>
+<p>当然也可以使用四个方向键进行移动，效果是一样的。  </p>
+<h3 id="4-8-跳至行首和行末"><a href="#4-8-跳至行首和行末" class="headerlink" title="4.8 跳至行首和行末"></a>4.8 跳至行首和行末</h3><ul>
+<li>行首：在交互模式下，为了将光标定位到一行的开始位置，只需要按下数字键 0 即可，键盘上的 Home 键也有相同效果。</li>
+<li>行末：在交互模式下，为了将光标定位到一行的末尾，只需要按下美元符号键 $ 即可，键盘上的 End 键也有相同效果。</li>
+</ul>
+<h3 id="4-9-按单词移动"><a href="#4-9-按单词移动" class="headerlink" title="4.9 按单词移动"></a>4.9 按单词移动</h3><p>在交互模式下，按字母键 w 可以一个单词一个单词的移动。</p>
+<h3 id="4-10-退出文件"><a href="#4-10-退出文件" class="headerlink" title="4.10 退出文件"></a>4.10 退出文件</h3><p>在交互模式下，按下冒号键 : 进入命令模式，再按下 q 键，就可以退出了。</p>
+<p>如果在退出之前又修改了文件，就直接想用 :q 退出 Vim ，那么 Vim 会显示一个红字标明错误信息。此时我们有两个选择：</p>
+<ol>
+<li>保存并退出 :wq 或 :x ；</li>
+<li>不保存且退出 :q! 。</li>
+</ol>
+<h2 id="5-标准操作"><a href="#5-标准操作" class="headerlink" title="5 标准操作"></a>5 标准操作</h2><h3 id="5-1-删除字符"><a href="#5-1-删除字符" class="headerlink" title="5.1 删除字符"></a>5.1 删除字符</h3><p>在交互模式下，将光标定位到一个你想要删除的字符上，按下字母键 x 你会发现这个字符被删除了。</p>
+<p>也可以一次性删除多个字符，只需要在按 x 键之前输入数字即可。  </p>
+<h3 id="5-2-删除（剪切）单词，行"><a href="#5-2-删除（剪切）单词，行" class="headerlink" title="5.2 删除（剪切）单词，行"></a>5.2 删除（剪切）单词，行</h3><ul>
+<li>删除一行：连按两次 d 来删除光标所在的那一行。</li>
+<li>删除多行：例如先输入数字 2 ，再按下 dd ，就会删除从光标所在行开始的两行。</li>
+<li>删除一个单词：将光标置于一个单词的首字母处，然后按下 dw 。</li>
+<li>删除多个单词：例如先按数字键 2 再按 dw 就可以删除两个单词了。</li>
+<li>从光标所在位置删除至行首：d0 。</li>
+<li>从光标所在位置删除至行末：d$ 。</li>
+</ul>
+<h3 id="5-3-复制单词，行"><a href="#5-3-复制单词，行" class="headerlink" title="5.3 复制单词，行"></a>5.3 复制单词，行</h3><ul>
+<li>复制行：按两次 y 会把光标所在行复制到内存中，和 dd 类似， dd 用于”剪切”光标所在行。</li>
+<li>复制单词：yw 会复制一个单词。</li>
+<li>复制到行末：y$ 是复制从光标所在处到行末的所有字符。</li>
+<li>复制到行首：y0 是复制光标所在处到行首的所有字符。  </li>
+</ul>
+<h3 id="5-4-粘贴"><a href="#5-4-粘贴" class="headerlink" title="5.4 粘贴"></a>5.4 粘贴</h3><p>如果之前用 dd 或者 yy 剪切复制过来的，可以使用 p 来粘贴。同样也可以使用 数字+p来表示复制多次。  </p>
+<h3 id="5-5-替换一个字符"><a href="#5-5-替换一个字符" class="headerlink" title="5.5 替换一个字符"></a>5.5 替换一个字符</h3><p>在交互模式下，将光标置于想要替换的字符上。按下 r 键，接着输入你要替换的字符即可。  </p>
+<h3 id="5-6-撤销操作"><a href="#5-6-撤销操作" class="headerlink" title="5.6 撤销操作"></a>5.6 撤销操作</h3><p>如果要撤销最近的修改，只需要按下 u 键，如果想要撤销最近四次修改，可以按下4，再按下 u 。  </p>
+<h3 id="5-7-重做"><a href="#5-7-重做" class="headerlink" title="5.7 重做"></a>5.7 重做</h3><p>取消撤销，也就是重做之前的修改使用 ctrl + r 。  </p>
+<h3 id="5-8-跳转到指定行"><a href="#5-8-跳转到指定行" class="headerlink" title="5.8 跳转到指定行"></a>5.8 跳转到指定行</h3><p>Vim 编辑的文件中，每一行都有一个行号，行号从1开始，逐一递增。</p>
+<p>行号默认是不显示，如果需要它显示的话，可以进入命令模式，然后输入 set nu ，如果要隐藏行号的话，使用 set nonu 。</p>
+<ul>
+<li>跳转到指定行：数字+gg ，例如 7gg ，表示跳转到第7行。</li>
+<li>要跳转到最后一行，按下 G 。</li>
+<li>要跳转到第一行，按下 gg 。</li>
+</ul>
+<h2 id="6-高级操作"><a href="#6-高级操作" class="headerlink" title="6 高级操作"></a>6 高级操作</h2><h3 id="6-1-查找"><a href="#6-1-查找" class="headerlink" title="6.1 查找"></a>6.1 查找</h3><p>处于交互模式下，按下 / 键，那么就进入查找模式，输入你要查找的字符串，然后按下回车。光标就会跳转到文件中下一个查找到的匹配处。如果字符串不存在，那么会显示 “pattern not found” 。</p>
+<ul>
+<li>n 跳转到下一个匹配项；</li>
+<li>N 跳转到上一个匹配项。</li>
+</ul>
+<p>[注意] 用斜杠来进行的查找是从当前光标处开始向文件尾搜索，如果你要从当前光标处开始，向文件头搜索则使用 ? ，当然也可以先按下 gg 跳转到第一行在进行全文搜索。  </p>
+<h3 id="6-2-查找并替换"><a href="#6-2-查找并替换" class="headerlink" title="6.2 查找并替换"></a>6.2 查找并替换</h3><p>替换光标所在行第一个匹配的字符串：</p>
+<h1 id="语法-s-旧字符串-新字符串-实例-s-one-two"><a href="#语法-s-旧字符串-新字符串-实例-s-one-two" class="headerlink" title="语法:s/旧字符串/新字符串# 实例:s/one/two"></a>语法:s/旧字符串/新字符串# 实例:s/one/two</h1><p>替换光标所在行所有旧字符串为新字符串：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 语法:s/旧字符串/新字符串/g</span><br></pre></td></tr></table></figure>
+<p>替换第几行到第几行中所有字符串：</p>
+<h1 id="语法-n-m-s-旧字符串-新字符串-g"><a href="#语法-n-m-s-旧字符串-新字符串-g" class="headerlink" title="语法:n,m s/旧字符串/新字符串/g"></a>语法:n,m s/旧字符串/新字符串/g</h1><h1 id="实例-2-4-s-one-two-g"><a href="#实例-2-4-s-one-two-g" class="headerlink" title="实例:2,4 s/one/two/g"></a>实例:2,4 s/one/two/g</h1><p>最常用的就是全文替换了：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 语法:%s/旧字符串/新字符串/g</span><br></pre></td></tr></table></figure>
+<h3 id="0-1-合并文件"><a href="#0-1-合并文件" class="headerlink" title="0.1 合并文件"></a>0.1 合并文件</h3><p>可以用冒号 +r ( :r ) 实现在光标处插入一个文件的内容。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:r filename # 可以用Tab键来自动补全另外一个文件的路径</span><br></pre></td></tr></table></figure>
     
     
   </div>
@@ -363,23 +1470,15 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      <a class="post-link" href="/2023/06/20/DDIA/06%20%E4%BA%8B%E5%8A%A1/">[DDIA] 事务</a>
+      <a class="post-link" href="/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/02-cond/"></a>
       
     </h1>
 
     <div class="post-meta">
       <span class="post-time">
-        2023-06-20
+        2025-05-07
       </span>
       
-      
-      <span class="post-category">
-        
-        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">阅读笔记</a>
-        
-        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/DDIA/">DDIA</a>
-        
-      </span>
       
       
     </div>
@@ -391,16 +1490,79 @@
     
     
     
-    
-    
 
     
-    <blockquote>
-<p>从<strong>时间</strong>和<strong>空间</strong>两个角度来理解事务，从生命周期（时间）来讲，事务要保证一组操作的整体性；从并发控制（空间），事务要做好多个事务间的并发控制。</p>
+    <h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h2><p>Golang 的 sync 包中的 Cond 实现了一种条件变量，可以使用在<strong>多个Reader</strong>等待共享资源 ready 的场景（如果只有一读一写，一个锁或者channel就搞定了）。<br>Cond的汇合点：多个goroutines等待、1个goroutine通知事件发生。<br>比较适合任务调用场景，一个 Master goroutine 通知事件发生，多个 Worker goroutine 在资源没准备好的时候就挂起，等待通知。<br><strong>使用方法</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Cond</span></span><br><span class="line">cond := sync.NewCond(<span class="built_in">new</span>(sync.Mutex))</span><br><span class="line"><span class="comment">// 挂起goroutine</span></span><br><span class="line">cond.L.Lock()</span><br><span class="line">cond.Wait()</span><br><span class="line"><span class="comment">// 唤醒一个</span></span><br><span class="line">cond.Signal()</span><br><span class="line"><span class="comment">// 唤醒所有</span></span><br><span class="line">cond.Broadcast()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>基本使用大概是需要等待的时候通过 Wait() 将 Goroutine 挂起，资源准备好的时候再通过 Signal() 或者 Broadcast() 将挂起中的 Goroutine 唤醒。</p>
 </blockquote>
-    <div class="read-more">
-      <a href="/2023/06/20/DDIA/06%20%E4%BA%8B%E5%8A%A1/" class="read-more-link">Read more..</a>
-    </div>
+<p>一个简单的 Demo<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> (</span><br><span class="line">		locker sync.Mutex</span><br><span class="line">		cond   = sync.NewCond(&amp;locker)</span><br><span class="line">		wg     sync.WaitGroup</span><br><span class="line">	)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		wg.Add(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(number <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">			<span class="comment">// wait()方法内部是先释放锁 然后在加锁 所以这里需要先 Lock()</span></span><br><span class="line">			cond.L.Lock()</span><br><span class="line">			<span class="keyword">defer</span> cond.L.Unlock()</span><br><span class="line">			cond.Wait() <span class="comment">// 等待通知,阻塞当前 goroutine</span></span><br><span class="line">			fmt.Printf(<span class="string">&quot;g %v ok~ \n&quot;</span>, number)</span><br><span class="line">			wg.Done()</span><br><span class="line">		&#125;(i)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">		<span class="comment">// 每过 50毫秒 唤醒一个 goroutine</span></span><br><span class="line">		cond.Signal()</span><br><span class="line">		time.Sleep(time.Millisecond * <span class="number">50</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	time.Sleep(time.Millisecond * <span class="number">50</span>)</span><br><span class="line">	<span class="comment">// 剩下5个 goroutine 一起唤醒</span></span><br><span class="line">	cond.Broadcast()</span><br><span class="line">	fmt.Println(<span class="string">&quot;Broadcast...&quot;</span>)</span><br><span class="line">	wg.Wait()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-源码分析"><a href="#2-源码分析" class="headerlink" title="2 源码分析"></a>2 源码分析</h2><blockquote>
+<p>go version 1.14.7</p>
+</blockquote>
+<h3 id="2-1-Cond"><a href="#2-1-Cond" class="headerlink" title="2.1 Cond"></a>2.1 Cond</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： cond.go</span></span><br><span class="line"><span class="comment">line: 21</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Cond <span class="keyword">struct</span> &#123;</span><br><span class="line">    noCopy noCopy</span><br><span class="line">    L Locker</span><br><span class="line">    notify  notifyList</span><br><span class="line">    checker copyChecker</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// NewCond() 返回指针，保证多 goroutine 获取到的是同一个实例。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewCond</span><span class="params">(l Locker)</span></span> *Cond &#123;</span><br><span class="line">	<span class="keyword">return</span> &amp;Cond&#123;L: l&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>noCopy</strong>：noCopy对象，实现了<code>sync.Locker</code>接口，使得内嵌 noCopy 的对象在进行 go vet 静态检查的时候，可以检查出是否被复制。</p>
+<blockquote>
+<p>noCopy 具体见 <a target="_blank" rel="noopener" href="https://github.com/golang/go/issues/8005">Go issues 8005</a></p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： cond.go</span></span><br><span class="line"><span class="comment">line: 94</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">type</span> noCopy <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(*noCopy)</span></span> Lock()   &#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(*noCopy)</span></span> Unlock() &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>L</strong>：实现了 <code>sync.Locker</code> 接口的锁对象，通常使用 Mutex 或 RWMutex 。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： mutex.go</span></span><br><span class="line"><span class="comment">line: 31</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">type</span> Locker <span class="keyword">interface</span> &#123;</span><br><span class="line">     Lock()</span><br><span class="line">     Unlock()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>notify</strong>：notifyList 对象，维护等待唤醒的 goroutine 队列,使用链表实现。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： runtime.go</span></span><br><span class="line"><span class="comment">line: 33    </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">type</span> notifyList <span class="keyword">struct</span> &#123;</span><br><span class="line">	wait   <span class="type">uint32</span></span><br><span class="line">	notify <span class="type">uint32</span></span><br><span class="line">	lock   <span class="type">uintptr</span></span><br><span class="line">	head   unsafe.Pointer</span><br><span class="line">	tail   unsafe.Pointer</span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<p><strong>checker</strong>：copyChecker 对象，实际上是 uintptr 对象，保存自身对象地址。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： cond.go</span></span><br><span class="line"><span class="comment">line: 79    </span></span><br><span class="line"><span class="comment">*/</span>    </span><br><span class="line"><span class="keyword">type</span> copyChecker <span class="type">uintptr</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *copyChecker)</span></span> check() &#123;</span><br><span class="line">     <span class="keyword">if</span> <span class="type">uintptr</span>(*c) != <span class="type">uintptr</span>(unsafe.Pointer(c)) &amp;&amp;</span><br><span class="line">            !atomic.CompareAndSwapUintptr((*<span class="type">uintptr</span>)(c), <span class="number">0</span>, <span class="type">uintptr</span>(unsafe.Pointer(c))) &amp;&amp;</span><br><span class="line">            <span class="type">uintptr</span>(*c) != <span class="type">uintptr</span>(unsafe.Pointer(c)) &#123;</span><br><span class="line">            <span class="built_in">panic</span>(<span class="string">&quot;sync.Cond is copied&quot;</span>)</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>1）检查当前 checker 对象的地址是否等于保存在 checker 中的地址</p>
+<ul>
+<li>由于第一次比较的时候 checker 中没有存地址所以第一次比较肯定是不相等的，于是有了后续 2 3步。</li>
+</ul>
+</li>
+<li><p>2）对 checker 进行 CAS 操作，如果 checker 中存储的地址值为空（就是0）就把当前 checker 对象的地址值存进去</p>
+</li>
+<li>3）第三步和第一步一样，再比较一下。<ul>
+<li>主要是防止在第一步比较发现不相等之后，第二步 CAS 之前，其他 goroutine 也在执行这个方法，并发的将 checker 赋值了，导致这里判定的时候第二步 CAS 失败，返回 false，然后错误的抛出一个 panic，所以执行第三步在比较一下是否相等。如果其他 goroutine 抢先执行 CAS 修改了 checker 中的值导致这里第二步也返回 false 的话，第三步的判定也会是相等的，不会抛出 panic</li>
+</ul>
+</li>
+<li>4）如果 3 个条件都成立，那 checker 肯定是被复制了，就是由于 cond 被复制引起的。</li>
+</ul>
+<blockquote>
+<p>check 方法在第一次调用的时候，会将 checker 对象地址赋值给 checker，也就是将自身内存地址赋值给自身。<br>再次调用 checker 方法的时候，会将当前 checker 对象地址值与 checker 中保存的地址值（原始地址）进行比较，若不相同则表示当前 checker 的地址不是第一次调用 check 方法时候的地址，即 cond 对象被复制了，导致checker 被重新分配了内存地址。</p>
+</blockquote>
+<h3 id="2-2-Wait"><a href="#2-2-Wait" class="headerlink" title="2.2 Wait"></a>2.2 Wait</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： cond.go</span></span><br><span class="line"><span class="comment">line: 52    </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Cond)</span></span> Wait() &#123;</span><br><span class="line">    <span class="comment">// 1.每次操作之前都要检测一下 cond 是否被复制了。</span></span><br><span class="line">    c.checker.check() </span><br><span class="line">    <span class="comment">// 2.将 notifyList 中的 wait 值加1并返回之前的值</span></span><br><span class="line">    t := runtime_notifyListAdd(&amp;c.notify) </span><br><span class="line">    <span class="comment">// 3.释放锁，因此在调用Wait方法前，必须保证获取到了cond的锁，否则会报错</span></span><br><span class="line">    c.L.Unlock()</span><br><span class="line">    <span class="comment">// 4.将当前goroutine挂起，等待唤醒信号</span></span><br><span class="line">    runtime_notifyListWait(&amp;c.notify, t) </span><br><span class="line">    <span class="comment">// 5.gorountine被唤醒，重新获取锁</span></span><br><span class="line">    c.L.Lock()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第二步代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">/*</span></span><br><span class="line"><span class="comment"> package: runtime</span></span><br><span class="line"><span class="comment"> file： sema.go</span></span><br><span class="line"><span class="comment"> line: 479  </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">notifyListAdd</span><span class="params">(l *notifyList)</span></span> <span class="type">uint32</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> atomic.Xadd(&amp;l.wait, <span class="number">1</span>) - <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第四步代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: runtime</span></span><br><span class="line"><span class="comment">file： sema.go</span></span><br><span class="line"><span class="comment">line: 488  </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// 获取当前 goroutine 添加到链表末端，然后 goparkunlock 函数休眠阻塞当前 goroutine</span></span><br><span class="line"><span class="comment">// goparkunlock 函数会让出当前处理器的使用权并等待调度器的唤醒</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">notifyListWait</span><span class="params">(l *notifyList, t <span class="type">uint32</span>)</span></span> &#123;</span><br><span class="line">    <span class="comment">// 1.锁住 notify 队列</span></span><br><span class="line">    lock(&amp;l.lock)</span><br><span class="line">    <span class="comment">// 2.判断传入的等待序号t是否小于当前已经唤醒的序号notify</span></span><br><span class="line">    <span class="comment">// 如果是则说明当前 goroutine 不需要阻塞了 直接解锁并返回</span></span><br><span class="line">    <span class="comment">// 有可能执行这步之前 goroutine 就已经被唤醒了</span></span><br><span class="line">    <span class="keyword">if</span> less(t, l.notify) &#123;</span><br><span class="line">        unlock(&amp;l.lock)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 3.获取当前 goroutine，设置相关参数，将当前等待数赋值给 ticket</span></span><br><span class="line">    s := acquireSudog()</span><br><span class="line">    s.g = getg()</span><br><span class="line">    s.ticket = t</span><br><span class="line">    s.releasetime = <span class="number">0</span></span><br><span class="line">    t0 := <span class="type">int64</span>(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">if</span> blockprofilerate &gt; <span class="number">0</span> &#123;</span><br><span class="line">        t0 = cputicks()</span><br><span class="line">        s.releasetime = <span class="number">-1</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 4.将当前 goroutine 写入到链表尾部</span></span><br><span class="line">    <span class="keyword">if</span> l.tail == <span class="literal">nil</span> &#123;</span><br><span class="line">        l.head = s</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        l.tail.next = s</span><br><span class="line">    &#125;</span><br><span class="line">    l.tail = s</span><br><span class="line">    <span class="comment">// 5. 调用 goparkunlock 函数将当前 goroutine 挂起，等待唤醒信号</span></span><br><span class="line">    goparkunlock(&amp;l.lock, <span class="string">&quot;semacquire&quot;</span>, traceEvGoBlockCond, <span class="number">3</span>)</span><br><span class="line">    <span class="keyword">if</span> t0 != <span class="number">0</span> &#123;</span><br><span class="line">        blockevent(s.releasetime-t0, <span class="number">2</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    releaseSudog(s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-3-Signal"><a href="#2-3-Signal" class="headerlink" title="2.3 Signal"></a>2.3 Signal</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： cond.go</span></span><br><span class="line"><span class="comment">line: 64  </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Cond)</span></span> Signal() &#123;</span><br><span class="line">    <span class="comment">// 1.复制检查</span></span><br><span class="line">    c.checker.check() </span><br><span class="line">    <span class="comment">// 2.顺序唤醒一个等待的gorountine</span></span><br><span class="line">    runtime_notifyListNotifyOne(&amp;c.notify)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: runtime</span></span><br><span class="line"><span class="comment">file： sema.go</span></span><br><span class="line"><span class="comment">line: 554  </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">notifyListNotifyOne</span><span class="params">(l *notifyList)</span></span> &#123;</span><br><span class="line">   <span class="comment">// 1.等待序号和唤醒序号相同则说明没有需要唤醒的 goroutine 直接返回</span></span><br><span class="line">   <span class="keyword">if</span> atomic.Load(&amp;l.wait) == atomic.Load(&amp;l.notify) &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// 2.锁住队列后再检查一遍等待序号和唤醒序号是否相同即判断有没有需要唤醒的 goroutine，没有则解锁后直接返回</span></span><br><span class="line">   lock(&amp;l.lock) </span><br><span class="line">   t := l.notify</span><br><span class="line">   <span class="keyword">if</span> t == atomic.Load(&amp;l.wait) &#123;</span><br><span class="line">        unlock(&amp;l.lock)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// 3.到这里就说明有需要唤醒的 goroutine，于是先将 notify序号+1</span></span><br><span class="line">   atomic.Store(&amp;l.notify, t+<span class="number">1</span>)  </span><br><span class="line">   <span class="comment">// 4.然后就开始唤醒 goroutine 了</span></span><br><span class="line">   <span class="keyword">for</span> p, s := (*sudog)(<span class="literal">nil</span>), l.head; s != <span class="literal">nil</span>; p, s = s, s.next &#123;</span><br><span class="line">        <span class="comment">// 4.1 找到 ticket等于当前唤醒序号的 goroutine</span></span><br><span class="line">        <span class="keyword">if</span> s.ticket == t &#123;</span><br><span class="line">           <span class="comment">// 4.2 然后将其从等待唤醒链表中移除（因为这个 goroutine 马上就要被唤醒了）</span></span><br><span class="line">           n := s.next</span><br><span class="line">           <span class="keyword">if</span> p != <span class="literal">nil</span> &#123;</span><br><span class="line">               p.next = n</span><br><span class="line">           &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">               l.head = n</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">if</span> n == <span class="literal">nil</span> &#123;</span><br><span class="line">               l.tail = p</span><br><span class="line">           &#125;</span><br><span class="line">           unlock(&amp;l.lock)</span><br><span class="line">           s.next = <span class="literal">nil</span></span><br><span class="line">           <span class="comment">// 4.3 然后唤醒这个 goroutine </span></span><br><span class="line">           readyWithTime(s, <span class="number">4</span>)</span><br><span class="line">           <span class="keyword">return</span></span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// 4.4 最后解锁队列 </span></span><br><span class="line">   unlock(&amp;l.lock)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-4-Broadcast"><a href="#2-4-Broadcast" class="headerlink" title="2.4 Broadcast"></a>2.4 Broadcast</h3><p>唤醒链表中所有的阻塞中的goroutine，还是使用readyWithTime来实现这个功能</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： cond.go</span></span><br><span class="line"><span class="comment">line: 73  </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Cond)</span></span> Broadcast() &#123;</span><br><span class="line">    <span class="comment">// 1.复制检查</span></span><br><span class="line">    c.checker.check()</span><br><span class="line">    <span class="comment">// 2.唤醒所有在等待的 goroutine</span></span><br><span class="line">    runtime_notifyListNotifyAll(&amp;c.notify)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里和 <code>notifyListNotifyOne()</code>差不多，只是一次性唤醒所有 goroutine。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: runtime</span></span><br><span class="line"><span class="comment">file： sema.go</span></span><br><span class="line"><span class="comment">line: 522 </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">notifyListNotifyAll</span><span class="params">(l *notifyList)</span></span> &#123;</span><br><span class="line">    <span class="comment">// 1.等待序号和唤醒序号相同则说明没有需要唤醒的 goroutine 直接返回</span></span><br><span class="line">    <span class="keyword">if</span> atomic.Load(&amp;l.wait) == atomic.Load(&amp;l.notify) &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 将链表头尾指针置为空（可以看做是清空整个等待队列）</span></span><br><span class="line">    <span class="comment">// 但是需要将当前的链表头保存下来，不然等会找不到链表中的数据了</span></span><br><span class="line">    lock(&amp;l.lock)</span><br><span class="line">    s := l.head</span><br><span class="line">    l.head = <span class="literal">nil</span></span><br><span class="line">    l.tail = <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3.直接将notify需要赋值成等待序号（这样表示当前没有需要唤醒的 goroutine 了）</span></span><br><span class="line">    <span class="comment">// 前面唤醒一个的时候这里是+1</span></span><br><span class="line">    atomic.Store(&amp;l.notify, atomic.Load(&amp;l.wait))</span><br><span class="line">    unlock(&amp;l.lock)</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 4.最后 for 循环唤醒链表中所有等待状态的 goroutine</span></span><br><span class="line">    <span class="keyword">for</span> s != <span class="literal">nil</span> &#123;</span><br><span class="line">        next := s.next</span><br><span class="line">        s.next = <span class="literal">nil</span></span><br><span class="line">        readyWithTime(s, <span class="number">4</span>)</span><br><span class="line">        s = next</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3 小结"></a>3 小结</h2><p><strong>基本使用</strong></p>
+<ul>
+<li>1）资源未准备好时，使用 Wait() 方法将 goroutine 挂起，由底层实现，会让出 CPU 时间片，从而避免使用无意义的循环浪费系统资源。</li>
+<li>2）资源准备好时通过 Signal() 或者 Broadcast() 方法唤醒一个或多个被挂起的 goroutine。</li>
+</ul>
+<p><strong>等待唤醒流程</strong></p>
+<ul>
+<li>1）所有相关数据都是存在 notifyList 中的，包括 goroutine 和一些计数信息。</li>
+<li>2）其中的 wait 和 notify 可以理解为等待序号和唤醒序号，都是自增值，wait 在有新 goroutine 等待时+1，notify 则在唤醒一个 goroutine 时+1。</li>
+<li>3）等待状态的 goroutine 信息则存放在链表中，等待时加入链表尾部，唤醒时移除。</li>
+<li>4）每个等待链表的 goroutine  都会将当前的 wait（等待序号）赋值给 ticket 字段，唤醒的时候会将 ticket=唤醒序号的 goroutine 唤醒。</li>
+<li>5）当 wait==notify 时表示没有 goroutine 需要被唤醒，wait&gt;notify 时表示有 goroutine 需要被唤醒，wait 恒大于等于 notify。</li>
+</ul>
+<p><strong>noCopy</strong><br>Cond在内部持有一个等待队列 notifyList ，这个队列维护所有等待在这个 Cond 的 goroutine。如果 Cond 被复制则会导致其中的等待队列也被复制，最终可能会导致在唤醒 goroutine 的时候出现错误。<br>Kubernetes 的调度中也用到了 sync.Cond 有兴趣的可以研究一下。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/rKLiazgWzneJfpfgHay8cA">https://mp.weixin.qq.com/s/rKLiazgWzneJfpfgHay8cA</a><br><a target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes/blob/0599ca2bcfcae7d702f95284f3c2e2c2978c7772/pkg/scheduler/internal/queue/scheduling_queue.go">https://github.com/kubernetes/kubernetes/blob/0599ca2bcfcae7d702f95284f3c2e2c2978c7772/pkg/scheduler/internal/queue/scheduling_queue.go</a></p>
+<h2 id="4-参考"><a href="#4-参考" class="headerlink" title="4 参考"></a>4 参考</h2><p><code>https://ieevee.com/tech/2019/06/15/cond.html</code></p>
+</blockquote>
+<p><code>https://segmentfault.com/a/1190000019957459</code></p>
+<p><code>https://www.jianshu.com/p/7b59d1d92a95</code></p>
+<p><code>http://www.pydevops.com/2016/12/04/go-cond源码剖析-3/</code></p>
+
     
     
   </div>
@@ -415,23 +1577,15 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      <a class="post-link" href="/2023/06/18/DDIA/05%20%E5%88%86%E5%8C%BA/">[DDIA] 分区</a>
+      <a class="post-link" href="/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/go-sync.Mutex/"></a>
       
     </h1>
 
     <div class="post-meta">
       <span class="post-time">
-        2023-06-18
+        2025-05-07
       </span>
       
-      
-      <span class="post-category">
-        
-        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">阅读笔记</a>
-        
-        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/DDIA/">DDIA</a>
-        
-      </span>
       
       
     </div>
@@ -443,16 +1597,77 @@
     
     
     
-    
-    
 
     
-    <blockquote>
-<p>解决数据集尺度与单机容量、负载不匹配的问题</p>
+    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line">## 1 基本结构</span><br><span class="line">```go</span><br><span class="line">// sync/mutex.go 25行</span><br><span class="line">type Mutex struct &#123;</span><br><span class="line">	state int32      // 当前互斥锁的状态</span><br><span class="line">	sema  uint32     // 控制锁状态的信号量</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="1-1-state字段"><a href="#1-1-state字段" class="headerlink" title="1.1 state字段"></a>1.1 state字段</h3><p>![[Pasted image 20230901043018.png]]<br>低三位分别标识</p>
+<ul>
+<li>mutexLocked（是否上锁）</li>
+<li>mutexWoken（是否有协程在抢锁）</li>
+<li>mutexStarving（是否处于饥饿模式）</li>
+<li>高 29 位的值聚合为一个范围为 0~2^29-1 的整数，表示在阻塞队列中等待的协程个数.</li>
+</ul>
+<h3 id="1-2-正常模式和饥饿模式"><a href="#1-2-正常模式和饥饿模式" class="headerlink" title="1.2 正常模式和饥饿模式"></a>1.2 正常模式和饥饿模式</h3><blockquote>
+<p>mutex 是公平锁</p>
 </blockquote>
-    <div class="read-more">
-      <a href="/2023/06/18/DDIA/05%20%E5%88%86%E5%8C%BA/" class="read-more-link">Read more..</a>
-    </div>
+<p><code>正常模式</code>：锁的等待者会按照<code>先进先出</code>的顺序获取锁。但是刚被唤起的 Goroutine 与新创建的 Goroutine 竞争时，大概率会获取不到锁，为了减少这种情况的出现，一旦 Goroutine <code>超过 1ms</code> 没有获取到锁，它就会将当前互斥锁切换饥饿模式，防止部分 Goroutine 被<strong>饿死</strong>。<br><code>饥饿模式</code>：互斥锁会直接交给等待队列最前面的 Goroutine。新的 Goroutine 在该状态下不能获取锁、也不会进入自旋状态，它们只会在队列的末尾等待。如果一个 Goroutine 获得了互斥锁并且它在队列的末尾或者它等待的时间<code>少于 1ms</code>，那么当前的互斥锁就会切换回正常模式。</p>
+<h2 id="2-加解锁过程"><a href="#2-加解锁过程" class="headerlink" title="2 加解锁过程"></a>2 加解锁过程</h2><h3 id="2-1-加锁"><a href="#2-1-加锁" class="headerlink" title="2.1 加锁"></a>2.1 加锁</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sync/mutex.go 72 行</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Mutex)</span></span> Lock() &#123;</span><br><span class="line">	<span class="comment">// Fast path: grab unlocked mutex.</span></span><br><span class="line">	<span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;m.state, <span class="number">0</span>, mutexLocked) &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// Slow path (outlined so that the fast path can be inlined)</span></span><br><span class="line">	m.lockSlow()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-1-1-Fast-path"><a href="#2-1-1-Fast-path" class="headerlink" title="2.1.1 Fast path"></a>2.1.1 Fast path</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;m.state, <span class="number">0</span>, mutexLocked) &#123;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>首先进行 <code>CAS</code> 操作，假如当前未上锁且锁内不存在阻塞协程，则直接 CAS 抢锁成功返回</p>
+</blockquote>
+<h4 id="2-1-2-Slow-Path"><a href="#2-1-2-Slow-Path" class="headerlink" title="2.1.2 Slow Path"></a>2.1.2 Slow Path</h4><p>如果互斥锁的状态不是 0 时就会进入 Slow Path。尝试通过自旋（Spinnig）等方式等待锁的释放，该方法的主体是一个非常大 for 循环，这里将它分成几个部分介绍获取锁的过程：</p>
+<h5 id="2-1-2-1-判断当前-Goroutine-能否进入自旋"><a href="#2-1-2-1-判断当前-Goroutine-能否进入自旋" class="headerlink" title="2.1.2.1 判断当前 Goroutine 能否进入自旋"></a>2.1.2.1 判断当前 Goroutine 能否进入自旋</h5><p><strong>自旋是一种多线程同步机制</strong>，当前的进程在进入自旋的过程中会一直保持 CPU 的占用，持续检查某个条件是否为真。<strong>在多核的 CPU 上，自旋可以避免 Goroutine 的切换</strong>，使用恰当会对性能带来很大的增益，但是使用的不恰当就会拖慢整个程序，所以 Goroutine 进入自旋的条件非常苛刻：</p>
+<ul>
+<li>互斥锁只有在普通模式才能进入自旋；</li>
+<li><code>runtime.sync_runtime_canSpin</code>需要返回 true<ul>
+<li>运行在多 CPU 的机器上；</li>
+</ul>
+<ul>
+<li>当前 Goroutine 为了获取该锁进入自旋的次数小于四次；</li>
+<li>当前机器上至少存在一个正在运行的处理器 P 并且处理的运行队列为空；</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-1-2-2-通过自旋等待互斥锁的释放"><a href="#2-1-2-2-通过自旋等待互斥锁的释放" class="headerlink" title="2.1.2.2 通过自旋等待互斥锁的释放"></a>2.1.2.2 通过自旋等待互斥锁的释放</h5><p>一旦当前 Goroutine 能够进入自旋就会调用<code>runtime.sync_runtime_doSpin</code>和<code>runtime.procyield</code>执行 30 次的 <code>PAUSE</code> 指令，该指令只会占用 CPU 并消耗 CPU 时间：</p>
+<h5 id="2-1-2-3-计算互斥锁的最新状态"><a href="#2-1-2-3-计算互斥锁的最新状态" class="headerlink" title="2.1.2.3 计算互斥锁的最新状态"></a>2.1.2.3 计算互斥锁的最新状态</h5><p>处理了自旋相关的特殊逻辑之后，互斥锁会根据上下文计算当前互斥锁最新的状态。几个不同的条件分别会更新 <code>state</code> 字段中存储的不同信息 — <code>mutexLocked</code>、<code>mutexStarving</code>、<code>mutexWoken</code> 和 <code>mutexWaiterShift</code>：</p>
+<h5 id="2-1-2-4-更新互斥锁的状态并获取锁"><a href="#2-1-2-4-更新互斥锁的状态并获取锁" class="headerlink" title="2.1.2.4 更新互斥锁的状态并获取锁"></a>2.1.2.4 更新互斥锁的状态并获取锁</h5><p>计算了新的互斥锁状态之后，会使用 CAS 函数更新状态<br>如果没有通过 CAS 获得锁，会调用 <code>runtime.sync_runtime_SemacquireMutex</code> 通过信号量保证资源不会被两个 Goroutine 获取。<br><code>runtime.sync_runtime_SemacquireMutex</code> 会在方法中不断尝试获取锁并陷入休眠等待信号量的释放，一旦当前 Goroutine 可以获取信号量，它就会立刻返回，<code>sync.Mutex.Lock</code>的剩余代码也会继续执行。</p>
+<ul>
+<li>在正常模式下，这段代码会设置唤醒和饥饿标记、重置迭代次数并重新执行获取锁的循环；</li>
+<li>在饥饿模式下，当前 Goroutine 会获得互斥锁，如果等待队列中只存在当前 Goroutine，互斥锁还会从饥饿模式中退出；</li>
+</ul>
+<h3 id="2-2-解锁"><a href="#2-2-解锁" class="headerlink" title="2.2 解锁"></a>2.2 解锁</h3><h4 id="2-2-1-Fast-path"><a href="#2-2-1-Fast-path" class="headerlink" title="2.2.1 Fast path"></a>2.2.1 Fast path</h4><p>该过程会先使用<code>atomic.AddInt32函数快速解锁，这时会发生下面的两种情况：</code></p>
+<ul>
+<li>如果该函数返回的新状态等于 0，当前 Goroutine 就成功解锁了互斥锁；</li>
+<li>如果该函数返回的新状态不等于 0，则进入 Slow path。<h4 id="2-2-2-Slow-path"><a href="#2-2-2-Slow-path" class="headerlink" title="2.2.2 Slow path"></a>2.2.2 Slow path</h4>先校验锁状态的<code>合法性</code> — 如果当前互斥锁已经被解锁过了会直接抛出异常 “sync: unlock of unlocked mutex” 中止当前程序。<br>在正常模式下，上述代码会使用如下所示的处理过程：</li>
+<li>如果互斥锁不存在等待者或者互斥锁的 <code>mutexLocked</code>、<code>mutexStarving</code>、<code>mutexWoken</code> 状态不都为 0，那么当前方法可以直接返回，不需要唤醒其他等待者；</li>
+<li>如果互斥锁存在等待者，会通过<code>runtime_Semrelease</code>唤醒等待者并移交锁的所有权；<br>在饥饿模式下，上述代码会直接调用<code>runtime_Semrelease</code>将当前锁交给下一个正在尝试获取锁的等待者，等待者被唤醒后会得到锁，在这时互斥锁还不会退出饥饿状态；</li>
+</ul>
+<h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3 小结"></a>3 小结</h2><p>互斥锁的<strong>加锁过程</strong>比较复杂，它涉及自旋、信号量以及调度等概念：</p>
+<ul>
+<li>如果互斥锁处于初始化状态，会通过置位 <code>mutexLocked</code> 加锁；</li>
+<li>如果互斥锁处于 <code>mutexLocked</code> 状态并且在普通模式下工作，会进入自旋，执行 30 次 <code>PAUSE</code> 指令消耗 CPU 时间等待锁的释放；</li>
+<li>如果当前 Goroutine 等待锁的时间超过了 1ms，互斥锁就会切换到饥饿模式；</li>
+<li>互斥锁在正常情况下会通过<code>sync_runtime_SemacquireMutex</code>将尝试获取锁的 Goroutine 切换至休眠状态，等待锁的持有者唤醒；</li>
+<li>如果当前 Goroutine 是互斥锁上的最后一个等待的协程或者等待的时间小于 1ms，那么它会将互斥锁切换回正常模式；</li>
+</ul>
+<p>互斥锁的<strong>解锁过程</strong>与之相比就比较简单：</p>
+<ul>
+<li>当互斥锁已经被解锁时，调用 Mutex.Lock 会直接抛出异常；</li>
+<li>当互斥锁处于饥饿模式时，将锁的所有权交给队列中的下一个等待者，等待者会负责设置 <code>mutexLocked</code> 标志位；</li>
+<li>当互斥锁处于普通模式时，如果没有 Goroutine 等待锁的释放或者已经有被唤醒的 Goroutine 获得了锁，会直接返回；在其他情况下会通过<code>sync.runtime_Semrelease</code> 唤醒对应的 Goroutine；</li>
+</ul>
+<h2 id="4-Sync-RWMutex"><a href="#4-Sync-RWMutex" class="headerlink" title="4 Sync.RWMutex"></a>4 Sync.RWMutex</h2><blockquote>
+<p>从逻辑上，可以把 RWMutex 理解为一把读锁加一把写锁；<br>写锁具有<code>严格的排他性</code>，当其被占用，其他试图取写锁或者读锁的 goroutine 均阻塞；<br>读锁具有<code>有限的共享性</code>，当其被占用，试图取写锁的 goroutine 会阻塞，试图取读锁的 goroutine 可与当前 goroutine 共享读锁；<br>RWMutex 适用于<code>读多写少</code>的场景，最理想化的情况，当所有操作均使用读锁，则可实现无锁化；最悲观的情况，倘若所有操作均使用写锁，则 RWMutex 退化为普通的 Mutex.</p>
+</blockquote>
+<h3 id="4-1-数据结构"><a href="#4-1-数据结构" class="headerlink" title="4.1 数据结构"></a>4.1 数据结构</h3><p>![[Pasted image 20230901163649.png]]<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> rwmutexMaxReaders = <span class="number">1</span> &lt;&lt; <span class="number">30</span>   <span class="comment">// 共享读锁的 goroutine 数量上限，值为 2^29；</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> RWMutex <span class="keyword">struct</span> &#123;</span><br><span class="line">    w           Mutex  <span class="comment">// 内置的一把普通互斥锁 sync.Mutex；</span></span><br><span class="line">    writerSem   <span class="type">uint32</span> <span class="comment">// 关联写锁阻塞队列的信号量；</span></span><br><span class="line">    readerSem   <span class="type">uint32</span> <span class="comment">// 关联读锁阻塞队列的信号量；</span></span><br><span class="line">    readerCount <span class="type">int32</span>  <span class="comment">// 正常情况下等于介入读锁流程的 goroutine 数量；当 goroutine 接入写锁流程时，该值为实际介入读锁流程的 goroutine 数量减 rwmutexMaxReaders.</span></span><br><span class="line">    readerWait  <span class="type">int32</span>  <span class="comment">// 记录在当前 goroutine 获取写锁前，还需要等待多少个 goroutine 释放读锁.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-2-读锁流程"><a href="#4-2-读锁流程" class="headerlink" title="4.2 读锁流程"></a>4.2 读锁流程</h3><h4 id="4-2-1-RLock"><a href="#4-2-1-RLock" class="headerlink" title="4.2.1 RLock"></a>4.2.1 RLock</h4><p>• 基于原子操作，将 RWMutex 的 readCount 变量加一，表示占用或等待读锁的 goroutine 数加一；<br>• 倘若 RWMutex.readCount 的新值仍小于 0，说明有 goroutine 未释放写锁，因此将当前 goroutine 添加到读锁的阻塞队列中并阻塞挂起.</p>
+<h4 id="4-2-2-RUnlock"><a href="#4-2-2-RUnlock" class="headerlink" title="4.2.2 RUnlock"></a>4.2.2 RUnlock</h4><p>• 基于原子操作，将 RWMutex 的 readCount 变量加一，表示占用或等待读锁的 goroutine 数减一；<br>• 倘若 RWMutex.readCount 的新值小于 0，说明有 goroutine 在等待获取写锁，则走入 RWMutex.rUnlockSlow 的流程中.</p>
+<h4 id="4-2-3-rUnlockSlow"><a href="#4-2-3-rUnlockSlow" class="headerlink" title="4.2.3 rUnlockSlow"></a>4.2.3 rUnlockSlow</h4><p>• 对 RWMutex.readerCount 进行校验，倘若发现当前协程此前未抢占过读锁，或者介入读锁流程的 goroutine 数量达到上限，则抛出 fatal；<br>(倘若 r+1 == -rwmutexMaxReaders，说明此时有 goroutine 介入写锁流程，但当前此前未加过读锁，具体原因见 2.3 小节；倘若 r+1=0，则要么此前未加过读锁，要么介入读锁流程的 goroutine 数量达到上限</p>
+<p>• 基于原子操作，对 RWMutex.readerWait 进行减一操作，倘若其新值为 0，说明当前 goroutine 是最后一个介入读锁流程的协程，因此需要唤醒一个等待写锁的阻塞队列的 goroutine.（综合 RWMutex.readerCount 为负值，可以确定存在等待写锁的 goroutine，具体原因见 2.3 小节.）</p>
+<h3 id="4-3-写锁流程"><a href="#4-3-写锁流程" class="headerlink" title="4.3 写锁流程"></a>4.3 写锁流程</h3><h4 id="4-3-1-Lock"><a href="#4-3-1-Lock" class="headerlink" title="4.3.1 Lock"></a>4.3.1 Lock</h4><p>• 对 RWMutex 内置的互斥锁进行加锁操作；<br>• 基于原子操作，对 RWMutex.readerCount 进行减少 -rwmutexMaxReaders 的操作；<br>• 倘若此时存在未释放读锁的 gouroutine，则基于原子操作在 RWMutex.readerWait 的基础上加上介入读锁流程的 goroutine 数量，并将当前 goroutine 添加到写锁的阻塞队列中挂起.</p>
+<h4 id="4-3-2-Unlock"><a href="#4-3-2-Unlock" class="headerlink" title="4.3.2 Unlock"></a>4.3.2 Unlock</h4><p>• 基于原子操作，将 RWMutex.readerCount 的值加上 rwmutexMaxReaders；<br>• 倘若发现 RWMutex.readerCount 的新值大于 rwmutexMaxReaders，则说明要么当前 RWMutex 未上过写锁，要么介入读锁流程的 goroutine 数量已经超限，因此直接抛出 fatal；<br>• 因此唤醒读锁阻塞队列中的所有 goroutine；(可见，竞争读锁的 goroutine 更具备优势)<br>• 解开 RWMutex 内置的互斥锁.</p>
+
     
     
   </div>
@@ -467,23 +1682,15 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      <a class="post-link" href="/2023/06/14/DDIA/04%20%E5%86%97%E4%BD%99/">[DDIA] 冗余</a>
+      <a class="post-link" href="/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/go-sync.WaitGroup/"></a>
       
     </h1>
 
     <div class="post-meta">
       <span class="post-time">
-        2023-06-14
+        2025-05-07
       </span>
       
-      
-      <span class="post-category">
-        
-        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">阅读笔记</a>
-        
-        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/DDIA/">DDIA</a>
-        
-      </span>
       
       
     </div>
@@ -495,16 +1702,46 @@
     
     
     
-    
-    
 
     
-    <blockquote>
-<p><strong>冗余（Replication）</strong> 是指将同一份数据复制多份，放到通过网络互联的多个机器上去。</p>
+    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line">&gt;Golang 调度方式：`主动让渡`和`被动调度`</span><br><span class="line">&gt;	被动调度: `通道 channel` 、`单机锁 sync.Mutex`、`并发等待组 sync.WaitGroup`</span><br><span class="line">&gt;当 goroutine 之间需要建立明确的`层级关系`. 倘若父 goroutine 希望持有子 goroutine 的生杀大权，并且保证父 goroutine 消亡时能连带回收其创建的所有子 goroutine ，此时可以使用到 Golang 上下文工具 context，完成父 goroutine 对 子 goroutine 的`生命周期控制`</span><br><span class="line"></span><br><span class="line">&gt; 多个协程等待一个协程执行完，除了WaitGroup 还有什么方式？  写入channel，for循环读</span><br><span class="line">## 1 How to use？</span><br><span class="line">### 1.1 核心方法</span><br><span class="line">• `WaitGroup.Add(n)`：完成一次登记操作，使得 WaitGroup 中并发计数器的数值加上 n. 在使用场景中，WaitGroup.Add(n) 背后的含义是，注册并启动了 n 个子 goroutine</span><br><span class="line">• `WaitGroup.Done()`：完成一次上报操作，使得 WaitGroup 中并发计数器的数值减 1. 在使用场景中，通常会在一个子 goroutine 退出前，会执行一次 WaitGroup.Done 方法</span><br><span class="line">• `WaitGroup.Wait()`：完成聚合操作. 通常由主 goroutine 调用该方法，主 goroutine 会因此陷入阻塞，直到所有子 goroutine 都已经执行完成，使得 WaitGroup 并发计数器数值清零时，主 goroutine 才得以继续往下执行</span><br><span class="line"></span><br><span class="line">### 1.2 案例</span><br><span class="line">```go</span><br><span class="line">func Test_waitGroup(t *testing.T) &#123;</span><br><span class="line">    var wg sync.WaitGroup   // 声明等待组 wg</span><br><span class="line">    for i := 0; i &lt; 10; i++ &#123;   // 循环开启十个子 Goroutine</span><br><span class="line">        wg.Add(1)               // 登记子 Goroutine</span><br><span class="line">        go func() &#123;</span><br><span class="line">            defer wg.Done()     // 保证退出前会调用一次，完成上报</span><br><span class="line">            &lt;-time.After(time.Second)</span><br><span class="line">        &#125;()</span><br><span class="line">    &#125;</span><br><span class="line">    wg.Wait()                   // 阻塞等待，直到等待组全部完成后才往下走</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：子 goroutine 是异步启动的，所以有可能出现 Wait 方法先于 Add 方法执行，此时由于计数器值为 0，Wait 方法会被直接放行，导致产生预期之外的执行流程；因此要保证 add 在 done 之前。</p>
 </blockquote>
-    <div class="read-more">
-      <a href="/2023/06/14/DDIA/04%20%E5%86%97%E4%BD%99/" class="read-more-link">Read more..</a>
-    </div>
+<h3 id="1-3-WaitGroup-channel-完成数据聚合"><a href="#1-3-WaitGroup-channel-完成数据聚合" class="headerlink" title="1.3 WaitGroup + channel 完成数据聚合"></a>1.3 WaitGroup + channel 完成数据聚合</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Test_waitGroup</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    tasksNum := <span class="number">10</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 数据缓存 channel</span></span><br><span class="line">    dataCh := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">interface</span>&#123;&#125;)</span><br><span class="line">    <span class="comment">// 数据结果 slice</span></span><br><span class="line">    resp := <span class="built_in">make</span>([]<span class="keyword">interface</span>&#123;&#125;, <span class="number">0</span>, tasksNum)</span><br><span class="line">    <span class="comment">// 控制管道</span></span><br><span class="line">    stopCh := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;, <span class="number">1</span>)</span><br><span class="line">    <span class="comment">// 启动读 goroutine</span></span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">for</span> data := <span class="keyword">range</span> dataCh &#123;</span><br><span class="line">            resp = <span class="built_in">append</span>(resp, data)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 标识数据读取完成</span></span><br><span class="line">        stopCh &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">    &#125;()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 保证获取到所有数据后，通过 channel 传递到读协程手中</span></span><br><span class="line">    <span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; tasksNum; i++ &#123;</span><br><span class="line">        wg.Add(<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(ch <span class="keyword">chan</span>&lt;- <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">            <span class="keyword">defer</span> wg.Done()</span><br><span class="line">            ch &lt;- time.Now().UnixNano()</span><br><span class="line">        &#125;(dataCh)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 确保所有取数据的协程都完成了工作，才关闭 ch</span></span><br><span class="line">    wg.Wait()</span><br><span class="line">    <span class="built_in">close</span>(dataCh)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 确保读协程处理完成</span></span><br><span class="line">    &lt;-stopCh</span><br><span class="line"></span><br><span class="line">    t.Logf(<span class="string">&quot;resp: %+v&quot;</span>, resp)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-源码走读"><a href="#2-源码走读" class="headerlink" title="2 源码走读"></a>2 源码走读</h2><h3 id="2-1-数据结构"><a href="#2-1-数据结构" class="headerlink" title="2.1 数据结构"></a>2.1 数据结构</h3><p>WaitGroup 位于 golang sync 包下，对应的类声明中包含了几个核心字段：</p>
+<ul>
+<li><code>noCopy</code>：这是防拷贝标识，标记了 WaitGroup 不应该用于值传递</li>
+<li><code>state1</code>：这是 WaitGroup 的核心字段，是一个无符号的64位整数，高32位是 WaitGroup 中并发计数器的数值，即当前 WaitGroup.Add 与 WaitGroup.Done 之间的差值；低 32 位标识了，当前有多少 goroutine 因 WaitGroup.Wait 操作而处于阻塞态，陷入阻塞态的原因是因为计数器的值没有清零，即 state1 字段高 32 位是一个正值</li>
+<li><code>state2</code>：用于阻塞和唤醒 goroutine 的信号量</li>
+</ul>
+<p><code>WaitGroup.Add</code> 方法会给 WaitGroup 的计数器累加上一定的值，背后的含义是标识出当前有多少 goroutine 正在运行，需要由 WaitGroup.Done 操作完成数值的抵扣：</p>
+<ul>
+<li>首先通过 WaitGroup.state 方法，获取到 WaitGroup 的 state1 和 state2 字段，分别将字段对应的地址赋给临时变量 statep 和 semap</li>
+<li>调用 atomic.AddUint64，直接通过指针的方式直接在 WaitGroup.state1 的高 32 位基础上累加上 delta 的值</li>
+<li>获取到 state1 高 32 位的值，赋值给局部变量 v，其含义是并发计数器的数值，即 WaitGroup.Add 和 WaitGroup.Done 之间的差值</li>
+<li>获取到 state1 低 32 位的值，赋值给局部变量 w. 其含义是因执行 WaitGroup.Wait 操作而陷入阻塞态的 goroutine 数量</li>
+<li>倘若 WaitGroup 计数器出现负值，直接 panic（ Done 不应该多于 Add ）</li>
+<li>倘若首次 Add 操作是在有 goroutine 因 Wait 操作而陷入阻塞时才执行，抛出 panic（if w != 0 &amp;&amp; delta &gt; 0 &amp;&amp; v == int32(delta) ）</li>
+<li>倘若执行完 Add 操作后，WaitGroup 的计数器还是正值，则直接返回</li>
+<li>倘若发现本次 Add 操作后， WaitGroup 计数器被清零了，则接下来需要依次把因 Wait 操作而陷入阻塞的 goroutine 唤醒. 在这期间，不允许再并发执行 Add 操作，否则会 panic</li>
+<li>唤醒 goroutine 使用的方法是 runtime_Semrelease 方法，底层会执行 goready 操作，属于 goroutine 的被动调度模式</li>
+</ul>
+<p>执行 WaitGroup.Wait 方法，会判断 WaitGroup 中的并发计数器数值是否为 0，如果不等于0，则当前 goroutine 会陷入阻塞态，直到计数器数值清零之后，才会被唤醒. 具体的执行流程如下：</p>
+<ul>
+<li>执行 WaitGroup.state 方法，获取到 state1 和 state2 字段</li>
+<li>走进 for 循环开启自旋流程</li>
+<li>将 state1 高 32 位所存储的计数器数值赋给局部变量 v</li>
+<li>将 state1 低 32 位所存储的阻塞 goroutine 数量赋给局部变量 w</li>
+<li>倘若计数器数值 v 已经是 0 了，则无需阻塞 goroutine，直接返回即可</li>
+<li>倘若计数器数值 v 大于 0，代表当前 goroutine 需要被阻塞挂起.</li>
+<li>基于 cas，将 state1 低 32 位的数值加 1，标识有一个额外的 goroutine 需要阻塞挂起了</li>
+<li>调用 runtime_Semacquire 方法，内部会通过 go park 操作，将当前 goroutine 阻塞挂起，属于被动调度模式</li>
+<li>当 goroutine 从 runtime_Semacquire 方法走出来时，说明 WaitGroup 计数器已经被清零了.</li>
+<li>在被唤醒的 goroutine 返回前，WaitGroup 不能被并发执行 Add 操作，否则会陷入 panic</li>
+<li>被唤醒的 goroutine 正常返回，Wait 流程结束</li>
+</ul>
+
     
     
   </div>
@@ -519,23 +1756,15 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      <a class="post-link" href="/2023/05/28/DDIA/03%20%E7%BC%96%E7%A0%81%E5%92%8C%E6%BC%94%E8%BF%9B/">[DDIA] 编码和演进</a>
+      <a class="post-link" href="/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/04-sync.Mutex/"></a>
       
     </h1>
 
     <div class="post-meta">
       <span class="post-time">
-        2023-05-28
+        2025-05-07
       </span>
       
-      
-      <span class="post-category">
-        
-        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">阅读笔记</a>
-        
-        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/DDIA/">DDIA</a>
-        
-      </span>
       
       
     </div>
@@ -547,16 +1776,120 @@
     
     
     
-    
-    
 
     
-    <blockquote>
-<p>编码主要涉及两方面问题：如何编码能够节省空间、提高性能;<br> 如何编码以适应数据的演化和兼容。</p>
+    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line">Go 语言在 `sync` 包中提供了用于同步的一些基本原语,`sync.Mutex` 就是其中最常用的一个。</span><br><span class="line"></span><br><span class="line">&gt; 本文基于 Go 1.17.1</span><br><span class="line">## 1 基本结构</span><br><span class="line">Go 语言的 `sync.Mutex`由两个字段 `state` 和 `sema` 组成。其中 `state` 表示当前互斥锁的状态，而 `sema` 是用于控制锁状态的信号量。</span><br><span class="line"></span><br><span class="line">```go</span><br><span class="line">// sync/mutex.go 25行</span><br><span class="line">type Mutex struct &#123;</span><br><span class="line">	state int32</span><br><span class="line">	sema  uint32</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述两个字段加起来只占 8 字节空间的结构体表示了 Go 语言中的互斥锁。</p>
+<h3 id="1-1-状态"><a href="#1-1-状态" class="headerlink" title="1.1 状态"></a>1.1 状态</h3><p>互斥锁的状态比较复杂，如下图所示，最低三位分别表示 <code>mutexLocked</code>、<code>mutexWoken</code> 和 <code>mutexStarving</code>，剩下的位置用来表示当前有多少个 Goroutine 在等待互斥锁的释放：<br>![[mutex-state.png]]<br><code>int32</code> 中的不同位分别表示了不同的状态：</p>
+<ul>
+<li><code>mutexLocked</code> — 表示互斥锁的锁定状态；</li>
+<li><code>mutexWoken</code> — 表示从正常模式被从唤醒；</li>
+<li><code>mutexStarving</code> — 当前的互斥锁进入饥饿状态；</li>
+<li><code>waitersCount</code> — 当前互斥锁上等待的 Goroutine 个数</li>
+</ul>
+<p>在默认情况下，互斥锁的所有状态位都是 0，即默认为未锁定状态。</p>
+<blockquote>
+<p>同时也表明 Mutex 是不需要初始化的</p>
 </blockquote>
-    <div class="read-more">
-      <a href="/2023/05/28/DDIA/03%20%E7%BC%96%E7%A0%81%E5%92%8C%E6%BC%94%E8%BF%9B/" class="read-more-link">Read more..</a>
-    </div>
+<p>源码中也提供了相关常量</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sync/mutex.go 36</span></span><br><span class="line"><span class="keyword">const</span> (</span><br><span class="line"></span><br><span class="line">    mutexLocked = <span class="number">1</span> &lt;&lt; <span class="literal">iota</span> <span class="comment">// 1 0001 含义：用最后一位表示当前对象锁的状态，0-未锁住 1-已锁住</span></span><br><span class="line"></span><br><span class="line">    mutexWoken <span class="comment">// 2 0010 含义：用倒数第二位表示当前对象是否被唤醒 0-唤醒 1-未唤醒</span></span><br><span class="line"></span><br><span class="line">    mutexStarving <span class="comment">// 4 0100 含义：用倒数第三位表示当前对象是否为饥饿模式，0为正常模式，1为饥饿模式。</span></span><br><span class="line"></span><br><span class="line">    mutexWaiterShift = <span class="literal">iota</span> <span class="comment">// 3，从倒数第四位往前的bit位表示在排队等待的goroutine数</span></span><br><span class="line"></span><br><span class="line">    starvationThresholdNs = <span class="number">1e6</span> <span class="comment">// 1ms 切换到饥饿模式的阈值</span></span><br><span class="line"></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="1-2-正常模式和饥饿模式"><a href="#1-2-正常模式和饥饿模式" class="headerlink" title="1.2 正常模式和饥饿模式"></a>1.2 正常模式和饥饿模式</h3><p>Mutex 有两种模式：</p>
+<ul>
+<li>正常模式；</li>
+<li>饥饿模式。</li>
+</ul>
+<p><strong>在正常模式下</strong>，锁的等待者会按照先进先出的顺序获取锁。但是刚被唤起的 Goroutine 与新创建的 Goroutine 竞争时，大概率会获取不到锁，为了减少这种情况的出现，一旦 Goroutine 超过 1ms 没有获取到锁，它就会将当前互斥锁切换饥饿模式，防止部分 Goroutine 被<strong>饿死</strong>。</p>
+<blockquote>
+<p><strong>引入饥饿模式的目的是保证互斥锁的公平性。</strong></p>
+<p>说明 Mutex 是公平锁。</p>
+</blockquote>
+<p><strong>在饥饿模式中</strong>，互斥锁会直接交给等待队列最前面的 Goroutine。新的 Goroutine 在该状态下不能获取锁、也不会进入自旋状态，它们只会在队列的末尾等待。如果一个 Goroutine 获得了互斥锁并且它在队列的末尾或者它等待的时间少于 1ms，那么当前的互斥锁就会切换回正常模式。</p>
+<blockquote>
+<p>与饥饿模式相比，正常模式下的互斥锁能够提供更好地性能，饥饿模式的能避免 Goroutine 由于陷入等待无法获取锁而造成的高尾延时。</p>
+</blockquote>
+<p>这里贴一下源码中的注释</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Mutex fairness.</span><br><span class="line"></span><br><span class="line">Mutex can be in 2 modes of operations: normal and starvation.</span><br><span class="line">In normal mode waiters are queued in FIFO order, but a woken up waiter</span><br><span class="line">does not own the mutex and competes with new arriving goroutines over</span><br><span class="line">the ownership. New arriving goroutines have an advantage -- they are</span><br><span class="line">already running on CPU and there can be lots of them, so a woken up</span><br><span class="line">waiter has good chances of losing. In such case it is queued at front</span><br><span class="line">of the wait queue. If a waiter fails to acquire the mutex for more than 1ms,</span><br><span class="line">it switches mutex to the starvation mode.</span><br><span class="line"></span><br><span class="line">In starvation mode ownership of the mutex is directly handed off from</span><br><span class="line">the unlocking goroutine to the waiter at the front of the queue.</span><br><span class="line">New arriving goroutines don&#x27;t try to acquire the mutex even if it appears</span><br><span class="line">to be unlocked, and don&#x27;t try to spin. Instead they queue themselves at</span><br><span class="line">the tail of the wait queue.</span><br><span class="line"></span><br><span class="line">If a waiter receives ownership of the mutex and sees that either</span><br><span class="line">(1) it is the last waiter in the queue, or (2) it waited for less than 1 ms,</span><br><span class="line">it switches mutex back to normal operation mode.</span><br><span class="line"></span><br><span class="line">Normal mode has considerably better performance as a goroutine can acquire</span><br><span class="line">a mutex several times in a row even if there are blocked waiters.</span><br><span class="line">Starvation mode is important to prevent pathological cases of tail latency.</span><br></pre></td></tr></table></figure>
+<h2 id="2-加解锁过程"><a href="#2-加解锁过程" class="headerlink" title="2 加解锁过程"></a>2 加解锁过程</h2><p>在<code>sync</code>包中 中定义了 Locker 接口：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sync/mutex.go 31 行</span></span><br><span class="line"><span class="keyword">type</span> Locker <span class="keyword">interface</span> &#123;</span><br><span class="line">        Lock()</span><br><span class="line">        Unlock()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Mutex 实现了 Locker 接口。除了互斥锁 Mutex 之外读写锁 RWMutex，也实现了 Locker 接口。</p>
+<h3 id="2-1-Lock"><a href="#2-1-Lock" class="headerlink" title="2.1 Lock"></a>2.1 Lock</h3><p>互斥锁的加锁是靠 Mutex.Lock 方法完成的，以下代码进行了简化，省略了 race 相关代码，只保留主干部分：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sync/mutex.go 72 行</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Mutex)</span></span> Lock() &#123;</span><br><span class="line">	<span class="comment">// Fast path: grab unlocked mutex.</span></span><br><span class="line">	<span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;m.state, <span class="number">0</span>, mutexLocked) &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// Slow path (outlined so that the fast path can be inlined)</span></span><br><span class="line">	m.lockSlow()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，整个加锁过程分为 Fast path 和 Slow Path。</p>
+<h4 id="2-1-1-Fast-path"><a href="#2-1-1-Fast-path" class="headerlink" title="2.1.1 Fast path"></a>2.1.1 Fast path</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;m.state, <span class="number">0</span>, mutexLocked) &#123;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果 m.state 为 0,说明当前锁为未锁定状态，将其设置为 1。</p>
+<p>这也是最简单的部分，直接通过一个 CAS 操作，尝试获取锁。</p>
+<h4 id="2-1-2-Slow-Path"><a href="#2-1-2-Slow-Path" class="headerlink" title="2.1.2 Slow Path"></a>2.1.2 Slow Path</h4><p>如果互斥锁的状态不是 0 时就会进入 Slow Path。尝试通过自旋（Spinnig）等方式等待锁的释放，该方法的主体是一个非常大 for 循环，这里将它分成几个部分介绍获取锁的过程：</p>
+<ul>
+<li>1）判断当前 Goroutine 能否进入自旋；</li>
+<li>2）通过自旋等待互斥锁的释放；</li>
+<li>3）计算互斥锁的最新状态；</li>
+<li>4）更新互斥锁的状态并获取锁；</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Mutex)</span></span> lockSlow() &#123;</span><br><span class="line">   <span class="keyword">var</span> waitStartTime <span class="type">int64</span></span><br><span class="line">   starving := <span class="literal">false</span></span><br><span class="line">   awoke := <span class="literal">false</span></span><br><span class="line">   iter := <span class="number">0</span></span><br><span class="line">   old := m.state</span><br><span class="line">   <span class="keyword">for</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> old&amp;(mutexLocked|mutexStarving) == mutexLocked &amp;&amp; runtime_canSpin(iter) &#123;</span><br><span class="line">         <span class="keyword">if</span> !awoke &amp;&amp; old&amp;mutexWoken == <span class="number">0</span> &amp;&amp; old&gt;&gt;mutexWaiterShift != <span class="number">0</span> &amp;&amp;</span><br><span class="line">            atomic.CompareAndSwapInt32(&amp;m.state, old, old|mutexWoken) &#123;</span><br><span class="line">            awoke = <span class="literal">true</span></span><br><span class="line">         &#125;</span><br><span class="line">         runtime_doSpin()</span><br><span class="line">         iter++</span><br><span class="line">         old = m.state</span><br><span class="line">         <span class="keyword">continue</span></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="built_in">new</span> := old</span><br><span class="line">   </span><br><span class="line">      <span class="keyword">if</span> old&amp;mutexStarving == <span class="number">0</span> &#123;</span><br><span class="line">         <span class="built_in">new</span> |= mutexLocked</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> old&amp;(mutexLocked|mutexStarving) != <span class="number">0</span> &#123;</span><br><span class="line">         <span class="built_in">new</span> += <span class="number">1</span> &lt;&lt; mutexWaiterShift</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> starving &amp;&amp; old&amp;mutexLocked != <span class="number">0</span> &#123;</span><br><span class="line">         <span class="built_in">new</span> |= mutexStarving</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> awoke &#123;</span><br><span class="line">         <span class="keyword">if</span> <span class="built_in">new</span>&amp;mutexWoken == <span class="number">0</span> &#123;</span><br><span class="line">            throw(<span class="string">&quot;sync: inconsistent mutex state&quot;</span>)</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="built_in">new</span> &amp;^= mutexWoken</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;m.state, old, <span class="built_in">new</span>) &#123;</span><br><span class="line">         <span class="keyword">if</span> old&amp;(mutexLocked|mutexStarving) == <span class="number">0</span> &#123;</span><br><span class="line">            <span class="keyword">break</span> <span class="comment">// locked the mutex with CAS</span></span><br><span class="line">         &#125;</span><br><span class="line">         queueLifo := waitStartTime != <span class="number">0</span></span><br><span class="line">         <span class="keyword">if</span> waitStartTime == <span class="number">0</span> &#123;</span><br><span class="line">            waitStartTime = runtime_nanotime()</span><br><span class="line">         &#125;</span><br><span class="line">         runtime_SemacquireMutex(&amp;m.sema, queueLifo, <span class="number">1</span>)</span><br><span class="line">         starving = starving || runtime_nanotime()-waitStartTime &gt; starvationThresholdNs</span><br><span class="line">         old = m.state</span><br><span class="line">         <span class="keyword">if</span> old&amp;mutexStarving != <span class="number">0</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> old&amp;(mutexLocked|mutexWoken) != <span class="number">0</span> || old&gt;&gt;mutexWaiterShift == <span class="number">0</span> &#123;</span><br><span class="line">               throw(<span class="string">&quot;sync: inconsistent mutex state&quot;</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            delta := <span class="type">int32</span>(mutexLocked - <span class="number">1</span>&lt;&lt;mutexWaiterShift)</span><br><span class="line">            <span class="keyword">if</span> !starving || old&gt;&gt;mutexWaiterShift == <span class="number">1</span> &#123;</span><br><span class="line">               delta -= mutexStarving</span><br><span class="line">            &#125;</span><br><span class="line">            atomic.AddInt32(&amp;m.state, delta)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">         &#125;</span><br><span class="line">         awoke = <span class="literal">true</span></span><br><span class="line">         iter = <span class="number">0</span></span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">         old = m.state</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>1）判断当前 Goroutine 能否进入自旋；</strong></p>
+<p><strong>自旋是一种多线程同步机制</strong>，当前的进程在进入自旋的过程中会一直保持 CPU 的占用，持续检查某个条件是否为真。<strong>在多核的 CPU 上，自旋可以避免 Goroutine 的切换</strong>，使用恰当会对性能带来很大的增益，但是使用的不恰当就会拖慢整个程序，所以 Goroutine 进入自旋的条件非常苛刻：</p>
+<ul>
+<li>1）互斥锁只有在普通模式才能进入自旋；</li>
+<li>2）<code>runtime.sync_runtime_canSpin</code>需要返回 true<ul>
+<li>运行在多 CPU 的机器上；</li>
+<li>当前 Goroutine 为了获取该锁进入自旋的次数小于四次；</li>
+<li>当前机器上至少存在一个正在运行的处理器 P 并且处理的运行队列为空；</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// runtime/proc.go 6364 行</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sync_runtime_canSpin</span><span class="params">(i <span class="type">int</span>)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> i &gt;= active_spin || ncpu &lt;= <span class="number">1</span> || gomaxprocs &lt;= <span class="type">int32</span>(sched.npidle+sched.nmspinning)+<span class="number">1</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> p := getg().m.p.ptr(); !runqempty(p) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>2）通过自旋等待互斥锁的释放；</strong></p>
+<p>一旦当前 Goroutine 能够进入自旋就会调用<code>runtime.sync_runtime_doSpin</code>和<code>runtime.procyield</code>执行 30 次的 <code>PAUSE</code> 指令，该指令只会占用 CPU 并消耗 CPU 时间：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// runtime/proc.go 6381 行</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sync_runtime_doSpin</span><span class="params">()</span></span> &#123;</span><br><span class="line">	procyield(active_spin_cnt)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// runtime/asm_386.s 574 行</span><br><span class="line">TEXT runtime·procyield(SB),NOSPLIT,$0-0</span><br><span class="line">	MOVL	cycles+0(FP), AX</span><br><span class="line">again:</span><br><span class="line">	PAUSE</span><br><span class="line">	SUBL	$1, AX</span><br><span class="line">	JNZ	again</span><br><span class="line">	RET</span><br></pre></td></tr></table></figure>
+<p><strong>3）计算互斥锁的最新状态；</strong></p>
+<p> 处理了自旋相关的特殊逻辑之后，互斥锁会根据上下文计算当前互斥锁最新的状态。几个不同的条件分别会更新 <code>state</code> 字段中存储的不同信息 — <code>mutexLocked</code>、<code>mutexStarving</code>、<code>mutexWoken</code> 和 <code>mutexWaiterShift</code>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">new</span> := old</span><br><span class="line"><span class="keyword">if</span> old&amp;mutexStarving == <span class="number">0</span> &#123;</span><br><span class="line">    <span class="built_in">new</span> |= mutexLocked</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> old&amp;(mutexLocked|mutexStarving) != <span class="number">0</span> &#123;</span><br><span class="line">    <span class="built_in">new</span> += <span class="number">1</span> &lt;&lt; mutexWaiterShift</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> starving &amp;&amp; old&amp;mutexLocked != <span class="number">0</span> &#123;</span><br><span class="line">    <span class="built_in">new</span> |= mutexStarving</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> awoke &#123;</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">new</span>&amp;mutexWoken == <span class="number">0</span> &#123;</span><br><span class="line">        throw(<span class="string">&quot;sync: inconsistent mutex state&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">new</span> &amp;^= mutexWoken</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>4）更新互斥锁的状态并获取锁；</strong></p>
+<p>计算了新的互斥锁状态之后，会使用 CAS 函数更新状态</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;m.state, old, <span class="built_in">new</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> old&amp;(mutexLocked|mutexStarving) == <span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">break</span> <span class="comment">// locked the mutex with CAS</span></span><br><span class="line">    &#125;</span><br><span class="line">    queueLifo := waitStartTime != <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> waitStartTime == <span class="number">0</span> &#123;</span><br><span class="line">        waitStartTime = runtime_nanotime()</span><br><span class="line">    &#125;</span><br><span class="line">    runtime_SemacquireMutex(&amp;m.sema, queueLifo, <span class="number">1</span>)</span><br><span class="line">    starving = starving || runtime_nanotime()-waitStartTime &gt; starvationThresholdNs</span><br><span class="line">    old = m.state</span><br><span class="line">    <span class="keyword">if</span> old&amp;mutexStarving != <span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> old&amp;(mutexLocked|mutexWoken) != <span class="number">0</span> || old&gt;&gt;mutexWaiterShift == <span class="number">0</span> &#123;</span><br><span class="line">            throw(<span class="string">&quot;sync: inconsistent mutex state&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        delta := <span class="type">int32</span>(mutexLocked - <span class="number">1</span>&lt;&lt;mutexWaiterShift)</span><br><span class="line">        <span class="keyword">if</span> !starving || old&gt;&gt;mutexWaiterShift == <span class="number">1</span> &#123;</span><br><span class="line">            delta -= mutexStarving</span><br><span class="line">        &#125;</span><br><span class="line">        atomic.AddInt32(&amp;m.state, delta)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    &#125;</span><br><span class="line">    awoke = <span class="literal">true</span></span><br><span class="line">    iter = <span class="number">0</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    old = m.state</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果没有通过 CAS 获得锁，会调用 <code>runtime.sync_runtime_SemacquireMutex</code> 通过信号量保证资源不会被两个 Goroutine 获取。</p>
+<p><code>runtime.sync_runtime_SemacquireMutex</code> 会在方法中不断尝试获取锁并陷入休眠等待信号量的释放，一旦当前 Goroutine 可以获取信号量，它就会立刻返回，<code>sync.Mutex.Lock</code>的剩余代码也会继续执行。</p>
+<ul>
+<li>在正常模式下，这段代码会设置唤醒和饥饿标记、重置迭代次数并重新执行获取锁的循环；</li>
+<li>在饥饿模式下，当前 Goroutine 会获得互斥锁，如果等待队列中只存在当前 Goroutine，互斥锁还会从饥饿模式中退出；</li>
+</ul>
+<p>其中还包含了状态切换的部分逻辑:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> waitStartTime <span class="type">int64</span></span><br><span class="line"><span class="keyword">for</span>&#123; <span class="comment">// for 循环里尝试获取锁</span></span><br><span class="line">    <span class="keyword">if</span> waitStartTime == <span class="number">0</span> &#123; <span class="comment">// waitStartTime 只有第一次执行时才会赋值</span></span><br><span class="line">        waitStartTime = runtime_nanotime()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 如果等待时间超过 1ms 则切换到饥饿模式</span></span><br><span class="line">    starving = starving || runtime_nanotime()-waitStartTime &gt; starvationThresholdNs</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-Unlock"><a href="#2-2-Unlock" class="headerlink" title="2.2 Unlock"></a>2.2 Unlock</h3><p>相比之下互斥锁的解锁过程就比较简单,同样分为 Fast path 和 Slow path。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Mutex)</span></span> Unlock() &#123;</span><br><span class="line">	<span class="comment">// Fast path: drop lock bit.</span></span><br><span class="line">	<span class="built_in">new</span> := atomic.AddInt32(&amp;m.state, -mutexLocked)</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">new</span> != <span class="number">0</span> &#123;</span><br><span class="line">		<span class="comment">// Outlined slow path to allow inlining the fast path.</span></span><br><span class="line">		<span class="comment">// To hide unlockSlow during tracing we skip one extra frame when tracing GoUnblock.</span></span><br><span class="line">		m.unlockSlow(<span class="built_in">new</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-2-1-Fast-path"><a href="#2-2-1-Fast-path" class="headerlink" title="2.2.1 Fast path"></a>2.2.1 Fast path</h4><p>该过程会先使用<code>atomic.AddInt32函数快速解锁，这时会发生下面的两种情况：</code></p>
+<ul>
+<li>如果该函数返回的新状态等于 0，当前 Goroutine 就成功解锁了互斥锁；</li>
+<li>如果该函数返回的新状态不等于 0，则进入 Slow path。</li>
+</ul>
+<h4 id="2-2-2-Slow-path"><a href="#2-2-2-Slow-path" class="headerlink" title="2.2.2 Slow path"></a>2.2.2 Slow path</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Mutex)</span></span> unlockSlow(<span class="built_in">new</span> <span class="type">int32</span>) &#123;</span><br><span class="line">   <span class="keyword">if</span> (<span class="built_in">new</span>+mutexLocked)&amp;mutexLocked == <span class="number">0</span> &#123;</span><br><span class="line">      throw(<span class="string">&quot;sync: unlock of unlocked mutex&quot;</span>)</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span> <span class="built_in">new</span>&amp;mutexStarving == <span class="number">0</span> &#123;</span><br><span class="line">      old := <span class="built_in">new</span></span><br><span class="line">      <span class="keyword">for</span> &#123;</span><br><span class="line">         <span class="keyword">if</span> old&gt;&gt;mutexWaiterShift == <span class="number">0</span> || old&amp;(mutexLocked|mutexWoken|mutexStarving) != <span class="number">0</span> &#123;</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">         &#125;</span><br><span class="line">         <span class="built_in">new</span> = (old - <span class="number">1</span>&lt;&lt;mutexWaiterShift) | mutexWoken</span><br><span class="line">         <span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;m.state, old, <span class="built_in">new</span>) &#123;</span><br><span class="line">            runtime_Semrelease(&amp;m.sema, <span class="literal">false</span>, <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">         &#125;</span><br><span class="line">         old = m.state</span><br><span class="line">      &#125;</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      runtime_Semrelease(&amp;m.sema, <span class="literal">true</span>, <span class="number">1</span>)</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>先校验锁状态的合法性 — 如果当前互斥锁已经被解锁过了会直接抛出异常 “sync: unlock of unlocked mutex” 中止当前程序。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="built_in">new</span>+mutexLocked)&amp;mutexLocked == <span class="number">0</span> &#123;</span><br><span class="line">    throw(<span class="string">&quot;sync: unlock of unlocked mutex&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后根据当前锁模式分别处理</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="built_in">new</span>&amp;mutexStarving == <span class="number">0</span> &#123; <span class="comment">// 正常模式</span></span><br><span class="line">    </span><br><span class="line">&#125;<span class="keyword">else</span>&#123; <span class="comment">// 饥饿模式</span></span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在正常模式下，上述代码会使用如下所示的处理过程：</p>
+<ul>
+<li>如果互斥锁不存在等待者或者互斥锁的 <code>mutexLocked</code>、<code>mutexStarving</code>、<code>mutexWoken</code> 状态不都为 0，那么当前方法可以直接返回，不需要唤醒其他等待者；</li>
+<li>如果互斥锁存在等待者，会通过<code>runtime_Semrelease</code>唤醒等待者并移交锁的所有权；</li>
+</ul>
+<p>在饥饿模式下，上述代码会直接调用<code>runtime_Semrelease</code>将当前锁交给下一个正在尝试获取锁的等待者，等待者被唤醒后会得到锁，在这时互斥锁还不会退出饥饿状态；</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// runtime/sema.go 65行</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sync_runtime_Semrelease</span><span class="params">(addr *<span class="type">uint32</span>, handoff <span class="type">bool</span>, skipframes <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">	semrelease1(addr, handoff, skipframes)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">semrelease1</span><span class="params">(addr *<span class="type">uint32</span>, handoff <span class="type">bool</span>, skipframes <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">	root := semroot(addr)</span><br><span class="line">	atomic.Xadd(addr, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> atomic.Load(&amp;root.nwait) == <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Harder case: search for a waiter and wake it.</span></span><br><span class="line">	lockWithRank(&amp;root.lock, lockRankRoot)</span><br><span class="line">	<span class="keyword">if</span> atomic.Load(&amp;root.nwait) == <span class="number">0</span> &#123;</span><br><span class="line">		unlock(&amp;root.lock)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	s, t0 := root.dequeue(addr)</span><br><span class="line">	<span class="keyword">if</span> s != <span class="literal">nil</span> &#123;</span><br><span class="line">		atomic.Xadd(&amp;root.nwait, <span class="number">-1</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	unlock(&amp;root.lock)</span><br><span class="line">	<span class="keyword">if</span> s != <span class="literal">nil</span> &#123; <span class="comment">// May be slow or even yield, so unlock first</span></span><br><span class="line">		acquiretime := s.acquiretime</span><br><span class="line">		<span class="keyword">if</span> acquiretime != <span class="number">0</span> &#123;</span><br><span class="line">			mutexevent(t0-acquiretime, <span class="number">3</span>+skipframes)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> s.ticket != <span class="number">0</span> &#123;</span><br><span class="line">			throw(<span class="string">&quot;corrupted semaphore ticket&quot;</span>)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> handoff &amp;&amp; cansemacquire(addr) &#123;</span><br><span class="line">			s.ticket = <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">		readyWithTime(s, <span class="number">5</span>+skipframes)</span><br><span class="line">		<span class="keyword">if</span> s.ticket == <span class="number">1</span> &amp;&amp; getg().m.locks == <span class="number">0</span> &#123;</span><br><span class="line">			goyield()</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3 小结"></a>3 小结</h2><p>互斥锁的<strong>加锁过程</strong>比较复杂，它涉及自旋、信号量以及调度等概念：</p>
+<ul>
+<li>如果互斥锁处于初始化状态，会通过置位 <code>mutexLocked</code> 加锁；</li>
+<li>如果互斥锁处于 <code>mutexLocked</code> 状态并且在普通模式下工作，会进入自旋，执行 30 次 <code>PAUSE</code> 指令消耗 CPU 时间等待锁的释放；</li>
+<li>如果当前 Goroutine 等待锁的时间超过了 1ms，互斥锁就会切换到饥饿模式；</li>
+<li>互斥锁在正常情况下会通过<code>sync_runtime_SemacquireMutex</code>将尝试获取锁的 Goroutine 切换至休眠状态，等待锁的持有者唤醒；</li>
+<li>如果当前 Goroutine 是互斥锁上的最后一个等待的协程或者等待的时间小于 1ms，那么它会将互斥锁切换回正常模式；</li>
+</ul>
+<p>互斥锁的<strong>解锁过程</strong>与之相比就比较简单：</p>
+<ul>
+<li>当互斥锁已经被解锁时，调用 Mutex.Lock 会直接抛出异常；</li>
+<li>当互斥锁处于饥饿模式时，将锁的所有权交给队列中的下一个等待者，等待者会负责设置 <code>mutexLocked</code> 标志位；</li>
+<li>当互斥锁处于普通模式时，如果没有 Goroutine 等待锁的释放或者已经有被唤醒的 Goroutine 获得了锁，会直接返回；在其他情况下会通过<code>sync.runtime_Semrelease</code> 唤醒对应的 Goroutine；</li>
+</ul>
+
     
     
   </div>
@@ -571,23 +1904,15 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      <a class="post-link" href="/2023/05/24/DDIA/02%20%E5%AD%98%E5%82%A8%E5%92%8C%E6%9F%A5%E8%AF%A2/">[DDIA] 存储和查询</a>
+      <a class="post-link" href="/2025/04/16/LLM/Agent/"></a>
       
     </h1>
 
     <div class="post-meta">
       <span class="post-time">
-        2023-05-24
+        2025-04-16
       </span>
       
-      
-      <span class="post-category">
-        
-        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">阅读笔记</a>
-        
-        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/DDIA/">DDIA</a>
-        
-      </span>
       
       
     </div>
@@ -599,16 +1924,9 @@
     
     
     
-    
-    
 
     
-    <blockquote>
-<p>数据库底层如何处理查询和存储。</p>
-</blockquote>
-    <div class="read-more">
-      <a href="/2023/05/24/DDIA/02%20%E5%AD%98%E5%82%A8%E5%92%8C%E6%9F%A5%E8%AF%A2/" class="read-more-link">Read more..</a>
-    </div>
+    
     
     
   </div>
@@ -623,23 +1941,15 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      <a class="post-link" href="/2023/05/17/DDIA/01%20%E5%8F%AF%E9%9D%A0%E3%80%81%E5%8F%AF%E6%8B%93%E5%B1%95%E3%80%81%E5%8F%AF%E7%BB%B4%E6%8A%A4/">[DDIA] 可靠、可拓展、可维护</a>
+      <a class="post-link" href="/2025/04/16/LLM/RAG/"></a>
       
     </h1>
 
     <div class="post-meta">
       <span class="post-time">
-        2023-05-17
+        2025-04-16
       </span>
       
-      
-      <span class="post-category">
-        
-        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">阅读笔记</a>
-        
-        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/DDIA/">DDIA</a>
-        
-      </span>
       
       
     </div>
@@ -651,16 +1961,9 @@
     
     
     
-    
-    
 
     
-    <blockquote>
-<p>如何评价一个好数据系统，如何构建一个好的数据系统，有哪些可以遵循的设计模式？有哪些通常需要考虑的方面？</p>
-</blockquote>
-    <div class="read-more">
-      <a href="/2023/05/17/DDIA/01%20%E5%8F%AF%E9%9D%A0%E3%80%81%E5%8F%AF%E6%8B%93%E5%B1%95%E3%80%81%E5%8F%AF%E7%BB%B4%E6%8A%A4/" class="read-more-link">Read more..</a>
-    </div>
+    
     
     
   </div>
@@ -675,23 +1978,15 @@
   <header class="post-header">
     <h1 class="post-title">
       
-      <a class="post-link" href="/2023/05/16/DDIA/00%20%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%E5%92%8C%E6%9F%A5%E8%AF%A2%E8%AF%AD%E8%A8%80/">[DDIA] 数据模型和查询语言</a>
+      <a class="post-link" href="/2025/04/16/LLM/Prompt%20Engineering/"></a>
       
     </h1>
 
     <div class="post-meta">
       <span class="post-time">
-        2023-05-16
+        2025-04-16
       </span>
       
-      
-      <span class="post-category">
-        
-        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">阅读笔记</a>
-        
-        <a href="/categories/%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/DDIA/">DDIA</a>
-        
-      </span>
       
       
     </div>
@@ -703,16 +1998,9 @@
     
     
     
-    
-    
 
     
-    <blockquote>
-<p>如何分析一个数据模型 &amp; 如何考量查询语言</p>
-</blockquote>
-    <div class="read-more">
-      <a href="/2023/05/16/DDIA/00%20%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%E5%92%8C%E6%9F%A5%E8%AF%A2%E8%AF%AD%E8%A8%80/" class="read-more-link">Read more..</a>
-    </div>
+    
     
     
   </div>

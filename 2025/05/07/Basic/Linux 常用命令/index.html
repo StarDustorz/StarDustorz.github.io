@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+
+<!-- Website keywords -->
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/atom.xml" title="Draco's Blog" type="application/atom+xml">
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://stardustorz.github.io/2025/05/07/Basic/Linux 常用命令/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":false};
+</script>
+  
+  <title> - Draco&#39;s Blog</title>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/links/">
+      <li class="mobile-menu-item">
+        
+        
+        Links              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Draco's Blog</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/links/">  
+              
+              
+              Links  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2025-05-07
+      </span>
+      
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%80%E3%80%81%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95"><span class="toc-number">1.</span> <span class="toc-text">1 一、文件和目录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-pwd"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 pwd</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-which"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 which</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-ls"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 ls</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-cd"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 cd</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-du"><span class="toc-number">1.5.</span> <span class="toc-text">1.5 du</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-6-%E6%B5%8F%E8%A7%88%E5%92%8C%E5%88%9B%E5%BB%BA%E6%96%87%E4%BB%B6"><span class="toc-number">1.6.</span> <span class="toc-text">1.6 浏览和创建文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-7-cat"><span class="toc-number">1.7.</span> <span class="toc-text">1.7 cat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-8-less"><span class="toc-number">1.8.</span> <span class="toc-text">1.8 less</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-9-head"><span class="toc-number">1.9.</span> <span class="toc-text">1.9 head</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-10-tail"><span class="toc-number">1.10.</span> <span class="toc-text">1.10 tail</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-11-touch"><span class="toc-number">1.11.</span> <span class="toc-text">1.11 touch</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-12-mkdir"><span class="toc-number">1.12.</span> <span class="toc-text">1.12 mkdir</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-13-cp"><span class="toc-number">1.13.</span> <span class="toc-text">1.13 cp</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-14-mv"><span class="toc-number">1.14.</span> <span class="toc-text">1.14 mv</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-15-rm"><span class="toc-number">1.15.</span> <span class="toc-text">1.15 rm</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-16-ln"><span class="toc-number">1.16.</span> <span class="toc-text">1.16 ln</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-17-%E7%A1%AC%E9%93%BE%E6%8E%A5"><span class="toc-number">1.17.</span> <span class="toc-text">1.17 硬链接</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BA%8C%E3%80%81%E7%94%A8%E6%88%B7%E4%B8%8E%E6%9D%83%E9%99%90"><span class="toc-number">2.</span> <span class="toc-text">2 二、用户与权限</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-sudo"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 sudo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-useradd-passwd"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 useradd + passwd</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-userdel"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 userdel</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-su"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 su</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-groupadd"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 groupadd</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-groupdel"><span class="toc-number">2.6.</span> <span class="toc-text">2.6 groupdel</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7-groups"><span class="toc-number">2.7.</span> <span class="toc-text">2.7 groups</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-8-usermod"><span class="toc-number">2.8.</span> <span class="toc-text">2.8 usermod</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-9-chgrp"><span class="toc-number">2.9.</span> <span class="toc-text">2.9 chgrp</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-chown"><span class="toc-number">2.10.</span> <span class="toc-text">2.10 chown</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-11-chmod"><span class="toc-number">2.11.</span> <span class="toc-text">2.11 chmod</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E6%9E%90"><span class="toc-number"></span> <span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0-1-%E7%94%A8%E5%AD%97%E6%AF%8D%E6%9D%A5%E5%88%86%E9%85%8D%E6%9D%83%E9%99%90"><span class="toc-number">0.1.</span> <span class="toc-text">0.1 用字母来分配权限</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%89%E3%80%81%E6%9F%A5%E6%89%BE%E6%96%87%E4%BB%B6"><span class="toc-number">1.</span> <span class="toc-text">1 三、查找文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-locate"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 locate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E5%AE%89%E8%A3%85-locate"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 安装 locate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E6%A0%B9%E6%8D%AE%E6%96%87%E4%BB%B6%E5%90%8D%E6%9F%A5%E6%89%BE"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 根据文件名查找</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-%E6%A0%B9%E6%8D%AE%E6%96%87%E4%BB%B6%E5%A4%A7%E5%B0%8F%E6%9F%A5%E6%89%BE"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 根据文件大小查找</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-%E6%A0%B9%E6%8D%AE%E6%96%87%E4%BB%B6%E6%9C%80%E8%BF%91%E8%AE%BF%E9%97%AE%E6%97%B6%E9%97%B4%E6%9F%A5%E6%89%BE"><span class="toc-number">1.5.</span> <span class="toc-text">1.5 根据文件最近访问时间查找</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-6-%E4%BB%85%E6%9F%A5%E6%89%BE%E7%9B%AE%E5%BD%95%E6%88%96%E6%96%87%E4%BB%B6-%E6%A0%B9%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%9F%A5%E6%89%BE"><span class="toc-number">1.6.</span> <span class="toc-text">1.6 仅查找目录或文件,根据类型查找</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%9B%9B%E3%80%81%E6%96%87%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">2 四、文本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 基础语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 常用参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-sort"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 sort</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 基础语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E5%AE%9E%E4%BE%8B%E7%94%A8%E6%B3%95"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 实例用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0"><span class="toc-number">2.6.</span> <span class="toc-text">2.6 常用参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7-wc"><span class="toc-number">2.7.</span> <span class="toc-text">2.7 wc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-8-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95"><span class="toc-number">2.8.</span> <span class="toc-text">2.8 基础语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-9-%E5%AE%9E%E4%BE%8B%E7%94%A8%E6%B3%95"><span class="toc-number">2.9.</span> <span class="toc-text">2.9 实例用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0"><span class="toc-number">2.10.</span> <span class="toc-text">2.10 常用参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-11-uniq"><span class="toc-number">2.11.</span> <span class="toc-text">2.11 uniq</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-12-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95"><span class="toc-number">2.12.</span> <span class="toc-text">2.12 基础语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-13-%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0"><span class="toc-number">2.13.</span> <span class="toc-text">2.13 常用参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-14-cut"><span class="toc-number">2.14.</span> <span class="toc-text">2.14 cut</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-15-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95"><span class="toc-number">2.15.</span> <span class="toc-text">2.15 基础语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-16-%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0"><span class="toc-number">2.16.</span> <span class="toc-text">2.16 常用参数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%BA%94%E3%80%81%E9%87%8D%E5%AE%9A%E5%90%91-%E7%AE%A1%E9%81%93-%E6%B5%81"><span class="toc-number">3.</span> <span class="toc-text">3 五、重定向 管道 流</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 重定向</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E8%BE%93%E5%87%BA%E9%87%8D%E5%AE%9A%E5%90%91-gt"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 输出重定向 &gt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E8%BE%93%E5%87%BA%E9%87%8D%E5%AE%9A%E5%90%91-gt-gt"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 输出重定向 &gt;&gt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E8%BE%93%E5%87%BA%E9%87%8D%E5%AE%9A%E5%90%91-2-gt"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 输出重定向 2&gt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E8%BE%93%E5%87%BA%E9%87%8D%E5%AE%9A%E5%90%91-2-gt-gt"><span class="toc-number">3.5.</span> <span class="toc-text">3.5 输出重定向 2&gt;&gt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-%E8%BE%93%E5%85%A5%E9%87%8D%E5%AE%9A%E5%90%91-lt"><span class="toc-number">3.6.</span> <span class="toc-text">3.6 输入重定向 &lt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-%E8%BE%93%E5%85%A5%E9%87%8D%E5%AE%9A%E5%90%91-lt-lt"><span class="toc-number">3.7.</span> <span class="toc-text">3.7 输入重定向 &lt;&lt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-8-%E7%AE%A1%E9%81%93"><span class="toc-number">3.8.</span> <span class="toc-text">3.8 管道 |</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E8%8E%B7%E5%8F%96%E5%88%B0%E7%9A%84-name-%E5%88%97%E8%A1%A8%EF%BC%8C%E9%80%9A%E8%BF%87%E7%AE%A1%E9%81%93%E7%AC%A6%E5%86%8D%E8%BF%9B%E8%A1%8C%E6%8E%92%E5%BA%8F%EF%BC%8C%E6%9C%80%E5%90%8E%E8%BE%93%E5%87%BA%E5%88%B0sorted-name-txt"><span class="toc-number"></span> <span class="toc-text">第一步获取到的 name 列表，通过管道符再进行排序，最后输出到sorted_name.txt</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#du-%E8%A1%A8%E7%A4%BA%E5%88%97%E4%B8%BE%E7%9B%AE%E5%BD%95%E5%A4%A7%E5%B0%8F%E4%BF%A1%E6%81%AF-sort-%E8%BF%9B%E8%A1%8C%E6%8E%92%E5%BA%8F-n-%E8%A1%A8%E7%A4%BA%E6%8C%89%E6%95%B0%E5%AD%97%E6%8E%92%E5%BA%8F%EF%BC%8C-r-%E8%A1%A8%E7%A4%BA%E5%80%92%E5%BA%8F-head-%E5%89%8D10%E8%A1%8C%E6%96%87%E4%BB%B6"><span class="toc-number"></span> <span class="toc-text">du 表示列举目录大小信息# sort 进行排序,-n 表示按数字排序，-r 表示倒序# head 前10行文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#grep-log-Ir-var-log-%E8%A1%A8%E7%A4%BA%E5%9C%A8log%E6%96%87%E4%BB%B6%E5%A4%B9%E4%B8%8B%E6%90%9C%E7%B4%A2-var-log-%E6%96%87%E6%9C%AC%EF%BC%8C-r-%E8%A1%A8%E7%A4%BA%E9%80%92%E5%BD%92%EF%BC%8C-I-%E7%94%A8%E4%BA%8E%E6%8E%92%E9%99%A4%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6-cut-d-f-1-%E8%A1%A8%E7%A4%BA%E9%80%9A%E8%BF%87%E5%86%92%E5%8F%B7%E8%BF%9B%E8%A1%8C%E5%89%AA%E5%88%87%EF%BC%8C%E8%8E%B7%E5%8F%96%E5%89%AA%E5%88%87%E7%9A%84%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86-sort-%E8%BF%9B%E8%A1%8C%E6%8E%92%E5%BA%8F-uniq-%E8%BF%9B%E8%A1%8C%E5%8E%BB%E9%87%8D%E5%A4%8D%E5%88%B6%E4%BB%A3%E7%A0%81"><span class="toc-number"></span> <span class="toc-text">grep log -Ir &#x2F;var&#x2F;log 表示在log文件夹下搜索 &#x2F;var&#x2F;log 文本，-r 表示递归，-I 用于排除二进制文件# cut -d : -f 1 表示通过冒号进行剪切，获取剪切的第一部分# sort 进行排序# uniq 进行去重复制代码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%85%AD%E3%80%81%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">1 六、查看进程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-w"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 w</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-ps"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 ps</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 常用参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-top"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 top</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-kill"><span class="toc-number">1.5.</span> <span class="toc-text">1.5 kill</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%83%E3%80%81%E7%AE%A1%E7%90%86%E8%BF%9B%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">2 七、管理进程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E8%BF%9B%E7%A8%8B%E7%8A%B6%E6%80%81"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 进程状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%89%8D%E5%8F%B0%E8%BF%9B%E7%A8%8B-amp-%E5%90%8E%E5%8F%B0%E8%BF%9B%E7%A8%8B"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 前台进程 &amp; 后台进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-amp"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 &amp;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-nohup"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 nohup</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-bg"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 bg</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-jobs"><span class="toc-number">2.6.</span> <span class="toc-text">2.6 jobs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7-fg"><span class="toc-number">2.7.</span> <span class="toc-text">2.7 fg</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%85%AB%E3%80%81%E6%96%87%E4%BB%B6%E5%8E%8B%E7%BC%A9%E8%A7%A3%E5%8E%8B"><span class="toc-number">3.</span> <span class="toc-text">3 八、文件压缩解压</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-tar"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 tar</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 基础用法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%86sort%E6%96%87%E4%BB%B6%E5%A4%B9%E5%BD%92%E6%A1%A3%E4%B8%BAsort-tar"><span class="toc-number"></span> <span class="toc-text">将sort文件夹归档为sort.tar</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%86-file1-file2-file3-%E5%BD%92%E6%A1%A3%E4%B8%BAarchive-tar%E5%A4%8D%E5%88%B6%E4%BB%A3%E7%A0%81"><span class="toc-number"></span> <span class="toc-text">将 file1 file2 file3 归档为archive.tar复制代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0-1-%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0"><span class="toc-number">0.1.</span> <span class="toc-text">0.1 常用参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-2-gzip-gunzip"><span class="toc-number">0.2.</span> <span class="toc-text">0.2 gzip &#x2F; gunzip</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-3-tar-%E5%BD%92%E6%A1%A3-%E5%8E%8B%E7%BC%A9"><span class="toc-number">0.3.</span> <span class="toc-text">0.3 tar 归档+压缩</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-4-zcat%E3%80%81zless%E3%80%81zmore"><span class="toc-number">0.4.</span> <span class="toc-text">0.4 zcat、zless、zmore</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-5-zip-unzip"><span class="toc-number">0.5.</span> <span class="toc-text">0.5 zip&#x2F;unzip</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-6-%E5%91%BD%E4%BB%A4%E5%AE%89%E8%A3%85"><span class="toc-number">0.6.</span> <span class="toc-text">0.6 命令安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-7-%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95"><span class="toc-number">0.7.</span> <span class="toc-text">0.7 基础用法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A3%E5%8E%8B-zip-%E6%96%87%E4%BB%B6"><span class="toc-number"></span> <span class="toc-text">解压 .zip 文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%8D%E8%A7%A3%E5%BC%80-zip-%E6%96%87%E4%BB%B6%EF%BC%8C%E5%8F%AA%E7%9C%8B%E5%85%B6%E4%B8%AD%E5%86%85%E5%AE%B9"><span class="toc-number"></span> <span class="toc-text">不解开 .zip 文件，只看其中内容</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%86sort%E6%96%87%E4%BB%B6%E5%A4%B9%E5%8E%8B%E7%BC%A9%E4%B8%BA-sort-zip%EF%BC%8C%E5%85%B6%E4%B8%AD-r%E8%A1%A8%E7%A4%BA%E9%80%92%E5%BD%92"><span class="toc-number"></span> <span class="toc-text">将sort文件夹压缩为 sort.zip，其中-r表示递归</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0-1-%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85"><span class="toc-number">0.1.</span> <span class="toc-text">0.1 编译安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-2-%E5%AE%9E%E9%99%85%E6%A1%88%E4%BE%8B"><span class="toc-number">0.2.</span> <span class="toc-text">0.2 实际案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-3-1%E3%80%81%E4%B8%8B%E8%BD%BD"><span class="toc-number">0.3.</span> <span class="toc-text">0.3 1、下载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-4-2%E3%80%81%E8%A7%A3%E5%8E%8B%E6%96%87%E4%BB%B6"><span class="toc-number">0.4.</span> <span class="toc-text">0.4 2、解压文件</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A3%E5%8E%8Bcd-htop-3-0-0-%E8%BF%9B%E5%85%A5%E7%9B%AE%E5%BD%95"><span class="toc-number"></span> <span class="toc-text">解压cd htop-3.0.0 # 进入目录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0-1-3%E3%80%81%E9%85%8D%E7%BD%AE"><span class="toc-number">0.1.</span> <span class="toc-text">0.1 3、配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-2-4%E3%80%81%E7%BC%96%E8%AF%91"><span class="toc-number">0.2.</span> <span class="toc-text">0.2 4、编译</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-3-5%E3%80%81%E5%AE%89%E8%A3%85"><span class="toc-number">0.3.</span> <span class="toc-text">0.3 5、安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B9%9D%E3%80%81%E7%BD%91%E7%BB%9C"><span class="toc-number">1.</span> <span class="toc-text">1 九、网络</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-ifconfig"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 ifconfig</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-host"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 host</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-ssh-%E8%BF%9E%E6%8E%A5%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 ssh 连接远程服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-h"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 *h</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAconfig"><span class="toc-number"></span> <span class="toc-text">创建config</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A1%AB%E5%86%99%E4%B8%80%E4%B8%8B%E5%86%85%E5%AE%B9"><span class="toc-number"></span> <span class="toc-text">填写一下内容</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0-1-wget"><span class="toc-number">0.1.</span> <span class="toc-text">0.1 wget</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8D%81-%E5%A4%87%E4%BB%BD"><span class="toc-number">1.</span> <span class="toc-text">1 十 备份</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-scp"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 scp</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#source-file-%E8%A1%A8%E7%A4%BA%E6%BA%90%E6%96%87%E4%BB%B6%EF%BC%8Cdestination-file-%E8%A1%A8%E7%A4%BA%E7%9B%AE%E6%A0%87%E6%96%87%E4%BB%B6"><span class="toc-number"></span> <span class="toc-text">source_file 表示源文件，destination_file 表示目标文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0-1-rsync"><span class="toc-number">0.1.</span> <span class="toc-text">0.1 rsync</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-2-%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="toc-number">0.2.</span> <span class="toc-text">0.2 软件安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0-3-%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95"><span class="toc-number">0.3.</span> <span class="toc-text">0.3 基础用法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%86Images-%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%9A%84%E6%89%80%E6%9C%89%E6%96%87%E4%BB%B6%E5%A4%87%E4%BB%BD%E5%88%B0-backups-%E7%9B%AE%E5%BD%95%E4%B8%8B"><span class="toc-number"></span> <span class="toc-text">将Images 目录下的所有文件备份到 backups 目录下</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%90%8C%E6%AD%A5%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84backups%E7%9B%AE%E5%BD%95%E4%B8%8B"><span class="toc-number"></span> <span class="toc-text">同步到服务器的backups目录下</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0-1-%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0-1"><span class="toc-number">0.1.</span> <span class="toc-text">0.1 常用参数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8D%81%E4%B8%80-%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.</span> <span class="toc-text">1 十一 系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-halt"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 halt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-reboot"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 reboot</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-poweroff"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 poweroff</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%8D%81%E4%BA%8C-Vim-%E7%BC%96%E8%BE%91%E5%99%A8"><span class="toc-number">2.</span> <span class="toc-text">2 十二 Vim 编辑器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Vim-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">3 Vim 是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Vim-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%BC%8F"><span class="toc-number">4.</span> <span class="toc-text">4 Vim 常用模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 交互模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E6%8F%92%E5%85%A5%E6%A8%A1%E5%BC%8F"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 插入模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3"><span class="toc-number">4.3.</span> <span class="toc-text">4.3</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 命令模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-%E6%89%93%E5%BC%80-Vim"><span class="toc-number">4.5.</span> <span class="toc-text">4.5 打开 Vim</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-%E6%8F%92%E5%85%A5"><span class="toc-number">4.6.</span> <span class="toc-text">4.6 插入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7-%E7%A7%BB%E5%8A%A8"><span class="toc-number">4.7.</span> <span class="toc-text">4.7 移动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-8-%E8%B7%B3%E8%87%B3%E8%A1%8C%E9%A6%96%E5%92%8C%E8%A1%8C%E6%9C%AB"><span class="toc-number">4.8.</span> <span class="toc-text">4.8 跳至行首和行末</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-9-%E6%8C%89%E5%8D%95%E8%AF%8D%E7%A7%BB%E5%8A%A8"><span class="toc-number">4.9.</span> <span class="toc-text">4.9 按单词移动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-10-%E9%80%80%E5%87%BA%E6%96%87%E4%BB%B6"><span class="toc-number">4.10.</span> <span class="toc-text">4.10 退出文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%A0%87%E5%87%86%E6%93%8D%E4%BD%9C"><span class="toc-number">5.</span> <span class="toc-text">5 标准操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E5%88%A0%E9%99%A4%E5%AD%97%E7%AC%A6"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 删除字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E5%88%A0%E9%99%A4%EF%BC%88%E5%89%AA%E5%88%87%EF%BC%89%E5%8D%95%E8%AF%8D%EF%BC%8C%E8%A1%8C"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 删除（剪切）单词，行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E5%A4%8D%E5%88%B6%E5%8D%95%E8%AF%8D%EF%BC%8C%E8%A1%8C"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 复制单词，行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-%E7%B2%98%E8%B4%B4"><span class="toc-number">5.4.</span> <span class="toc-text">5.4 粘贴</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-%E6%9B%BF%E6%8D%A2%E4%B8%80%E4%B8%AA%E5%AD%97%E7%AC%A6"><span class="toc-number">5.5.</span> <span class="toc-text">5.5 替换一个字符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-6-%E6%92%A4%E9%94%80%E6%93%8D%E4%BD%9C"><span class="toc-number">5.6.</span> <span class="toc-text">5.6 撤销操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-7-%E9%87%8D%E5%81%9A"><span class="toc-number">5.7.</span> <span class="toc-text">5.7 重做</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-8-%E8%B7%B3%E8%BD%AC%E5%88%B0%E6%8C%87%E5%AE%9A%E8%A1%8C"><span class="toc-number">5.8.</span> <span class="toc-text">5.8 跳转到指定行</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E9%AB%98%E7%BA%A7%E6%93%8D%E4%BD%9C"><span class="toc-number">6.</span> <span class="toc-text">6 高级操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E6%9F%A5%E6%89%BE"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 查找</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E6%9F%A5%E6%89%BE%E5%B9%B6%E6%9B%BF%E6%8D%A2"><span class="toc-number">6.2.</span> <span class="toc-text">6.2 查找并替换</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95-s-%E6%97%A7%E5%AD%97%E7%AC%A6%E4%B8%B2-%E6%96%B0%E5%AD%97%E7%AC%A6%E4%B8%B2-%E5%AE%9E%E4%BE%8B-s-one-two"><span class="toc-number"></span> <span class="toc-text">语法:s&#x2F;旧字符串&#x2F;新字符串# 实例:s&#x2F;one&#x2F;two</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95-n-m-s-%E6%97%A7%E5%AD%97%E7%AC%A6%E4%B8%B2-%E6%96%B0%E5%AD%97%E7%AC%A6%E4%B8%B2-g"><span class="toc-number"></span> <span class="toc-text">语法:n,m s&#x2F;旧字符串&#x2F;新字符串&#x2F;g</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B-2-4-s-one-two-g"><span class="toc-number"></span> <span class="toc-text">实例:2,4 s&#x2F;one&#x2F;two&#x2F;g</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0-1-%E5%90%88%E5%B9%B6%E6%96%87%E4%BB%B6"><span class="toc-number">0.1.</span> <span class="toc-text">0.1 合并文件</span></a></li></ol></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <h2 id="1-一、文件和目录"><a href="#1-一、文件和目录" class="headerlink" title="1 一、文件和目录"></a>1 一、文件和目录</h2><blockquote>
+<p>查看路径</p>
+</blockquote>
+<h3 id="1-1-pwd"><a href="#1-1-pwd" class="headerlink" title="1.1 pwd"></a>1.1 <strong>pwd</strong></h3><p><strong>显示当前目录的路径</strong></p>
+<h3 id="1-2-which"><a href="#1-2-which" class="headerlink" title="1.2 which"></a>1.2 <strong>which</strong></h3><p>查看命令的可执行文件所在路径， Linux 下，每一条命令其实都对应一个可执行程序，在终端中输入命令，按回车的时候，就是执行了对应的那个程序， which 命令本身对应的程序也存在于 Linux 中。</p>
+<p>总的来说一个命令就是一个可执行程序。</p>
+<blockquote>
+<p><em>浏览和切换目录</em></p>
+</blockquote>
+<h3 id="1-3-ls"><a href="#1-3-ls" class="headerlink" title="1.3 ls"></a>1.3 <strong>ls</strong></h3><p><strong>列出文件和目录，它是 Linux 最常用的命令之一。</strong></p>
+<p>【常用参数】</p>
+<ul>
+<li>-a 显示所有文件和目录包括隐藏的</li>
+<li>-l 显示详细列表</li>
+<li>-h 适合人类阅读的</li>
+<li>-t 按文件最近一次修改时间排序</li>
+<li>-i 显示文件的 inode （ inode 是文件内容的标识）</li>
+</ul>
+<h3 id="1-4-cd"><a href="#1-4-cd" class="headerlink" title="1.4 cd"></a>1.4 <strong>cd</strong></h3><p><strong>cd 是英语 change directory 的缩写，表示切换目录。</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cd / --&gt; 跳转到根目录</span><br><span class="line">cd ~ --&gt; 跳转到家目录</span><br><span class="line">cd .. --&gt; 跳转到上级目录</span><br><span class="line">cd ./home --&gt; 跳转到当前目录的home目录下</span><br><span class="line">cd /home/lion --&gt; 跳转到根目录下的home目录下的lion目录</span><br><span class="line">cd --&gt; 不添加任何参数，也是回到家目录</span><br></pre></td></tr></table></figure>
+<p>[注意] 输入cd /ho + 单次 tab 键会自动补全路径 + 两次 tab 键会列出所有可能的目录列表。</p>
+<h3 id="1-5-du"><a href="#1-5-du" class="headerlink" title="1.5 du"></a>1.5 <strong>du</strong></h3><p><strong>列举目录大小信息。</strong></p>
+<p>【常用参数】</p>
+<ul>
+<li>-h 适合人类阅读的；</li>
+<li>-a 同时列举出目录下文件的大小信息；</li>
+<li>-s 只显示总计大小，不显示具体信息。</li>
+</ul>
+<h3 id="1-6-浏览和创建文件"><a href="#1-6-浏览和创建文件" class="headerlink" title="1.6 浏览和创建文件"></a>1.6 浏览和创建文件</h3><h3 id="1-7-cat"><a href="#1-7-cat" class="headerlink" title="1.7 cat"></a>1.7 <strong>cat</strong></h3><p><strong>一次性显示文件所有内容，更适合查看小的文件。</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cat cloud-init.log</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>【常用参数】</p>
+<ul>
+<li>-n 显示行号。  </li>
+</ul>
+<h3 id="1-8-less"><a href="#1-8-less" class="headerlink" title="1.8 less"></a>1.8 <strong>less</strong></h3><p><strong>分页显示文件内容，更适合查看大的文件。</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">less cloud-init.log</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>【快捷操作】</p>
+<ul>
+<li>空格键：前进一页（一个屏幕）；</li>
+<li>b 键：后退一页；</li>
+<li>回车键：前进一行；</li>
+<li>y 键：后退一行；</li>
+<li>上下键：回退或前进一行；</li>
+<li>d 键：前进半页；</li>
+<li>u 键：后退半页；</li>
+<li>q 键：停止读取文件，中止 less 命令；</li>
+<li>= 键：显示当前页面的内容是文件中的第几行到第几行以及一些其它关于本页内容的详细信息；</li>
+<li>h 键：显示帮助文档；</li>
+<li>/ 键：进入搜索模式后，按 n 键跳到一个符合项目，按 N 键跳到上一个符合项目，同时也可以输入<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A2717297135%7D">正则表达式</a>匹配。</li>
+</ul>
+<h3 id="1-9-head"><a href="#1-9-head" class="headerlink" title="1.9 head"></a>1.9 <strong>head</strong></h3><p><strong>显示文件的开头几行（默认是10行）</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">head cloud-init.log</span><br></pre></td></tr></table></figure>
+<p>【参数】</p>
+<ul>
+<li>-n 指定行数 head cloud-init.log -n 2  </li>
+</ul>
+<h3 id="1-10-tail"><a href="#1-10-tail" class="headerlink" title="1.10 tail"></a>1.10 <strong>tail</strong></h3><p><strong>显示文件的结尾几行（默认是10行）</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tail cloud-init.log复制代码</span><br></pre></td></tr></table></figure>
+<p>【参数】</p>
+<ul>
+<li>-n 指定行数 tail cloud-init.log -n 2</li>
+<li>-f 会每过1秒检查下文件是否有更新内容，也可以用 -s 参数指定间隔时间 tail -f -s 4 xxx.log</li>
+</ul>
+<h3 id="1-11-touch"><a href="#1-11-touch" class="headerlink" title="1.11 touch"></a>1.11 <strong>touch</strong></h3><p><strong>创建一个文件</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch new_file复制代码</span><br></pre></td></tr></table></figure>
+<h3 id="1-12-mkdir"><a href="#1-12-mkdir" class="headerlink" title="1.12 mkdir"></a>1.12 <strong>mkdir</strong></h3><p><strong>创建一个目录</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir new_folder复制代码</span><br></pre></td></tr></table></figure>
+<p>【常用参数】</p>
+<ul>
+<li>-p 递归的创建目录结构 mkdir -p one/two/three  </li>
+</ul>
+<blockquote>
+<p>文件的复制和移动</p>
+</blockquote>
+<h3 id="1-13-cp"><a href="#1-13-cp" class="headerlink" title="1.13 cp"></a>1.13 <strong>cp</strong></h3><p><strong>拷贝文件和目录</strong></p>
+<p>cp file file_copy —&gt; file 是目标文件，file_copy 是拷贝出来的文件cp file one —&gt; 把 file 文件拷贝到 one 目录下，并且文件名依然为 file</p>
+<p>cp file one/file_copy —&gt; 把 file 文件拷贝到 one 目录下，文件名为file_copy</p>
+<p>cp *.txt folder —&gt; 把当前目录下所有 txt 文件拷贝到 folder 目录下</p>
+<p>【常用参数】</p>
+<ul>
+<li>-r 递归的拷贝，常用来拷贝一整个目录  </li>
+</ul>
+<h3 id="1-14-mv"><a href="#1-14-mv" class="headerlink" title="1.14 mv"></a>1.14 <strong>mv</strong></h3><p><strong>移动（重命名）文件或目录，与cp命令用法相似。</strong></p>
+<p>mv file one —&gt; 将 file 文件移动到 one 目录下</p>
+<p>mv new_folder one —&gt; 将 new_folder 文件夹移动到one目录下mv *.txt folder —&gt; 把当前目录下所有 txt 文件移动到 folder 目录下mv file new_file —&gt; file 文件重命名为 new_file</p>
+<blockquote>
+<p>文件的删除和链接</p>
+</blockquote>
+<h3 id="1-15-rm"><a href="#1-15-rm" class="headerlink" title="1.15 rm"></a>1.15 <strong>rm</strong></h3><p><strong>删除文件和目录，由于 Linux 下没有回收站，一旦删除非常难恢复，因此需要谨慎操作</strong></p>
+<p>rm new_file —&gt; 删除 new_file 文件</p>
+<p>rm f1 f2 f3 —&gt; 同时删除 f1 f2 f3 3个文件</p>
+<p>【常用参数】</p>
+<ul>
+<li>-i 向用户确认是否删除；</li>
+<li>-f 文件强制删除；</li>
+<li>-r 递归删除文件夹，著名的删除操作 rm -rf 。  </li>
+</ul>
+<h3 id="1-16-ln"><a href="#1-16-ln" class="headerlink" title="1.16 ln"></a>1.16 <strong>ln</strong></h3><p><strong>英文 Link 的缩写，表示创建链接。</strong></p>
+<p>学习创建链接之前，首先要理解链接是什么，我们先来看看 Linux 的文件是如何存储的：</p>
+<p>Linux 文件的存储方式分为3个部分，文件名、文件内容以及权限，其中文件名的列表是存储在硬盘的其它地方和文件内容是分开存放的，每个文件名通过 inode 标识绑定到文件内容。</p>
+<p>Linux 下有两种链接类型：硬链接和软链接。</p>
+<h3 id="1-17-硬链接"><a href="#1-17-硬链接" class="headerlink" title="1.17 硬链接"></a>1.17 硬链接</h3><p>使链接的两个文件共享同样文件内容，就是同样的 inode ，一旦文件1和文件2之间有了硬链接，那么修改任何一个文件，修改的都是同一块内容，它的缺点是，只能创建指向文件的硬链接，不能创建指向目录的（其实也可以，但比较复杂）而软链接都可以，<strong>因此软链接使用更加广泛</strong>。</p>
+<p>这个部分暂时不展开。  </p>
+<h2 id="2-二、用户与权限"><a href="#2-二、用户与权限" class="headerlink" title="2 二、用户与权限"></a>2 二、用户与权限</h2><blockquote>
+<p>用户</p>
+</blockquote>
+<p>Linux 是一个多用户的操作系统。在 Linux 中，理论上来说，我们可以创建无数个用户，但是这些用户是被划分到不同的群组里面的，有一个用户，名叫 root ，是一个很特殊的用户，它是超级用户，拥有最高权限。</p>
+<h3 id="2-1-sudo"><a href="#2-1-sudo" class="headerlink" title="2.1 sudo"></a>2.1 <strong>sudo</strong></h3><p><strong>以 root 身份运行命令</strong></p>
+<h3 id="2-2-useradd-passwd"><a href="#2-2-useradd-passwd" class="headerlink" title="2.2 useradd + passwd"></a>2.2 <strong>useradd + passwd</strong></h3><ul>
+<li>useradd 添加新用户</li>
+<li>passwd 修改用户密码</li>
+</ul>
+<p>这两个命令需要 root 用户权限</p>
+<h3 id="2-3-userdel"><a href="#2-3-userdel" class="headerlink" title="2.3 userdel"></a>2.3 <strong>userdel</strong></h3><p><strong>删除用户，需要 root 用户权限</strong></p>
+<h3 id="2-4-su"><a href="#2-4-su" class="headerlink" title="2.4 su"></a>2.4 <strong>su</strong></h3><p><strong>切换用户</strong>，需要 root 用户权限</p>
+<blockquote>
+<p>群组的管理</p>
+</blockquote>
+<p>Linux 中每个用户都属于一个特定的群组，如果你不设置用户的群组，默认会创建一个和它的用户名一样的群组，并且把用户划归到这个群组。</p>
+<h3 id="2-5-groupadd"><a href="#2-5-groupadd" class="headerlink" title="2.5 groupadd"></a>2.5 <strong>groupadd</strong></h3><p><strong>创建群组，</strong>用法和 useradd 类似</p>
+<h3 id="2-6-groupdel"><a href="#2-6-groupdel" class="headerlink" title="2.6 groupdel"></a>2.6 <strong>groupdel</strong></h3><p><strong>删除一个已存在的群组</strong></p>
+<h3 id="2-7-groups"><a href="#2-7-groups" class="headerlink" title="2.7 groups"></a>2.7 <strong>groups</strong></h3><p><strong>查看用户所在群组</strong></p>
+<h3 id="2-8-usermod"><a href="#2-8-usermod" class="headerlink" title="2.8 usermod"></a>2.8 <strong>usermod</strong></h3><p><strong>用于修改用户的账户。</strong></p>
+<p>【常用参数】</p>
+<ul>
+<li>-l 对用户重命名。需要注意的是 /home 中的用户家目录的名字不会改变，需要手动修改。</li>
+<li>-g 修改用户所在的群组，例如 usermod -g friends lion修改 lion 用户的群组为 friends 。</li>
+<li>-G 一次性让用户添加多个群组，例如 usermod -G friends,foo,bar lion 。</li>
+<li>-a -G 会让你离开原先的群组，如果你不想这样做的话，就得再添加 -a 参数，意味着append 追加的意思。  </li>
+</ul>
+<h3 id="2-9-chgrp"><a href="#2-9-chgrp" class="headerlink" title="2.9 chgrp"></a>2.9 <strong>chgrp</strong></h3><p><strong>用于修改文件的群组。</strong></p>
+<h3 id="2-10-chown"><a href="#2-10-chown" class="headerlink" title="2.10 chown"></a>2.10 <strong>chown</strong></h3><p><strong>改变文件的所有者</strong>，需要 root 身份才能运行。</p>
+<p>【常用参数】</p>
+<ul>
+<li>-R 递归设置子目录和子文件， chown -R lion:lion /home/frank 把 frank 文件夹的用户和群组都改为 lion 。</li>
+</ul>
+<blockquote>
+<p>文件权限管理</p>
+</blockquote>
+<h3 id="2-11-chmod"><a href="#2-11-chmod" class="headerlink" title="2.11 chmod"></a>2.11 <strong>chmod</strong></h3><p><strong>修改访问权限。</strong></p>
+<p>【常用参数】</p>
+<ul>
+<li>-R 可以递归地修改文件访问权限，例如 chmod -R 777 /home/lion</li>
+</ul>
+<p>其中 drwxr-xr-x 表示文件或目录的权限。让我们一起来解读它具体代表什么？</p>
+<ul>
+<li>d ：表示目录，就是说这是一个目录，普通文件是 - ，链接是 l 。</li>
+<li>r ：read 表示文件可读。</li>
+<li>w ：write 表示文件可写，一般有写的权限，就有删除的权限。</li>
+<li>x ：execute 表示文件可执行。</li>
+<li><ul>
+<li>：表示没有相应权限。</li>
+</ul>
+</li>
+</ul>
+<p>现在再来理解这句权限 drwxr-xr-x 的意思：</p>
+<ul>
+<li>它是一个文件夹；</li>
+<li>它的所有者具有：读、写、执行权限；</li>
+<li>它的群组用户具有：读、执行的权限，没有写的权限；</li>
+<li>它的其它用户具有：读、执行的权限，没有写的权限。  </li>
+</ul>
+<p>现在理解了权限，我们使用 chmod 来尝试修改权限。chmod 它不需要是 root 用户才能运行的，只要你是此文件所有者，就可以用 chmod 来修改文件的访问权限。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-419fd37f2018837b1ffd75925e24901e_1440w.webp?source=1940ef5c" alt=""></p>
+<p>chmod 640 hello.c</p>
+<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>6 = 4 + 2 + 0 表示所有者具有 rw 权限</p>
+<p>4 = 4 + 0 + 0 表示群组用户具有 r 权限</p>
+<p>0 = 0 + 0 + 0 表示其它用户没有权限</p>
+<p>对应文字权限为：-rw-r——-</p>
+<h3 id="0-1-用字母来分配权限"><a href="#0-1-用字母来分配权限" class="headerlink" title="0.1 用字母来分配权限"></a>0.1 用字母来分配权限</h3><ul>
+<li>u ：user 的缩写，用户的意思，表示所有者。</li>
+<li>g ：group 的缩写，群组的意思，表示群组用户。</li>
+<li>o ：other 的缩写，其它的意思，表示其它用户。</li>
+<li>a ：all 的缩写，所有的意思，表示所有用户。</li>
+<li><ul>
+<li>：加号，表示添加权限。</li>
+</ul>
+</li>
+<li><ul>
+<li>：减号，表示去除权限。</li>
+</ul>
+</li>
+<li>= ：等于号，表示分配权限。</li>
+</ul>
+<p>chmod u+rx file —&gt; 文件file的所有者增加读和运行的权限</p>
+<p>chmod g+r file —&gt; 文件file的群组用户增加读的权限</p>
+<p>chmod o-r file—&gt; 文件file的其它用户移除读的权限</p>
+<p>chmod g+r file —&gt; 文件file的群组用户增加读的权限，其它用户移除读的权限</p>
+<p>chmod go-r file —&gt; 文件file的群组和其他用户移除读的权限</p>
+<p>chmod +x file —&gt; 文件file的所有用户增加运行的权限</p>
+<p>chmod u=rwx,g=r,o=- file —&gt; 文件file的所有者分配读写和执行的权限，群组其它用户分配读的权限，其他用户没有任何权限</p>
+<h2 id="1-三、查找文件"><a href="#1-三、查找文件" class="headerlink" title="1 三、查找文件"></a>1 三、查找文件</h2><h3 id="1-1-locate"><a href="#1-1-locate" class="headerlink" title="1.1 locate"></a>1.1 <strong>locate</strong></h3><p><strong>搜索包含关键字的所有文件和目录。后接需要查找的文件名，也可以用正则表达式。</strong></p>
+<h3 id="1-2-安装-locate"><a href="#1-2-安装-locate" class="headerlink" title="1.2 安装 locate"></a>1.2 安装 locate</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install mlocate --&gt; 安装包updatedb --&gt; 更新数据库复制代码locate file.txtlocate fil*.txt</span><br></pre></td></tr></table></figure>
+<p>[注意] locate 命令会去<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E6%96%87%E4%BB%B6%E6%95%B0%E6%8D%AE%E5%BA%93&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A2717297135%7D">文件数据库</a>中查找命令，而不是全磁盘查找，因此刚创建的文件并不会更新到数据库中，所以无法被查找到，可以执行 updatedb 命令去更新数据库。</p>
+<blockquote>
+<p>find</p>
+</blockquote>
+<p>用于查找文件，它会去遍历你的实际硬盘进行查找，而且它允许我们对每个找到的文件进行后续操作，功能非常强大。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find &lt;何处&gt; &lt;何物&gt; &lt;做什么&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>何处：指定在哪个目录查找，此目录的所有子目录也会被查找。</li>
+<li>何物：查找什么，可以根据文件的名字来查找，也可以根据其大小来查找，还可以根据其最近访问时间来查找。</li>
+<li>做什么：找到文件后，可以进行后续处理，如果不指定这个参数， find 命令只会显示找到的文件。  </li>
+</ul>
+<h3 id="1-3-根据文件名查找"><a href="#1-3-根据文件名查找" class="headerlink" title="1.3 根据文件名查找"></a>1.3 <strong>根据文件名查找</strong></h3><p>find -name “file.txt” —&gt; 当前目录以及子目录下通过名称查找文件</p>
+<p>find . -name “syslog” —&gt; 当前目录以及子目录下通过名称查找文件</p>
+<p>find / -name “syslog” —&gt; 整个硬盘下查找syslog</p>
+<p>find /var/log -name “syslog” —&gt; 在指定的目录/var/log下查找syslog文件find /var/log -name “syslog*” —&gt; 查找syslog1、syslog2 … 等文件，通配符表示所有</p>
+<p>find /var/log -name “<em>syslog</em>“ —&gt; 查找包含syslog的文件</p>
+<p>[注意] find 命令只会查找完全符合 “何物” 字符串的文件，而 locate 会查找所有包含关键字的文件。</p>
+<h3 id="1-4-根据文件大小查找"><a href="#1-4-根据文件大小查找" class="headerlink" title="1.4 根据文件大小查找"></a>1.4 <strong>根据文件大小查找</strong></h3><p>find /var -size +10M —&gt; /var 目录下查找文件大小超过 10M 的文件</p>
+<p>find /var -size -50k —&gt; /var 目录下查找文件大小小于 50k 的文件</p>
+<p>find /var -size +1G —&gt; /var 目录下查找文件大小查过 1G 的文件</p>
+<p>find /var -size 1M —&gt; /var 目录下查找文件大小等于 1M 的文件</p>
+<h3 id="1-5-根据文件最近访问时间查找"><a href="#1-5-根据文件最近访问时间查找" class="headerlink" title="1.5 根据文件最近访问时间查找"></a>1.5 <strong>根据文件最近访问时间查找</strong></h3><p>find -name “*.txt” -atime -7</p>
+<p>—&gt; 近 7天内访问过的.txt结尾的文件</p>
+<h3 id="1-6-仅查找目录或文件-根据类型查找"><a href="#1-6-仅查找目录或文件-根据类型查找" class="headerlink" title="1.6 仅查找目录或文件,根据类型查找"></a>1.6 <strong>仅查找目录或文件,根据类型查找</strong></h3><p>find . -name “file” -type f</p>
+<p>—&gt; 只查找当前目录下的file文件</p>
+<p>find . -name “file” -type d</p>
+<p>—&gt; 只查找当前目录下的file目录</p>
+<blockquote>
+<p>软件仓库</p>
+</blockquote>
+<p>Linux 下软件是以包的形式存在，一个软件包其实就是软件的所有文件的压缩包，是二进制的形式，包含了安装软件的所有指令。Red Hat 家族的软件包后缀名一般为 .rpm ，Debian 家族的软件包后缀是 .deb 。</p>
+<p>Linux 的包都存在一个仓库，叫做软件仓库，它可以使用 yum 来管理软件包， yum 是 CentOS 中默认的包管理工具，适用于 Red Hat 一族。可以理解成 Node.js 的 npm 。</p>
+<blockquote>
+<p>yum 常用命令</p>
+</blockquote>
+<ul>
+<li>yum update | yum upgrade 更新软件包</li>
+<li>yum search xxx 搜索相应的软件包</li>
+<li>yum install xxx 安装软件包</li>
+<li>yum remove xxx 删除软件包</li>
+</ul>
+<h2 id="2-四、文本操作"><a href="#2-四、文本操作" class="headerlink" title="2 四、文本操作"></a>2 四、文本操作</h2><blockquote>
+<p>grep</p>
+</blockquote>
+<p><strong>全局搜索一个正则表达式，并且打印到屏幕。简单来说就是，在文件中查找关键字，并显示关键字所在行。</strong></p>
+<h3 id="2-1-基础语法"><a href="#2-1-基础语法" class="headerlink" title="2.1 基础语法"></a>2.1 基础语法</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep text file # text代表要搜索的文本，file代表供搜索的文件</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-常用参数"><a href="#2-2-常用参数" class="headerlink" title="2.2 常用参数"></a>2.2 常用参数</h3><ul>
+<li>-i 忽略大小写， grep -i path /etc/profile</li>
+<li>-n 显示行号，grep -n path /etc/profile</li>
+<li>-v 只显示搜索文本不在的那些行，grep -v path /etc/profile</li>
+<li>-r 递归查找， grep -r hello /etc ，Linux 中还有一个 rgrep 命令，作用相当于 grep -r</li>
+</ul>
+<h3 id="2-3-sort"><a href="#2-3-sort" class="headerlink" title="2.3 sort"></a>2.3 sort</h3><p><strong>对文件的行进行排序。</strong></p>
+<h3 id="2-4-基础语法"><a href="#2-4-基础语法" class="headerlink" title="2.4 基础语法"></a>2.4 基础语法</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sort name.txt # 对name.txt文件进行排序</span><br></pre></td></tr></table></figure>
+<h3 id="2-5-实例用法"><a href="#2-5-实例用法" class="headerlink" title="2.5 实例用法"></a>2.5 实例用法</h3><p>为了演示方便，我们首先创建一个文件 name.txt ，放入以下内容：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ChristopherShawnTedRockNoahZacharyBella</span><br></pre></td></tr></table></figure>
+<p>执行 sort name.txt 命令，会对文本内容进行排序。</p>
+<h3 id="2-6-常用参数"><a href="#2-6-常用参数" class="headerlink" title="2.6 常用参数"></a>2.6 常用参数</h3><ul>
+<li>-o 将排序后的文件写入新文件， sort -o name_sorted.txt name.txt ；</li>
+<li>-r 倒序排序， sort -r name.txt ；</li>
+<li>-R 随机排序， sort -R name.txt ；</li>
+<li>-n 对数字进行排序，默认是把数字识别成字符串的，因此 138 会排在 25 前面，如果添加了 -n 数字排序的话，则 25 会在 138 前面。</li>
+</ul>
+<h3 id="2-7-wc"><a href="#2-7-wc" class="headerlink" title="2.7 wc"></a>2.7 wc</h3><p><strong>word count 的缩写，用于文件的统计。它可以统计单词数目、行数、字符数，字节数等。</strong></p>
+<h3 id="2-8-基础语法"><a href="#2-8-基础语法" class="headerlink" title="2.8 基础语法"></a>2.8 基础语法</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wc name.txt # 统计name.txt</span><br></pre></td></tr></table></figure>
+<h3 id="2-9-实例用法"><a href="#2-9-实例用法" class="headerlink" title="2.9 实例用法"></a>2.9 实例用法</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@lion ~]# wc name.txt 13 13 91 name.txt</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第一个13，表示行数；</li>
+<li>第二个13，表示单词数；</li>
+<li>第三个91，表示字节数。</li>
+</ul>
+<h3 id="2-10-常用参数"><a href="#2-10-常用参数" class="headerlink" title="2.10 常用参数"></a>2.10 常用参数</h3><ul>
+<li>-l 只统计行数， wc -l name.txt ；</li>
+<li>-w 只统计单词数， wc -w name.txt ；</li>
+<li>-c 只统计字节数， wc -c name.txt ；</li>
+<li>-m 只统计字符数， wc -m name.txt 。  </li>
+</ul>
+<h3 id="2-11-uniq"><a href="#2-11-uniq" class="headerlink" title="2.11 uniq"></a>2.11 uniq</h3><p><strong>删除文件中的重复内容。</strong></p>
+<h3 id="2-12-基础语法"><a href="#2-12-基础语法" class="headerlink" title="2.12 基础语法"></a>2.12 基础语法</h3><p>uniq name.txt # 去除name.txt重复的行数，并打印到屏幕上</p>
+<p>【注意】它只能去除连续重复的行数。</p>
+<h3 id="2-13-常用参数"><a href="#2-13-常用参数" class="headerlink" title="2.13 常用参数"></a>2.13 常用参数</h3><ul>
+<li>-c 统计重复行数， uniq -c name.txt ；</li>
+<li>-d 只显示重复的行数， uniq -d name.txt 。  </li>
+</ul>
+<h3 id="2-14-cut"><a href="#2-14-cut" class="headerlink" title="2.14 cut"></a>2.14 <strong>cut</strong></h3><p><strong>剪切文件的一部分内容。</strong></p>
+<h3 id="2-15-基础语法"><a href="#2-15-基础语法" class="headerlink" title="2.15 基础语法"></a>2.15 基础语法</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cut -c 2-4 name.txt # 剪切每一行第二到第四个字符</span><br></pre></td></tr></table></figure>
+<h3 id="2-16-常用参数"><a href="#2-16-常用参数" class="headerlink" title="2.16 常用参数"></a>2.16 常用参数</h3><ul>
+<li>-d 用于指定用什么分隔符（比如逗号、分号、双引号等等） cut -d , name.txt ；</li>
+<li>-f 表示剪切下用分隔符分割的哪一块或哪几块区域， cut -d , -f 1 name.txt 。  </li>
+</ul>
+<h2 id="3-五、重定向-管道-流"><a href="#3-五、重定向-管道-流" class="headerlink" title="3 五、重定向 管道 流"></a>3 五、重定向 管道 流</h2><p>在 Linux 中一个命令的去向可以有3个地方：终端、文件、作为另外一个命令的入参。</p>
+<p>命令一般都是通过键盘输入，然后输出到终端、文件等地方，它的标准用语是 stdin 、 stdout 以及 stderr 。</p>
+<ul>
+<li>标准输入 stdin ，终端接收键盘输入的命令，会产生两种输出；</li>
+<li>标准输出 stdout ，终端输出的信息（不包含错误信息）；</li>
+<li>标准错误输出 stderr ，终端输出的错误信息。</li>
+</ul>
+<h3 id="3-1-重定向"><a href="#3-1-重定向" class="headerlink" title="3.1 重定向"></a>3.1 重定向</h3><p>把本来要显示在终端的命令结果，输送到别的地方（到文件中或者作为其他命令的输入）。</p>
+<h3 id="3-2-输出重定向-gt"><a href="#3-2-输出重定向-gt" class="headerlink" title="3.2 输出重定向 &gt;"></a>3.2 <strong>输出重定向 &gt;</strong></h3><blockquote>
+<p>表示重定向到新的文件， cut -d , -f 1 notes.csv &gt; name.csv ，它表示通过逗号剪切notes.csv 文件（剪切完有3个部分）获取第一个部分，重定向到 name.csv 文件。</p>
+</blockquote>
+<p>我们来看一个具体示例，学习它的使用，假设我们有一个文件 notes.csv ，文件内容如下：</p>
+<p>Mark1,951/100,很不错1Mark2,952/100,很不错2Mark3,</p>
+<p>953/100,很不错3Mark4,954/100,很不错4Mark5,955/100,很不错5Mark6,956/100,很不错6</p>
+<p>执行命令：cut -d , -f 1 notes.csv &gt; name.csv 最后输出如下内容：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mark1Mark2Mark3Mark4Mark5Mark6</span><br></pre></td></tr></table></figure>
+<p>【注意】使用 &gt; 要注意，如果输出的文件不存在它会新建一个，如果输出的文件已经存在，则会覆盖。因此执行这个操作要非常小心，以免覆盖其它重要文件。</p>
+<h3 id="3-3-输出重定向-gt-gt"><a href="#3-3-输出重定向-gt-gt" class="headerlink" title="3.3 输出重定向 &gt;&gt;"></a>3.3 <strong>输出重定向 &gt;&gt;</strong></h3><p>表示重定向到文件末尾，因此它不会像 &gt; 命令这么危险，它是追加到文件的末尾（当然如果文件不存在，也会被创建）。</p>
+<p>再次执行 cut -d , -f 1 notes.csv &gt;&gt; name.csv ，则会把名字追加到 name.csv 里面。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mark1Mark2Mark3Mark4Mark5Mark6Mark1Mark2Mark3Mark4Mark5Mark6</span><br></pre></td></tr></table></figure>
+<p>我们平时读的 log 日志文件其实都是用这个命令输出的。</p>
+<h3 id="3-4-输出重定向-2-gt"><a href="#3-4-输出重定向-2-gt" class="headerlink" title="3.4 输出重定向 2&gt;"></a>3.4 <strong>输出重定向 2&gt;</strong></h3><p>标准错误输出</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat not_exist_file.csv &gt; res.txt 2&gt; errors.log</span><br></pre></td></tr></table></figure>
+<ul>
+<li>当我们 cat 一个文件时，会把文件内容打印到屏幕上，这个是标准输出；</li>
+<li>当使用了 &gt; res.txt 时，则不会打印到屏幕，会把标准输出写入文件 res.txt 文件中；</li>
+<li>2&gt; errors.log 当发生错误时会写入 errors.log 文件中。  </li>
+</ul>
+<h3 id="3-5-输出重定向-2-gt-gt"><a href="#3-5-输出重定向-2-gt-gt" class="headerlink" title="3.5 输出重定向 2&gt;&gt;"></a>3.5 <strong>输出重定向 2&gt;&gt;</strong></h3><p>标准错误输出（追加到文件末尾）同 &gt;&gt; 相似。</p>
+<h3 id="3-6-输入重定向-lt"><a href="#3-6-输入重定向-lt" class="headerlink" title="3.6 输入重定向 &lt;"></a>3.6 <strong>输入重定向 &lt;</strong></h3><p>&lt; 符号用于指定命令的输入。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat &lt; name.csv # 指定命令的输入为 name.csv</span><br></pre></td></tr></table></figure>
+<p>虽然它的运行结果与 cat name.csv 一样，但是它们的原理却完全不同。</p>
+<ul>
+<li>cat name.csv 表示 cat 命令接收的输入是 notes.csv 文件名，那么要先打开这个文件，然后打印出文件内容。</li>
+<li>cat &lt; name.csv 表示 cat 命令接收的输入直接是 notes.csv 这个文件的内容， cat命令只负责将其内容打印，打开文件并将文件内容传递给 cat 命令的工作则交给终端完成。  </li>
+</ul>
+<h3 id="3-7-输入重定向-lt-lt"><a href="#3-7-输入重定向-lt-lt" class="headerlink" title="3.7 输入重定向 &lt;&lt;"></a>3.7 <strong>输入重定向 &lt;&lt;</strong></h3><p>将键盘的输入重定向为某个命令的输入。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sort -n &lt;&lt; END # 输入这个命令之后，按下回车，终端就进入键盘输入模式，其中END为结束命令（这个可以自定义）wc -m &lt;&lt; END # 统计输入的单词复</span><br></pre></td></tr></table></figure>
+<h3 id="3-8-管道"><a href="#3-8-管道" class="headerlink" title="3.8 管道 |"></a>3.8 管道 |</h3><p>把两个命令连起来使用，一个命令的输出作为另外一个命令的输入，英文是 pipeline ，可以想象一个个水管连接起来，管道算是重定向流的一种。</p>
+<p>举几个实际用法案例：</p>
+<p>cut -d , -f 1 name.csv | sort &gt; sorted_name.txt</p>
+<h1 id="第一步获取到的-name-列表，通过管道符再进行排序，最后输出到sorted-name-txt"><a href="#第一步获取到的-name-列表，通过管道符再进行排序，最后输出到sorted-name-txt" class="headerlink" title="第一步获取到的 name 列表，通过管道符再进行排序，最后输出到sorted_name.txt"></a>第一步获取到的 name 列表，通过管道符再进行排序，最后输出到sorted_name.txt</h1><p>du | sort -nr | head</p>
+<h1 id="du-表示列举目录大小信息-sort-进行排序-n-表示按数字排序，-r-表示倒序-head-前10行文件"><a href="#du-表示列举目录大小信息-sort-进行排序-n-表示按数字排序，-r-表示倒序-head-前10行文件" class="headerlink" title="du 表示列举目录大小信息# sort 进行排序,-n 表示按数字排序，-r 表示倒序# head 前10行文件"></a>du 表示列举目录大小信息# sort 进行排序,-n 表示按数字排序，-r 表示倒序# head 前10行文件</h1><p>grep log -Ir /var/log | cut -d : -f 1 | sort | uniq</p>
+<h1 id="grep-log-Ir-var-log-表示在log文件夹下搜索-var-log-文本，-r-表示递归，-I-用于排除二进制文件-cut-d-f-1-表示通过冒号进行剪切，获取剪切的第一部分-sort-进行排序-uniq-进行去重复制代码"><a href="#grep-log-Ir-var-log-表示在log文件夹下搜索-var-log-文本，-r-表示递归，-I-用于排除二进制文件-cut-d-f-1-表示通过冒号进行剪切，获取剪切的第一部分-sort-进行排序-uniq-进行去重复制代码" class="headerlink" title="grep log -Ir /var/log 表示在log文件夹下搜索 /var/log 文本，-r 表示递归，-I 用于排除二进制文件# cut -d : -f 1 表示通过冒号进行剪切，获取剪切的第一部分# sort 进行排序# uniq 进行去重复制代码"></a>grep log -Ir /var/log 表示在log文件夹下搜索 /var/log 文本，-r 表示递归，-I 用于排除二进制文件# cut -d : -f 1 表示通过冒号进行剪切，获取剪切的第一部分# sort 进行排序# uniq 进行去重复制代码</h1><h2 id="1-六、查看进程"><a href="#1-六、查看进程" class="headerlink" title="1 六、查看进程"></a>1 六、查看进程</h2><p>在 Windows 中通过 Ctrl + Alt + Delete 快捷键查看软件进程。</p>
+<h3 id="1-1-w"><a href="#1-1-w" class="headerlink" title="1.1 w"></a>1.1 <strong>w</strong></h3><p><strong>帮助我们快速了解系统中目前有哪些用户登录着，以及他们在干什么。</strong></p>
+<h3 id="1-2-ps"><a href="#1-2-ps" class="headerlink" title="1.2 ps"></a>1.2 <strong>ps</strong></h3><p><strong>用于显示当前系统中的进程， ps 命令显示的进程列表不会随时间而更新，是静态的，是运行 ps 命令那个时刻的状态或者说是一个进程快照。</strong></p>
+<h3 id="1-3-常用参数"><a href="#1-3-常用参数" class="headerlink" title="1.3 常用参数"></a>1.3 常用参数</h3><ul>
+<li>-ef 列出所有进程;</li>
+<li>-efH 以乔木状列举出所有进程;</li>
+<li>-u 列出此用户运行的进程;</li>
+<li>-aux 通过 CPU 和内存使用来过滤进程 ps -aux | less ;</li>
+<li>-aux —sort -pcpu 按 CPU 使用降序排列， -aux —sort -pmem 表示按内存使用降序排列;</li>
+<li>-axjf 以树形结构显示进程， ps -axjf 它和 pstree 效果类似。  </li>
+</ul>
+<h3 id="1-4-top"><a href="#1-4-top" class="headerlink" title="1.4 top"></a>1.4 top</h3><p><strong>获取进程的动态列表。</strong></p>
+<h3 id="1-5-kill"><a href="#1-5-kill" class="headerlink" title="1.5 kill"></a>1.5 <strong>kill</strong></h3><p><strong>结束一个进程， kill + PID 。</strong></p>
+<h2 id="2-七、管理进程"><a href="#2-七、管理进程" class="headerlink" title="2 七、管理进程"></a>2 七、管理进程</h2><h3 id="2-1-进程状态"><a href="#2-1-进程状态" class="headerlink" title="2.1 进程状态"></a>2.1 进程状态</h3><p>主要是切换进程的状态。我们先了解下 Linux 下进程的五种状态：</p>
+<ol>
+<li>状态码 R ：表示正在运行的状态；</li>
+<li>状态码 S ：表示中断（休眠中，受阻，当某个条件形成后或接受到信号时，则脱离该状态）；</li>
+<li>状态码 D ：表示不可中断（进程不响应系统异步信号，即使用kill命令也不能使其中断）；</li>
+<li>状态码 Z ：表示僵死（进程已终止，但进程描述符依然存在，直到父进程调用 wait4()<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E7%B3%BB%E7%BB%9F%E5%87%BD%E6%95%B0&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A2717297135%7D">系统函数</a>后将进程释放）；</li>
+<li>状态码 T ：表示停止（进程收到 SIGSTOP 、 SIGSTP 、 SIGTIN 、 SIGTOU 等停止信号后停止运行）。  </li>
+</ol>
+<h3 id="2-2-前台进程-amp-后台进程"><a href="#2-2-前台进程-amp-后台进程" class="headerlink" title="2.2 前台进程 &amp; 后台进程"></a>2.2 前台进程 &amp; 后台进程</h3><p>默认情况下，用户创建的进程都是前台进程，前台进程从键盘读取数据，并把处理结果输出到显示器。例如运行 top 命令，这就是一个一直运行的前台进程。</p>
+<p>后台进程的优点是不必等待程序运行结束，就可以输入其它命令。在需要执行的命令后面添加&amp; 符号，就表示启动一个后台进程。</p>
+<h3 id="2-3-amp"><a href="#2-3-amp" class="headerlink" title="2.3 &amp;"></a>2.3 &amp;</h3><p>启动后台进程，它的缺点是后台进程与终端相关联，一旦关闭终端，进程就自动结束了。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp name.csv name-copy.csv &amp;</span><br></pre></td></tr></table></figure>
+<h3 id="2-4-nohup"><a href="#2-4-nohup" class="headerlink" title="2.4 nohup"></a>2.4 nohup</h3><p>使进程不受挂断（关闭终端等动作）的影响。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup cp name.csv name-copy.csv</span><br></pre></td></tr></table></figure>
+<p>nohup 命令也可以和 &amp; 结合使用。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup cp name.csv name-copy.csv &amp;</span><br></pre></td></tr></table></figure>
+<h3 id="2-5-bg"><a href="#2-5-bg" class="headerlink" title="2.5 bg"></a>2.5 bg</h3><p>使一个”后台暂停运行”的进程，状态改为”后台运行”。</p>
+<h3 id="2-6-jobs"><a href="#2-6-jobs" class="headerlink" title="2.6 jobs"></a>2.6 jobs</h3><p>显示当前终端后台进程状态。</p>
+<h3 id="2-7-fg"><a href="#2-7-fg" class="headerlink" title="2.7 fg"></a>2.7 fg</h3><p>fg 使进程转为前台运行，用法和 bg 命令类似。</p>
+<p>我们用一张图来表示前后台进程切换：</p>
+<p><img src="https://pic1.zhimg.com/80/v2-fda7a2872cecb93215a9b88f9ae71a29_1440w.webp?source=1940ef5c" alt=""></p>
+<p>我们可以使程序在后台运行，成为后台进程，这样在当前终端中我们就可以做其他事情了，而不必等待此进程运行结束。</p>
+<h2 id="3-八、文件压缩解压"><a href="#3-八、文件压缩解压" class="headerlink" title="3 八、文件压缩解压"></a>3 八、文件压缩解压</h2><ul>
+<li>打包：是将多个文件变成一个总的文件，它的学名叫存档、归档。</li>
+<li>压缩：是将一个大文件（通常指归档）压缩变成一个小文件。  </li>
+</ul>
+<p>我们常常使用 tar 将多个文件归档为一个总的文件，称为 archive 。然后用 gzip 或 bzip2 命令将 archive 压缩为更小的文件。</p>
+<h3 id="3-1-tar"><a href="#3-1-tar" class="headerlink" title="3.1 tar"></a>3.1 <strong>tar</strong></h3><p><strong>创建一个 tar 归档。</strong></p>
+<h3 id="3-2-基础用法"><a href="#3-2-基础用法" class="headerlink" title="3.2 基础用法"></a>3.2 基础用法</h3><p>tar -cvf sort.tar sort/</p>
+<h1 id="将sort文件夹归档为sort-tar"><a href="#将sort文件夹归档为sort-tar" class="headerlink" title="将sort文件夹归档为sort.tar"></a>将sort文件夹归档为sort.tar</h1><p>tar -cvf archive.tar file1 file2 file3</p>
+<h1 id="将-file1-file2-file3-归档为archive-tar复制代码"><a href="#将-file1-file2-file3-归档为archive-tar复制代码" class="headerlink" title="将 file1 file2 file3 归档为archive.tar复制代码"></a>将 file1 file2 file3 归档为archive.tar复制代码</h1><h3 id="0-1-常用参数"><a href="#0-1-常用参数" class="headerlink" title="0.1 常用参数"></a>0.1 常用参数</h3><ul>
+<li>-cvf 表示 create（创建）+ verbose（细节）+ file（文件），创建归档文件并显示操作细节；</li>
+<li>-tf 显示归档里的内容，并不解开归档；</li>
+<li>-rvf 追加文件到归档， tar -rvf archive.tar file.txt ；</li>
+<li>-xvf 解开归档， tar -xvf archive.tar 。</li>
+</ul>
+<h3 id="0-2-gzip-gunzip"><a href="#0-2-gzip-gunzip" class="headerlink" title="0.2 gzip / gunzip"></a>0.2 gzip / gunzip</h3><p>“压缩/解压”归档，默认用 gzip 命令，压缩后的<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E6%96%87%E4%BB%B6%E5%90%8E%E7%BC%80%E5%90%8D&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A2717297135%7D">文件后缀名</a>为 .tar.gz 。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gzip archive.tar # 压缩gunzip archive.tar.gz # 解压</span><br></pre></td></tr></table></figure>
+<h3 id="0-3-tar-归档-压缩"><a href="#0-3-tar-归档-压缩" class="headerlink" title="0.3 tar 归档+压缩"></a>0.3 tar 归档+压缩</h3><p>可以用 tar 命令同时完成归档和压缩的操作，就是给 tar 命令多加一个选项参数，使之完成归档操作后，还是调用 gzip 或 bzip2 命令来完成压缩操作。</p>
+<p>tar -zcvf archive.tar.gz archive/ # 将archive文件夹归档并压缩</p>
+<p>tar -zxvf archive.tar.gz # 将archive.tar.gz归档压缩文件解压</p>
+<h3 id="0-4-zcat、zless、zmore"><a href="#0-4-zcat、zless、zmore" class="headerlink" title="0.4 zcat、zless、zmore"></a>0.4 zcat、zless、zmore</h3><p>之前讲过使用 cat less more 可以查看文件内容，但是压缩文件的内容是不能使用这些命令进行查看的，而要使用 zcat、zless、zmore 进行查看。</p>
+<p>zcat archive.tar.gz</p>
+<h3 id="0-5-zip-unzip"><a href="#0-5-zip-unzip" class="headerlink" title="0.5 zip/unzip"></a>0.5 zip/unzip</h3><p>“压缩/解压” zip 文件（ zip 压缩文件一般来自 windows 操作系统）。</p>
+<h3 id="0-6-命令安装"><a href="#0-6-命令安装" class="headerlink" title="0.6 命令安装"></a>0.6 命令安装</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># Red Hat 一族中的安装方式yum install zip yum install unzip 复制代码</span><br></pre></td></tr></table></figure>
+<h3 id="0-7-基础用法"><a href="#0-7-基础用法" class="headerlink" title="0.7 基础用法"></a>0.7 基础用法</h3><p>unzip archive.zip</p>
+<h1 id="解压-zip-文件"><a href="#解压-zip-文件" class="headerlink" title="解压 .zip 文件"></a>解压 .zip 文件</h1><p>unzip -l archive.zip</p>
+<h1 id="不解开-zip-文件，只看其中内容"><a href="#不解开-zip-文件，只看其中内容" class="headerlink" title="不解开 .zip 文件，只看其中内容"></a>不解开 .zip 文件，只看其中内容</h1><p>zip -r sort.zip sort/</p>
+<h1 id="将sort文件夹压缩为-sort-zip，其中-r表示递归"><a href="#将sort文件夹压缩为-sort-zip，其中-r表示递归" class="headerlink" title="将sort文件夹压缩为 sort.zip，其中-r表示递归"></a>将sort文件夹压缩为 sort.zip，其中-r表示递归</h1><h3 id="0-1-编译安装"><a href="#0-1-编译安装" class="headerlink" title="0.1 编译安装"></a>0.1 编译安装</h3><p>简单来说，编译就是将程序的源代码转换成可执行文件的过程。大多数 Linux 的程序都是开放源码的，可以编译成适合我们的电脑和操纵系统属性的可执行文件。</p>
+<p>基本步骤如下：</p>
+<ol>
+<li>下载源代码</li>
+<li>解压压缩包</li>
+<li>配置</li>
+<li>编译</li>
+<li>安装  </li>
+</ol>
+<h3 id="0-2-实际案例"><a href="#0-2-实际案例" class="headerlink" title="0.2 实际案例"></a>0.2 实际案例</h3><h3 id="0-3-1、下载"><a href="#0-3-1、下载" class="headerlink" title="0.3 1、下载"></a>0.3 1、下载</h3><p>我们来编译安装 htop 软件，首先在它的官网下载源码：<strong><a href="https://link.zhihu.com/?target=http%3A//bintray.com/htop/source">http://bintray.com/htop/source</a>…</strong>[1]</p>
+<p>下载好的源码在本机电脑上使用如下命令同步到服务器上：</p>
+<p>scp 文件名 用户名@服务器ip:目标路径</p>
+<p>scp ~/Desktop/htop-3.0.0.tar.gz root@121.42.11.34:.</p>
+<p>也可以使用 wegt 进行下载：</p>
+<p>wegt+下载地址</p>
+<p>wegt <a href="https://link.zhihu.com/?target=https%3A//bintray.com/htop/source/download_file%3Ffile_path%3Dhtop-3.0.0.tar.gz">https://bintray.com/htop/source/download_file?file_path=htop-3.0.0.tar.gz</a></p>
+<h3 id="0-4-2、解压文件"><a href="#0-4-2、解压文件" class="headerlink" title="0.4 2、解压文件"></a>0.4 2、解压文件</h3><p>tar -zxvf htop-3.0.0.tar.gz</p>
+<h1 id="解压cd-htop-3-0-0-进入目录"><a href="#解压cd-htop-3-0-0-进入目录" class="headerlink" title="解压cd htop-3.0.0 # 进入目录"></a>解压cd htop-3.0.0 # 进入目录</h1><h3 id="0-1-3、配置"><a href="#0-1-3、配置" class="headerlink" title="0.1 3、配置"></a>0.1 3、配置</h3><p>执行 ./configure ，它会分析你的电脑去确认编译所需的工具是否都已经安装了。</p>
+<h3 id="0-2-4、编译"><a href="#0-2-4、编译" class="headerlink" title="0.2 4、编译"></a>0.2 4、编译</h3><p>执行 make 命令</p>
+<h3 id="0-3-5、安装"><a href="#0-3-5、安装" class="headerlink" title="0.3 5、安装"></a>0.3 5、安装</h3><p>执行 make install 命令，安装完成后执行 ls /usr/local/bin/ 查看是否有 htop 命令。如果有就可以执行 htop 命令查看系统进程了。</p>
+<h2 id="1-九、网络"><a href="#1-九、网络" class="headerlink" title="1 九、网络"></a>1 九、网络</h2><h3 id="1-1-ifconfig"><a href="#1-1-ifconfig" class="headerlink" title="1.1 ifconfig"></a>1.1 <strong>ifconfig</strong></h3><p><strong>查看 ip 网络相关信息，如果命令不存在的话， 执行命令 yum install net-tools 安装。</strong></p>
+<p>参数解析：</p>
+<ul>
+<li><p>eth0 对应有线连接（对应你的有线网卡），就是用网线来连接的上网。eth 是 Ethernet 的缩写，表示”<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E4%BB%A5%E5%A4%AA%E7%BD%91&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A2717297135%7D">以太网</a>“。有些电脑可能同时有好几条网线连着，例如服务器，那么除了eht0 ，你还会看到 eth1 、 eth2 等。  </p>
+</li>
+<li><p>lo 表示本地回环（ Local Loopback 的缩写，对应一个<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E8%99%9A%E6%8B%9F%E7%BD%91%E5%8D%A1&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A2717297135%7D">虚拟网卡</a>）可以看到它的 ip 地址是 127.0.0.1 。每台电脑都应该有这个接口，因为它对应着”连向自己的链接”。这也是被称之为”本地回环”的原因。所有经由这个接口发送的东西都会回到你自己的电脑。看起来好像并没有什么用，但有时为了某些缘故，我们需要连接自己。例如用来测试一个网络程序，但又不想让局域网或外网的用户查看，只能在此台主机上运行和查看所有的网络接口。例如在我们启动一个前端工程时，在浏览器输入 127.0.0.1:3000 启动项目就能查看到自己的 web 网站，并且它只有你能看到。  </p>
+</li>
+<li><p>wlan0 表示无线局域网</p>
+</li>
+</ul>
+<h3 id="1-2-host"><a href="#1-2-host" class="headerlink" title="1.2 host"></a>1.2 <strong>host</strong></h3><p><strong>ip 地址和主机名的互相转换。</strong></p>
+<h3 id="1-3-ssh-连接远程服务器"><a href="#1-3-ssh-连接远程服务器" class="headerlink" title="1.3 ssh 连接远程服务器"></a>1.3 <strong>ssh 连接远程服务器</strong></h3><p><strong>通过<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A2717297135%7D">非对称加密</a>以及对称加密的方式（同 HTTPS 安全连接原理相似）连接到远端服务器。</strong></p>
+<h3 id="1-4-h"><a href="#1-4-h" class="headerlink" title="1.4 *h"></a>1.4 <em>*</em>h</h3><p>config 文件可以<em>*</em>h ，方便批量管理多个 ssh 连接。</p>
+<p>配置文件分为以下几种：</p>
+<ul>
+<li>全局 ssh 服务端的配置：/etc/ssh/sshd_config ；</li>
+<li>全局 ssh 客户端的配置：/etc/ssh/ssh_config（很少修改）；</li>
+<li>当前用户 ssh 客户端的<em>*</em>h/config 。</li>
+</ul>
+<p><img src="https://pica.zhimg.com/80/v2-6822a5b5868d9e08fb6d9fbae94b6661_1440w.webp?source=1940ef5c" alt=""></p>
+<p>配置当前用户的 config ：</p>
+<h1 id="创建config"><a href="#创建config" class="headerlink" title="创建config"></a>创建config</h1><p>vim ~/.ssh/config</p>
+<h1 id="填写一下内容"><a href="#填写一下内容" class="headerlink" title="填写一下内容"></a>填写一下内容</h1><p>Host lion # 别名 HostName 172.x.x.x # ip 地址 Port 22 # 端口 User root # 用户</p>
+<p>这样配置完成后，下次登录时，可以这样登录 ssh lion 会自动识别为 root 用户。</p>
+<p>[注意] 这段配置不是在服务器上，而是你自己的机器上，它仅仅是设置了一个别名。</p>
+<h3 id="0-1-wget"><a href="#0-1-wget" class="headerlink" title="0.1 wget"></a>0.1 wget</h3><p>可以使我们直接从终端控制台下载文件，只需要给出文件的HTTP或FTP地址。</p>
+<h2 id="1-十-备份"><a href="#1-十-备份" class="headerlink" title="1 十 备份"></a>1 十 备份</h2><h3 id="1-1-scp"><a href="#1-1-scp" class="headerlink" title="1.1 scp"></a>1.1 scp</h3><p><strong>它是 Secure Copy 的缩写，表示安全拷贝。scp 可以使我们通过网络，把文件从一台电脑拷贝到另一台电脑。</strong></p>
+<p>scp 是基于 ssh 的原理来运作的， ssh 会在两台通过网络连接的电脑之间创建一条安全通信的管道， scp 就利用这条管道安全地拷贝文件。</p>
+<p>scp source_file destination_file</p>
+<h1 id="source-file-表示源文件，destination-file-表示目标文件"><a href="#source-file-表示源文件，destination-file-表示目标文件" class="headerlink" title="source_file 表示源文件，destination_file 表示目标文件"></a>source_file 表示源文件，destination_file 表示目标文件</h1><p>其中 source_file 和 destination_file 都可以这样表示：user@ip:file_name ， user 是登录名， ip 是域名或 ip 地址。file_name 是文件路径。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp root@192.168.1.5:/root/file.txt file.txt # 表示把远程电脑上的 file.txt 文件拷贝到本机</span><br><span class="line">scp file.txt root@192.168.1.5:/root # 表示把我的电脑中当前文件夹下的 file.txt 文件拷贝到远程电脑</span><br></pre></td></tr></table></figure>
+<h3 id="0-1-rsync"><a href="#0-1-rsync" class="headerlink" title="0.1 rsync"></a>0.1 rsync</h3><p>rsync 命令主要用于远程同步文件。它可以同步两个目录，不管它们是否处于同一台电脑。它应该是最常用于”<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E5%A2%9E%E9%87%8F%E5%A4%87%E4%BB%BD&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A2717297135%7D">增量备份</a>“的命令了。它就是智能版的 scp 命令。</p>
+<h3 id="0-2-软件安装"><a href="#0-2-软件安装" class="headerlink" title="0.2 软件安装"></a>0.2 软件安装</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install rsync复制代码</span><br></pre></td></tr></table></figure>
+<h3 id="0-3-基础用法"><a href="#0-3-基础用法" class="headerlink" title="0.3 基础用法"></a>0.3 基础用法</h3><p>rsync -arv Images/ backups/</p>
+<h1 id="将Images-目录下的所有文件备份到-backups-目录下"><a href="#将Images-目录下的所有文件备份到-backups-目录下" class="headerlink" title="将Images 目录下的所有文件备份到 backups 目录下"></a>将Images 目录下的所有文件备份到 backups 目录下</h1><p>rsync -arv Images/ root@192.x.x.x:backups/</p>
+<h1 id="同步到服务器的backups目录下"><a href="#同步到服务器的backups目录下" class="headerlink" title="同步到服务器的backups目录下"></a>同步到服务器的backups目录下</h1><h3 id="0-1-常用参数-1"><a href="#0-1-常用参数-1" class="headerlink" title="0.1 常用参数"></a>0.1 常用参数</h3><ul>
+<li>-a 保留文件的所有信息，包括权限，修改日期等；</li>
+<li>-r 递归调用，表示子目录的所有文件也都包括；</li>
+<li>-v 冗余模式，输出详细操作信息。</li>
+</ul>
+<p>默认地， rsync 在同步时并不会删除目标目录的文件，例如你在源目录中删除一个文件，但是用 rsync 同步时，它并不会删除同步目录中的相同文件。如果向删除也可以这么做：rsync -arv —delete Images/ backups/ 。</p>
+<h2 id="1-十一-系统"><a href="#1-十一-系统" class="headerlink" title="1 十一 系统"></a>1 十一 系统</h2><h3 id="1-1-halt"><a href="#1-1-halt" class="headerlink" title="1.1 halt"></a>1.1 halt</h3><p>关闭系统，需要 root 身份。</p>
+<h3 id="1-2-reboot"><a href="#1-2-reboot" class="headerlink" title="1.2 reboot"></a>1.2 reboot</h3><p>重启系统，需要 root 身份。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<h3 id="1-3-poweroff"><a href="#1-3-poweroff" class="headerlink" title="1.3 poweroff"></a>1.3 poweroff</h3><p>直接运行即可关机，不需要 root 身份。</p>
+<h2 id="2-十二-Vim-编辑器"><a href="#2-十二-Vim-编辑器" class="headerlink" title="2 十二 Vim 编辑器"></a>2 十二 Vim 编辑器</h2><h2 id="3-Vim-是什么？"><a href="#3-Vim-是什么？" class="headerlink" title="3 Vim 是什么？"></a>3 Vim 是什么？</h2><p>Vim 是从 vi 发展出来的一个<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A2717297135%7D">文本编辑器</a>。其代码补完、编译及错误跳转等方便编程的功能特别丰富，在程序员中被广泛使用。和 Emacs 并列成为类 Unix 系统用户最喜欢的编辑器。</p>
+<h2 id="4-Vim-常用模式"><a href="#4-Vim-常用模式" class="headerlink" title="4 Vim 常用模式"></a>4 Vim 常用模式</h2><ul>
+<li>交互模式</li>
+<li>插入模式</li>
+<li>命令模式</li>
+<li>可视模式  </li>
+</ul>
+<h3 id="4-1-交互模式"><a href="#4-1-交互模式" class="headerlink" title="4.1 交互模式"></a>4.1 交互模式</h3><p>也成为正常模式，这是 Vim 的默认模式，每次运行 Vim 程序的时候，就会进入这个模式。</p>
+<p>例如执行 vim name.txt 则会进入交互模式。</p>
+<p>交互模式特征：</p>
+<ul>
+<li>在这个模式下，你不能输入文本；</li>
+<li>它可以让我们在文本间移动，删除一行文本，复制黏贴文本，跳转到指定行，撤销操作，等等  </li>
+</ul>
+<h3 id="4-2-插入模式"><a href="#4-2-插入模式" class="headerlink" title="4.2 插入模式"></a>4.2 插入模式</h3><p>这个模式是我们熟悉的文本编辑器的模式，就是可以输入任何你想输入的内容。进入这个模式有几种方法，最常用的方法是按字母键 i （ i、I、a、A、o、O 都可以进入插入模式，只是所处的位置不同），退出这种模式，只需要按下 Esc 键。</p>
+<ul>
+<li>i, I 进入输入模式 Insert mode ：i 为”从目前光标所在处输入”， I 为”在目前所在行的第一个非空格符处开始输入”；</li>
+<li>a, A 进入输入模式 Insert mode ：a 为”从目前光标所在的下一个字符处开始输入”，A 为”从光标所在行的最后一个字符处开始输入”；</li>
+<li>o, O 进入输入模式 Insert mode ：o 为”在目前光标所在的下一行处输入新的一行”；O 为在目前光标所在处的上一行输入新的一行。</li>
+</ul>
+<h3 id="4-3"><a href="#4-3" class="headerlink" title="4.3"></a>4.3</h3><h3 id="4-4-命令模式"><a href="#4-4-命令模式" class="headerlink" title="4.4 命令模式"></a>4.4 命令模式</h3><p>命令模式也称为底线命令模式，这个模式下可以运行一些命令例如”退出”，”保存”，等动作。</p>
+<p>也可以用这个模式来激活一些 Vim 配置，例如语法高亮，显示行号，等。甚至还可以发送一些命令给终端命令行，例如 ls、cp 。</p>
+<p>为了进入命令模式，首先要进入交互模式，再按下冒号键。</p>
+<p>用一张图表示三种模式如何切换：</p>
+<p><img src="https://picx.zhimg.com/80/v2-ba2da86f7f9e710f75d2b52449458f07_1440w.webp?source=1940ef5c" alt=""></p>
+<p>基本操作</p>
+<h3 id="4-5-打开-Vim"><a href="#4-5-打开-Vim" class="headerlink" title="4.5 打开 Vim"></a>4.5 打开 Vim</h3><p>在终端命令行中输入 vim 回车后 Vim 就会被运行起来，也可以用 Vim 来打开一个文件，只需要在 vim 后面再加文件名。如 vim file.name ，如果文件不存在，那么会被创建。  </p>
+<h3 id="4-6-插入"><a href="#4-6-插入" class="headerlink" title="4.6 插入"></a>4.6 插入</h3><p>进入文件之后，此时处于交互模式，可以通过输入 i 进入插入模式  </p>
+<h3 id="4-7-移动"><a href="#4-7-移动" class="headerlink" title="4.7 移动"></a>4.7 移动</h3><p>在 Vim 的交互模式下，我们可以在文本中移动光标。</p>
+<ul>
+<li>h 向左移动一个字符</li>
+<li>j 向下移动一个字符</li>
+<li>k 向上移动一个字符</li>
+<li>i 向右移动一个字符</li>
+</ul>
+<p>当然也可以使用四个方向键进行移动，效果是一样的。  </p>
+<h3 id="4-8-跳至行首和行末"><a href="#4-8-跳至行首和行末" class="headerlink" title="4.8 跳至行首和行末"></a>4.8 跳至行首和行末</h3><ul>
+<li>行首：在交互模式下，为了将光标定位到一行的开始位置，只需要按下数字键 0 即可，键盘上的 Home 键也有相同效果。</li>
+<li>行末：在交互模式下，为了将光标定位到一行的末尾，只需要按下美元符号键 $ 即可，键盘上的 End 键也有相同效果。</li>
+</ul>
+<h3 id="4-9-按单词移动"><a href="#4-9-按单词移动" class="headerlink" title="4.9 按单词移动"></a>4.9 按单词移动</h3><p>在交互模式下，按字母键 w 可以一个单词一个单词的移动。</p>
+<h3 id="4-10-退出文件"><a href="#4-10-退出文件" class="headerlink" title="4.10 退出文件"></a>4.10 退出文件</h3><p>在交互模式下，按下冒号键 : 进入命令模式，再按下 q 键，就可以退出了。</p>
+<p>如果在退出之前又修改了文件，就直接想用 :q 退出 Vim ，那么 Vim 会显示一个红字标明错误信息。此时我们有两个选择：</p>
+<ol>
+<li>保存并退出 :wq 或 :x ；</li>
+<li>不保存且退出 :q! 。</li>
+</ol>
+<h2 id="5-标准操作"><a href="#5-标准操作" class="headerlink" title="5 标准操作"></a>5 标准操作</h2><h3 id="5-1-删除字符"><a href="#5-1-删除字符" class="headerlink" title="5.1 删除字符"></a>5.1 删除字符</h3><p>在交互模式下，将光标定位到一个你想要删除的字符上，按下字母键 x 你会发现这个字符被删除了。</p>
+<p>也可以一次性删除多个字符，只需要在按 x 键之前输入数字即可。  </p>
+<h3 id="5-2-删除（剪切）单词，行"><a href="#5-2-删除（剪切）单词，行" class="headerlink" title="5.2 删除（剪切）单词，行"></a>5.2 删除（剪切）单词，行</h3><ul>
+<li>删除一行：连按两次 d 来删除光标所在的那一行。</li>
+<li>删除多行：例如先输入数字 2 ，再按下 dd ，就会删除从光标所在行开始的两行。</li>
+<li>删除一个单词：将光标置于一个单词的首字母处，然后按下 dw 。</li>
+<li>删除多个单词：例如先按数字键 2 再按 dw 就可以删除两个单词了。</li>
+<li>从光标所在位置删除至行首：d0 。</li>
+<li>从光标所在位置删除至行末：d$ 。</li>
+</ul>
+<h3 id="5-3-复制单词，行"><a href="#5-3-复制单词，行" class="headerlink" title="5.3 复制单词，行"></a>5.3 复制单词，行</h3><ul>
+<li>复制行：按两次 y 会把光标所在行复制到内存中，和 dd 类似， dd 用于”剪切”光标所在行。</li>
+<li>复制单词：yw 会复制一个单词。</li>
+<li>复制到行末：y$ 是复制从光标所在处到行末的所有字符。</li>
+<li>复制到行首：y0 是复制光标所在处到行首的所有字符。  </li>
+</ul>
+<h3 id="5-4-粘贴"><a href="#5-4-粘贴" class="headerlink" title="5.4 粘贴"></a>5.4 粘贴</h3><p>如果之前用 dd 或者 yy 剪切复制过来的，可以使用 p 来粘贴。同样也可以使用 数字+p来表示复制多次。  </p>
+<h3 id="5-5-替换一个字符"><a href="#5-5-替换一个字符" class="headerlink" title="5.5 替换一个字符"></a>5.5 替换一个字符</h3><p>在交互模式下，将光标置于想要替换的字符上。按下 r 键，接着输入你要替换的字符即可。  </p>
+<h3 id="5-6-撤销操作"><a href="#5-6-撤销操作" class="headerlink" title="5.6 撤销操作"></a>5.6 撤销操作</h3><p>如果要撤销最近的修改，只需要按下 u 键，如果想要撤销最近四次修改，可以按下4，再按下 u 。  </p>
+<h3 id="5-7-重做"><a href="#5-7-重做" class="headerlink" title="5.7 重做"></a>5.7 重做</h3><p>取消撤销，也就是重做之前的修改使用 ctrl + r 。  </p>
+<h3 id="5-8-跳转到指定行"><a href="#5-8-跳转到指定行" class="headerlink" title="5.8 跳转到指定行"></a>5.8 跳转到指定行</h3><p>Vim 编辑的文件中，每一行都有一个行号，行号从1开始，逐一递增。</p>
+<p>行号默认是不显示，如果需要它显示的话，可以进入命令模式，然后输入 set nu ，如果要隐藏行号的话，使用 set nonu 。</p>
+<ul>
+<li>跳转到指定行：数字+gg ，例如 7gg ，表示跳转到第7行。</li>
+<li>要跳转到最后一行，按下 G 。</li>
+<li>要跳转到第一行，按下 gg 。</li>
+</ul>
+<h2 id="6-高级操作"><a href="#6-高级操作" class="headerlink" title="6 高级操作"></a>6 高级操作</h2><h3 id="6-1-查找"><a href="#6-1-查找" class="headerlink" title="6.1 查找"></a>6.1 查找</h3><p>处于交互模式下，按下 / 键，那么就进入查找模式，输入你要查找的字符串，然后按下回车。光标就会跳转到文件中下一个查找到的匹配处。如果字符串不存在，那么会显示 “pattern not found” 。</p>
+<ul>
+<li>n 跳转到下一个匹配项；</li>
+<li>N 跳转到上一个匹配项。</li>
+</ul>
+<p>[注意] 用斜杠来进行的查找是从当前光标处开始向文件尾搜索，如果你要从当前光标处开始，向文件头搜索则使用 ? ，当然也可以先按下 gg 跳转到第一行在进行全文搜索。  </p>
+<h3 id="6-2-查找并替换"><a href="#6-2-查找并替换" class="headerlink" title="6.2 查找并替换"></a>6.2 查找并替换</h3><p>替换光标所在行第一个匹配的字符串：</p>
+<h1 id="语法-s-旧字符串-新字符串-实例-s-one-two"><a href="#语法-s-旧字符串-新字符串-实例-s-one-two" class="headerlink" title="语法:s/旧字符串/新字符串# 实例:s/one/two"></a>语法:s/旧字符串/新字符串# 实例:s/one/two</h1><p>替换光标所在行所有旧字符串为新字符串：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 语法:s/旧字符串/新字符串/g</span><br></pre></td></tr></table></figure>
+<p>替换第几行到第几行中所有字符串：</p>
+<h1 id="语法-n-m-s-旧字符串-新字符串-g"><a href="#语法-n-m-s-旧字符串-新字符串-g" class="headerlink" title="语法:n,m s/旧字符串/新字符串/g"></a>语法:n,m s/旧字符串/新字符串/g</h1><h1 id="实例-2-4-s-one-two-g"><a href="#实例-2-4-s-one-two-g" class="headerlink" title="实例:2,4 s/one/two/g"></a>实例:2,4 s/one/two/g</h1><p>最常用的就是全文替换了：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 语法:%s/旧字符串/新字符串/g</span><br></pre></td></tr></table></figure>
+<h3 id="0-1-合并文件"><a href="#0-1-合并文件" class="headerlink" title="0.1 合并文件"></a>0.1 合并文件</h3><p>可以用冒号 +r ( :r ) 实现在光标处插入一个文件的内容。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:r filename # 可以用Tab键来自动补全另外一个文件的路径</span><br></pre></td></tr></table></figure>
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span>Author: </span>
+    <a href="https://stardustorz.github.io">draco</a>
+  </p>
+  <p class="copyright-item">
+    <span>Link: </span>
+    <a href="https://stardustorz.github.io/2025/05/07/Basic/Linux%20%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">https://stardustorz.github.io/2025/05/07/Basic/Linux%20%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</a>
+  </p>
+  <p class="copyright-item">
+    <span>License: </span>
+    
+    <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+  </p>
+</div>
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/2025/05/07/Basic/Linux/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default"></span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/02-cond/">  
+        <span class="next-text nav-default"></span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2019 - 2025      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">draco</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+</body>
+
+</html>

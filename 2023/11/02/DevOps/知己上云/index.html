@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+
+<!-- Website keywords -->
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/atom.xml" title="Draco's Blog" type="application/atom+xml">
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://stardustorz.github.io/2023/11/02/DevOps/知己上云/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":false};
+</script>
+  
+  <title> - Draco&#39;s Blog</title>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/links/">
+      <li class="mobile-menu-item">
+        
+        
+        Links              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Draco's Blog</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/links/">  
+              
+              
+              Links  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2023-11-02
+      </span>
+      
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7"><span class="toc-number">1.</span> <span class="toc-text">1 可观测性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%B8%9A%E5%8A%A1%E7%A8%B3%E5%AE%9A%E6%98%AF%E7%AC%AC%E4%B8%80%E4%BD%8D"><span class="toc-number">2.</span> <span class="toc-text">2 业务稳定是第一位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%99%8D%E4%BD%8E-request-%E5%80%BC"><span class="toc-number">3.</span> <span class="toc-text">3 降低 request 值</span></a></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <p>STKE 提供的 HPA 能力能够很好的满足知几对扩缩容的需求，知几同时使用了定时 HPA 和动态 HAP 满足不同的场景：</p>
+<ul>
+<li>针对突发流量， 知几采用 CPU request 和内存 request 作为触发扩容的条件。</li>
+<li>节假日和周五、六晚未成年人游戏上线，知几采用周定时 HPA 提前扩容。</li>
+</ul>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/gBXSicjuwMvE0DQ8sSf45n8FicIXxprYlNGMicaf7MMKK4leVEHNQxhsJ6OxWLdWxZKauYkGfq5icgnPjwibQGqehrQ/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="图片"></p>
+<p>这样很大程度上减少了开发、运维同学面对运营活动和突发流量时的心智负担，提高了服务稳定性。特别是定时 HPA，可以很方便的满足知几在未成年人保护方面对扩缩容的要求，系统可以在特定时间段完成系统容量的扩容和缩容，在保证系统平稳应对流量的同时也不会造成对资源的浪费。迁移上云后，知几通过这种方式保证了周末时段和线上多场运营活动的平稳进行。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/gBXSicjuwMvE0DQ8sSf45n8FicIXxprYlNIMxLkne6debgic5fyjau3WsZibMU3kSvEibLa6VpCib2sez4bUCicP37XVw/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="图片"></p>
+<h3 id="1-可观测性"><a href="#1-可观测性" class="headerlink" title="1 可观测性"></a>1 可观测性</h3><p>系统的可观测性能够让开发同学根据系统输出快速监控、定位问题。可观测性可以从 Metrics、Log、Trace 三个方面来看。</p>
+<ul>
+<li><strong>Metrics</strong>，知几服务大部分对接的是 Monitor 系统，通过自定义 metircs 上报实现模调信息、服务状态、业务等指标的监控，知几封装了 Monitor 的标准库实现指标模板的标准化和上报。Monitor 上报需要通过 http 请求获取上报的 ip 再将数据通过 tcp 形式发送到 Monitor 侧，这种形式的上报对业务并不友好，Monitor 当前也已不再接入新的业务，目前知几正逐步将 Metrics 迁移到智研监控系统，trpc 提供插件接入智研监控能力。</li>
+<li><strong>Log</strong>，早期知几上云时采用的 filebeat 采集日志，现在 stke 提供了统一的日志数据解决方案 CLS，可以方便的进行日志采集、存储、检索，运维成本较低，体验较好。</li>
+<li><strong>Trace</strong>，知几接入天机阁来对请求做 traceing，记录系统的请求链路等上下文信息。通过 traceId 对请求进行标记染色很大程度上提升了问题定位的效率。在此基础上，知几同时也在尝试 dapr[2] 这类新的分布式应用开发组件，dapr 提供的可观测性的无感知接入，相比天机阁等侵入式的接入方式，成本更低。</li>
+</ul>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/gBXSicjuwMvE0DQ8sSf45n8FicIXxprYlNpjxQQNVZy5e36lgIIU4qCsfOkmV6U3wFJ7vB5iaciaHEZUhSU4IibVraA/640?wx_fmt=png&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="图片"></p>
+<h3 id="2-业务稳定是第一位"><a href="#2-业务稳定是第一位" class="headerlink" title="2 业务稳定是第一位"></a>2 业务稳定是第一位</h3><p>在云原生提分实践过程中，发现很多模块的瓶颈并不是 CPU，而是流量或者内存，但是目前云原生的计算方式只计算 CPU，所以制定 HPA 扩缩容策略时需要综合各维度去考虑。</p>
+<h3 id="3-降低-request-值"><a href="#3-降低-request-值" class="headerlink" title="3 降低 request 值"></a>3 降低 request 值</h3><p>对于某些流量型的模块如 http、preupload和 prxoy，可以把 workoad 的 request 的值适当降低，这样可以让 CPU 利用率的提升有立竿见影的效果，需要结合压力测试来确认 request 降低后 CPU 不会成为瓶颈。</p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg5NjA1MjkxNw==&amp;mid=2247521650&amp;idx=1&amp;sn=6a13f20045cb4aae49ae7ad82256c25c&amp;chksm=c0042ea8f773a7beaa3daeff95afc8eecd03187d650d70c483e96fa1ee03c03e002c5f10d97e&amp;scene=178&amp;cur_album_id=1487567830194667526#rd">https://mp.weixin.qq.com/s?__biz=Mzg5NjA1MjkxNw==&amp;mid=2247521650&amp;idx=1&amp;sn=6a13f20045cb4aae49ae7ad82256c25c&amp;chksm=c0042ea8f773a7beaa3daeff95afc8eecd03187d650d70c483e96fa1ee03c03e002c5f10d97e&amp;scene=178&amp;cur_album_id=1487567830194667526#rd</a></p>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span>Author: </span>
+    <a href="https://stardustorz.github.io">draco</a>
+  </p>
+  <p class="copyright-item">
+    <span>Link: </span>
+    <a href="https://stardustorz.github.io/2023/11/02/DevOps/%E7%9F%A5%E5%B7%B1%E4%B8%8A%E4%BA%91/">https://stardustorz.github.io/2023/11/02/DevOps/%E7%9F%A5%E5%B7%B1%E4%B8%8A%E4%BA%91/</a>
+  </p>
+  <p class="copyright-item">
+    <span>License: </span>
+    
+    <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+  </p>
+</div>
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/2024/07/01/DevOps/K8S/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default"></span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/2023/10/31/DevOps/%E4%BA%91%E8%AE%A1%E7%AE%97%E6%A6%82%E8%BF%B0/">  
+        <span class="next-text nav-default"></span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2019 - 2025      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">draco</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+</body>
+
+</html>
