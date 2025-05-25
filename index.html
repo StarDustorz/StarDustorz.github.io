@@ -393,7 +393,8 @@
     
 
     
-    <h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h2><p>Golang 的 sync 包中的 Cond 实现了一种条件变量，可以使用在<strong>多个Reader</strong>等待共享资源 ready 的场景（如果只有一读一写，一个锁或者channel就搞定了）。<br>Cond的汇合点：多个goroutines等待、1个goroutine通知事件发生。<br>比较适合任务调用场景，一个 Master goroutine 通知事件发生，多个 Worker goroutine 在资源没准备好的时候就挂起，等待通知。<br><strong>使用方法</strong></p>
+    <span id="more"></span>
+<h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h2><p>Golang 的 sync 包中的 Cond 实现了一种条件变量，可以使用在<strong>多个Reader</strong>等待共享资源 ready 的场景（如果只有一读一写，一个锁或者channel就搞定了）。<br>Cond的汇合点：多个goroutines等待、1个goroutine通知事件发生。<br>比较适合任务调用场景，一个 Master goroutine 通知事件发生，多个 Worker goroutine 在资源没准备好的时候就挂起，等待通知。<br><strong>使用方法</strong></p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Cond</span></span><br><span class="line">cond := sync.NewCond(<span class="built_in">new</span>(sync.Mutex))</span><br><span class="line"><span class="comment">// 挂起goroutine</span></span><br><span class="line">cond.L.Lock()</span><br><span class="line">cond.Wait()</span><br><span class="line"><span class="comment">// 唤醒一个</span></span><br><span class="line">cond.Signal()</span><br><span class="line"><span class="comment">// 唤醒所有</span></span><br><span class="line">cond.Broadcast()</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>基本使用大概是需要等待的时候通过 Wait() 将 Goroutine 挂起，资源准备好的时候再通过 Signal() 或者 Broadcast() 将挂起中的 Goroutine 唤醒。</p>
@@ -508,7 +509,8 @@
     
 
     
-    <p>Go 语言在 <code>sync</code> 包中提供了用于同步的一些基本原语,<code>sync.Mutex</code> 就是其中最常用的一个。</p>
+    <span id="more"></span>
+<p>Go 语言在 <code>sync</code> 包中提供了用于同步的一些基本原语,<code>sync.Mutex</code> 就是其中最常用的一个。</p>
 <blockquote>
 <p>本文基于 Go 1.17.1</p>
 <h2 id="1-基本结构"><a href="#1-基本结构" class="headerlink" title="1 基本结构"></a>1 基本结构</h2><p>Go 语言的 <code>sync.Mutex</code>由两个字段 <code>state</code> 和 <code>sema</code> 组成。其中 <code>state</code> 表示当前互斥锁的状态，而 <code>sema</code> 是用于控制锁状态的信号量。</p>

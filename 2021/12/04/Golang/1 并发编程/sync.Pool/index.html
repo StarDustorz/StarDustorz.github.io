@@ -244,6 +244,7 @@
 <blockquote>
 <p>以下分析基于 Go 1.17.1</p>
 </blockquote>
+<span id="more"></span>
 <h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h2><h3 id="1-1-大致理念"><a href="#1-1-大致理念" class="headerlink" title="1.1 大致理念"></a>1.1 大致理念</h3><p><code>sync.Pool</code> 是 sync 包下的一个组件，可以作为保存临时取还对象的一个“池子”，可以缓存暂时不用的对象，下次需要时直接使用（无需重新分配）。</p>
 <blockquote>
 <p>因为频繁的内存分配和回收会对性能产生影响，通过复用临时对象就可以避免改问题。</p>

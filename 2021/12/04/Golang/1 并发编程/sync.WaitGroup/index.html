@@ -240,7 +240,8 @@
 
   <div class="post-content">
     
-    <blockquote>
+    <span id="more"></span>
+<blockquote>
 <p>Golang 调度方式：<code>主动让渡</code>和<code>被动调度</code><br>   被动调度: <code>通道 channel</code> 、<code>单机锁 sync.Mutex</code>、<code>并发等待组 sync.WaitGroup</code><br>当 goroutine 之间需要建立明确的<code>层级关系</code>. 倘若父 goroutine 希望持有子 goroutine 的生杀大权，并且保证父 goroutine 消亡时能连带回收其创建的所有子 goroutine ，此时可以使用到 Golang 上下文工具 context，完成父 goroutine 对 子 goroutine 的<code>生命周期控制</code></p>
 <p>多个协程等待一个协程执行完，除了WaitGroup 还有什么方式？  写入channel，for循环读</p>
 <h2 id="1-How-to-use？"><a href="#1-How-to-use？" class="headerlink" title="1 How to use？"></a>1 How to use？</h2><h3 id="1-1-核心方法"><a href="#1-1-核心方法" class="headerlink" title="1.1 核心方法"></a>1.1 核心方法</h3><p>• <code>WaitGroup.Add(n)</code>：完成一次登记操作，使得 WaitGroup 中并发计数器的数值加上 n. 在使用场景中，WaitGroup.Add(n) 背后的含义是，注册并启动了 n 个子 goroutine<br>• <code>WaitGroup.Done()</code>：完成一次上报操作，使得 WaitGroup 中并发计数器的数值减 1. 在使用场景中，通常会在一个子 goroutine 退出前，会执行一次 WaitGroup.Done 方法<br>• <code>WaitGroup.Wait()</code>：完成聚合操作. 通常由主 goroutine 调用该方法，主 goroutine 会因此陷入阻塞，直到所有子 goroutine 都已经执行完成，使得 WaitGroup 并发计数器数值清零时，主 goroutine 才得以继续往下执行</p>

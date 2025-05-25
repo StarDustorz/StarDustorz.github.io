@@ -240,7 +240,8 @@
 
   <div class="post-content">
     
-    <p>Go 语言在 <code>sync</code> 包中提供了用于同步的一些基本原语,<code>sync.Mutex</code> 就是其中最常用的一个。</p>
+    <span id="more"></span>
+<p>Go 语言在 <code>sync</code> 包中提供了用于同步的一些基本原语,<code>sync.Mutex</code> 就是其中最常用的一个。</p>
 <blockquote>
 <p>本文基于 Go 1.17.1</p>
 <h2 id="1-基本结构"><a href="#1-基本结构" class="headerlink" title="1 基本结构"></a>1 基本结构</h2><p>Go 语言的 <code>sync.Mutex</code>由两个字段 <code>state</code> 和 <code>sema</code> 组成。其中 <code>state</code> 表示当前互斥锁的状态，而 <code>sema</code> 是用于控制锁状态的信号量。</p>
