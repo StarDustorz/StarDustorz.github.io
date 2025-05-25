@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="[Go] sync.Mutex" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="Golang, Draco&#39;s Blog" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/atom.xml" title="Draco's Blog" type="application/atom+xml">
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://stardustorz.github.io/2022/07/14/Golang/1 并发编程/sync.Mutex/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":false};
+</script>
+  
+  <title>[Go] sync.Mutex - Draco&#39;s Blog</title>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/links/">
+      <li class="mobile-menu-item">
+        
+        
+        Links              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Draco's Blog</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/links/">  
+              
+              
+              Links  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      [Go] sync.Mutex
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2022-07-14
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/Golang/">Golang</a>
+        
+        <a href="/categories/Golang/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">1 基本结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E7%8A%B6%E6%80%81"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%AD%A3%E5%B8%B8%E6%A8%A1%E5%BC%8F%E5%92%8C%E9%A5%A5%E9%A5%BF%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 正常模式和饥饿模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%8A%A0%E8%A7%A3%E9%94%81%E8%BF%87%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">2 加解锁过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-Lock"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 Lock</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-Fast-path"><span class="toc-number">2.1.1.</span> <span class="toc-text">2.1.1 Fast path</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-Slow-Path"><span class="toc-number">2.1.2.</span> <span class="toc-text">2.1.2 Slow Path</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-Unlock"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 Unlock</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-Fast-path"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.2.1 Fast path</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-Slow-path"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2.2 Slow path</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%B0%8F%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">3 小结</span></a></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <p>Go 语言在 <code>sync</code> 包中提供了用于同步的一些基本原语,<code>sync.Mutex</code> 就是其中最常用的一个。</p>
+<blockquote>
+<p>本文基于 Go 1.17.1</p>
+<h2 id="1-基本结构"><a href="#1-基本结构" class="headerlink" title="1 基本结构"></a>1 基本结构</h2><p>Go 语言的 <code>sync.Mutex</code>由两个字段 <code>state</code> 和 <code>sema</code> 组成。其中 <code>state</code> 表示当前互斥锁的状态，而 <code>sema</code> 是用于控制锁状态的信号量。</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sync/mutex.go 25行</span></span><br><span class="line"><span class="keyword">type</span> Mutex <span class="keyword">struct</span> &#123;</span><br><span class="line">	state <span class="type">int32</span></span><br><span class="line">	sema  <span class="type">uint32</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述两个字段加起来只占 8 字节空间的结构体表示了 Go 语言中的互斥锁。</p>
+<h3 id="1-1-状态"><a href="#1-1-状态" class="headerlink" title="1.1 状态"></a>1.1 状态</h3><p>互斥锁的状态比较复杂，如下图所示，最低三位分别表示 <code>mutexLocked</code>、<code>mutexWoken</code> 和 <code>mutexStarving</code>，剩下的位置用来表示当前有多少个 Goroutine 在等待互斥锁的释放：<br>![[mutex-state.png]]<br><code>int32</code> 中的不同位分别表示了不同的状态：</p>
+<ul>
+<li><code>mutexLocked</code> — 表示互斥锁的锁定状态；</li>
+<li><code>mutexWoken</code> — 表示从正常模式被从唤醒；</li>
+<li><code>mutexStarving</code> — 当前的互斥锁进入饥饿状态；</li>
+<li><code>waitersCount</code> — 当前互斥锁上等待的 Goroutine 个数</li>
+</ul>
+<p>在默认情况下，互斥锁的所有状态位都是 0，即默认为未锁定状态。</p>
+<blockquote>
+<p>同时也表明 Mutex 是不需要初始化的</p>
+</blockquote>
+<p>源码中也提供了相关常量</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sync/mutex.go 36</span></span><br><span class="line"><span class="keyword">const</span> (</span><br><span class="line"></span><br><span class="line">    mutexLocked = <span class="number">1</span> &lt;&lt; <span class="literal">iota</span> <span class="comment">// 1 0001 含义：用最后一位表示当前对象锁的状态，0-未锁住 1-已锁住</span></span><br><span class="line"></span><br><span class="line">    mutexWoken <span class="comment">// 2 0010 含义：用倒数第二位表示当前对象是否被唤醒 0-唤醒 1-未唤醒</span></span><br><span class="line"></span><br><span class="line">    mutexStarving <span class="comment">// 4 0100 含义：用倒数第三位表示当前对象是否为饥饿模式，0为正常模式，1为饥饿模式。</span></span><br><span class="line"></span><br><span class="line">    mutexWaiterShift = <span class="literal">iota</span> <span class="comment">// 3，从倒数第四位往前的bit位表示在排队等待的goroutine数</span></span><br><span class="line"></span><br><span class="line">    starvationThresholdNs = <span class="number">1e6</span> <span class="comment">// 1ms 切换到饥饿模式的阈值</span></span><br><span class="line"></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="1-2-正常模式和饥饿模式"><a href="#1-2-正常模式和饥饿模式" class="headerlink" title="1.2 正常模式和饥饿模式"></a>1.2 正常模式和饥饿模式</h3><p>Mutex 有两种模式：</p>
+<ul>
+<li>正常模式；</li>
+<li>饥饿模式。</li>
+</ul>
+<p><strong>在正常模式下</strong>，锁的等待者会按照先进先出的顺序获取锁。但是刚被唤起的 Goroutine 与新创建的 Goroutine 竞争时，大概率会获取不到锁，为了减少这种情况的出现，一旦 Goroutine 超过 1ms 没有获取到锁，它就会将当前互斥锁切换饥饿模式，防止部分 Goroutine 被<strong>饿死</strong>。</p>
+<blockquote>
+<p><strong>引入饥饿模式的目的是保证互斥锁的公平性。</strong></p>
+<p>说明 Mutex 是公平锁。</p>
+</blockquote>
+<p><strong>在饥饿模式中</strong>，互斥锁会直接交给等待队列最前面的 Goroutine。新的 Goroutine 在该状态下不能获取锁、也不会进入自旋状态，它们只会在队列的末尾等待。如果一个 Goroutine 获得了互斥锁并且它在队列的末尾或者它等待的时间少于 1ms，那么当前的互斥锁就会切换回正常模式。</p>
+<blockquote>
+<p>与饥饿模式相比，正常模式下的互斥锁能够提供更好地性能，饥饿模式的能避免 Goroutine 由于陷入等待无法获取锁而造成的高尾延时。</p>
+</blockquote>
+<p>这里贴一下源码中的注释</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Mutex fairness.</span><br><span class="line"></span><br><span class="line">Mutex can be in 2 modes of operations: normal and starvation.</span><br><span class="line">In normal mode waiters are queued in FIFO order, but a woken up waiter</span><br><span class="line">does not own the mutex and competes with new arriving goroutines over</span><br><span class="line">the ownership. New arriving goroutines have an advantage -- they are</span><br><span class="line">already running on CPU and there can be lots of them, so a woken up</span><br><span class="line">waiter has good chances of losing. In such case it is queued at front</span><br><span class="line">of the wait queue. If a waiter fails to acquire the mutex for more than 1ms,</span><br><span class="line">it switches mutex to the starvation mode.</span><br><span class="line"></span><br><span class="line">In starvation mode ownership of the mutex is directly handed off from</span><br><span class="line">the unlocking goroutine to the waiter at the front of the queue.</span><br><span class="line">New arriving goroutines don&#x27;t try to acquire the mutex even if it appears</span><br><span class="line">to be unlocked, and don&#x27;t try to spin. Instead they queue themselves at</span><br><span class="line">the tail of the wait queue.</span><br><span class="line"></span><br><span class="line">If a waiter receives ownership of the mutex and sees that either</span><br><span class="line">(1) it is the last waiter in the queue, or (2) it waited for less than 1 ms,</span><br><span class="line">it switches mutex back to normal operation mode.</span><br><span class="line"></span><br><span class="line">Normal mode has considerably better performance as a goroutine can acquire</span><br><span class="line">a mutex several times in a row even if there are blocked waiters.</span><br><span class="line">Starvation mode is important to prevent pathological cases of tail latency.</span><br></pre></td></tr></table></figure>
+<h2 id="2-加解锁过程"><a href="#2-加解锁过程" class="headerlink" title="2 加解锁过程"></a>2 加解锁过程</h2><p>在<code>sync</code>包中 中定义了 Locker 接口：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sync/mutex.go 31 行</span></span><br><span class="line"><span class="keyword">type</span> Locker <span class="keyword">interface</span> &#123;</span><br><span class="line">        Lock()</span><br><span class="line">        Unlock()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Mutex 实现了 Locker 接口。除了互斥锁 Mutex 之外读写锁 RWMutex，也实现了 Locker 接口。</p>
+<h3 id="2-1-Lock"><a href="#2-1-Lock" class="headerlink" title="2.1 Lock"></a>2.1 Lock</h3><p>互斥锁的加锁是靠 Mutex.Lock 方法完成的，以下代码进行了简化，省略了 race 相关代码，只保留主干部分：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sync/mutex.go 72 行</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Mutex)</span></span> Lock() &#123;</span><br><span class="line">	<span class="comment">// Fast path: grab unlocked mutex.</span></span><br><span class="line">	<span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;m.state, <span class="number">0</span>, mutexLocked) &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// Slow path (outlined so that the fast path can be inlined)</span></span><br><span class="line">	m.lockSlow()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，整个加锁过程分为 Fast path 和 Slow Path。</p>
+<h4 id="2-1-1-Fast-path"><a href="#2-1-1-Fast-path" class="headerlink" title="2.1.1 Fast path"></a>2.1.1 Fast path</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;m.state, <span class="number">0</span>, mutexLocked) &#123;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果 m.state 为 0,说明当前锁为未锁定状态，将其设置为 1。</p>
+<p>这也是最简单的部分，直接通过一个 CAS 操作，尝试获取锁。</p>
+<h4 id="2-1-2-Slow-Path"><a href="#2-1-2-Slow-Path" class="headerlink" title="2.1.2 Slow Path"></a>2.1.2 Slow Path</h4><p>如果互斥锁的状态不是 0 时就会进入 Slow Path。尝试通过自旋（Spinnig）等方式等待锁的释放，该方法的主体是一个非常大 for 循环，这里将它分成几个部分介绍获取锁的过程：</p>
+<ul>
+<li>1）判断当前 Goroutine 能否进入自旋；</li>
+<li>2）通过自旋等待互斥锁的释放；</li>
+<li>3）计算互斥锁的最新状态；</li>
+<li>4）更新互斥锁的状态并获取锁；</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Mutex)</span></span> lockSlow() &#123;</span><br><span class="line">   <span class="keyword">var</span> waitStartTime <span class="type">int64</span></span><br><span class="line">   starving := <span class="literal">false</span></span><br><span class="line">   awoke := <span class="literal">false</span></span><br><span class="line">   iter := <span class="number">0</span></span><br><span class="line">   old := m.state</span><br><span class="line">   <span class="keyword">for</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> old&amp;(mutexLocked|mutexStarving) == mutexLocked &amp;&amp; runtime_canSpin(iter) &#123;</span><br><span class="line">         <span class="keyword">if</span> !awoke &amp;&amp; old&amp;mutexWoken == <span class="number">0</span> &amp;&amp; old&gt;&gt;mutexWaiterShift != <span class="number">0</span> &amp;&amp;</span><br><span class="line">            atomic.CompareAndSwapInt32(&amp;m.state, old, old|mutexWoken) &#123;</span><br><span class="line">            awoke = <span class="literal">true</span></span><br><span class="line">         &#125;</span><br><span class="line">         runtime_doSpin()</span><br><span class="line">         iter++</span><br><span class="line">         old = m.state</span><br><span class="line">         <span class="keyword">continue</span></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="built_in">new</span> := old</span><br><span class="line">   </span><br><span class="line">      <span class="keyword">if</span> old&amp;mutexStarving == <span class="number">0</span> &#123;</span><br><span class="line">         <span class="built_in">new</span> |= mutexLocked</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> old&amp;(mutexLocked|mutexStarving) != <span class="number">0</span> &#123;</span><br><span class="line">         <span class="built_in">new</span> += <span class="number">1</span> &lt;&lt; mutexWaiterShift</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> starving &amp;&amp; old&amp;mutexLocked != <span class="number">0</span> &#123;</span><br><span class="line">         <span class="built_in">new</span> |= mutexStarving</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> awoke &#123;</span><br><span class="line">         <span class="keyword">if</span> <span class="built_in">new</span>&amp;mutexWoken == <span class="number">0</span> &#123;</span><br><span class="line">            throw(<span class="string">&quot;sync: inconsistent mutex state&quot;</span>)</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="built_in">new</span> &amp;^= mutexWoken</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;m.state, old, <span class="built_in">new</span>) &#123;</span><br><span class="line">         <span class="keyword">if</span> old&amp;(mutexLocked|mutexStarving) == <span class="number">0</span> &#123;</span><br><span class="line">            <span class="keyword">break</span> <span class="comment">// locked the mutex with CAS</span></span><br><span class="line">         &#125;</span><br><span class="line">         queueLifo := waitStartTime != <span class="number">0</span></span><br><span class="line">         <span class="keyword">if</span> waitStartTime == <span class="number">0</span> &#123;</span><br><span class="line">            waitStartTime = runtime_nanotime()</span><br><span class="line">         &#125;</span><br><span class="line">         runtime_SemacquireMutex(&amp;m.sema, queueLifo, <span class="number">1</span>)</span><br><span class="line">         starving = starving || runtime_nanotime()-waitStartTime &gt; starvationThresholdNs</span><br><span class="line">         old = m.state</span><br><span class="line">         <span class="keyword">if</span> old&amp;mutexStarving != <span class="number">0</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> old&amp;(mutexLocked|mutexWoken) != <span class="number">0</span> || old&gt;&gt;mutexWaiterShift == <span class="number">0</span> &#123;</span><br><span class="line">               throw(<span class="string">&quot;sync: inconsistent mutex state&quot;</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            delta := <span class="type">int32</span>(mutexLocked - <span class="number">1</span>&lt;&lt;mutexWaiterShift)</span><br><span class="line">            <span class="keyword">if</span> !starving || old&gt;&gt;mutexWaiterShift == <span class="number">1</span> &#123;</span><br><span class="line">               delta -= mutexStarving</span><br><span class="line">            &#125;</span><br><span class="line">            atomic.AddInt32(&amp;m.state, delta)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">         &#125;</span><br><span class="line">         awoke = <span class="literal">true</span></span><br><span class="line">         iter = <span class="number">0</span></span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">         old = m.state</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>1）判断当前 Goroutine 能否进入自旋；</strong></p>
+<p><strong>自旋是一种多线程同步机制</strong>，当前的进程在进入自旋的过程中会一直保持 CPU 的占用，持续检查某个条件是否为真。<strong>在多核的 CPU 上，自旋可以避免 Goroutine 的切换</strong>，使用恰当会对性能带来很大的增益，但是使用的不恰当就会拖慢整个程序，所以 Goroutine 进入自旋的条件非常苛刻：</p>
+<ul>
+<li>1）互斥锁只有在普通模式才能进入自旋；</li>
+<li>2）<code>runtime.sync_runtime_canSpin</code>需要返回 true<ul>
+<li>运行在多 CPU 的机器上；</li>
+<li>当前 Goroutine 为了获取该锁进入自旋的次数小于四次；</li>
+<li>当前机器上至少存在一个正在运行的处理器 P 并且处理的运行队列为空；</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// runtime/proc.go 6364 行</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sync_runtime_canSpin</span><span class="params">(i <span class="type">int</span>)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">	<span class="keyword">if</span> i &gt;= active_spin || ncpu &lt;= <span class="number">1</span> || gomaxprocs &lt;= <span class="type">int32</span>(sched.npidle+sched.nmspinning)+<span class="number">1</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> p := getg().m.p.ptr(); !runqempty(p) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>2）通过自旋等待互斥锁的释放；</strong></p>
+<p>一旦当前 Goroutine 能够进入自旋就会调用<code>runtime.sync_runtime_doSpin</code>和<code>runtime.procyield</code>执行 30 次的 <code>PAUSE</code> 指令，该指令只会占用 CPU 并消耗 CPU 时间：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// runtime/proc.go 6381 行</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sync_runtime_doSpin</span><span class="params">()</span></span> &#123;</span><br><span class="line">	procyield(active_spin_cnt)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// runtime/asm_386.s 574 行</span><br><span class="line">TEXT runtime·procyield(SB),NOSPLIT,$0-0</span><br><span class="line">	MOVL	cycles+0(FP), AX</span><br><span class="line">again:</span><br><span class="line">	PAUSE</span><br><span class="line">	SUBL	$1, AX</span><br><span class="line">	JNZ	again</span><br><span class="line">	RET</span><br></pre></td></tr></table></figure>
+<p><strong>3）计算互斥锁的最新状态；</strong></p>
+<p> 处理了自旋相关的特殊逻辑之后，互斥锁会根据上下文计算当前互斥锁最新的状态。几个不同的条件分别会更新 <code>state</code> 字段中存储的不同信息 — <code>mutexLocked</code>、<code>mutexStarving</code>、<code>mutexWoken</code> 和 <code>mutexWaiterShift</code>：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">new</span> := old</span><br><span class="line"><span class="keyword">if</span> old&amp;mutexStarving == <span class="number">0</span> &#123;</span><br><span class="line">    <span class="built_in">new</span> |= mutexLocked</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> old&amp;(mutexLocked|mutexStarving) != <span class="number">0</span> &#123;</span><br><span class="line">    <span class="built_in">new</span> += <span class="number">1</span> &lt;&lt; mutexWaiterShift</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> starving &amp;&amp; old&amp;mutexLocked != <span class="number">0</span> &#123;</span><br><span class="line">    <span class="built_in">new</span> |= mutexStarving</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> awoke &#123;</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">new</span>&amp;mutexWoken == <span class="number">0</span> &#123;</span><br><span class="line">        throw(<span class="string">&quot;sync: inconsistent mutex state&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">new</span> &amp;^= mutexWoken</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>4）更新互斥锁的状态并获取锁；</strong></p>
+<p>计算了新的互斥锁状态之后，会使用 CAS 函数更新状态</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;m.state, old, <span class="built_in">new</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> old&amp;(mutexLocked|mutexStarving) == <span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">break</span> <span class="comment">// locked the mutex with CAS</span></span><br><span class="line">    &#125;</span><br><span class="line">    queueLifo := waitStartTime != <span class="number">0</span></span><br><span class="line">    <span class="keyword">if</span> waitStartTime == <span class="number">0</span> &#123;</span><br><span class="line">        waitStartTime = runtime_nanotime()</span><br><span class="line">    &#125;</span><br><span class="line">    runtime_SemacquireMutex(&amp;m.sema, queueLifo, <span class="number">1</span>)</span><br><span class="line">    starving = starving || runtime_nanotime()-waitStartTime &gt; starvationThresholdNs</span><br><span class="line">    old = m.state</span><br><span class="line">    <span class="keyword">if</span> old&amp;mutexStarving != <span class="number">0</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> old&amp;(mutexLocked|mutexWoken) != <span class="number">0</span> || old&gt;&gt;mutexWaiterShift == <span class="number">0</span> &#123;</span><br><span class="line">            throw(<span class="string">&quot;sync: inconsistent mutex state&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        delta := <span class="type">int32</span>(mutexLocked - <span class="number">1</span>&lt;&lt;mutexWaiterShift)</span><br><span class="line">        <span class="keyword">if</span> !starving || old&gt;&gt;mutexWaiterShift == <span class="number">1</span> &#123;</span><br><span class="line">            delta -= mutexStarving</span><br><span class="line">        &#125;</span><br><span class="line">        atomic.AddInt32(&amp;m.state, delta)</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    &#125;</span><br><span class="line">    awoke = <span class="literal">true</span></span><br><span class="line">    iter = <span class="number">0</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    old = m.state</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果没有通过 CAS 获得锁，会调用 <code>runtime.sync_runtime_SemacquireMutex</code> 通过信号量保证资源不会被两个 Goroutine 获取。</p>
+<p><code>runtime.sync_runtime_SemacquireMutex</code> 会在方法中不断尝试获取锁并陷入休眠等待信号量的释放，一旦当前 Goroutine 可以获取信号量，它就会立刻返回，<code>sync.Mutex.Lock</code>的剩余代码也会继续执行。</p>
+<ul>
+<li>在正常模式下，这段代码会设置唤醒和饥饿标记、重置迭代次数并重新执行获取锁的循环；</li>
+<li>在饥饿模式下，当前 Goroutine 会获得互斥锁，如果等待队列中只存在当前 Goroutine，互斥锁还会从饥饿模式中退出；</li>
+</ul>
+<p>其中还包含了状态切换的部分逻辑:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> waitStartTime <span class="type">int64</span></span><br><span class="line"><span class="keyword">for</span>&#123; <span class="comment">// for 循环里尝试获取锁</span></span><br><span class="line">    <span class="keyword">if</span> waitStartTime == <span class="number">0</span> &#123; <span class="comment">// waitStartTime 只有第一次执行时才会赋值</span></span><br><span class="line">        waitStartTime = runtime_nanotime()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 如果等待时间超过 1ms 则切换到饥饿模式</span></span><br><span class="line">    starving = starving || runtime_nanotime()-waitStartTime &gt; starvationThresholdNs</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-Unlock"><a href="#2-2-Unlock" class="headerlink" title="2.2 Unlock"></a>2.2 Unlock</h3><p>相比之下互斥锁的解锁过程就比较简单,同样分为 Fast path 和 Slow path。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Mutex)</span></span> Unlock() &#123;</span><br><span class="line">	<span class="comment">// Fast path: drop lock bit.</span></span><br><span class="line">	<span class="built_in">new</span> := atomic.AddInt32(&amp;m.state, -mutexLocked)</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">new</span> != <span class="number">0</span> &#123;</span><br><span class="line">		<span class="comment">// Outlined slow path to allow inlining the fast path.</span></span><br><span class="line">		<span class="comment">// To hide unlockSlow during tracing we skip one extra frame when tracing GoUnblock.</span></span><br><span class="line">		m.unlockSlow(<span class="built_in">new</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-2-1-Fast-path"><a href="#2-2-1-Fast-path" class="headerlink" title="2.2.1 Fast path"></a>2.2.1 Fast path</h4><p>该过程会先使用<code>atomic.AddInt32函数快速解锁，这时会发生下面的两种情况：</code></p>
+<ul>
+<li>如果该函数返回的新状态等于 0，当前 Goroutine 就成功解锁了互斥锁；</li>
+<li>如果该函数返回的新状态不等于 0，则进入 Slow path。</li>
+</ul>
+<h4 id="2-2-2-Slow-path"><a href="#2-2-2-Slow-path" class="headerlink" title="2.2.2 Slow path"></a>2.2.2 Slow path</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(m *Mutex)</span></span> unlockSlow(<span class="built_in">new</span> <span class="type">int32</span>) &#123;</span><br><span class="line">   <span class="keyword">if</span> (<span class="built_in">new</span>+mutexLocked)&amp;mutexLocked == <span class="number">0</span> &#123;</span><br><span class="line">      throw(<span class="string">&quot;sync: unlock of unlocked mutex&quot;</span>)</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">if</span> <span class="built_in">new</span>&amp;mutexStarving == <span class="number">0</span> &#123;</span><br><span class="line">      old := <span class="built_in">new</span></span><br><span class="line">      <span class="keyword">for</span> &#123;</span><br><span class="line">         <span class="keyword">if</span> old&gt;&gt;mutexWaiterShift == <span class="number">0</span> || old&amp;(mutexLocked|mutexWoken|mutexStarving) != <span class="number">0</span> &#123;</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">         &#125;</span><br><span class="line">         <span class="built_in">new</span> = (old - <span class="number">1</span>&lt;&lt;mutexWaiterShift) | mutexWoken</span><br><span class="line">         <span class="keyword">if</span> atomic.CompareAndSwapInt32(&amp;m.state, old, <span class="built_in">new</span>) &#123;</span><br><span class="line">            runtime_Semrelease(&amp;m.sema, <span class="literal">false</span>, <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">         &#125;</span><br><span class="line">         old = m.state</span><br><span class="line">      &#125;</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      runtime_Semrelease(&amp;m.sema, <span class="literal">true</span>, <span class="number">1</span>)</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>先校验锁状态的合法性 — 如果当前互斥锁已经被解锁过了会直接抛出异常 “sync: unlock of unlocked mutex” 中止当前程序。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="built_in">new</span>+mutexLocked)&amp;mutexLocked == <span class="number">0</span> &#123;</span><br><span class="line">    throw(<span class="string">&quot;sync: unlock of unlocked mutex&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后根据当前锁模式分别处理</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="built_in">new</span>&amp;mutexStarving == <span class="number">0</span> &#123; <span class="comment">// 正常模式</span></span><br><span class="line">    </span><br><span class="line">&#125;<span class="keyword">else</span>&#123; <span class="comment">// 饥饿模式</span></span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在正常模式下，上述代码会使用如下所示的处理过程：</p>
+<ul>
+<li>如果互斥锁不存在等待者或者互斥锁的 <code>mutexLocked</code>、<code>mutexStarving</code>、<code>mutexWoken</code> 状态不都为 0，那么当前方法可以直接返回，不需要唤醒其他等待者；</li>
+<li>如果互斥锁存在等待者，会通过<code>runtime_Semrelease</code>唤醒等待者并移交锁的所有权；</li>
+</ul>
+<p>在饥饿模式下，上述代码会直接调用<code>runtime_Semrelease</code>将当前锁交给下一个正在尝试获取锁的等待者，等待者被唤醒后会得到锁，在这时互斥锁还不会退出饥饿状态；</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// runtime/sema.go 65行</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sync_runtime_Semrelease</span><span class="params">(addr *<span class="type">uint32</span>, handoff <span class="type">bool</span>, skipframes <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">	semrelease1(addr, handoff, skipframes)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">semrelease1</span><span class="params">(addr *<span class="type">uint32</span>, handoff <span class="type">bool</span>, skipframes <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">	root := semroot(addr)</span><br><span class="line">	atomic.Xadd(addr, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> atomic.Load(&amp;root.nwait) == <span class="number">0</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Harder case: search for a waiter and wake it.</span></span><br><span class="line">	lockWithRank(&amp;root.lock, lockRankRoot)</span><br><span class="line">	<span class="keyword">if</span> atomic.Load(&amp;root.nwait) == <span class="number">0</span> &#123;</span><br><span class="line">		unlock(&amp;root.lock)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	s, t0 := root.dequeue(addr)</span><br><span class="line">	<span class="keyword">if</span> s != <span class="literal">nil</span> &#123;</span><br><span class="line">		atomic.Xadd(&amp;root.nwait, <span class="number">-1</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	unlock(&amp;root.lock)</span><br><span class="line">	<span class="keyword">if</span> s != <span class="literal">nil</span> &#123; <span class="comment">// May be slow or even yield, so unlock first</span></span><br><span class="line">		acquiretime := s.acquiretime</span><br><span class="line">		<span class="keyword">if</span> acquiretime != <span class="number">0</span> &#123;</span><br><span class="line">			mutexevent(t0-acquiretime, <span class="number">3</span>+skipframes)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> s.ticket != <span class="number">0</span> &#123;</span><br><span class="line">			throw(<span class="string">&quot;corrupted semaphore ticket&quot;</span>)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> handoff &amp;&amp; cansemacquire(addr) &#123;</span><br><span class="line">			s.ticket = <span class="number">1</span></span><br><span class="line">		&#125;</span><br><span class="line">		readyWithTime(s, <span class="number">5</span>+skipframes)</span><br><span class="line">		<span class="keyword">if</span> s.ticket == <span class="number">1</span> &amp;&amp; getg().m.locks == <span class="number">0</span> &#123;</span><br><span class="line">			goyield()</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3 小结"></a>3 小结</h2><p>互斥锁的<strong>加锁过程</strong>比较复杂，它涉及自旋、信号量以及调度等概念：</p>
+<ul>
+<li>如果互斥锁处于初始化状态，会通过置位 <code>mutexLocked</code> 加锁；</li>
+<li>如果互斥锁处于 <code>mutexLocked</code> 状态并且在普通模式下工作，会进入自旋，执行 30 次 <code>PAUSE</code> 指令消耗 CPU 时间等待锁的释放；</li>
+<li>如果当前 Goroutine 等待锁的时间超过了 1ms，互斥锁就会切换到饥饿模式；</li>
+<li>互斥锁在正常情况下会通过<code>sync_runtime_SemacquireMutex</code>将尝试获取锁的 Goroutine 切换至休眠状态，等待锁的持有者唤醒；</li>
+<li>如果当前 Goroutine 是互斥锁上的最后一个等待的协程或者等待的时间小于 1ms，那么它会将互斥锁切换回正常模式；</li>
+</ul>
+<p>互斥锁的<strong>解锁过程</strong>与之相比就比较简单：</p>
+<ul>
+<li>当互斥锁已经被解锁时，调用 Mutex.Lock 会直接抛出异常；</li>
+<li>当互斥锁处于饥饿模式时，将锁的所有权交给队列中的下一个等待者，等待者会负责设置 <code>mutexLocked</code> 标志位；</li>
+<li>当互斥锁处于普通模式时，如果没有 Goroutine 等待锁的释放或者已经有被唤醒的 Goroutine 获得了锁，会直接返回；在其他情况下会通过<code>sync.runtime_Semrelease</code> 唤醒对应的 Goroutine；</li>
+</ul>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span>Author: </span>
+    <a href="https://stardustorz.github.io">draco</a>
+  </p>
+  <p class="copyright-item">
+    <span>Link: </span>
+    <a href="https://stardustorz.github.io/2022/07/14/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/sync.Mutex/">https://stardustorz.github.io/2022/07/14/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/sync.Mutex/</a>
+  </p>
+  <p class="copyright-item">
+    <span>License: </span>
+    
+    <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+  </p>
+</div>
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/Golang/">Golang</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/2022/07/14/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/sync.Cond/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">[Go] sync.Cond</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/2022/07/10/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/Context/">  
+        <span class="next-text nav-default">[Go] Context</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2019 - 2025      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">draco</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+</body>
+
+</html>

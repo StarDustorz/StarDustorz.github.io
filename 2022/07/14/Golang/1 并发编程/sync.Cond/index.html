@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="[Go] sync.Cond" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="Golang, Draco&#39;s Blog" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/atom.xml" title="Draco's Blog" type="application/atom+xml">
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://stardustorz.github.io/2022/07/14/Golang/1 并发编程/sync.Cond/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":false};
+</script>
+  
+  <title>[Go] sync.Cond - Draco&#39;s Blog</title>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/links/">
+      <li class="mobile-menu-item">
+        
+        
+        Links              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Draco's Blog</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/links/">  
+              
+              
+              Links  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      [Go] sync.Cond
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2022-07-14
+      </span>
+      
+      
+      <span class="post-category">
+        
+        <a href="/categories/Golang/">Golang</a>
+        
+        <a href="/categories/Golang/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a>
+        
+      </span>
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">1 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-number">2.</span> <span class="toc-text">2 源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-Cond"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 Cond</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-Wait"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 Wait</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-Signal"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 Signal</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-Broadcast"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 Broadcast</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%B0%8F%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">3 小结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%8F%82%E8%80%83"><span class="toc-number">4.</span> <span class="toc-text">4 参考</span></a></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h2><p>Golang 的 sync 包中的 Cond 实现了一种条件变量，可以使用在<strong>多个Reader</strong>等待共享资源 ready 的场景（如果只有一读一写，一个锁或者channel就搞定了）。<br>Cond的汇合点：多个goroutines等待、1个goroutine通知事件发生。<br>比较适合任务调用场景，一个 Master goroutine 通知事件发生，多个 Worker goroutine 在资源没准备好的时候就挂起，等待通知。<br><strong>使用方法</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Cond</span></span><br><span class="line">cond := sync.NewCond(<span class="built_in">new</span>(sync.Mutex))</span><br><span class="line"><span class="comment">// 挂起goroutine</span></span><br><span class="line">cond.L.Lock()</span><br><span class="line">cond.Wait()</span><br><span class="line"><span class="comment">// 唤醒一个</span></span><br><span class="line">cond.Signal()</span><br><span class="line"><span class="comment">// 唤醒所有</span></span><br><span class="line">cond.Broadcast()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>基本使用大概是需要等待的时候通过 Wait() 将 Goroutine 挂起，资源准备好的时候再通过 Signal() 或者 Broadcast() 将挂起中的 Goroutine 唤醒。</p>
+</blockquote>
+<p>一个简单的 Demo<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> (</span><br><span class="line">		locker sync.Mutex</span><br><span class="line">		cond   = sync.NewCond(&amp;locker)</span><br><span class="line">		wg     sync.WaitGroup</span><br><span class="line">	)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123;</span><br><span class="line">		wg.Add(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(number <span class="type">int</span>)</span></span> &#123;</span><br><span class="line">			<span class="comment">// wait()方法内部是先释放锁 然后在加锁 所以这里需要先 Lock()</span></span><br><span class="line">			cond.L.Lock()</span><br><span class="line">			<span class="keyword">defer</span> cond.L.Unlock()</span><br><span class="line">			cond.Wait() <span class="comment">// 等待通知,阻塞当前 goroutine</span></span><br><span class="line">			fmt.Printf(<span class="string">&quot;g %v ok~ \n&quot;</span>, number)</span><br><span class="line">			wg.Done()</span><br><span class="line">		&#125;(i)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">		<span class="comment">// 每过 50毫秒 唤醒一个 goroutine</span></span><br><span class="line">		cond.Signal()</span><br><span class="line">		time.Sleep(time.Millisecond * <span class="number">50</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	time.Sleep(time.Millisecond * <span class="number">50</span>)</span><br><span class="line">	<span class="comment">// 剩下5个 goroutine 一起唤醒</span></span><br><span class="line">	cond.Broadcast()</span><br><span class="line">	fmt.Println(<span class="string">&quot;Broadcast...&quot;</span>)</span><br><span class="line">	wg.Wait()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-源码分析"><a href="#2-源码分析" class="headerlink" title="2 源码分析"></a>2 源码分析</h2><blockquote>
+<p>go version 1.14.7</p>
+</blockquote>
+<h3 id="2-1-Cond"><a href="#2-1-Cond" class="headerlink" title="2.1 Cond"></a>2.1 Cond</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： cond.go</span></span><br><span class="line"><span class="comment">line: 21</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Cond <span class="keyword">struct</span> &#123;</span><br><span class="line">    noCopy noCopy</span><br><span class="line">    L Locker</span><br><span class="line">    notify  notifyList</span><br><span class="line">    checker copyChecker</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// NewCond() 返回指针，保证多 goroutine 获取到的是同一个实例。</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewCond</span><span class="params">(l Locker)</span></span> *Cond &#123;</span><br><span class="line">	<span class="keyword">return</span> &amp;Cond&#123;L: l&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>noCopy</strong>：noCopy对象，实现了<code>sync.Locker</code>接口，使得内嵌 noCopy 的对象在进行 go vet 静态检查的时候，可以检查出是否被复制。</p>
+<blockquote>
+<p>noCopy 具体见 <a target="_blank" rel="noopener" href="https://github.com/golang/go/issues/8005">Go issues 8005</a></p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： cond.go</span></span><br><span class="line"><span class="comment">line: 94</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">type</span> noCopy <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(*noCopy)</span></span> Lock()   &#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(*noCopy)</span></span> Unlock() &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>L</strong>：实现了 <code>sync.Locker</code> 接口的锁对象，通常使用 Mutex 或 RWMutex 。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： mutex.go</span></span><br><span class="line"><span class="comment">line: 31</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">type</span> Locker <span class="keyword">interface</span> &#123;</span><br><span class="line">     Lock()</span><br><span class="line">     Unlock()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>notify</strong>：notifyList 对象，维护等待唤醒的 goroutine 队列,使用链表实现。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： runtime.go</span></span><br><span class="line"><span class="comment">line: 33    </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">type</span> notifyList <span class="keyword">struct</span> &#123;</span><br><span class="line">	wait   <span class="type">uint32</span></span><br><span class="line">	notify <span class="type">uint32</span></span><br><span class="line">	lock   <span class="type">uintptr</span></span><br><span class="line">	head   unsafe.Pointer</span><br><span class="line">	tail   unsafe.Pointer</span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<p><strong>checker</strong>：copyChecker 对象，实际上是 uintptr 对象，保存自身对象地址。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： cond.go</span></span><br><span class="line"><span class="comment">line: 79    </span></span><br><span class="line"><span class="comment">*/</span>    </span><br><span class="line"><span class="keyword">type</span> copyChecker <span class="type">uintptr</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *copyChecker)</span></span> check() &#123;</span><br><span class="line">     <span class="keyword">if</span> <span class="type">uintptr</span>(*c) != <span class="type">uintptr</span>(unsafe.Pointer(c)) &amp;&amp;</span><br><span class="line">            !atomic.CompareAndSwapUintptr((*<span class="type">uintptr</span>)(c), <span class="number">0</span>, <span class="type">uintptr</span>(unsafe.Pointer(c))) &amp;&amp;</span><br><span class="line">            <span class="type">uintptr</span>(*c) != <span class="type">uintptr</span>(unsafe.Pointer(c)) &#123;</span><br><span class="line">            <span class="built_in">panic</span>(<span class="string">&quot;sync.Cond is copied&quot;</span>)</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>1）检查当前 checker 对象的地址是否等于保存在 checker 中的地址</p>
+<ul>
+<li>由于第一次比较的时候 checker 中没有存地址所以第一次比较肯定是不相等的，于是有了后续 2 3步。</li>
+</ul>
+</li>
+<li><p>2）对 checker 进行 CAS 操作，如果 checker 中存储的地址值为空（就是0）就把当前 checker 对象的地址值存进去</p>
+</li>
+<li>3）第三步和第一步一样，再比较一下。<ul>
+<li>主要是防止在第一步比较发现不相等之后，第二步 CAS 之前，其他 goroutine 也在执行这个方法，并发的将 checker 赋值了，导致这里判定的时候第二步 CAS 失败，返回 false，然后错误的抛出一个 panic，所以执行第三步在比较一下是否相等。如果其他 goroutine 抢先执行 CAS 修改了 checker 中的值导致这里第二步也返回 false 的话，第三步的判定也会是相等的，不会抛出 panic</li>
+</ul>
+</li>
+<li>4）如果 3 个条件都成立，那 checker 肯定是被复制了，就是由于 cond 被复制引起的。</li>
+</ul>
+<blockquote>
+<p>check 方法在第一次调用的时候，会将 checker 对象地址赋值给 checker，也就是将自身内存地址赋值给自身。<br>再次调用 checker 方法的时候，会将当前 checker 对象地址值与 checker 中保存的地址值（原始地址）进行比较，若不相同则表示当前 checker 的地址不是第一次调用 check 方法时候的地址，即 cond 对象被复制了，导致checker 被重新分配了内存地址。</p>
+</blockquote>
+<h3 id="2-2-Wait"><a href="#2-2-Wait" class="headerlink" title="2.2 Wait"></a>2.2 Wait</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： cond.go</span></span><br><span class="line"><span class="comment">line: 52    </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Cond)</span></span> Wait() &#123;</span><br><span class="line">    <span class="comment">// 1.每次操作之前都要检测一下 cond 是否被复制了。</span></span><br><span class="line">    c.checker.check() </span><br><span class="line">    <span class="comment">// 2.将 notifyList 中的 wait 值加1并返回之前的值</span></span><br><span class="line">    t := runtime_notifyListAdd(&amp;c.notify) </span><br><span class="line">    <span class="comment">// 3.释放锁，因此在调用Wait方法前，必须保证获取到了cond的锁，否则会报错</span></span><br><span class="line">    c.L.Unlock()</span><br><span class="line">    <span class="comment">// 4.将当前goroutine挂起，等待唤醒信号</span></span><br><span class="line">    runtime_notifyListWait(&amp;c.notify, t) </span><br><span class="line">    <span class="comment">// 5.gorountine被唤醒，重新获取锁</span></span><br><span class="line">    c.L.Lock()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第二步代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">/*</span></span><br><span class="line"><span class="comment"> package: runtime</span></span><br><span class="line"><span class="comment"> file： sema.go</span></span><br><span class="line"><span class="comment"> line: 479  </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">notifyListAdd</span><span class="params">(l *notifyList)</span></span> <span class="type">uint32</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> atomic.Xadd(&amp;l.wait, <span class="number">1</span>) - <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第四步代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: runtime</span></span><br><span class="line"><span class="comment">file： sema.go</span></span><br><span class="line"><span class="comment">line: 488  </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// 获取当前 goroutine 添加到链表末端，然后 goparkunlock 函数休眠阻塞当前 goroutine</span></span><br><span class="line"><span class="comment">// goparkunlock 函数会让出当前处理器的使用权并等待调度器的唤醒</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">notifyListWait</span><span class="params">(l *notifyList, t <span class="type">uint32</span>)</span></span> &#123;</span><br><span class="line">    <span class="comment">// 1.锁住 notify 队列</span></span><br><span class="line">    lock(&amp;l.lock)</span><br><span class="line">    <span class="comment">// 2.判断传入的等待序号t是否小于当前已经唤醒的序号notify</span></span><br><span class="line">    <span class="comment">// 如果是则说明当前 goroutine 不需要阻塞了 直接解锁并返回</span></span><br><span class="line">    <span class="comment">// 有可能执行这步之前 goroutine 就已经被唤醒了</span></span><br><span class="line">    <span class="keyword">if</span> less(t, l.notify) &#123;</span><br><span class="line">        unlock(&amp;l.lock)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 3.获取当前 goroutine，设置相关参数，将当前等待数赋值给 ticket</span></span><br><span class="line">    s := acquireSudog()</span><br><span class="line">    s.g = getg()</span><br><span class="line">    s.ticket = t</span><br><span class="line">    s.releasetime = <span class="number">0</span></span><br><span class="line">    t0 := <span class="type">int64</span>(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">if</span> blockprofilerate &gt; <span class="number">0</span> &#123;</span><br><span class="line">        t0 = cputicks()</span><br><span class="line">        s.releasetime = <span class="number">-1</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 4.将当前 goroutine 写入到链表尾部</span></span><br><span class="line">    <span class="keyword">if</span> l.tail == <span class="literal">nil</span> &#123;</span><br><span class="line">        l.head = s</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        l.tail.next = s</span><br><span class="line">    &#125;</span><br><span class="line">    l.tail = s</span><br><span class="line">    <span class="comment">// 5. 调用 goparkunlock 函数将当前 goroutine 挂起，等待唤醒信号</span></span><br><span class="line">    goparkunlock(&amp;l.lock, <span class="string">&quot;semacquire&quot;</span>, traceEvGoBlockCond, <span class="number">3</span>)</span><br><span class="line">    <span class="keyword">if</span> t0 != <span class="number">0</span> &#123;</span><br><span class="line">        blockevent(s.releasetime-t0, <span class="number">2</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    releaseSudog(s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-3-Signal"><a href="#2-3-Signal" class="headerlink" title="2.3 Signal"></a>2.3 Signal</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： cond.go</span></span><br><span class="line"><span class="comment">line: 64  </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Cond)</span></span> Signal() &#123;</span><br><span class="line">    <span class="comment">// 1.复制检查</span></span><br><span class="line">    c.checker.check() </span><br><span class="line">    <span class="comment">// 2.顺序唤醒一个等待的gorountine</span></span><br><span class="line">    runtime_notifyListNotifyOne(&amp;c.notify)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: runtime</span></span><br><span class="line"><span class="comment">file： sema.go</span></span><br><span class="line"><span class="comment">line: 554  </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">notifyListNotifyOne</span><span class="params">(l *notifyList)</span></span> &#123;</span><br><span class="line">   <span class="comment">// 1.等待序号和唤醒序号相同则说明没有需要唤醒的 goroutine 直接返回</span></span><br><span class="line">   <span class="keyword">if</span> atomic.Load(&amp;l.wait) == atomic.Load(&amp;l.notify) &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// 2.锁住队列后再检查一遍等待序号和唤醒序号是否相同即判断有没有需要唤醒的 goroutine，没有则解锁后直接返回</span></span><br><span class="line">   lock(&amp;l.lock) </span><br><span class="line">   t := l.notify</span><br><span class="line">   <span class="keyword">if</span> t == atomic.Load(&amp;l.wait) &#123;</span><br><span class="line">        unlock(&amp;l.lock)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// 3.到这里就说明有需要唤醒的 goroutine，于是先将 notify序号+1</span></span><br><span class="line">   atomic.Store(&amp;l.notify, t+<span class="number">1</span>)  </span><br><span class="line">   <span class="comment">// 4.然后就开始唤醒 goroutine 了</span></span><br><span class="line">   <span class="keyword">for</span> p, s := (*sudog)(<span class="literal">nil</span>), l.head; s != <span class="literal">nil</span>; p, s = s, s.next &#123;</span><br><span class="line">        <span class="comment">// 4.1 找到 ticket等于当前唤醒序号的 goroutine</span></span><br><span class="line">        <span class="keyword">if</span> s.ticket == t &#123;</span><br><span class="line">           <span class="comment">// 4.2 然后将其从等待唤醒链表中移除（因为这个 goroutine 马上就要被唤醒了）</span></span><br><span class="line">           n := s.next</span><br><span class="line">           <span class="keyword">if</span> p != <span class="literal">nil</span> &#123;</span><br><span class="line">               p.next = n</span><br><span class="line">           &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">               l.head = n</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="keyword">if</span> n == <span class="literal">nil</span> &#123;</span><br><span class="line">               l.tail = p</span><br><span class="line">           &#125;</span><br><span class="line">           unlock(&amp;l.lock)</span><br><span class="line">           s.next = <span class="literal">nil</span></span><br><span class="line">           <span class="comment">// 4.3 然后唤醒这个 goroutine </span></span><br><span class="line">           readyWithTime(s, <span class="number">4</span>)</span><br><span class="line">           <span class="keyword">return</span></span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// 4.4 最后解锁队列 </span></span><br><span class="line">   unlock(&amp;l.lock)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-4-Broadcast"><a href="#2-4-Broadcast" class="headerlink" title="2.4 Broadcast"></a>2.4 Broadcast</h3><p>唤醒链表中所有的阻塞中的goroutine，还是使用readyWithTime来实现这个功能</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: sync</span></span><br><span class="line"><span class="comment">file： cond.go</span></span><br><span class="line"><span class="comment">line: 73  </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Cond)</span></span> Broadcast() &#123;</span><br><span class="line">    <span class="comment">// 1.复制检查</span></span><br><span class="line">    c.checker.check()</span><br><span class="line">    <span class="comment">// 2.唤醒所有在等待的 goroutine</span></span><br><span class="line">    runtime_notifyListNotifyAll(&amp;c.notify)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里和 <code>notifyListNotifyOne()</code>差不多，只是一次性唤醒所有 goroutine。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">package: runtime</span></span><br><span class="line"><span class="comment">file： sema.go</span></span><br><span class="line"><span class="comment">line: 522 </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">notifyListNotifyAll</span><span class="params">(l *notifyList)</span></span> &#123;</span><br><span class="line">    <span class="comment">// 1.等待序号和唤醒序号相同则说明没有需要唤醒的 goroutine 直接返回</span></span><br><span class="line">    <span class="keyword">if</span> atomic.Load(&amp;l.wait) == atomic.Load(&amp;l.notify) &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 将链表头尾指针置为空（可以看做是清空整个等待队列）</span></span><br><span class="line">    <span class="comment">// 但是需要将当前的链表头保存下来，不然等会找不到链表中的数据了</span></span><br><span class="line">    lock(&amp;l.lock)</span><br><span class="line">    s := l.head</span><br><span class="line">    l.head = <span class="literal">nil</span></span><br><span class="line">    l.tail = <span class="literal">nil</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3.直接将notify需要赋值成等待序号（这样表示当前没有需要唤醒的 goroutine 了）</span></span><br><span class="line">    <span class="comment">// 前面唤醒一个的时候这里是+1</span></span><br><span class="line">    atomic.Store(&amp;l.notify, atomic.Load(&amp;l.wait))</span><br><span class="line">    unlock(&amp;l.lock)</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 4.最后 for 循环唤醒链表中所有等待状态的 goroutine</span></span><br><span class="line">    <span class="keyword">for</span> s != <span class="literal">nil</span> &#123;</span><br><span class="line">        next := s.next</span><br><span class="line">        s.next = <span class="literal">nil</span></span><br><span class="line">        readyWithTime(s, <span class="number">4</span>)</span><br><span class="line">        s = next</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3 小结"></a>3 小结</h2><p><strong>基本使用</strong></p>
+<ul>
+<li>1）资源未准备好时，使用 Wait() 方法将 goroutine 挂起，由底层实现，会让出 CPU 时间片，从而避免使用无意义的循环浪费系统资源。</li>
+<li>2）资源准备好时通过 Signal() 或者 Broadcast() 方法唤醒一个或多个被挂起的 goroutine。</li>
+</ul>
+<p><strong>等待唤醒流程</strong></p>
+<ul>
+<li>1）所有相关数据都是存在 notifyList 中的，包括 goroutine 和一些计数信息。</li>
+<li>2）其中的 wait 和 notify 可以理解为等待序号和唤醒序号，都是自增值，wait 在有新 goroutine 等待时+1，notify 则在唤醒一个 goroutine 时+1。</li>
+<li>3）等待状态的 goroutine 信息则存放在链表中，等待时加入链表尾部，唤醒时移除。</li>
+<li>4）每个等待链表的 goroutine  都会将当前的 wait（等待序号）赋值给 ticket 字段，唤醒的时候会将 ticket=唤醒序号的 goroutine 唤醒。</li>
+<li>5）当 wait==notify 时表示没有 goroutine 需要被唤醒，wait&gt;notify 时表示有 goroutine 需要被唤醒，wait 恒大于等于 notify。</li>
+</ul>
+<p><strong>noCopy</strong><br>Cond在内部持有一个等待队列 notifyList ，这个队列维护所有等待在这个 Cond 的 goroutine。如果 Cond 被复制则会导致其中的等待队列也被复制，最终可能会导致在唤醒 goroutine 的时候出现错误。<br>Kubernetes 的调度中也用到了 sync.Cond 有兴趣的可以研究一下。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/rKLiazgWzneJfpfgHay8cA">https://mp.weixin.qq.com/s/rKLiazgWzneJfpfgHay8cA</a><br><a target="_blank" rel="noopener" href="https://github.com/kubernetes/kubernetes/blob/0599ca2bcfcae7d702f95284f3c2e2c2978c7772/pkg/scheduler/internal/queue/scheduling_queue.go">https://github.com/kubernetes/kubernetes/blob/0599ca2bcfcae7d702f95284f3c2e2c2978c7772/pkg/scheduler/internal/queue/scheduling_queue.go</a></p>
+<h2 id="4-参考"><a href="#4-参考" class="headerlink" title="4 参考"></a>4 参考</h2><p><code>https://ieevee.com/tech/2019/06/15/cond.html</code></p>
+</blockquote>
+<p><code>https://segmentfault.com/a/1190000019957459</code></p>
+<p><code>https://www.jianshu.com/p/7b59d1d92a95</code></p>
+<p><code>http://www.pydevops.com/2016/12/04/go-cond源码剖析-3/</code></p>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span>Author: </span>
+    <a href="https://stardustorz.github.io">draco</a>
+  </p>
+  <p class="copyright-item">
+    <span>Link: </span>
+    <a href="https://stardustorz.github.io/2022/07/14/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/sync.Cond/">https://stardustorz.github.io/2022/07/14/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/sync.Cond/</a>
+  </p>
+  <p class="copyright-item">
+    <span>License: </span>
+    
+    <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+  </p>
+</div>
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/Golang/">Golang</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/2022/07/14/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/Channel/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">[Go] Channel</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/2022/07/14/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/sync.Mutex/">  
+        <span class="next-text nav-default">[Go] sync.Mutex</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2019 - 2025      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">draco</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+</body>
+
+</html>

@@ -2,43 +2,79 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://stardustorz.github.io/2022/07/14/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/sync.Cond/</loc>
+    
+    <lastmod>2025-05-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://stardustorz.github.io/2022/07/14/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/Channel/</loc>
+    
+    <lastmod>2025-05-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://stardustorz.github.io/2022/07/14/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/sync.Mutex/</loc>
+    
+    <lastmod>2025-05-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://stardustorz.github.io/2021/12/04/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/sync.Pool/</loc>
+    
+    <lastmod>2025-05-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://stardustorz.github.io/2021/12/04/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/sync.WaitGroup/</loc>
+    
+    <lastmod>2025-05-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://stardustorz.github.io/2021/09/20/Golang/3%20%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/Golang%20%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/</loc>
+    
+    <lastmod>2025-05-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://stardustorz.github.io/2021/08/19/Golang/3%20%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/Golang%20%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/</loc>
+    
+    <lastmod>2025-05-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://stardustorz.github.io/2023/09/10/System-Design/%E5%88%86%E5%B8%83%E5%BC%8F%E7%90%86%E8%AE%BA/</loc>
+    
+    <lastmod>2025-05-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://stardustorz.github.io/2021/10/26/Golang/0%20%E5%9F%BA%E7%A1%80/%E5%85%B3%E9%94%AE%E5%AD%97/Defer/</loc>
-    
-    <lastmod>2025-05-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/go-sync.Mutex/</loc>
-    
-    <lastmod>2025-05-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/go-sync.WaitGroup/</loc>
-    
-    <lastmod>2025-05-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/04-sync.Mutex/</loc>
-    
-    <lastmod>2025-05-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2023/08/27/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/05-sync.pool/</loc>
     
     <lastmod>2025-05-24</lastmod>
     
@@ -56,24 +92,6 @@
   </url>
   
   <url>
-    <loc>https://stardustorz.github.io/2025/05/07/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/02-cond/</loc>
-    
-    <lastmod>2025-05-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2023/09/10/System-Design/%E5%88%86%E5%B8%83%E5%BC%8F%E7%90%86%E8%AE%BA/</loc>
-    
-    <lastmod>2025-05-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://stardustorz.github.io/2023/09/11/System-Design/Raft/</loc>
     
     <lastmod>2025-05-24</lastmod>
@@ -83,133 +101,7 @@
   </url>
   
   <url>
-    <loc>https://stardustorz.github.io/2025/05/22/Golang/Go%E9%9D%A2%E8%AF%95%E9%A2%98%E6%80%BB%E7%BB%93/</loc>
-    
-    <lastmod>2025-05-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2023/10/31/DevOps/%E4%BA%91%E8%AE%A1%E7%AE%97%E6%A6%82%E8%BF%B0/</loc>
-    
-    <lastmod>2025-05-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2023/09/05/Framework/Redis/</loc>
-    
-    <lastmod>2025-05-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2023/09/10/Framework/MySQL/</loc>
-    
-    <lastmod>2025-05-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2023/09/09/Framework/Kafka/</loc>
-    
-    <lastmod>2025-05-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2023/10/09/DevOps/Docker%E4%B8%8E%20K8S/</loc>
-    
-    <lastmod>2025-05-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2023/11/02/DevOps/%E7%9F%A5%E5%B7%B1%E4%B8%8A%E4%BA%91/</loc>
-    
-    <lastmod>2025-05-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2023/10/09/DevOps/HPA/</loc>
-    
-    <lastmod>2025-05-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2024/07/01/DevOps/K8S/</loc>
-    
-    <lastmod>2025-05-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2023/10/09/Basic/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</loc>
-    
-    <lastmod>2025-05-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2023/10/09/Basic/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</loc>
-    
-    <lastmod>2025-05-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2025/05/07/Basic/Linux/</loc>
-    
-    <lastmod>2025-05-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2023/08/22/Basic/RPC/</loc>
-    
-    <lastmod>2025-05-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://stardustorz.github.io/2023/10/09/Algorithm/%E8%B7%B3%E8%A1%A8/</loc>
-    
-    <lastmod>2025-05-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2025/05/07/Basic/Linux%20%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</loc>
     
     <lastmod>2025-05-24</lastmod>
     
@@ -255,15 +147,6 @@
   
   <url>
     <loc>https://stardustorz.github.io/categories/index.html</loc>
-    
-    <lastmod>2025-05-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2021/06/12/Basic/git%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/</loc>
     
     <lastmod>2025-05-12</lastmod>
     
@@ -335,24 +218,6 @@
   </url>
   
   <url>
-    <loc>https://stardustorz.github.io/2021/09/20/Golang/3%20%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/Golang%20%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/</loc>
-    
-    <lastmod>2025-03-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2021/08/19/Golang/3%20%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/Golang%20%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/</loc>
-    
-    <lastmod>2025-03-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://stardustorz.github.io/2022/09/08/Golang/2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/</loc>
     
     <lastmod>2025-03-11</lastmod>
@@ -365,15 +230,6 @@
     <loc>https://stardustorz.github.io/2022/09/12/Golang/2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/</loc>
     
     <lastmod>2025-03-11</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2022/07/09/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/sync.Map/</loc>
-    
-    <lastmod>2025-03-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -444,15 +300,6 @@
   
   <url>
     <loc>https://stardustorz.github.io/2022/07/10/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/Context/</loc>
-    
-    <lastmod>2025-03-08</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2022/07/14/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/Channel/</loc>
     
     <lastmod>2025-03-08</lastmod>
     
@@ -533,15 +380,6 @@
   </url>
   
   <url>
-    <loc>https://stardustorz.github.io/2021/10/11/Golang/4%20%E5%85%B6%E4%BB%96/time%20rate%E4%BD%BF%E7%94%A8/</loc>
-    
-    <lastmod>2025-01-19</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://stardustorz.github.io/2021/08/09/Golang/4%20%E5%85%B6%E4%BB%96/ldflags/</loc>
     
     <lastmod>2025-01-19</lastmod>
@@ -560,25 +398,7 @@
   </url>
   
   <url>
-    <loc>https://stardustorz.github.io/2021/10/11/Golang/4%20%E5%85%B6%E4%BB%96/Benchyou%E4%BD%BF%E7%94%A8/</loc>
-    
-    <lastmod>2025-01-19</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://stardustorz.github.io/2021/08/17/Golang/4%20%E5%85%B6%E4%BB%96/Quic/</loc>
-    
-    <lastmod>2025-01-18</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2021/07/22/Golang/4%20%E5%85%B6%E4%BB%96/%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90/</loc>
     
     <lastmod>2025-01-18</lastmod>
     
@@ -596,36 +416,9 @@
   </url>
   
   <url>
-    <loc>https://stardustorz.github.io/2021/08/11/Golang/4%20%E5%85%B6%E4%BB%96/WorkerPool/</loc>
-    
-    <lastmod>2025-01-18</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://stardustorz.github.io/2021/08/17/Golang/4%20%E5%85%B6%E4%BB%96/Concatenate%20Strings/</loc>
     
     <lastmod>2025-01-18</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2021/08/17/Golang/4%20%E5%85%B6%E4%BB%96/Channel%E5%AE%9E%E7%8E%B0%E4%BA%92%E6%96%A5%E9%94%81/</loc>
-    
-    <lastmod>2025-01-18</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/2024/07/18/DevOps/Docker/</loc>
-    
-    <lastmod>2024-07-18</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -642,13 +435,6 @@
   
   <url>
     <loc>https://stardustorz.github.io/tags/Algorithm/</loc>
-    <lastmod>2025-05-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/tags/Git/</loc>
     <lastmod>2025-05-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -675,24 +461,10 @@
     <priority>0.2</priority>
   </url>
   
-  <url>
-    <loc>https://stardustorz.github.io/tags/Golang-Basic/</loc>
-    <lastmod>2025-05-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
 
   
   <url>
     <loc>https://stardustorz.github.io/categories/Algorithm/</loc>
-    <lastmod>2025-05-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/categories/Basic/</loc>
     <lastmod>2025-05-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -762,21 +534,14 @@
   </url>
   
   <url>
-    <loc>https://stardustorz.github.io/categories/%E6%8A%80%E6%9C%AF/Golang/Basic/</loc>
-    <lastmod>2025-05-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://stardustorz.github.io/categories/%E6%8A%80%E6%9C%AF/Golang/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/</loc>
-    <lastmod>2025-05-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://stardustorz.github.io/categories/%E6%8A%80%E6%9C%AF/Golang/Packges/</loc>
+    <lastmod>2025-05-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://stardustorz.github.io/categories/Golang/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/</loc>
     <lastmod>2025-05-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
