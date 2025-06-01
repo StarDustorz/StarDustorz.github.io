@@ -240,13 +240,11 @@
 
   <div class="post-content">
     
-    <p>本文主要介绍了Go语言(golang)中的<code>sync.pool</code>包。给出了 sync.pool 的基本用法，以及各大框架中的使用案例。并从源码层面对其底层结构和具体实现原理进行分析。</p>
-<blockquote>
-<p>以下分析基于 Go 1.17.1</p>
+    <blockquote>
+<p>sync.Pool 可以作为保存临时取还对象的一个“池子”，可以缓存暂时不用的对象，下次需要时直接使用（无需重新分配）。</p>
 </blockquote>
 <span id="more"></span>
-<h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h2><h3 id="1-1-大致理念"><a href="#1-1-大致理念" class="headerlink" title="1.1 大致理念"></a>1.1 大致理念</h3><p><code>sync.Pool</code> 是 sync 包下的一个组件，可以作为保存临时取还对象的一个“池子”，可以缓存暂时不用的对象，下次需要时直接使用（无需重新分配）。</p>
-<blockquote>
+<h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1 概述"></a>1 概述</h2><h3 id="1-1-大致理念"><a href="#1-1-大致理念" class="headerlink" title="1.1 大致理念"></a>1.1 大致理念</h3><blockquote>
 <p>因为频繁的内存分配和回收会对性能产生影响，通过复用临时对象就可以避免改问题。</p>
 </blockquote>
 <p>下面是 2018 年的时候，《Go 夜读》上关于 <code>sync.Pool</code> 的分享，关于适用场景：</p>
@@ -425,14 +423,10 @@ atomic.StorePointer(&amp;slot.typ, nil)
 </li>
 </ol>
 <h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3 小结"></a>3 小结</h2><ul>
-<li><p>1）关键思想是对象的复用，避免重复创建、销毁。将暂时不用的对象缓存起来，待下次需要的时候直接使用，不用再次经过内存分配，复用对象的内存，减轻 GC 的压力。</p>
-</li>
-<li><p>2）<code>sync.Pool</code> 是协程安全的，使用起来非常方便。设置好 New 函数后，调用 Get 获取，调用 Put 归还对象。</p>
-</li>
-<li><p>3）不要对 Get 得到的对象有任何假设，更好的做法是归还对象时，将对象“清空”。</p>
-</li>
-<li><p>4）Pool 里对象的生命周期受 GC 影响，不适合于做连接池，因为连接池需要自己管理对象的生命周期。</p>
-</li>
+<li>关键思想是对象的复用，避免重复创建、销毁。将暂时不用的对象缓存起来，待下次需要的时候直接使用，不用再次经过内存分配，复用对象的内存，减轻 GC 的压力。</li>
+<li><code>sync.Pool</code> 是协程安全的，使用起来非常方便。设置好 New 函数后，调用 Get 获取，调用 Put 归还对象。</li>
+<li>不要对 Get 得到的对象有任何假设，更好的做法是归还对象时，将对象“清空”。</li>
+<li>Pool 里对象的生命周期受 GC 影响，不适合于做连接池，因为连接池需要自己管理对象的生命周期。</li>
 </ul>
 <p>一些设计思想或者相关知识点：</p>
 <ul>
@@ -507,8 +501,8 @@ atomic.StorePointer(&amp;slot.typ, nil)
       </a>  
       
       
-      <a class="next" href="/2021/12/04/Golang/1%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/sync.WaitGroup/">  
-        <span class="next-text nav-default">[Go] sync.WaitGroup</span>  
+      <a class="next" href="/2021/10/26/Golang/4%20%E5%85%B6%E4%BB%96/Golang%20Test%20%E5%B7%A5%E5%85%B7%E6%8C%87%E4%BB%A4/">  
+        <span class="next-text nav-default">[Go] Golang Test 工具指令</span>  
         <span class="prev-text nav-mobile">Next</span>  
         <i class="iconfont icon-right"></i>  
       </a>  
