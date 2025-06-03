@@ -1,0 +1,245 @@
+---
+import type { MarkdownHeading } from 'astro'
+import TocIcon from '@/assets/icons/toc-icon.svg'
+import { ui } from '@/i18n/ui'
+import { getPageInfo } from '@/utils/page'
+
+interface Props {
+  headings: MarkdownHeading[]
+}
+
+const { currentLang } = getPageInfo(Astro.url.pathname)
+const currentUI = ui[currentLang as keyof typeof ui]
+
+const { headings = [] } = Astro.props
+const filteredHeadings = headings.filter(heading =>
+  heading.depth >= 2
+  && heading.depth <= 4,
+)
+---
+
+{filteredHeadings.length > 0 && (
+  // TOC Container
+  <div
+    id="toc-container"
+    class="mb-6 uno-round-border bg-secondary/5 2xl:(fixed left-0 top-44.5 max-w-[min(calc(50vw-38rem),13rem)] border-none bg-secondary/0)"
+  >
+    {/* Hidden Checkbox */}
+    <input
+      type="checkbox"
+      id="toc-toggle"
+      class="accordion-toggle"
+      hidden
+    />
+    {/* TOC Toggle */}
+    <div class="relative h-12 w-full">
+      <label
+        for="toc-toggle"
+        class="absolute inset-0 flex cursor-pointer items-center 2xl:(static flex c-secondary/40 transition-colors ease-out hover:c-secondary/80)"
+      >
+        {/* Title on Mobile */}
+        <span class="toc-title">
+          {currentUI.toc}
+        </span>
+
+        {/* Icon on Desktop */}
+        <TocIcon
+          id="toc-icon"
+          aria-hidden="true"
+          class="ml-1 hidden aspect-square w-4.2 2xl:(mt-4 block origin-center active:scale-90!)"
+          fill="currentColor"
+        />
+      </label>
+    </div>
+
+    {/* Expandable Content Wrapper with Accordion Animation */}
+    <div class="accordion-wrapper">
+      <nav
+        id="toc-content"
+        class="accordion-content"
+        aria-label="Table of Contents"
+      >
+        {/* TOC List */}
+        <ul
+          id="toc-list"
+          class="toc-list"
+        >
+          {filteredHeadings.map(heading => (
+            <li
+              class:list={{
+                'ml-0': heading.depth === 2,
+                'ml-4': heading.depth === 3,
+                'ml-8': heading.depth === 4,
+              }}
+            >
+              <a
+                href={`#${heading.slug}`}
+                class:list={[
+                  { 'toc-link-h2': heading.depth === 2 },
+                  { 'toc-link-h3': heading.depth === 3 },
+                  { 'toc-link-h4': heading.depth === 4 },
+                ]}
+              >
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  </div>
+)}
+
+<!-- Override heti default styles  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+<style>
+.toc-title {
+  --at-apply: 'ml-4 font-semibold 2xl:hidden';
+}
+.toc-list {
+  --at-apply: 'mb-2.5 mt-1 list-none pl-0 space-y-1.1 2xl:(mb-1 space-y-1)';
+}
+.toc-link-h2, .toc-link-h3, .toc-link-h4 {
+  --at-apply: 'text-balance text-sm font-normal no-underline 2xl:(text-3.2 c-secondary/60 transition-colors transition-font-weight ease-out hover:c-secondary hover:font-medium)';
+}
+
+/* Initial collapsed state with zero height grid row */
+.accordion-wrapper {
+  --at-apply: 'grid rows-[0fr] transition-all duration-350 ease-in-out';
+}
+.accordion-content {
+  --at-apply: 'max-h-59.3 overflow-hidden pl-4 pr-6 2xl:(max-h-[calc(100vh-26.75rem)] pl-1)';
+}
+
+/* When toggle is checked, expand the wrapper to show content */
+.accordion-toggle:checked ~ .accordion-wrapper {
+  grid-template-rows: 1fr;
+}
+.accordion-toggle:checked ~ .accordion-wrapper .accordion-content {
+  --at-apply: 'overflow-y-auto';
+}
+#toc-content {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(var(--un-preset-theme-colors-secondary) / 0.15) transparent;
+}
+
+@media (min-width: 1536px) {
+  .accordion-wrapper {
+    grid-template-rows: 1fr;
+  }
+  .accordion-toggle:checked ~ .accordion-wrapper {
+    grid-template-rows: 0fr;
+  }
+  .accordion-content {
+    --at-apply: 'overflow-y-auto';
+  }
+  .accordion-toggle:checked ~ .accordion-wrapper .accordion-content {
+    --at-apply: 'overflow-hidden';
+  }
+  .toc-link-active {
+    --at-apply: 'c-secondary font-medium';
+  }
+  #toc-content {
+    --at-apply: 'scrollbar-hidden';
+  }
+  #toc-content::-webkit-scrollbar {
+    display: none;
+  }
+}
+</style>
+
+<!-- TOC Highlight Script >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> -->
+<script>
+function setupTOCHighlight() {
+  const tocContent = document.getElementById('toc-content')
+  if (!tocContent)
+    return
+
+  const tocLinks = tocContent.getElementsByTagName('a')
+  if (tocLinks.length === 0)
+    return
+
+  // Check if in large screen (2xl) mode
+  let is2xl = window.innerWidth >= 1536
+
+  // Build mapping from heading IDs to TOC links
+  const headingMap = new Map<string, HTMLAnchorElement>()
+  Array.from(tocLinks).forEach((link) => {
+    const id = link.getAttribute('href')?.substring(1)
+    if (id)
+      headingMap.set(id, link as HTMLAnchorElement)
+  })
+
+  let currentActiveLink: HTMLAnchorElement | null = null
+
+  function highlightLink(link: HTMLAnchorElement) {
+    if (link === currentActiveLink)
+      return
+
+    if (currentActiveLink) {
+      currentActiveLink.classList.remove('toc-link-active')
+    }
+
+    link.classList.add('toc-link-active')
+    currentActiveLink = link
+
+    // Only scroll the TOC in large screen (2xl) mode
+    if (is2xl) {
+      scrollLinkToCenter(link)
+    }
+  }
+
+  // Scroll the link to center position
+  function scrollLinkToCenter(link: HTMLAnchorElement) {
+    link.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    })
+  }
+
+  // Intersection observer callback
+  const intersectionCallback = (entries: IntersectionObserverEntry[]) => {
+    const visibleHeading = entries.find(entry => entry.isIntersecting)?.target
+
+    if (visibleHeading && visibleHeading.id) {
+      const link = headingMap.get(visibleHeading.id)
+      if (link)
+        highlightLink(link)
+    }
+  }
+
+  // Create the intersection observer
+  const headingObserver = new IntersectionObserver(intersectionCallback, {
+    rootMargin: '0% 0% -66% 0%',
+    threshold: [0.4],
+  })
+
+  // Observe all heading elements
+  document.querySelectorAll('h2, h3, h4').forEach((heading) => {
+    if (heading.id && heading.id !== 'footnotes') {
+      headingObserver.observe(heading)
+    }
+  })
+
+  // Highlight the first TOC item by default
+  if (tocLinks.length > 0) {
+    highlightLink(tocLinks[0] as HTMLAnchorElement)
+  }
+
+  // Listen for window resize events
+  window.addEventListener('resize', () => {
+    const newIs2xl = window.innerWidth >= 1536
+    if (is2xl !== newIs2xl) {
+      // Update screen size flag
+      is2xl = newIs2xl
+
+      if (currentActiveLink && is2xl) {
+        scrollLinkToCenter(currentActiveLink)
+      }
+    }
+  })
+}
+
+setupTOCHighlight()
+document.addEventListener('astro:after-swap', setupTOCHighlight)
+</script>
+
