@@ -4,7 +4,7 @@ published: 2021-12-04
 tags:
 - Golang
 title: 总结
-draft:true
+draft: true
 ---
 
 <!--more-->
