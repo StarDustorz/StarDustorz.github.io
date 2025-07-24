@@ -1,6 +1,6 @@
 ---
 title: Markdown Extended Features
-published: 2025-04-25
+published: 2022-04-25
 tags:
   - Guide
 toc: false
@@ -8,7 +8,7 @@ lang: en
 abbrlink: markdown-extended-features
 ---
 
-Here are some extended Markdown features supported by Retypeset, including syntax examples and their stylistic effects.
+Here are some extended Markdown features, including syntax examples and their stylistic effects.
 
 ## Figure Captions
 

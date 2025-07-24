@@ -1,6 +1,6 @@
 ---
 title: Markdown 扩展功能
-published: 2025-04-25
+published: 2022-04-25
 tags:
   - 工具
 toc: false
@@ -8,7 +8,7 @@ lang: zh
 abbrlink: markdown-extended-features
 ---
 
-本文介绍 Retypeset 主题支持的 Markdown 扩展功能，包括语法示例与效果展示。
+支持的 Markdown 扩展功能，包括语法示例与效果展示。
 
 ## 图注
 
@@ -118,4 +118,3 @@ abbrlink: markdown-extended-features
   </summary>
   键盘。
 </details>
-
