@@ -214,7 +214,6 @@ func schedule() {
 
 ### 4.5 findRunnable
 
-![](file-20250303232645826.png)
 
 ```go
 func findRunnable() (gp *g, inheritTime, tryWakeP bool) {
@@ -311,7 +310,6 @@ top:
 
 g 执行主动让渡时，会调用 mcall 方法将执行权归还给 g0，并由 g0 调用 gosched_m 方法，位于 runtime/proc.go 文件中
 
-![](file-20250303234355218.png)
 - 将当前 g 的状态由执行中切换为待执行 `_Grunnable`
 - 调用 dropg() 方法，将当前的 m 和 g 解绑
 - 将 g 添加到全局队列当中

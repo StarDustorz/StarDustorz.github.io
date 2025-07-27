@@ -125,7 +125,6 @@ map 中，会通过长度为 2 的整数次幂的桶数组进行 key-value 对�
 
 ### 3.1 hmap
 
-![](StarDust/source/_posts/技术/Golang/0%20基础/数据结构/Map/file-20250305235454430.png)
 
 ```go
 type hmap struct {

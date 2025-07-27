@@ -62,7 +62,7 @@ func A2() {}
 
 具体结构如下图所示：
 
-![](StarDust/source/_posts/技术/Golang/0%20基础/关键字/Panic%20Recover/file-20250119062723162.png)
+
 
 ## 2 正常流程
 
@@ -119,7 +119,7 @@ func A2() {
 
 具体结构如下图所示：
 
-![](StarDust/source/_posts/技术/Golang/0%20基础/关键字/Panic%20Recover/file-20250119062734853.png)
+
 
 **小结**
 

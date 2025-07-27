@@ -17,7 +17,6 @@ draft: false
 
 ### 1.1 sync.Map
 
-![](file-20250307231828243.png)
 
 ```go
 type Map struct {

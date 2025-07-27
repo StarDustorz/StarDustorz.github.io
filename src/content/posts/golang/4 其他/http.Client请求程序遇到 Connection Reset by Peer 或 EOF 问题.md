@@ -1,12 +1,12 @@
 ---
-title: "[Go] Connection Reset by Peer or EOF "
+title: "[Go] Connection Reset by Peer or EOF"
 published: 2021-10-26
 tags:
   - Golang
   - Go其他
 lang: zh
 toc: true
-abbrlink: golang-connection-reset-by-Peer-or-EOF
+abbrlink: golang-connection-reset-by-peer-or-eof
 draft: false
 ---
 
