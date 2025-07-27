@@ -6,6 +6,7 @@ tags:
 lang: zh
 toc: true
 abbrlink: algorithm-queue-stack
+---
 <!--more-->
 
 ### 0.1 [20. 有效的括号](https://leetcode.cn/problems/valid-parentheses/)
