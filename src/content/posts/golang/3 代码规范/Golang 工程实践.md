@@ -1,12 +1,14 @@
 ---
-abbrlink: article-91a479b0
+title: "[Go] Best Practice"
 published: 2021-09-20
 tags:
-- Golang
-- 代码规范
-title: 工程实践
+  - Golang
+  - Go工程实践
+lang: zh
+toc: true
+abbrlink: golang-best-practice
+draft: false
 ---
-
 > 如何写优雅的 Go 语言代码
 
 <!--more-->

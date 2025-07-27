@@ -1,12 +1,14 @@
 ---
-abbrlink: syncmap
+title: "[Go] sync.Map"
 published: 2022-07-09
 tags:
-- Golang
-- 并发编程
-title: sync.Map
+  - Golang
+  - Go并发编程
+lang: zh
+toc: true
+abbrlink: golang-sync-map
+draft: false
 ---
-
 > 在 golang 中, map 并不保证并发安全的安全性, 对 map 进行并发读写会导致严重的错误, sync 标准包下的 sync.Map 解决了这一问题.
 
 <!--more-->
@@ -15,6 +17,7 @@ title: sync.Map
 
 ### 1.1 sync.Map
 
+![](file-20250307231828243.png)
 
 ```go
 type Map struct {

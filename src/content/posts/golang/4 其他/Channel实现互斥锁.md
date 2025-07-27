@@ -1,11 +1,14 @@
 ---
-abbrlink: golang-channel
+title: "[Go] Channel实现互斥锁"
 published: 2021-08-17
 tags:
-- Golang
-title: Golang Channel实现互斥锁
+  - Golang
+  - Go其他
+lang: zh
+toc: true
+abbrlink: golang-mutex-by-channel
+draft: false
 ---
-
 >使用长度为1的有缓冲channel实现互斥锁
 
 <!--more-->

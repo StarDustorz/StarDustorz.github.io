@@ -1,10 +1,12 @@
 ---
-abbrlink: golang-benchyou
+title: "[Tool] Benchyou"
 published: 2021-10-11
 tags:
-- Golang
-- Packges
-title: Golang Benchyou
+  - Tool
+lang: zh
+toc: true
+abbrlink: tool-benchyou
+draft: false
 ---
 
 > benchyou is a benchmark tool for MySQL, real-time monitoring TPS and vmstat/iostat
@@ -12,6 +14,7 @@ title: Golang Benchyou
 <!--more-->
 
 ## 1 Build
+
 ```shell
 $ git clone https://github.com/xelabs/benchyou
 $ cd benchyou

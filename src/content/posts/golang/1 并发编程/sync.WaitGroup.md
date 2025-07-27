@@ -1,12 +1,14 @@
 ---
-abbrlink: syncwaitgroup
+title: "[Go] sync.WaitGroup"
 published: 2021-12-04
 tags:
-- Golang
-- 并发编程
-title: sync.WaitGroup
+  - Golang
+  - Go并发编程
+lang: zh
+toc: true
+abbrlink: golang-sync-waitgroup
+draft: false
 ---
-
 >sync.WaitGroup 可以作为保存临时取还对象的一个“池子”，可以缓存暂时不用的对象，下次需要时直接使用（无需重新分配）。
 
 <!--more-->

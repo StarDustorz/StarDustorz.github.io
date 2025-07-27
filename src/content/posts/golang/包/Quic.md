@@ -1,15 +1,19 @@
 ---
-abbrlink: golang-quic
+title: "[Go] Quic"
 published: 2021-08-17
 tags:
-- Golang
-- Packges
-title: Golang Quic
+  - Golang
+  - GoPackges
+lang: zh
+toc: true
+abbrlink: golang-quic
+draft: false
 ---
 
 >Quick UDP Internet Connection
 
 <!--more-->
+
 ## 1 QUIC 概述
 
 QUIC（Quick UDP Internet Connection，快速 UDP 互联网连接协议）是一种以 UDP 为底层传输协议，支持加密、多路复用，工作在用户空间的的低延迟传输协议。
@@ -23,6 +27,7 @@ Quic 相比现在广泛应用的 http2+tcp+tls 协议有如下优势：
 5. 前向冗余纠错。
 
 ## 2 server
+
 ```go
 package main
 
@@ -111,7 +116,9 @@ func generateTLSConfig() *tls.Config {
 	}
 }
 ```
+
 ## 3 client
+
 ```go
 package main
 
@@ -161,6 +168,7 @@ func main() {
 	}
 }
 ```
+
 ## 4 运行
 
 ```fallback
@@ -176,5 +184,7 @@ Client: Got 'Client: Sending '522181000''
 Client: Got 'Client: Sending '519381000''
 
 ```
+
 ## 5 参考
+
 - [QUIC协议原理分析](https://zhuanlan.zhihu.com/p/32553477)

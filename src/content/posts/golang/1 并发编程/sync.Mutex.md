@@ -1,12 +1,14 @@
 ---
-abbrlink: syncmutex
+title: "[Go] sync.Mutex"
 published: 2021-12-04
 tags:
-- Golang
-- 并发编程
-title: sync.Mutex
+  - Golang
+  - Go并发编程
+lang: zh
+toc: true
+abbrlink: golang-sync-mutex
+draft: false
 ---
-
 >sync.Mutex 是 Go 语言中实现互斥锁的核心结构
 
 <!--more-->
@@ -155,3 +157,4 @@ type RWMutex struct {
 ## 5 总结
 
 go-sync.Mutex 是 Go 语言中实现互斥锁的核心结构，通过 state 字段管理锁状态（正常/饥饿模式），利用 CAS 操作和信号量控制协程的加解锁流程，其中写锁具有严格排他性，读锁支持有限共享，适用于读多写少场景，通过自旋和队列调度平衡性能与公平性。
+

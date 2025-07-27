@@ -1,12 +1,14 @@
 ---
-abbrlink: synccond
+title: "[Go] sync.Cond"
 published: 2022-07-14
 tags:
-- Golang
-- 并发编程
-title: sync.Cond
+  - Golang
+  - Go并发编程
+lang: zh
+toc: true
+abbrlink: golang-sync-cond
+draft: false
 ---
-
 >sync.Cond 实现了一种条件变量，可以使用在多个Reader等待共享资源 ready 的场景
 
 <!--more-->

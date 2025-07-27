@@ -1,12 +1,14 @@
 ---
-abbrlink: for-range
+title: "[Go] for 和 range"
 published: 2021-09-15
 tags:
-- Golang
-- 关键字
-title: for 和 range
+  - Golang
+  - Go关键字
+lang: zh
+toc: true
+abbrlink: golang-for-range
+draft: true
 ---
-
 >
 
 <!--more-->

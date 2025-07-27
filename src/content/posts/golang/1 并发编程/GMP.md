@@ -1,13 +1,14 @@
 ---
-abbrlink: gmp
+title: "[Go] GMP"
 published: 2022-07-03
 tags:
-- Golang
-- 并发编程
-title: GMP
-
+  - Golang
+  - Go并发编程
+lang: zh
+toc: true
+abbrlink: golang-gmp
+draft: false
 ---
-
 > gmp = goroutine + machine + processor
 
 <!--more-->
@@ -29,7 +30,7 @@ title: GMP
 
 ### 1.3 Goroutine
 
-Goroutine，经 Golang 优化后的特殊"协程"，特点如下：
+Goroutine，经 Golang 优化后的特殊“协程”，特点如下：
 - 与线程存在映射关系，为 M：N；
 - 创建、销毁、调度在用户态完成，对内核透明，足够轻便；
 - 可利用多个线程，实现并行；
@@ -197,7 +198,7 @@ m 通过 p 调度执行的 goroutine 永远在普通 g 和 g0 之间进行切换
 
 ### 4.4 schedule
 
-调度流程的主干方法是位于 runtime/proc.go 中的 schedule 函数，此时的执行权位于 g0 手中：
+调度流程的主干方法是位于 runtime/proc.go 中的 schedule 函数，此时的执行权位于 g0 手中：
 ```go
 func schedule() {
     // ...
@@ -213,6 +214,7 @@ func schedule() {
 
 ### 4.5 findRunnable
 
+![](file-20250303232645826.png)
 
 ```go
 func findRunnable() (gp *g, inheritTime, tryWakeP bool) {
@@ -309,6 +311,7 @@ top:
 
 g 执行主动让渡时，会调用 mcall 方法将执行权归还给 g0，并由 g0 调用 gosched_m 方法，位于 runtime/proc.go 文件中
 
+![](file-20250303234355218.png)
 - 将当前 g 的状态由执行中切换为待执行 `_Grunnable`
 - 调用 dropg() 方法，将当前的 m 和 g 解绑
 - 将 g 添加到全局队列当中
@@ -319,7 +322,7 @@ g 执行主动让渡时，会调用 mcall 方法将执行权归还给 g0，并�
 - g 需要被动调度时，会调用 mcall 方法切换至 g0，并调用 park_m 方法将 g 置为阻塞态，执行流程位于 runtime/proc.go 的 gopark 方法当中
 	- 将当前 g 的状态由 running 改为 waiting
 	- 将 g 与 m 解绑
-	- 执行新一轮的调度 schedule
+	- 执行新一轮的调度 schedule
 - 当因被动调度陷入阻塞态的 g 需要被唤醒时，会由其他协程执行 goready 方法将 g 重新置为可执行的状态，方法位于 runtime/proc.go
 	- 先将 g 的状态从阻塞态改为可执行的状态
 	- 调用 runqput 将当前 g 添加到唤醒者 p 的本地队列中，如果队列满了，会连带 g 一起将一半的元素转移到全局队列

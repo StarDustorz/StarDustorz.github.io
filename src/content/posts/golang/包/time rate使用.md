@@ -1,10 +1,13 @@
 ---
-abbrlink: golang-timerate
+title: "[Go] Time/rate使用"
 published: 2021-10-11
 tags:
-- Golang
-- Packges
-title: Golang Time/rate使用
+  - Golang
+  - GoPackges
+lang: zh
+toc: true
+abbrlink: golang-time-rate
+draft: false
 ---
 
 > Time/rate 是基于 Token Bucket (令牌桶) 算法实现的限流
@@ -41,6 +44,7 @@ func NewLimiter(r Limit, b int) *Limiter {
     }
 }
 ```
+
 NewLimiter有两个参数
 
 第一个r Limit 表示每秒可以放入多少个token到桶中，Limit是float64的别名；
@@ -68,6 +72,7 @@ Every表示放入token速率时间粒度;
 func (lim *Limiter) Wait(ctx context.Context) (err error)
 func (lim *Limiter) WaitN(ctx context.Context, n int) (err error)
 ```
+
 Wait获取Token时如果数组不足(小于N)，将会阻塞一段时间，直至Token满足条件, 如果充足则直接返回
 
 阻塞时间可以通过context参数设置Deadline或Timeout控制
@@ -86,6 +91,7 @@ Allow获取Token充足返回true，同时Token减少，否则返回false，不�
 func (lim *Limiter) Reserve() *Reservation
 func (lim *Limiter) ReserveN(now time.Time, n int) *Reservation
 ```
+
 返回Reservation对象，有如下对象方法：
 
 ```go
@@ -97,6 +103,7 @@ func (r *Reservation) DelayFrom(now time.Time) time.Duration
 func (r *Reservation) Cancel() // 取消，将获取的Token重新放入桶中
 func (r *Reservation) CancelAt(now time.Time)
 ```
+
 ### 2.6 调整速率和桶大小
 
 ```go
@@ -106,13 +113,18 @@ func (lim *Limiter) SetLimitAt(now time.Time, newLimit Limit)
 func (lim *Limiter) SetBurst(newBurst int) // 改变Token桶大小
 func (lim *Limiter) SetBurstAt(now time.Time, newBurst int)
 ```
+
 ### 2.7 获取速率和桶大小
 
 ```go
 func (lim *Limiter) Limit() Limit // 获取速率
 func (lim *Limiter) Burst() int //获取桶容量
 ```
+
 ## 3 参考
 
 - [Golang 标准库限流器 time/rate 实现剖析](https://www.cyhone.com/articles/analisys-of-golang-rate/)
 - [Golang 标准库限流器 time/rate 使用介绍](https://www.cyhone.com/articles/usage-of-golang-rate/)
+
+
+

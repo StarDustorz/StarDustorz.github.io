@@ -1,12 +1,14 @@
 ---
-abbrlink: string
+title: "[Go] String"
 published: 2021-07-03
 tags:
-- Golang
-- 数据结构
-title: String
+  - Golang
+  - Go数据结构
+lang: zh
+toc: true
+abbrlink: golang-string
+draft: false
 ---
-
 > 字符串的实现和注意事项
 
 <!--more-->
@@ -64,7 +66,7 @@ func main() {
 
 不同字符串可以共享同一个字符串内容，如果其中一个字符串修改了底层字符串内容，这样的影响是不可预测的。
 
-
+![](StarDust/source/_posts/技术/Golang/0%20基础/数据结构/String/file-20250119031144315.png)
 
 比如图中的 s1（hello指月） 和 s2（指月）就共享了底层的字符串内容。
 

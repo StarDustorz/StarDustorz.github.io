@@ -1,9 +1,13 @@
 ---
-abbrlink: golang-workerpool
+title: "[Go] WorkerPool"
 published: 2021-08-11
 tags:
-- Golang
-title: Golang WorkerPool
+  - Golang
+  - Go其他
+lang: zh
+toc: true
+abbrlink: golang-workerpool
+draft: false
 ---
 
 > Golang实现一个工作池处理并发任务

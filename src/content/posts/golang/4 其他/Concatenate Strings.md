@@ -1,9 +1,13 @@
 ---
-abbrlink: golang-concatenate-strings
+title: "[Go] Concatenate Strings"
 published: 2021-08-17
 tags:
-- Golang
-title: Golang Concatenate Strings
+  - Golang
+  - Go其他
+lang: zh
+toc: true
+abbrlink: golang-concatenate-strings
+draft: false
 ---
 
 >How to Efficiently Concatenate Strings in Go

@@ -1,9 +1,13 @@
 ---
-abbrlink: article-91b5047d
+title: "[Go] Code Style"
 published: 2021-08-19
 tags:
-- Golang
-title: 代码规范
+  - Golang
+  - Go代码规范
+lang: zh
+toc: true
+abbrlink: golang-code-style
+draft: false
 ---
 
 > 主要记录了一些容易犯错的地方，具体规范参考如下:

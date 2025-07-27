@@ -1,13 +1,15 @@
-
 ---
-title: Defer
+title: "[Go] Defer"
 published: 2021-09-19
 tags:
   - Golang
-  - 关键字
+  - Go关键字
 lang: zh
-abbrlink: defer
+toc: true
+abbrlink: golang-defer
+draft: false
 ---
+
 
 
 
@@ -18,7 +20,7 @@ abbrlink: defer
 
 ## 1 1.12
 
-> 本节基于 Go 1.12 版本的 defer。1.13 和1.14 都有不少优化。
+> 本节将的是 Go 1.12 版本的 defer。1.13 和1.14 都有不少优化。
 
 ### 1.1 demo
 

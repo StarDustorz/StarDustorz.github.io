@@ -1,12 +1,14 @@
 ---
-abbrlink: context
+title: "[Go] Context"
 published: 2022-07-10
 tags:
-- Golang
-- 并发编程
-title: Context
+  - Golang
+  - Go并发编程
+lang: zh
+toc: true
+abbrlink: golang-context
+draft: false
 ---
-
 > Context 主要用于在异步场景中用于实现并发协调以及对 goroutine 的生命周期控制. 除此之外，context 还兼有一定的数据存储能力.
 
 <!--more-->

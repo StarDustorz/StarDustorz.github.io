@@ -1,9 +1,12 @@
 ---
-abbrlink: reflect
+title: "[Go] 面试题总结"
 published: 2021-12-04
 tags:
-- Golang
-title: 总结
+  - Golang
+  - Go其他
+lang: zh
+toc: true
+abbrlink: golang-interview
 draft: true
 ---
 

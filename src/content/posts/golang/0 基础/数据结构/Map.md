@@ -1,12 +1,14 @@
 ---
-abbrlink: map
+title: "[Go] Map"
 published: 2021-08-10
 tags:
-- Golang
-- 数据结构
-title: Map
+  - Golang
+  - Go数据结构
+lang: zh
+toc: true
+abbrlink: golang-map
+draft: false
 ---
-
 >map 的底层数据结构和实现原理
 
 <!--more-->
@@ -123,6 +125,7 @@ map 中，会通过长度为 2 的整数次幂的桶数组进行 key-value 对�
 
 ### 3.1 hmap
 
+![](StarDust/source/_posts/技术/Golang/0%20基础/数据结构/Map/file-20250305235454430.png)
 
 ```go
 type hmap struct {
@@ -347,3 +350,5 @@ map 的扩容类型分为两类，一类叫做增量扩容，一类叫做等量�
 - 当每次触发写、删操作时，会为处于扩容流程中的 map 完成两组桶的数据迁移
 	- 一组桶是当前写、删操作所命中的桶
 	- 另一组桶是，当前未迁移的桶中，索引最小的那个桶
+
+

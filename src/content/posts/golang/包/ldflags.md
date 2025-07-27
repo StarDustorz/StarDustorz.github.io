@@ -1,10 +1,13 @@
 ---
-abbrlink: golang-ldflags
+title: "[Go] ldflags"
 published: 2021-08-09
 tags:
-- Golang
-- Packges
-title: Golang ldflags
+  - Golang
+  - GoPackges
+lang: zh
+toc: true
+abbrlink: golang-ldflags
+draft: false
 ---
 
 > Golang 在编译时使用ldflags动态设置包中变量的值
@@ -14,6 +17,7 @@ title: Golang ldflags
 ```shell
 -X importpath.name=value Set the value of the string variable in importpath named name to value. Note that before Go 1.5 this option took two separate arguments. Now it takes one argument split on the first = sign.
 ```
+
 ldflags用于链接过程，详细见文章[也谈Go的可移植性](https://tonybai.com/2017/06/27/an-intro-about-go-portability/)
 [静态链接,动态链接,静态库,共享库这些概念的详解](http://blog.champbay.com/2019/11/25/%e9%9d%99%e6%80%81%e9%93%be%e6%8e%a5%e5%8a%a8%e6%80%81%e9%93%be%e6%8e%a5%e9%9d%99%e6%80%81%e5%ba%93%e5%85%b1%e4%ba%ab%e5%ba%93%e8%bf%99%e4%ba%9b%e6%a6%82%e5%bf%b5%e7%9a%84%e8%af%a6%e8%a7%a3/)
 
@@ -67,6 +71,7 @@ git log: 175a5eb```
 ## 测试时使用
 
 创建包和文件
+
 ```shell
 > mkdir $GOPATH/src/gotest 
 > touch $GOPATH/src/gotest/go_test.go
@@ -87,6 +92,7 @@ func TestBuild(t *testing.T) {
 
 
 执行输出：
+
 ```shell
 > cd $GOPATH/src/
 > GO111MODULE=off go test -ldflags="-X 'gotest.time=`date`' -X gotest.version=1.0.1" gotest -v
@@ -99,6 +105,7 @@ ok      gotest  0.009s```
 
 
 ## 参考
+
 - [ldflags使用技巧](https://www.cnblogs.com/ahmczsy/p/11512151.html)
 - [也谈Go的可移植性](https://tonybai.com/2017/06/27/an-intro-about-go-portability/)
 - [静态链接,动态链接,静态库,共享库这些概念的详解](http://blog.champbay.com/2019/11/25/%e9%9d%99%e6%80%81%e9%93%be%e6%8e%a5%e5%8a%a8%e6%80%81%e9%93%be%e6%8e%a5%e9%9d%99%e6%80%81%e5%ba%93%e5%85%b1%e4%ba%ab%e5%ba%93%e8%bf%99%e4%ba%9b%e6%a6%82%e5%bf%b5%e7%9a%84%e8%af%a6%e8%a7%a3/)

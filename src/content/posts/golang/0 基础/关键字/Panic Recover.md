@@ -1,13 +1,14 @@
 ---
-abbrlink: panic-recover
+title: "[Go] Panic Recover"
 published: 2021-08-22
 tags:
-- Golang
-- 关键字
-title: Panic Recover
+  - Golang
+  - Go关键字
 lang: zh
+toc: true
+abbrlink: golang-panic-recover
+draft: false
 ---
-
 >以链表形式存储在 goroutine 结构体中。
 
 <!--more-->
@@ -59,6 +60,9 @@ func A1() {}
 func A2() {}
 ```
 
+具体结构如下图所示：
+
+![](file-20250119062723162.png)
 
 ## 2 正常流程
 
@@ -113,6 +117,9 @@ func A2() {
 }
 ```
 
+具体结构如下图所示：
+
+![](file-20250119062734853.png)
 
 **小结**
 

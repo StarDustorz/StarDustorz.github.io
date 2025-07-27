@@ -1,11 +1,14 @@
 ---
-abbrlink: golang-build-docker-image
+title: "[Go] Build Docker Image"
 published: 2021-06-05
 tags:
-- Golang
-title: Golang Build Docker Image
+  - Golang
+  - Go其他
+lang: zh
+toc: true
+abbrlink: golang-build-docker-image
+draft: false
 ---
-
 > Golang应用通过Dockerfile构建Docker镜像
 
 <!--more-->

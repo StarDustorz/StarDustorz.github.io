@@ -1,10 +1,13 @@
 ---
-abbrlink: channel
+title: "[Go] Channel"
 published: 2022-07-14
 tags:
-- Golang
-- 并发编程
-title: Channel
+  - Golang
+  - Go并发编程
+lang: zh
+toc: true
+abbrlink: golang-channel
+draft: false
 ---
 
 >学习 golang 中的 chan，并分析其具体实现，包括创建 channel，发送数据，接收数据以及相关调度等。
@@ -917,3 +920,8 @@ send/recv的时候都会判断recvq/sendq是否有goroutine正在等待，有则
 [图解Golang channel源码](https://juejin.cn/post/6875325172249788429)
 [Go夜读-第 56 期 channel & select 源码分析](https://github.com/talkgo/night/issues/450)
 [Go源码阅读 | channel 设计与实现](https://maratrix.cn/post/2020/08/25/go-channel-source-read/)
+
+
+
+
+

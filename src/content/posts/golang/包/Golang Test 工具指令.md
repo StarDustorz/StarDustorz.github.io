@@ -1,10 +1,13 @@
 ---
-abbrlink: golang-test
-published: 2021-10-26
+title: "[Go] Package Test "
+published: 2021-08-17
 tags:
-- Golang
-- Packges
-title: Golang Test 工具指令
+  - Golang
+  - GoPackges
+lang: zh
+toc: true
+abbrlink: golang-package-test
+draft: false
 ---
 
 >Golang Test 工具指令
@@ -12,12 +15,15 @@ title: Golang Test 工具指令
 <!--more-->
 
 ## 1 简介
+
 Go test 测试工具包含示例函数测试 (ExampleXXX)、单元测试 (TestXXX)、基准测试 (BenchmarkXXX)。
 
 命令格式：
+
 ```shell
 Go test [-c] [-i] [build flags] [packages] [flags for test binary]
 ```
+
 参数解释：
 
 ```
@@ -59,6 +65,7 @@ Func ExamplePrintln () {
     Println (“output”)
 }
 ```
+
 执行测试函数：
 
 ```go
@@ -76,6 +83,7 @@ Go test -v xxx_test. Go -bench=BenchmarkXXX
 
 Go test -v xxx_test. Go -bench=^BenchmarkXXX$ -run=^$
 ```
+
 -v 参数表示是否通过测试都会显示结果，不加-v 表示只显示未通过的测试
 
 其他参数：-p -cpu=1,2,4 -args= -parallel -timeout -run -short
@@ -94,7 +102,9 @@ Go test -bench=. -count=2
 Go test -bench=. -benchmem
 ./xxx. Test -test. Bench -test. Benchmem
 ```
+
 ## 2 参考：
+
 - [Go 测试，go test 工具的具体指令 flag](https://deepzz.com/post/the-command-flag-of-go-test.html)
 - [Golang 测试](https://sanyuesha.com/2019/08/21/go-test/)
 - [golang test测试使用](https://studygolang.com/articles/2491)

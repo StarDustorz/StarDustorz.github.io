@@ -1,12 +1,14 @@
 ---
-abbrlink: slice
+title: "[Go] Slice"
 published: 2021-07-22
 tags:
-- Golang
-- 数据结构
-title: Slice
+  - Golang
+  - Go数据结构
+lang: zh
+toc: true
+abbrlink: golang-slice
+draft: false
 ---
-
 > 切片的实现原理使用
 
 <!--more-->

@@ -1,12 +1,14 @@
 ---
-abbrlink: function
+title: "[Go] Function"
 published: 2021-10-26
 tags:
-- Golang
-- 语言基础
-title: Function
+  - Golang
+  - Go语言基础
+lang: zh
+toc: true
+abbrlink: golang-function
+draft: false
 ---
-
 >Go 语言中 function 是一等公民，可以用作参数、返回值，也可以赋值给变量。
 
 <!--more-->

@@ -1,15 +1,14 @@
-
 ---
-title: Select
+title: "[Go] Select"
 published: 2021-08-19
 tags:
   - Golang
-  - 关键字
+  - Go关键字
 lang: zh
-abbrlink: select
+toc: true
+abbrlink: golang-select
+draft: false
 ---
-
-
 >以链表形式存储在 goroutine 结构体中。
 
 <!--more-->
@@ -61,7 +60,9 @@ func A1() {}
 func A2() {}
 ```
 
+具体结构如下图所示：
 
+![](StarDust/source/_posts/技术/Golang/0%20基础/关键字/Panic%20Recover/file-20250119062723162.png)
 
 ## 2 正常流程
 
@@ -116,6 +117,9 @@ func A2() {
 }
 ```
 
+具体结构如下图所示：
+
+![](StarDust/source/_posts/技术/Golang/0%20基础/关键字/Panic%20Recover/file-20250119062734853.png)
 
 **小结**
 

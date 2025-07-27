@@ -1,12 +1,14 @@
 ---
-abbrlink: syncpool
-published: 2021-12-04
+title: "[Go] sync.Pool"
+published: 2021-12-14
 tags:
-- Golang
-- 并发编程
-title: sync.Pool
+  - Golang
+  - Go并发编程
+lang: zh
+toc: true
+abbrlink: golang-sync-pool
+draft: false
 ---
-
 >sync.Pool 可以作为保存临时取还对象的一个“池子”，可以缓存暂时不用的对象，下次需要时直接使用（无需重新分配）。
 
 
