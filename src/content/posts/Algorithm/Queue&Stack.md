@@ -9,7 +9,7 @@ abbrlink: algorithm-queue-stack
 ---
 <!--more-->
 
-### 0.1 [20. 有效的括号](https://leetcode.cn/problems/valid-parentheses/)
+## 1 [20. 有效的括号](https://leetcode.cn/problems/valid-parentheses/)
 
 给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
 
@@ -41,7 +41,7 @@ class Solution {
 }
 ```
 
-### 0.2 [42. 接雨水](https://leetcode.cn/problems/trapping-rain-water/)
+## 2 [42. 接雨水](https://leetcode.cn/problems/trapping-rain-water/)
 
 给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
 
@@ -94,7 +94,7 @@ int trap(int[] height) {
 }
 ```
 
-### 0.3 [11. 盛最多水的容器](https://leetcode.cn/problems/container-with-most-water/)
+## 3 [11. 盛最多水的容器](https://leetcode.cn/problems/container-with-most-water/)
 
 给定一个长度为 n 的整数数组 height 。有 n 条垂线，第 i 条线的两个端点是 (i, 0) 和 (i, height[i]) 。
 
@@ -125,7 +125,7 @@ class Solution {
 
 
 
-### 0.4 [232. 用栈实现队列](https://leetcode.cn/problems/implement-queue-using-stacks/)
+## 4 [232. 用栈实现队列](https://leetcode.cn/problems/implement-queue-using-stacks/)
 
 请你仅使用两个栈实现先入先出队列。队列应当支持一般队列支持的所有操作（push、pop、peek、empty）：
 
@@ -171,7 +171,7 @@ class MyQueue {
 }
 ```
 
-### 0.5 [225. 用队列实现栈](https://leetcode.cn/problems/implement-stack-using-queues/)
+## 5 [225. 用队列实现栈](https://leetcode.cn/problems/implement-stack-using-queues/)
 
 请你仅使用两个队列实现一个后入先出（LIFO）的栈，并支持普通栈的全部四种操作（push、top、pop 和 empty）。
 
@@ -214,7 +214,7 @@ class MyStack {
 }
 ```
 
-### 0.6 [1047. 删除字符串中的所有相邻重复项](https://leetcode.cn/problems/remove-all-adjacent-duplicates-in-string/)
+## 6 [1047. 删除字符串中的所有相邻重复项](https://leetcode.cn/problems/remove-all-adjacent-duplicates-in-string/)
 
 给出由小写字母组成的字符串 S，重复项删除操作会选择两个相邻且相同的字母，并删除它们。在 S 上反复执行重复项删除操作，直到无法继续删除。
 
@@ -238,7 +238,7 @@ class Solution {
 }
 ```
 
-### 0.7 [316. 去除重复字母](https://leetcode.cn/problems/remove-duplicate-letters/)
+## 7 [316. 去除重复字母](https://leetcode.cn/problems/remove-duplicate-letters/)
 
 给你一个字符串 s ，请你去除字符串中重复的字母，使得每个字母只出现一次。需保证 返回结果的字典序最小（要求不能打乱其他字符的相对位置）。
 
@@ -291,7 +291,7 @@ class Solution {
 
 
 
-### 0.8 [155. 最小栈](https://leetcode.cn/problems/min-stack/)
+## 8 [155. 最小栈](https://leetcode.cn/problems/min-stack/)
 
 设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。
 
@@ -334,7 +334,7 @@ class MinStack {
 }
 ```
 
-### 0.9 [496. 下一个更大元素 I](https://leetcode.cn/problems/next-greater-element-i/) 单调栈
+## 9 [496. 下一个更大元素 I](https://leetcode.cn/problems/next-greater-element-i/) 单调栈
 
 nums1 中数字 x 的 下一个更大元素 是指 x 在 nums2 中对应位置 右侧 的 第一个 比 x 大的元素。
 
@@ -380,7 +380,7 @@ class Solution {
 }
 ```
 
-### 0.10 [503. 下一个更大元素 II](https://leetcode.cn/problems/next-greater-element-ii/)  单调栈
+## 10 [503. 下一个更大元素 II](https://leetcode.cn/problems/next-greater-element-ii/)  单调栈
 
 给定一个循环数组 nums （ nums[nums.length - 1] 的下一个元素是 nums[0] ），返回 nums 中每个元素的 下一个更大元素
 
@@ -411,7 +411,7 @@ class Solution {
 
 
 
-### 0.11 [739. 每日温度](https://leetcode.cn/problems/daily-temperatures/)  单调栈
+## 11 [739. 每日温度](https://leetcode.cn/problems/daily-temperatures/)  单调栈
 
 给定一个整数数组 temperatures ，表示每天的温度，返回一个数组 answer ，其中 answer[i] 是指对于第 i 天，下一个更高温度出现在几天后。如果气温在这之后都不会升高，请在该位置用 0 来代替。
 
@@ -445,7 +445,7 @@ int[] dailyTemperatures(int[] temperatures) {
 
 
 
-### 0.12 [402. 移掉 K 位数字](https://leetcode.cn/problems/remove-k-digits/)
+## 12 [402. 移掉 K 位数字](https://leetcode.cn/problems/remove-k-digits/)
 
 给你一个以字符串表示的非负整数 num 和一个整数 k ，移除这个数中的 k 位数字，使得剩下的数字最小。请你以字符串形式返回这个最小的数字。
 
@@ -468,7 +468,7 @@ class Solution {
 }
 ```
 
-### 0.13 [71. 简化路径](https://leetcode.cn/problems/simplify-path/)
+## 13 [71. 简化路径](https://leetcode.cn/problems/simplify-path/)
 
 给你一个字符串 path ，表示指向某一文件或目录的 Unix 风格 绝对路径 （以 '/' 开头），请你将其转化为更加简洁的规范路径。
 
@@ -498,7 +498,7 @@ class Solution {
 }
 ```
 
-### 0.14 [394. 字符串解码](https://leetcode.cn/problems/decode-string/)
+## 14 [394. 字符串解码](https://leetcode.cn/problems/decode-string/)
 
 给定一个经过编码的字符串，返回它解码后的字符串。
 
@@ -541,7 +541,7 @@ class Solution {
 }
 ```
 
-### 0.15 [84. 柱状图中最大的矩形](https://leetcode.cn/problems/largest-rectangle-in-histogram/)
+## 15 [84. 柱状图中最大的矩形](https://leetcode.cn/problems/largest-rectangle-in-histogram/)
 
 给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。
 
@@ -603,7 +603,7 @@ public class Solution {
 }
 ```
 
-### 0.16 [85. 最大矩形](https://leetcode.cn/problems/maximal-rectangle/) hard
+## 16 [85. 最大矩形](https://leetcode.cn/problems/maximal-rectangle/) hard
 
 给定一个仅包含 0 和 1 、大小为 rows x cols 的二维二进制矩阵，找出只包含 1 的最大矩形，并返回其面积。
 
@@ -638,7 +638,7 @@ class Solution {
 
  
 
-### 0.17 [224. 基本计算器](https://leetcode.cn/problems/basic-calculator/)
+## 17 [224. 基本计算器](https://leetcode.cn/problems/basic-calculator/)
 
 s 由数字、 + 、 -、(  、 )、和 '   ' 组成
 
@@ -715,7 +715,7 @@ class Solution {
 
 
 
-### 0.18 [227. 基本计算器 II](https://leetcode.cn/problems/basic-calculator-ii/)
+## 18 [227. 基本计算器 II](https://leetcode.cn/problems/basic-calculator-ii/)
 
 给你一个字符串表达式 s ，请你实现一个基本计算器来计算并返回它的值。
 
@@ -824,7 +824,7 @@ class Solution {
 
 
 
-### 0.19 [150. 逆波兰表达式求值](https://leetcode.cn/problems/evaluate-reverse-polish-notation/)
+## 19 [150. 逆波兰表达式求值](https://leetcode.cn/problems/evaluate-reverse-polish-notation/)
 
 根据 逆波兰表示法，求表达式的值。
 
@@ -864,7 +864,7 @@ class Solution {
 
 
 
-### 0.20 [面试题59 - II. 队列的最大值](https://leetcode.cn/problems/dui-lie-de-zui-da-zhi-lcof/)
+## 20 [面试题59 - II. 队列的最大值](https://leetcode.cn/problems/dui-lie-de-zui-da-zhi-lcof/)
 
 请定义一个队列并实现函数 max_value 得到队列里的最大值，要求函数max_value、push_back 和 pop_front 的均摊时间复杂度都是O(1)。
 
@@ -898,7 +898,7 @@ class MaxQueue {
 
 
 
-### 0.21 [946. 验证栈序列](https://leetcode.cn/problems/validate-stack-sequences/)
+## 21 [946. 验证栈序列](https://leetcode.cn/problems/validate-stack-sequences/)
 
 给定 pushed 和 popped 两个序列，每个序列中的 值都不重复，只有当它们可能是在最初空栈上进行的推入 push 和弹出 pop 操作序列的结果时，返回 true；否则，返回 false 。
 

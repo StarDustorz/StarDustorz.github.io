@@ -9,7 +9,7 @@ abbrlink: algorithm-string
 ---
 <!-- more -->
 
-### 0.1 字符串常用方法
+## 1 字符串常用方法
 
 - 不必考虑到线程同步问题，我们应该优先使用StringBuilder类；如果要保证线程安全，自然是StringBuffer。
 
@@ -46,7 +46,7 @@ int len = sb.length();  // 10
 res.toString()   //转换成string
 ```
 
-### 0.2 [剑指 Offer 58 - I. 翻转单词顺序](https://leetcode-cn.com/problems/fan-zhuan-dan-ci-shun-xu-lcof/)
+## 2 [剑指 Offer 58 - I. 翻转单词顺序](https://leetcode-cn.com/problems/fan-zhuan-dan-ci-shun-xu-lcof/)
 
 输入一个英文句子，翻转句子中单词的顺序，但单词内字符的顺序不变。为简单起见，标点符号和普通字母一样处理
 
@@ -83,7 +83,7 @@ class Solution {
 
 
 
-### 0.3 [409. 最长回文串](https://leetcode-cn.com/problems/longest-palindrome/)
+## 3 [409. 最长回文串](https://leetcode-cn.com/problems/longest-palindrome/)
 
 给定一个包含大写字母和小写字母的字符串，找到通过这些字母构造成的最长的回文串。
 
@@ -130,7 +130,7 @@ class Solution {
 
 
 
-### 0.4 [205. 同构字符串](https://leetcode-cn.com/problems/isomorphic-strings/)
+## 4 [205. 同构字符串](https://leetcode-cn.com/problems/isomorphic-strings/)
 
 给定两个字符串 s 和 t，判断它们是否是同构的。
 
@@ -162,7 +162,7 @@ class Solution {
 
 
 
-### 0.5 [647. 回文子串](https://leetcode-cn.com/problems/palindromic-substrings/)
+## 5 [647. 回文子串](https://leetcode-cn.com/problems/palindromic-substrings/)
 
 给定一个字符串，你的任务是计算这个字符串中有多少个回文子串。
 
@@ -195,7 +195,7 @@ class Solution{
 
 
 
-### 0.6 [696. 计数二进制子串](https://leetcode-cn.com/problems/count-binary-substrings/)
+## 6 [696. 计数二进制子串](https://leetcode-cn.com/problems/count-binary-substrings/)
 
 给定一个字符串 s，计算具有相同数量0和1的非空(连续)子字符串的数量，并且这些子字符串中的所有0和所有1都是组合在一起的。
 
@@ -229,7 +229,7 @@ class Solution {
 
 
 
-### 0.7 [剑指 Offer 19. 正则表达式匹配](https://leetcode-cn.com/problems/zheng-ze-biao-da-shi-pi-pei-lcof/)
+## 7 [剑指 Offer 19. 正则表达式匹配](https://leetcode-cn.com/problems/zheng-ze-biao-da-shi-pi-pei-lcof/)
 
 请实现一个函数用来匹配包含'. '和'/*'的正则表达式。模式中的字符'.'表示任意一个字符，而'*'表示它前面的字符可以出现任意次（含0次）。在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串"aaa"与模式"a.a"和"ab*ac*a"匹配，但与"aa.a"和"ab*a"均不匹配。
 
@@ -291,7 +291,7 @@ class Solution {
 
 
 
-### 0.8 [剑指 Offer 48. 最长不含重复字符的子字符串](https://leetcode-cn.com/problems/zui-chang-bu-han-zhong-fu-zi-fu-de-zi-zi-fu-chuan-lcof/)
+## 8 [剑指 Offer 48. 最长不含重复字符的子字符串](https://leetcode-cn.com/problems/zui-chang-bu-han-zhong-fu-zi-fu-de-zi-zi-fu-chuan-lcof/)
 
 给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
 
@@ -324,7 +324,7 @@ class Solution {
 
 
 
-### 0.9 [剑指 Offer 67. 把字符串转换成整数](https://leetcode-cn.com/problems/ba-zi-fu-chuan-zhuan-huan-cheng-zheng-shu-lcof/)
+## 9 [剑指 Offer 67. 把字符串转换成整数](https://leetcode-cn.com/problems/ba-zi-fu-chuan-zhuan-huan-cheng-zheng-shu-lcof/)
 
 写一个函数 StrToInt，实现把字符串转换成整数这个功能。不能使用 atoi 或者其他类似的库函数。
 
@@ -379,7 +379,7 @@ class Solution {
 
 
 
-### 0.10 [剑指 Offer 44. 数字序列中某一位的数字](https://leetcode-cn.com/problems/shu-zi-xu-lie-zhong-mou-yi-wei-de-shu-zi-lcof/)
+## 10 [剑指 Offer 44. 数字序列中某一位的数字](https://leetcode-cn.com/problems/shu-zi-xu-lie-zhong-mou-yi-wei-de-shu-zi-lcof/)
 
 数字以0123456789101112131415…的格式序列化到一个字符序列中。在这个序列中，第5位（从下标0开始计数）是5，第13位是1，第19位是4，等等。
 
@@ -434,7 +434,7 @@ class Solution {
 
 
 
-### 0.11 无重复的最长子串
+## 11 无重复的最长子串
 
 ```java
 //双指针，如果已经包含就不断前移
@@ -478,7 +478,7 @@ class Solution {
 }
 ```
 
-### 0.12 最小覆盖子串
+## 12 最小覆盖子串
 
 ```java
 public static String minWindow(String s, String t) {
@@ -535,7 +535,7 @@ public static String minWindow(String s, String t) {
 
 
 
-### 0.13 [剑指 Offer 57 - II. 和为s的连续正数序列](https://leetcode-cn.com/problems/he-wei-sde-lian-xu-zheng-shu-xu-lie-lcof/)
+## 13 [剑指 Offer 57 - II. 和为s的连续正数序列](https://leetcode-cn.com/problems/he-wei-sde-lian-xu-zheng-shu-xu-lie-lcof/)
 
 输入一个正整数 target ，输出所有和为 target 的连续正整数序列（至少含有两个数）。
 
@@ -577,7 +577,7 @@ class Solution {
 
 
 
-### 0.14 [剑指 Offer 59 - I. 滑动窗口的最大值](https://leetcode-cn.com/problems/hua-dong-chuang-kou-de-zui-da-zhi-lcof/)
+## 14 [剑指 Offer 59 - I. 滑动窗口的最大值](https://leetcode-cn.com/problems/hua-dong-chuang-kou-de-zui-da-zhi-lcof/)
 
 给定一个数组 `nums` 和滑动窗口的大小 `k`，请找出所有滑动窗口里的最大值。
 

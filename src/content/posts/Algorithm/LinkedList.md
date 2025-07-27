@@ -8,9 +8,9 @@ toc: true
 abbrlink: algorithm-linkedlist
 ---
 <!--more-->
-## 1 链表
 
-### 1.1 定义
+
+2### 0.1 定义
 
 ```java
 // Definition for singly-linked list.
@@ -22,7 +22,7 @@ public class SinglyListNode {
 ```
 
 
-### 1.2 [206. 反转链表](https://leetcode-cn.com/problems/reverse-linked-list/) *
+## 1 [206. 反转链表](https://leetcode-cn.com/problems/reverse-linked-list/) *
 
 题目：反转一个单链表
 
@@ -82,7 +82,7 @@ reverseList(1)
 
 
 
-### 1.3 [92. 反转链表 II](https://leetcode-cn.com/problems/reverse-linked-list-ii/)  *
+## 2 [92. 反转链表 II](https://leetcode-cn.com/problems/reverse-linked-list-ii/)  *
 
 题目：反转从位置 m 到 n 的链表。请使用一趟扫描完成反转。
 
@@ -155,7 +155,7 @@ class Solution {
 
 
 
-### 1.4 [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/) important
+## 3 [25. K 个一组翻转链表](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/) important
 
 给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。
 
@@ -238,7 +238,7 @@ class Solution {
 
 
 
-### 1.5 [83. 删除排序链表中的重复元素](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
+## 4 [83. 删除排序链表中的重复元素](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
 
 题目：给定一个排序链表，删除所有重复的元素，使得每个元素只出现一次。
 
@@ -265,7 +265,7 @@ public class Solution {
 
 
 
-### 1.6 [82. 删除排序链表中的重复元素 II](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/)
+## 5 [82. 删除排序链表中的重复元素 II](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/)
 
 题目：给定一个排序链表，删除所有重复的元素，只保留没有重复出现的结点。
 
@@ -308,7 +308,7 @@ class Solution {
 
 
 
-### 1.7 从尾到头打印链表
+## 6 从尾到头打印链表
 题目：输入一个链表，按链表值从尾到头的顺序返回一个ArrayList。
 
 思路：
@@ -366,7 +366,7 @@ class Solution {
 ```
 
 
-### 1.8 链表中的倒数第K个节点 *
+## 7 链表中的倒数第K个节点 *
 题目：输入一个链表，输出该链表中倒数第k个结点。
 
 思路：双指针法，一个先走k步，另一个也开始走，直到
@@ -391,7 +391,7 @@ class Solution {
 }
 ```
 
-### 1.9 [19. 删除链表的倒数第 N 个结点](https://leetcode.cn/problems/remove-nth-node-from-end-of-list/)
+## 8 [19. 删除链表的倒数第 N 个结点](https://leetcode.cn/problems/remove-nth-node-from-end-of-list/)
 
 ```html
 题目:给定一个链表，删除链表的倒数第 n 个节点，并且返回链表的头结点。
@@ -427,7 +427,7 @@ class Solution {
 
 
 
-### 1.10 复杂链表的复制
+## 9 复杂链表的复制
 
 题目：请实现 copyRandomList 函数，复制一个复杂链表。在复杂链表中，每个节点除了有一个 next 指针指向下一个节点，还有一个 random 指针指向链表中的任意节点或者 null。
 
@@ -463,7 +463,7 @@ class Solution { //HashMap实现
 }
 ```
 
-### 1.11 两个链表的第一个公共节点
+## 10 两个链表的第一个公共节点
 题目：输入两个链表，找出它们的第一个公共节点。
 
 
@@ -490,7 +490,7 @@ public class Solution {
 
 
 
-### 1.12 环型链表
+## 11 环型链表
 
 题目：给定一个链表，判断链表中是否有环。
 
@@ -522,7 +522,7 @@ public class Solution {
 
 
 
-### 1.13 [链表中环的入口结点](https://www.nowcoder.com/practice/253d2c59ec3e4bc68da16833f79a38e4?tpId=13&tqId=11208&tPage=3&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
+## 12 [链表中环的入口结点](https://www.nowcoder.com/practice/253d2c59ec3e4bc68da16833f79a38e4?tpId=13&tqId=11208&tPage=3&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking)
 
 
 [https://leetcode-cn.com/problems/linked-list-cycle-ii/submissions/](https://leetcode-cn.com/problems/linked-list-cycle-ii/submissions/)
@@ -552,7 +552,7 @@ public ListNode EntryNodeOfLoop(ListNode pHead) {
 
 
 
-### 1.14 [2. 两数相加](https://leetcode.cn/problems/add-two-numbers/)  *
+## 13 [2. 两数相加](https://leetcode.cn/problems/add-two-numbers/)  *
 
 题目:给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
 
@@ -592,7 +592,7 @@ class Solution {
 
 
 
-### 1.15 [445. 两数相加 II](https://leetcode-cn.com/problems/add-two-numbers-ii/)
+## 14 [445. 两数相加 II](https://leetcode-cn.com/problems/add-two-numbers-ii/)
 
 题目：给你两个 非空 链表来代表两个非负整数。数字最高位位于链表开始位置。它们的每个节点只存储一位数字。将这两数相加会返回一个新的链表。
 
@@ -636,7 +636,7 @@ class Solution {
 
 
 
-### 1.16 [328. 奇偶链表](https://leetcode-cn.com/problems/odd-even-linked-list/)
+## 15 [328. 奇偶链表](https://leetcode-cn.com/problems/odd-even-linked-list/)
 
 题目：给定一个单链表，把所有的奇数节点和偶数节点分别排在一起。请注意，这里的奇数节点和偶数节点指的是节点编号的奇偶性，而不是节点的值的奇偶性。
 
@@ -663,7 +663,7 @@ class Solution {
 
 
 
-### 1.17 [725. 分隔链表](https://leetcode-cn.com/problems/split-linked-list-in-parts/)
+## 16 [725. 分隔链表](https://leetcode-cn.com/problems/split-linked-list-in-parts/)
 
 给定一个头结点为 root 的链表, 编写一个函数以将链表分隔为 k 个连续的部分。
 
@@ -711,7 +711,7 @@ class Solution {
 
 
 
-### 1.18 [21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/) *
+## 17 [21. 合并两个有序链表](https://leetcode-cn.com/problems/merge-two-sorted-lists/) *
 
 题目：将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。
 
@@ -766,7 +766,7 @@ class Solution {
 }
 ```
 
-### 1.19 [23. 合并K个升序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/) *
+## 18 [23. 合并K个升序链表](https://leetcode-cn.com/problems/merge-k-sorted-lists/) *
 
 给你一个链表数组，每个链表都已经按升序排列。
 
@@ -835,7 +835,7 @@ class Solution {
 
 
 
-### 1.20 [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/) important
+## 19 [234. 回文链表](https://leetcode-cn.com/problems/palindrome-linked-list/) important
 
 请判断一个链表是否为回文链表。
 
@@ -890,7 +890,7 @@ class Solution {
 
 
 
-### 1.21 [86. 分隔链表](https://leetcode-cn.com/problems/partition-list/)  important
+## 20 [86. 分隔链表](https://leetcode-cn.com/problems/partition-list/)  important
 
 给你一个链表的头节点 head 和一个特定值 x ，请你对链表进行分隔，使得所有 小于 x 的节点都出现在 大于或等于 x 的节点之前。
 
@@ -924,7 +924,7 @@ class Solution {
 
 
 
-### 1.22 剑指46.圆圈中最后剩下的数 ###
+## 21 剑指46.圆圈中最后剩下的数 ###
 
 每年六一儿童节,牛客都会准备一些小礼物去看望孤儿院的小朋友,今年亦是如此。HF作为牛客的资深元老,自然也准备了一些小游戏。其中,有个游戏是这样的:首先,让小朋友们围成一个大圈。然后,他随机指定一个数m,让编号为0的小朋友开始报数。每次喊到m-1的那个小朋友要出列唱首歌,然后可以在礼品箱中任意的挑选礼物,并且不再回到圈中,从他的下一个小朋友开始,继续0...m-1报数....这样下去....直到剩下最后一个小朋友,可以不用表演,并且拿到牛客名贵的“名侦探柯南”典藏版(名额有限哦!!^_^)。请你试着想下,哪个小朋友会得到这份礼品呢？(注：小朋友的编号是从0到n-1) 
 
@@ -955,7 +955,7 @@ public class Solution {
 }
 ```
 
-### 1.23 853.链表的中间结点  important
+## 22 853.链表的中间结点  important
 
 [https://leetcode-cn.com/problems/middle-of-the-linked-list/](https://leetcode-cn.com/problems/middle-of-the-linked-list/)
 
@@ -973,7 +973,7 @@ class Solution {
 }
 ```
 
-### 1.24 [24. 两两交换链表中的节点](https://leetcode.cn/problems/swap-nodes-in-pairs/) *
+## 23 [24. 两两交换链表中的节点](https://leetcode.cn/problems/swap-nodes-in-pairs/) *
 
 给你一个链表，两两交换其中相邻的节点，并返回交换后链表的头节点。你必须在不修改节点内部的值的情况下完成本题（即，只能进行节点交换）。
 
@@ -1016,7 +1016,7 @@ class Solution {
 
 
 
-### 1.25 奇数位升序偶数位降序的链表  important
+## 24 奇数位升序偶数位降序的链表  important
 
 ```java
 public static ListNode oddEvenLinkedList(ListNode head) {

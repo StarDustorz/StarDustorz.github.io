@@ -11,7 +11,7 @@ abbrlink: algorithm-array
 
 <!--more-->
 
-### 0.1 声明和定义
+## 1 声明和定义
 
 ```java
 int[] array = new int[5];
@@ -27,7 +27,7 @@ public static void printArray(int[] array) {
 int[][] a = new int[2][3];
 ```
 
-### 0.2 [11. 盛最多水的容器](https://leetcode-cn.com/problems/container-with-most-water/)
+## 2 [11. 盛最多水的容器](https://leetcode-cn.com/problems/container-with-most-water/)
 
 给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
 
@@ -47,7 +47,7 @@ class Solution {
 
 
 
-### 0.3 [15. 三数之和](https://leetcode-cn.com/problems/3sum/)
+## 3 [15. 三数之和](https://leetcode-cn.com/problems/3sum/)
 
 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有和为 0 且不重复的三元组。
 
@@ -85,7 +85,7 @@ class Solution {
 
 
 
-### 0.4 [33. 搜索旋转排序数组](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/)
+## 4 [33. 搜索旋转排序数组](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/)
 
 整数数组 nums 按升序排列，数组中的值 互不相同 。
 
@@ -122,7 +122,7 @@ class Solution {
 
 
 
-### 0.5 [38. 外观数列](https://leetcode-cn.com/problems/count-and-say/)
+## 5 [38. 外观数列](https://leetcode-cn.com/problems/count-and-say/)
 
 要 描述 一个数字字符串，首先要将字符串分割为 最小 数量的组，每个组都由连续的最多 相同字符 组成。然后对于每个组，先描述字符的数量，然后描述字符，形成一个描述组。要将描述转换为数字字符串，先将每组中的字符数量用数字替换，再将所有描述组连接起来。
 
@@ -165,7 +165,7 @@ class Solution {
 
 
 
-### 0.6 [42. 接雨水](https://leetcode-cn.com/problems/trapping-rain-water/)
+## 6 [42. 接雨水](https://leetcode-cn.com/problems/trapping-rain-water/)
 
 给定 *n* 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
 
@@ -194,7 +194,7 @@ class Solution {
 
 
 
-### 0.7 寻找数组的中心索引
+## 7 寻找数组的中心索引
 
 题目：给定一个整数类型的数组 nums，请编写一个能够返回数组 “中心索引” 的方法。
 
@@ -225,7 +225,7 @@ nums = [1, 7, 3, 6, 5, 6]
     return -1;
 ```
 
-### 0.8 搜索插入位置
+## 8 搜索插入位置
 
 题目：给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
 
@@ -257,7 +257,7 @@ nums = [1, 7, 3, 6, 5, 6]
 ```
 
 
-### 0.9 合并区间
+## 9 合并区间
 
 题目：给出一个区间的集合，请合并所有重叠的区间。
 
@@ -296,7 +296,7 @@ nums = [1, 7, 3, 6, 5, 6]
 
 
 
-## 1 最大子序和(1385)
+## 10 最大子序和(1385)
 
 [https://leetcode-cn.com/problems/maximum-subarray/](https://leetcode-cn.com/problems/maximum-subarray/)
 
@@ -326,7 +326,7 @@ class Solution {
 }
 ```
 
-## 2 打家劫舍 II(375)
+## 11 打家劫舍 II(375)
 
 [https://leetcode-cn.com/problems/house-robber-ii/](https://leetcode-cn.com/problems/house-robber-ii/)
 
@@ -367,7 +367,7 @@ class Solution {
 }
 ```
 
-## 3 搜索插入位置(1239)
+## 12 搜索插入位置(1239)
 
 [https://leetcode-cn.com/problems/search-insert-position/](https://leetcode-cn.com/problems/search-insert-position/)
 
@@ -414,7 +414,7 @@ class Solution {
 }
 ```
 
-## 4 接雨水(1145)
+## 13 接雨水(1145)
 
 [https://leetcode-cn.com/problems/trapping-rain-water/](https://leetcode-cn.com/problems/trapping-rain-water/)
 
@@ -439,7 +439,7 @@ class Solution {
 }
 ```
 
-## 5 跳跃游戏(1059)
+## 14 跳跃游戏(1059)
 
 [https://leetcode-cn.com/problems/jump-game/](https://leetcode-cn.com/problems/jump-game/)
 
@@ -484,7 +484,7 @@ class Solution {
 }
 ```
 
-## 6 加一(1254)
+## 15 加一(1254)
 
 [https://leetcode-cn.com/problems/plus-one/](https://leetcode-cn.com/problems/plus-one/)
 
@@ -532,7 +532,7 @@ class Solution {
 }
 ```
 
-## 7 合并两个有序数组(1057)
+## 16 合并两个有序数组(1057)
 
 [https://leetcode-cn.com/problems/merge-sorted-array/](https://leetcode-cn.com/problems/merge-sorted-array/)
 
@@ -574,7 +574,7 @@ public void merge(int[] nums1, int m, int[] nums2, int n) {
 
 ```
 
-## 8 买卖股票的最佳时机(1491)
+## 17 买卖股票的最佳时机(1491)
 
 [https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)
 
@@ -619,9 +619,9 @@ class Solution {
 }
 ```
 
-## 9 多数元素(1096)
+## 18 多数元素(1096)
 
-## 10 多数元素(1096)
+## 19 多数元素(1096)
 
 [https://leetcode-cn.com/problems/majority-element/](https://leetcode-cn.com/problems/majority-element/)
 
@@ -646,7 +646,7 @@ class Solution {
 }
 ```
 
-## 11 打家劫舍(1035)
+## 20 打家劫舍(1035)
 
 [https://leetcode-cn.com/problems/house-robber/](https://leetcode-cn.com/problems/house-robber/)
 
@@ -685,7 +685,7 @@ class Solution {
 
 
 
-## 12 移动零(1008)
+## 21 移动零(1008)
 
 [https://leetcode-cn.com/problems/move-zeroes/](https://leetcode-cn.com/problems/move-zeroes/)
 
@@ -712,7 +712,7 @@ class Solution {
 }
 ```
 
-## 13 合并区间(950)
+## 22 合并区间(950)
 
 [https://leetcode-cn.com/problems/merge-intervals/](https://leetcode-cn.com/problems/merge-intervals/)
 
@@ -754,7 +754,7 @@ class Solution {
 }
 ```
 
-## 14 在排序数组中查找元素的第一个和最后一个位置(935)
+## 23 在排序数组中查找元素的第一个和最后一个位置(935)
 
 [https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
@@ -800,7 +800,7 @@ class Solution {
 }
 ```
 
-## 15 全排列(985)
+## 24 全排列(985)
 
 [https://leetcode-cn.com/problems/permutations/](https://leetcode-cn.com/problems/permutations/)
 
@@ -850,7 +850,7 @@ class Solution {
 }
 ```
 
-## 16 只出现一次的数字(890)
+## 25 只出现一次的数字(890)
 
 [https://leetcode-cn.com/problems/single-number/](https://leetcode-cn.com/problems/single-number/)
 
@@ -873,7 +873,7 @@ class Solution {
 }
 ```
 
-## 17 岛屿数量(853)
+## 26 岛屿数量(853)
 
 [https://leetcode-cn.com/problems/number-of-islands/](https://leetcode-cn.com/problems/number-of-islands/)
 
@@ -941,7 +941,7 @@ class Solution {
 }
 ```
 
-## 18 数组中的第K个最大元素(855)
+## 27 数组中的第K个最大元素(855)
 
 [https://leetcode-cn.com/problems/kth-largest-element-in-an-array/](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)
 
@@ -997,7 +997,7 @@ class Solution {
 }
 ```
 
-## 19 缺失的第一个正数(751)
+## 28 缺失的第一个正数(751)
 
 [https://leetcode-cn.com/problems/first-missing-positive/](https://leetcode-cn.com/problems/first-missing-positive/)
 
@@ -1036,7 +1036,7 @@ class Solution {
 }
 ```
 
-## 20 最长上升子序列(718)
+## 29 最长上升子序列(718)
 
 [https://leetcode-cn.com/problems/longest-increasing-subsequence/](https://leetcode-cn.com/problems/longest-increasing-subsequence/)
 
@@ -1070,7 +1070,7 @@ class Solution {
 }
 ```
 
-## 21 将数组分成和相等的三个部分(798)
+## 30 将数组分成和相等的三个部分(798)
 
 [https://leetcode-cn.com/problems/partition-array-into-three-parts-with-equal-sum/](https://leetcode-cn.com/problems/partition-array-into-three-parts-with-equal-sum/)
 
@@ -1121,7 +1121,7 @@ class Solution {
 }
 ```
 
-## 22 拼写单词(705)
+## 31 拼写单词(705)
 
 [https://leetcode-cn.com/problems/find-words-that-can-be-formed-by-characters/](https://leetcode-cn.com/problems/find-words-that-can-be-formed-by-characters/)
 
@@ -1173,7 +1173,7 @@ class Solution {
 }
 ```
 
-## 23 子集(633)
+## 32 子集(633)
 
 [https://leetcode-cn.com/problems/subsets/](https://leetcode-cn.com/problems/subsets/)
 
@@ -1228,7 +1228,7 @@ class Solution {
 
 
 
-## 24 岛屿的最大面积(648)
+## 33 岛屿的最大面积(648)
 
 [https://leetcode-cn.com/problems/max-area-of-island/](https://leetcode-cn.com/problems/max-area-of-island/)
 
@@ -1282,7 +1282,7 @@ class Solution {
 }
 ```
 
-## 25 每日温度(698)
+## 34 每日温度(698)
 
 [https://leetcode-cn.com/problems/daily-temperatures/](https://leetcode-cn.com/problems/daily-temperatures/)
 
@@ -1313,7 +1313,7 @@ class Solution {
 }
 ```
 
-## 26 组合总和(582)
+## 35 组合总和(582)
 
 [https://leetcode-cn.com/problems/combination-sum/](https://leetcode-cn.com/problems/combination-sum/)
 
@@ -1367,7 +1367,7 @@ class Solution {
 }
 ```
 
-## 27 颜色分类(584)
+## 36 颜色分类(584)
 
 [https://leetcode-cn.com/problems/sort-colors/](https://leetcode-cn.com/problems/sort-colors/)
 给定一个包含红色、白色和蓝色，一共 n 个元素的数组，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。
@@ -1404,7 +1404,7 @@ class Solution {
 }
 ```
 
-## 28 三角形最小路径和(523)
+## 37 三角形最小路径和(523)
 
 [https://leetcode-cn.com/problems/triangle/](https://leetcode-cn.com/problems/triangle/)
 
@@ -1452,7 +1452,7 @@ class Solution {
 }
 ```
 
-## 29 乘积最大子数组(541)
+## 38 乘积最大子数组(541)
 
 [https://leetcode-cn.com/problems/maximum-product-subarray/](https://leetcode-cn.com/problems/maximum-product-subarray/)
 
@@ -1496,7 +1496,7 @@ class Solution {
 }
 ```
 
-## 30 两数之和 II - 输入有序数组(559)
+## 39 两数之和 II - 输入有序数组(559)
 
 [https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/](https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/)
 
@@ -1535,7 +1535,7 @@ class Solution {
 }
 ```
 
-## 31 旋转数组(517)
+## 40 旋转数组(517)
 
 [https://leetcode-cn.com/problems/rotate-array/](https://leetcode-cn.com/problems/rotate-array/)
 
@@ -1576,7 +1576,7 @@ class Solution {
 }
 ```
 
-## 32 寻找重复数(515)
+## 41 寻找重复数(515)
 
 [https://leetcode-cn.com/problems/find-the-duplicate-number/](https://leetcode-cn.com/problems/find-the-duplicate-number/)
 
@@ -1619,7 +1619,7 @@ class Solution {
 }
 ```
 
-## 33 存在重复元素(471)
+## 42 存在重复元素(471)
 
 [https://leetcode-cn.com/problems/contains-duplicate/](https://leetcode-cn.com/problems/contains-duplicate/)
 
@@ -1649,7 +1649,7 @@ class Solution {
 
 
 
-## 34 除自身以外数组的乘积(467)
+## 43 除自身以外数组的乘积(467)
 
 [https://leetcode-cn.com/problems/product-of-array-except-self/](https://leetcode-cn.com/problems/product-of-array-except-self/)
 
@@ -1680,7 +1680,7 @@ class Solution {
 }
 ```
 
-## 35 两个数组的交集 II(402)
+## 44 两个数组的交集 II(402)
 
 [https://leetcode-cn.com/problems/intersection-of-two-arrays-ii/](https://leetcode-cn.com/problems/intersection-of-two-arrays-ii/)
 
@@ -1714,7 +1714,7 @@ class Solution {
 }
 ```
 
-## 36 子集 II(304)
+## 45 子集 II(304)
 
 [https://leetcode-cn.com/problems/subsets-ii/](https://leetcode-cn.com/problems/subsets-ii/)
 
@@ -1770,7 +1770,7 @@ class Solution {
 }
 ```
 
-## 37 寻找旋转排序数组中的最小值(316)
+## 46 寻找旋转排序数组中的最小值(316)
 
 [https://leetcode-cn.com/problems/find-minimum-in-rotated-sorted-array/](https://leetcode-cn.com/problems/find-minimum-in-rotated-sorted-array/)
 
@@ -1807,7 +1807,7 @@ class Solution {
 }
 ```
 
-## 38 有序矩阵中第K小的元素(337)
+## 47 有序矩阵中第K小的元素(337)
 
 [https://leetcode-cn.com/problems/kth-smallest-element-in-a-sorted-matrix/](https://leetcode-cn.com/problems/kth-smallest-element-in-a-sorted-matrix/)
 
