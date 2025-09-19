@@ -44,7 +44,7 @@
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^4.13.2",
+    "@antfu/eslint-config": "^5.4.1",
     "@astrojs/check": "^0.9.4",
     "@types/hast": "^3.0.4",
     "@types/markdown-it": "^14.1.2",
