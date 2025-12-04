@@ -26,7 +26,7 @@ public class SinglyListNode {
 
 题目：反转一个单链表
 
-1.双指针迭代
+方法一：双指针迭代
 
 从前向后反转
 
@@ -50,7 +50,7 @@ class Solution {
 ```
 
 
-2.递归
+方法二：递归
 
 从后往前反转
 
