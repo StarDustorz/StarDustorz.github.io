@@ -25,7 +25,6 @@ pnpm-debug.log*
 !.vscode/extensions.json
 !.vscode/settings.json
 
-.claude.md
+.CLAUDE.md
+.发布文章.md
 
-/Users/caotianlong/Desktop/StarDust/source/_posts/发布文章.md
-/Users/caotianlong/Desktop/StarDust/source/_posts/CLAUDE.md
