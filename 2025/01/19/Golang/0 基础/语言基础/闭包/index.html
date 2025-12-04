@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="[Go] Closure" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="Golang, Go 语言基础, Draco&#39;s Blog" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/atom.xml" title="Draco's Blog" type="application/atom+xml">
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://stardustorz.github.io/2025/01/19/Golang/0 基础/语言基础/闭包/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":false};
+</script>
+  
+  <title>[Go] Closure - Draco&#39;s Blog</title>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/links/">
+      <li class="mobile-menu-item">
+        
+        
+        Links              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Draco's Blog</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/links/">  
+              
+              
+              Links  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      [Go] Closure
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2025-01-19
+      </span>
+      
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%97%AD%E5%8C%85"><span class="toc-number">1.</span> <span class="toc-text">闭包</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-function-value"><span class="toc-number">1.1.</span> <span class="toc-text">1 function value</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%97%AD%E5%8C%85-Closure"><span class="toc-number">1.2.</span> <span class="toc-text">2 闭包 Closure</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%8E%B7%E5%8F%96%E6%8D%95%E8%8E%B7%E5%88%97%E8%A1%A8"><span class="toc-number">1.3.</span> <span class="toc-text">3 获取捕获列表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%8D%95%E8%8E%B7%E5%8F%98%E9%87%8F"><span class="toc-number">1.4.</span> <span class="toc-text">4 捕获变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E6%B2%A1%E6%9C%89%E4%BF%AE%E6%94%B9"><span class="toc-number">1.4.1.</span> <span class="toc-text">4.1 没有修改</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E6%9C%89%E4%BF%AE%E6%94%B9"><span class="toc-number">1.4.2.</span> <span class="toc-text">4.2 有修改</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E5%B0%8F%E7%BB%93"><span class="toc-number">1.4.3.</span> <span class="toc-text">4.3 小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%B0%8F%E7%BB%93"><span class="toc-number">1.5.</span> <span class="toc-text">5 小结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%8F%82%E8%80%83"><span class="toc-number">1.6.</span> <span class="toc-text">6 参考</span></a></li></ol></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <blockquote>
+<p>闭包是有状态函数</p>
+</blockquote>
+<span id="more"></span>
+<h1 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h1><h2 id="1-function-value"><a href="#1-function-value" class="headerlink" title="1 function value"></a>1 function value</h2><p>Go 语言中的函数是头等公民。可以做为参数传递，可以做函数返回值、也可以绑定到变量。</p>
+<p>Go 语言称这样的参数、返回值或变量为<strong>function value</strong>。</p>
+<p>function value 不直接指向函数指令入口，而是指向一个 <code>runtime.funcval</code>结构体。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// runtime/runtime2.go</span></span><br><span class="line"><span class="keyword">type</span> funcval <span class="keyword">struct</span> &#123;</span><br><span class="line">	fn <span class="type">uintptr</span></span><br><span class="line">	<span class="comment">// variable-size, fn-specific data here</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到 funcval 只有一个字段 fn，存储的就是函数指令入口地址。</p>
+<h2 id="2-闭包-Closure"><a href="#2-闭包-Closure" class="headerlink" title="2 闭包 Closure"></a>2 闭包 Closure</h2><p><strong>为什么要用 funcval 结构体来包装函数指令入口地址，然后使用二级指针来调用？</strong></p>
+<p>主要是为了处理闭包的情况。</p>
+<p>维基百科上的<a href="[https://zh.wikipedia.org/wiki/%E9%97%AD%E5%8C%85_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6">闭包</a>](<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/闭包_(计算机科学)))定义如下：">https://zh.wikipedia.org/wiki/闭包_(计算机科学)))定义如下：</a></p>
+<ul>
+<li>1）必须要有在函数外部定义但在函数内部引用的<code>自由变量</code></li>
+<li>2）脱离了形成闭包的上下文，闭包也能照常使用这些自由变量。</li>
+</ul>
+<p>就向下面这个例子</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	f1 := create()</span><br><span class="line">	f2 := create()</span><br><span class="line">	fmt.Println(f1())</span><br><span class="line">	fmt.Println(f2())</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">create</span><span class="params">()</span></span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	i := <span class="number">2</span></span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> <span class="type">int</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> i</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>create() 函数执行结束后，通过 f1()，f2() 依然可以正常调用这个闭包函数，并使用定义在 create() 函数内部的局部变量 i，所以这符合闭包的定义。</p>
+<p>通常称这个变量 i 为<strong>捕获变量</strong>。</p>
+<p><strong>闭包函数的指令在编译阶段生成，但是闭包对象要到执行阶段才创建，因为每个闭包对象都要保存自己的捕获变量</strong>。</p>
+<p>闭包函数指令存放在栈中的代码段上。</p>
+<p>闭包对象则会分配到堆上，闭包对象具体组成如下：</p>
+<ul>
+<li>1）funcval 结构体</li>
+<li>2）捕获变量列表</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">f1 := create()</span><br><span class="line">f2 := create()</span><br></pre></td></tr></table></figure>
+<p>这里创建了两个闭包对象，其中的 funcval 都指向同一个函数指令入口，但是捕获变量则需要各自维护。</p>
+<p>然后把这两个闭包对象的地址赋值给接收者，即这里的 f1,f2。</p>
+<p>通过f1、f2调用闭包函数会找到各自对应的 funcval 结构体，拿到同一个函数入口，但是却使用的是各自的捕获变量列表。</p>
+<p><strong>这就是称闭包为有状态函数的原因。</strong></p>
+<h2 id="3-获取捕获列表"><a href="#3-获取捕获列表" class="headerlink" title="3 获取捕获列表"></a>3 获取捕获列表</h2><p><strong>闭包函数是如何找到对应的捕获列表呢？</strong></p>
+<p>Go语言中通过一个 function value 调用函数时，会把对应的<strong>funcval 结构体地址</strong>存入特定寄存器。例如 amd64 平台使用的是 DX 寄存器。</p>
+<p>这样在闭包函数中就可以通过寄存器取出 funcval 结构体的地址，然后加上相应的<strong>偏移量</strong>来找到每一个被捕获的变量。</p>
+<p>所以<strong>Go 语言中闭包就是有捕获列表的 function value</strong>，而没有捕获列表的 function value 直接忽略这个寄存器的值就好了。</p>
+<h2 id="4-捕获变量"><a href="#4-捕获变量" class="headerlink" title="4 捕获变量"></a>4 捕获变量</h2><p>被闭包捕获的变量，要在外层函数闭包函数中表现一致，好像它们在使用同一个变量。为此 Go 语言编译器针对不同情况做了不同的处理。</p>
+<blockquote>
+<p>变量逃逸、参数堆分配、返回值</p>
+</blockquote>
+<h3 id="4-1-没有修改"><a href="#4-1-没有修改" class="headerlink" title="4.1 没有修改"></a>4.1 没有修改</h3><p>被捕获变量 i 除了赋值之外没有被其他地方修改，所以直接拷贝到捕获列表即可。</p>
+<p>就像下面这个例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">incrementer</span><span class="params">()</span></span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> <span class="type">int</span> &#123;</span><br><span class="line">	i := <span class="number">2</span></span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> <span class="type">int</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> i</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4-2-有修改"><a href="#4-2-有修改" class="headerlink" title="4.2 有修改"></a>4.2 有修改</h3><p>除了初始化赋值外还被修改过，则需要进一步细分。</p>
+<p><strong>捕获的是局部变量</strong></p>
+<p>被闭包捕获的局部变量如果除了初始化赋值外还被修改过，就会分配到堆上。</p>
+<p>闭包导致的局部变量堆分配，也是变量逃逸的一种。</p>
+<p>例子如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fs := create()</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(fs); i++ &#123;</span><br><span class="line">		fs[i]()</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">create</span><span class="params">()</span></span> (fs [<span class="number">2</span>]<span class="function"><span class="keyword">func</span><span class="params">()</span></span>) &#123;</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">2</span>; i++ &#123;</span><br><span class="line">		fs[i] = <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">			fmt.Println(i)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>create() 函数中的局部变量 i 除了初始化之外，还被修改过(i++)，同时还被闭包捕获，所以会分配到堆上，然后栈上只存储该变量的地址。</p>
+<p>每次 i++ 自增的是堆上的变量 i，而闭包捕获的都是变量 i 的地址，都指向堆上的变量 i。</p>
+<p>最后 i 会自增到 2 ，所以最终闭包打印出来的i值都为2。</p>
+<p><strong>捕获的是参数</strong></p>
+<p>由于参数设计到函数原型，就不能像局部变量这样处理了。</p>
+<p>参数依然通过调用者栈帧传入，但是编译器会把栈上参数拷贝一份到堆上。然后外层函数和闭包函数都使用堆上分配的这个。</p>
+<p><strong>捕获的是返回值</strong></p>
+<p>如果捕获的是返回值，则处理又不同。</p>
+<p>调用者栈帧上依然会分配返回值空间，不过闭包的外层函数会在堆上也分配一个，外层函数和闭包函数都使用堆上分配的这个。</p>
+<p>但是在外层函数返回前，需要把堆上的返回值拷贝到栈上的返回值空间。</p>
+<h3 id="4-3-小结"><a href="#4-3-小结" class="headerlink" title="4.3 小结"></a>4.3 小结</h3><p>处理方式虽然多种多样，但是目标只有一个，那就是<strong>保持捕获变量在外层函数和闭包函数中的一致性</strong>。</p>
+<h2 id="5-小结"><a href="#5-小结" class="headerlink" title="5 小结"></a>5 小结</h2><ul>
+<li><strong>闭包由 funcval 结构体和捕获变量组成</strong>。<pre><code>* funcval 结构体中的 fn 字段指向闭包函数的函数入口
+* 捕获变量则是当前闭包对象的参数，每个闭包对象维护各种的参数列表。
+</code></pre></li>
+<li>除初始化外还被修改过的局部变量被闭包捕获后会<strong>分配到堆上，栈上保存的是指向堆上变量的指针</strong>。<pre><code>* 局部变量堆分配，变量逃逸的一种。
+* 所以这个时候闭包中的局部变量其实就是一个地址，都指向堆上的同一个变量。
+* 这也是为什么各种 for 循环最后打印出的 i 都是一个值
+</code></pre></li>
+</ul>
+<h2 id="6-参考"><a href="#6-参考" class="headerlink" title="6 参考"></a>6 参考</h2><p><code>https://zh.wikipedia.org/wiki/闭包_(计算机科学)</code></p>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span>Author: </span>
+    <a href="https://stardustorz.github.io">draco</a>
+  </p>
+  <p class="copyright-item">
+    <span>Link: </span>
+    <a href="https://stardustorz.github.io/2025/01/19/Golang/0%20%E5%9F%BA%E7%A1%80/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E9%97%AD%E5%8C%85/">https://stardustorz.github.io/2025/01/19/Golang/0%20%E5%9F%BA%E7%A1%80/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/%E9%97%AD%E5%8C%85/</a>
+  </p>
+  <p class="copyright-item">
+    <span>License: </span>
+    
+    <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+  </p>
+</div>
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/Golang/">Golang</a>
+      
+      <a href="/tags/Go-%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/">Go 语言基础</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/2025/01/19/Golang/0%20%E5%9F%BA%E7%A1%80/%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/Function/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">[Go] Function</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/2025/01/19/Golang/4%20%E5%85%B6%E4%BB%96/%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90/">  
+        <span class="next-text nav-default">[Go] Memory Align</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2019 - 2025      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">draco</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+</body>
+
+</html>
