@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Website mata -->
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- Disable transformation -->
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<!-- Website description -->
+
+<meta name="description" content="[Algorithm] SkipList" />
+
+
+<!-- Website keywords -->
+
+<meta name="keywords" content="Algorithm, Draco&#39;s Blog" />
+
+
+
+
+<!-- Website rss -->
+
+<link rel="alternate" href="/atom.xml" title="Draco's Blog" type="application/atom+xml">
+
+
+<!-- Website favicon -->
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=3.0.0" />
+
+
+<!-- Canonical, good for google search engine -->
+<link rel="canonical" href="https://stardustorz.github.io/2025/07/25/Algorithm/SkipList/" />
+
+<!-- Fancybox styling -->
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css" />
+
+
+<!-- MathJax (LaTeX) support -->
+
+
+<!-- Theme styling -->
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=3.0.0" />
+
+<!-- Analytics and push -->
+
+
+
+  
+
+
+
+<!-- LeanCloud Counter -->
+
+
+<script>
+  window.config = {"leancloud":{"app_id":null,"app_key":null,"server_url":null,"cdn":null},"toc":true,"fancybox":true,"latex":false};
+</script>
+  
+  <title>[Algorithm] SkipList - Draco&#39;s Blog</title>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div class="scrollPercentage"></div>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">Draco&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    
+    <a href="/">
+      <li class="mobile-menu-item">
+        
+        
+        Home              </li>
+    </a>
+    
+    <a href="/archives/">
+      <li class="mobile-menu-item">
+        
+        
+        Archives              </li>
+    </a>
+    
+    <a href="/tags/">
+      <li class="mobile-menu-item">
+        
+        
+        Tags              </li>
+    </a>
+    
+    <a href="/categories/">
+      <li class="mobile-menu-item">
+        
+        
+        Categories              </li>
+    </a>
+    
+    <a href="/links/">
+      <li class="mobile-menu-item">
+        
+        
+        Links              </li>
+    </a>
+    
+    <a href="/about/">
+      <li class="mobile-menu-item">
+        
+        
+        About              </li>
+    </a>
+    
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+      <div class="logo-wrapper">  
+  <a href="/." class="logo">Draco's Blog</a>  
+</div>  
+  
+<nav class="site-navbar">  
+    
+    <ul id="menu" class="menu">  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/">  
+              
+              
+              Home  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/archives/">  
+              
+              
+              Archives  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/tags/">  
+              
+              
+              Tags  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/categories/">  
+              
+              
+              Categories  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/links/">  
+              
+              
+              Links  
+              
+          </a>  
+        </li>  
+        
+        <li class="menu-item">  
+          <a class="menu-item-link" href="/about/">  
+              
+              
+              About  
+              
+          </a>  
+        </li>  
+        
+    </ul>  
+    
+</nav>  
+
+    </header>
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+      [Algorithm] SkipList
+      
+    </h1>
+
+    <div class="post-meta">
+      <span class="post-time">
+        2025-07-25
+      </span>
+      
+      
+      
+    </div>
+  </header>
+
+  
+  <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">Contents</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A0%B8%E5%BF%83%E6%80%A7%E8%B4%A8"><span class="toc-number">1.</span> <span class="toc-text">1 核心性质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%AE%9A%E4%B9%89"><span class="toc-number">2.</span> <span class="toc-text">2 数据结构定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%AF%BB%E6%B5%81%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">3 读流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%86%99%E6%B5%81%E7%A8%8B"><span class="toc-number">4.</span> <span class="toc-text">4 写流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E6%B5%81%E7%A8%8B"><span class="toc-number">5.</span> <span class="toc-text">删流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-RANGE-%E6%B5%81%E7%A8%8B"><span class="toc-number">6.</span> <span class="toc-text">5 RANGE 流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CEILING-%E6%B5%81%E7%A8%8B"><span class="toc-number">7.</span> <span class="toc-text">CEILING 流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-FLOOR-%E6%B5%81%E7%A8%8B"><span class="toc-number">8.</span> <span class="toc-text">6 FLOOR 流程</span></a></li></ol>
+    </div>
+  </div>
+  
+
+  <div class="post-content">
+    
+    <h2 id="1-核心性质"><a href="#1-核心性质" class="headerlink" title="1 核心性质"></a>1 核心性质</h2><ul>
+<li>跳表由多层索引结构组成</li>
+<li>每次节点个数接近于相邻下层节点数的一半</li>
+<li>对于一个 m 层存在的节点，在 1~m-1层中这个节点也一定存在</li>
+<li>为保证连贯性，跳表额外补充了本身不存储数据的头节点和尾节点，作为起点和终点</li>
+<li>头节点和尾节点的高度是动态扩缩的，其高度取决于当前跳表内数据节点的最大高度</li>
+<li>跳表的”跳“字体现在，在高层检索时，每跳过一个节点，实际上都过滤跳过了底层的大量数据，从而实现检索加速<h2 id="2-数据结构定义"><a href="#2-数据结构定义" class="headerlink" title="2 数据结构定义"></a>2 数据结构定义</h2></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// 跳表的数据结构 Skiplist  </span></span><br><span class="line"> <span class="keyword">type</span> Skiplist <span class="keyword">struct</span> &#123;  </span><br><span class="line">     head *node  </span><br><span class="line"> &#125;  </span><br><span class="line"> <span class="comment">// 节点定义  </span></span><br><span class="line"> <span class="keyword">type</span> node <span class="keyword">struct</span> &#123;  </span><br><span class="line">     <span class="comment">// 长度为当前节点的高度  </span></span><br><span class="line">     nexts    []*node  </span><br><span class="line">     key, val <span class="type">int</span>  </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-读流程"><a href="#3-读流程" class="headerlink" title="3 读流程"></a>3 读流程</h2><ul>
+<li>以 head 节点作为起点</li>
+<li>从当前跳表存在的最大高度出发</li>
+<li>倘若右侧节点 key 值小于 target，则持续向右遍历</li>
+<li>倘若右侧节点 key 值等于 target，则代表找到目标，直接取值返回</li>
+<li>倘若右侧节点为终点（nil）或者 key 值大于 target，则沿当前节点降低高度进入下一层</li>
+<li>重复</li>
+<li>倘若已经抵达第1层仍然找到不到 target，则返回 key 不存在的信息</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// 根据 key 读取 val，第二个 bool flag 反映 key 在 skiplist 中是否存在  </span></span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="params">(s *Skiplist)</span></span> Get(key <span class="type">int</span>) (<span class="type">int</span>, <span class="type">bool</span>) &#123;  </span><br><span class="line">     <span class="comment">// 根据 key 尝试检索对应的 node，如果 node 存在，则返回对应的 val  </span></span><br><span class="line">     <span class="keyword">if</span> _node := s.search(key); _node != <span class="literal">nil</span> &#123;  </span><br><span class="line">         <span class="keyword">return</span> _node.val, <span class="literal">true</span>  </span><br><span class="line">     &#125;  </span><br><span class="line">     <span class="keyword">return</span> <span class="number">-1</span>, <span class="literal">false</span>  </span><br><span class="line"> &#125;  </span><br><span class="line"> ​  </span><br><span class="line"> <span class="comment">// 从跳表中检索 key 对应的 node  </span></span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="params">(s *Skiplist)</span></span> search(key <span class="type">int</span>) *node &#123;  </span><br><span class="line">     <span class="comment">// 每次检索从头部出发  </span></span><br><span class="line">     move := s.head  </span><br><span class="line">     <span class="comment">// 每次检索从最大高度出发，直到来到首层  </span></span><br><span class="line">     <span class="keyword">for</span> level := <span class="built_in">len</span>(s.head.nexts) - <span class="number">1</span>; level &gt;= <span class="number">0</span>; level-- &#123;  </span><br><span class="line">         <span class="comment">// 在每一层中持续向右遍历，直到下一个节点不存在或者 key 值大于等于 key  </span></span><br><span class="line">         <span class="keyword">for</span> move.nexts[level] != <span class="literal">nil</span> &amp;&amp; move.nexts[level].key &lt; key &#123;  </span><br><span class="line">             move = move.nexts[level]  </span><br><span class="line">         &#125;  </span><br><span class="line">         <span class="comment">// 如果 key 值相等，则找到了目标直接返回  </span></span><br><span class="line">         <span class="keyword">if</span> move.nexts[level] != <span class="literal">nil</span> &amp;&amp; move.nexts[level].key == key &#123;  </span><br><span class="line">             <span class="keyword">return</span> move.nexts[level]  </span><br><span class="line">         &#125;  </span><br><span class="line">         <span class="comment">// 当前层没找到目标，则层数减 1，继续向下  </span></span><br><span class="line">     &#125;  </span><br><span class="line">     <span class="comment">// 遍历完所有层数，都没有找到目标，返回 nil  </span></span><br><span class="line">     <span class="keyword">return</span> <span class="literal">nil</span>  </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4-写流程"><a href="#4-写流程" class="headerlink" title="4 写流程"></a>4 写流程</h2><ul>
+<li>首先基于读流程检索出 key 对应的节点是否存在，倘若存在，则对值进行更新并直接返回</li>
+<li>随机出新插入节点的高度；倘若新插入节点的高度大于当前跳表的最大高度，则需要对起点和终点的高度进行扩容</li>
+<li>以 head 节点作为起点，从当前跳表存在的最大高度出发</li>
+<li>倘若右侧节点 key 值小于 target，则持续向右遍历</li>
+<li>倘若右侧节点为终点（nil）或者 key 值大于 target，则在该空隙插入新节点，并降低高度进入下一层</li>
+<li>重复（4）-（5）步</li>
+<li>倘若已经进入第 1 层，插入新节点后即可返回<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">import</span> (<span class="string">&quot;math/rand&quot;</span>)  </span><br><span class="line"> roll 骰子，决定一个待插入的新节点在 skiplist 中最高层对应的 index  </span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="params">(s *Skiplist)</span></span> roll() <span class="type">int</span> &#123;  </span><br><span class="line">     <span class="keyword">var</span> level <span class="type">int</span>  </span><br><span class="line">     <span class="comment">// 每次投出 1，则层数加 1  </span></span><br><span class="line">     <span class="keyword">for</span> rand.Int() &gt; <span class="number">0</span> &#123;  </span><br><span class="line">         level++  </span><br><span class="line">     &#125;  </span><br><span class="line">     <span class="keyword">return</span> level  </span><br><span class="line"> &#125;  </span><br><span class="line"> ​  </span><br><span class="line"> <span class="comment">// 将 key-val 对加入 skiplist  </span></span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="params">(s *Skiplist)</span></span> Put(key, val <span class="type">int</span>) &#123;  </span><br><span class="line">     <span class="comment">// 假如 kv对已存在，则直接对值进行更新并返回  </span></span><br><span class="line">     <span class="keyword">if</span> _node := s.search(key); _node != <span class="literal">nil</span> &#123;  </span><br><span class="line">         _node.val = val  </span><br><span class="line">         <span class="keyword">return</span>  </span><br><span class="line">     &#125;  </span><br><span class="line"> ​  </span><br><span class="line">     <span class="comment">// roll 出新节点的高度  </span></span><br><span class="line">     level := s.roll()  </span><br><span class="line">     </span><br><span class="line">     <span class="comment">// 新节点高度超出跳表最大高度，则需要对高度进行补齐  </span></span><br><span class="line">     <span class="keyword">for</span> <span class="built_in">len</span>(s.head.nexts)<span class="number">-1</span> &lt; level &#123;  </span><br><span class="line">         s.head.nexts = <span class="built_in">append</span>(s.head.nexts, <span class="literal">nil</span>)  </span><br><span class="line">     &#125;  </span><br><span class="line"> ​  </span><br><span class="line">     <span class="comment">// 创建出新的节点  </span></span><br><span class="line">     newNode := node&#123;  </span><br><span class="line">         key:   key,  </span><br><span class="line">         val:   val,  </span><br><span class="line">         nexts: <span class="built_in">make</span>([]*node, level+<span class="number">1</span>),  </span><br><span class="line">     &#125;  </span><br><span class="line">    </span><br><span class="line">     <span class="comment">// 从头节点的最高层出发  </span></span><br><span class="line">     move := s.head  </span><br><span class="line">     <span class="keyword">for</span> level := level; level &gt;= <span class="number">0</span>; level-- &#123;  </span><br><span class="line">         <span class="comment">// 向右遍历，直到右侧节点不存在或者 key 值大于 key  </span></span><br><span class="line">         <span class="keyword">for</span> move.nexts[level] != <span class="literal">nil</span> &amp;&amp; move.nexts[level].key &lt; key &#123;  </span><br><span class="line">             move = move.nexts[level]  </span><br><span class="line">         &#125;  </span><br><span class="line">         <span class="comment">// 调整指针关系，完成新节点的插入  </span></span><br><span class="line">         newNode.nexts[level] = move.nexts[level]  </span><br><span class="line">         move.nexts[level] = &amp;newNode  </span><br><span class="line">     &#125;  </span><br><span class="line"> &#125;  </span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="删流程"><a href="#删流程" class="headerlink" title="删流程"></a>删流程</h2><ul>
+<li>以 head 节点作为起点，从当前跳表存在的最大高度出发</li>
+<li>倘若右侧节点 key 值小于 target，则持续向右遍历</li>
+<li>倘若右侧节点为终点（nil）或者 key 值大于 target，则在该空隙插入新节点，并降低高度进入下一层</li>
+<li>倘若右侧节点 key 值等于 target，则代表找到目标</li>
+<li>找到目标值后，沿当前节点层层向下，依次将每层中的目标节点删除</li>
+<li>倘若已经进入第 1 层仍然没有找到节点，说明节点不存在，删除失败</li>
+<li><p>倘若删除成功，需要尝试对跳表的整体高度进行缩容，即需要对高度递减，直到确定最大高度对应的层数上至少存在一个有效的数据节点为止</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 根据 key 从跳表中删除对应的节点  </span></span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="params">(s *Skiplist)</span></span> Del(key <span class="type">int</span>) &#123;  </span><br><span class="line">     <span class="comment">// 如果 kv 对不存在，则无需删除直接返回  </span></span><br><span class="line">     <span class="keyword">if</span> _node := s.search(key); _node == <span class="literal">nil</span> &#123;  </span><br><span class="line">         <span class="keyword">return</span>  </span><br><span class="line">     &#125;  </span><br><span class="line"> ​  </span><br><span class="line">     <span class="comment">// 从头节点的最高层出发      </span></span><br><span class="line">     move := s.head  </span><br><span class="line">     <span class="keyword">for</span> level := <span class="built_in">len</span>(s.head.nexts) - <span class="number">1</span>; level &gt;= <span class="number">0</span>; level-- &#123;  </span><br><span class="line">         <span class="comment">// 向右遍历，直到右侧节点不存在或者 key 值大于等于 key  </span></span><br><span class="line">         <span class="keyword">for</span> move.nexts[level] != <span class="literal">nil</span> &amp;&amp; move.nexts[level].key &lt; key &#123;  </span><br><span class="line">             move = move.nexts[level]  </span><br><span class="line">         &#125;  </span><br><span class="line">           </span><br><span class="line">         <span class="comment">// 右侧节点不存在或者 key 值大于 target，则直接跳过  </span></span><br><span class="line">         <span class="keyword">if</span> move.nexts[level] == <span class="literal">nil</span> || move.nexts[level].key &gt; key&#123;  </span><br><span class="line">            <span class="keyword">continue</span>  </span><br><span class="line">         &#125;      </span><br><span class="line">         <span class="comment">// 走到此处意味着右侧节点的 key 值必然等于 key，则调整指针引用  </span></span><br><span class="line">         move.nexts[level] = move.nexts[level].nexts[level]  </span><br><span class="line">     &#125;  </span><br><span class="line"> ​  </span><br><span class="line">     <span class="comment">// 对跳表的最大高度进行更新  </span></span><br><span class="line">     <span class="keyword">var</span> dif <span class="type">int</span>  </span><br><span class="line">     <span class="comment">// 倘若某一层已经不存在数据节点，高度需要递减  </span></span><br><span class="line">     <span class="keyword">for</span> level := <span class="built_in">len</span>(s.head.nexts) - <span class="number">1</span>; level &gt; <span class="number">0</span> &amp;&amp; s.head.nexts[level] == <span class="literal">nil</span>; level-- &#123;  </span><br><span class="line">         dif++  </span><br><span class="line">     &#125;  </span><br><span class="line">     s.head.nexts = s.head.nexts[:<span class="built_in">len</span>(s.head.nexts)-dif]  </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="5-RANGE-流程"><a href="#5-RANGE-流程" class="headerlink" title="5 RANGE 流程"></a>5 RANGE 流程</h2></li>
+<li>以 head 节点作为起点</li>
+<li>从当前跳表存在的最大高度出发</li>
+<li>倘若右侧节点 key 值小于 target，则持续向右遍历</li>
+<li>倘若右侧节点为终点（nil）或者 key 值大于 target，则沿当前节点降低高度进入下一层</li>
+<li>倘若右侧节点 key 值等于 target，则代表找到目标，直接沿该节点向下来到第1层</li>
+<li><p>重复（3）-（5）步，直到来到第1层，接下来从首个大于等于 target 的节点出发，向右依次遍历，直到取满 range 区间的数据后返回</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 找到 skiplist 当中 ≥ start，且 ≤ end 的 kv 对  </span></span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="params">(s *Skiplist)</span></span> Range(start, end <span class="type">int</span>) [][<span class="number">2</span>]<span class="type">int</span> &#123;  </span><br><span class="line">     <span class="comment">// 首先通过 ceiling 方法，找到 skiplist 中 key 值大于等于 start 且最接近于 start 的节点 ceilNode  </span></span><br><span class="line">     ceilNode := s.ceiling(start)  </span><br><span class="line">     <span class="comment">// 如果不存在，直接返回  </span></span><br><span class="line">     <span class="keyword">if</span> ceilNode == <span class="literal">nil</span> &#123;  </span><br><span class="line">         <span class="keyword">return</span> [][<span class="number">2</span>]<span class="type">int</span>&#123;&#125;  </span><br><span class="line">     &#125;  </span><br><span class="line"> ​  </span><br><span class="line">     <span class="comment">// 从 ceilNode 首层出发向右遍历，把所有位于 [start,end] 区间内的节点统统返回  </span></span><br><span class="line">     <span class="keyword">var</span> res [][<span class="number">2</span>]<span class="type">int</span>  </span><br><span class="line">     <span class="keyword">for</span> move := ceilNode; move != <span class="literal">nil</span> &amp;&amp; move.key &lt;= end; move = move.nexts[<span class="number">0</span>] &#123;  </span><br><span class="line">         res = <span class="built_in">append</span>(res, [<span class="number">2</span>]<span class="type">int</span>&#123;move.key, move.val&#125;)  </span><br><span class="line">     &#125;  </span><br><span class="line">     <span class="keyword">return</span> res  </span><br><span class="line"> &#125;  </span><br><span class="line"> ​  </span><br><span class="line"> <span class="comment">// 找到 key 值大于等于 target 且 key 值最接近于 target 的节点  </span></span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="params">(s *Skiplist)</span></span> ceiling(target <span class="type">int</span>) *node &#123;  </span><br><span class="line">     move := s.head  </span><br><span class="line">     <span class="comment">// 自上而下，找到 key 值小于 target 且最接近 target 的 kv 对  </span></span><br><span class="line">     <span class="keyword">for</span> level := <span class="built_in">len</span>(s.head.nexts) - <span class="number">1</span>; level &gt;= <span class="number">0</span>; level-- &#123;  </span><br><span class="line">         <span class="keyword">for</span> move.nexts[level] != <span class="literal">nil</span> &amp;&amp; move.nexts[level].key &lt; target &#123;  </span><br><span class="line">             move = move.nexts[level]  </span><br><span class="line">         &#125;  </span><br><span class="line">         <span class="comment">// 如果 key 值等于 targe 的 kv 对存在，则直接返回  </span></span><br><span class="line">         <span class="keyword">if</span> move.nexts[level] != <span class="literal">nil</span> &amp;&amp; move.nexts[level].key == target &#123;  </span><br><span class="line">             <span class="keyword">return</span> move.nexts[level]  </span><br><span class="line">         &#125;  </span><br><span class="line">     &#125;  </span><br><span class="line">     <span class="comment">// 此时 move 已经对应于在首层 key 值小于 key 且最接近于 key 的节点，其右侧第一个节点即为所寻找的目标节点  </span></span><br><span class="line">     <span class="keyword">return</span> move.nexts[<span class="number">0</span>]  </span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="CEILING-流程"><a href="#CEILING-流程" class="headerlink" title="CEILING 流程"></a>CEILING 流程</h2><ul>
+<li>以 head 节点作为起点</li>
+<li>从当前跳表存在的最大高度出发</li>
+<li>倘若右侧节点 key 值小于 target，则持续向右遍历</li>
+<li>倘若右侧节点为终点（nil）或者 key 值大于 target，则沿当前节点降低高度进入下一层</li>
+<li>倘若右侧节点 key 值等于 target，则代表找到目标，直接取值返回</li>
+<li>重复（3）-（5）步，直到找到 key 值等于 target 的节点或者来到第1层，接下来获取到首个大于等于 target 的节点并返回</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// 找到 skiplist 中，key 值大于等于 target 且最接近于 target 的 key-value 对  </span></span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="params">(s *Skiplist)</span></span> Ceiling(target <span class="type">int</span>) ([<span class="number">2</span>]<span class="type">int</span>, <span class="type">bool</span>) &#123;  </span><br><span class="line">     <span class="keyword">if</span> ceilNode := s.ceiling(target); ceilNode != <span class="literal">nil</span> &#123;  </span><br><span class="line">         <span class="keyword">return</span> [<span class="number">2</span>]<span class="type">int</span>&#123;ceilNode.key, ceilNode.val&#125;, <span class="literal">true</span>  </span><br><span class="line">     &#125;  </span><br><span class="line">     <span class="keyword">return</span> [<span class="number">2</span>]<span class="type">int</span>&#123;&#125;, <span class="literal">false</span>  </span><br><span class="line"> &#125;  </span><br></pre></td></tr></table></figure>
+<p> ​</p>
+<h2 id="6-FLOOR-流程"><a href="#6-FLOOR-流程" class="headerlink" title="6 FLOOR 流程"></a>6 FLOOR 流程</h2><ul>
+<li>以 head 节点作为起点</li>
+<li>从当前跳表存在的最大高度出发</li>
+<li>倘若右侧节点 key 值小于 target，则持续向右遍历</li>
+<li>倘若右侧节点为终点（nil）或者 key 值大于 target，则沿当前节点降低高度进入下一层</li>
+<li>倘若右侧节点 key 值等于 target，则代表找到目标，直接取值返回</li>
+<li><p>重复（3）-（5）步，直到找到 key 值等于 target 的节点或者来到第1层，接下来获取到首个小于等于 target 的节点并返回</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 找到 skiplist 中，key 值小于等于 target 且最接近于 target 的 key-value 对  </span></span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="params">(s *Skiplist)</span></span> Floor(target <span class="type">int</span>) ([<span class="number">2</span>]<span class="type">int</span>, <span class="type">bool</span>) &#123;  </span><br><span class="line">     <span class="comment">// 引用 floor 方法，取 floorNode 值进行返回  </span></span><br><span class="line">     <span class="keyword">if</span> floorNode := s.floor(target); floorNode != <span class="literal">nil</span> &#123;  </span><br><span class="line">         <span class="keyword">return</span> [<span class="number">2</span>]<span class="type">int</span>&#123;floorNode.key, floorNode.val&#125;, <span class="literal">true</span>  </span><br><span class="line">     &#125;  </span><br><span class="line"> ​  </span><br><span class="line"> ​  </span><br><span class="line">     <span class="keyword">return</span> [<span class="number">2</span>]<span class="type">int</span>&#123;&#125;, <span class="literal">false</span>  </span><br><span class="line"> &#125;  </span><br><span class="line"> ​  </span><br><span class="line"> <span class="comment">// 找到 key 值小于等于 target 且 key 值最接近于 target 的节点  </span></span><br><span class="line"> <span class="function"><span class="keyword">func</span> <span class="params">(s *Skiplist)</span></span> floor(target <span class="type">int</span>) *node &#123;  </span><br><span class="line">     move := s.head  </span><br><span class="line">     <span class="comment">// 自上而下，找到 key 值小于 target 且最接近 target 的 kv 对  </span></span><br><span class="line">     <span class="keyword">for</span> level := <span class="built_in">len</span>(s.head.nexts) - <span class="number">1</span>; level &gt;= <span class="number">0</span>; level-- &#123;  </span><br><span class="line">         <span class="keyword">for</span> move.nexts[level] != <span class="literal">nil</span> &amp;&amp; move.nexts[level].key &lt; target &#123;  </span><br><span class="line">             move = move.nexts[level]  </span><br><span class="line">         &#125;  </span><br><span class="line">         <span class="comment">// 如果 key 值等于 targe 的 kv对存在，则直接返回  </span></span><br><span class="line">         <span class="keyword">if</span> move.nexts[level] != <span class="literal">nil</span> &amp;&amp; move.nexts[level].key == target &#123;  </span><br><span class="line">             <span class="keyword">return</span> move.nexts[level]  </span><br><span class="line">         &#125;  </span><br><span class="line">     &#125;  </span><br><span class="line"> ​  </span><br><span class="line">     <span class="comment">// move 是首层中 key 值小于 target 且最接近 target 的节点，直接返回 move 即可  </span></span><br><span class="line">     <span class="keyword">return</span> move  </span><br><span class="line"> &#125;  </span><br></pre></td></tr></table></figure>
+<p>​<br>​</p>
+</li>
+</ul>
+
+    
+  </div>
+
+  
+  <!-- Post Copyright -->
+
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span>Author: </span>
+    <a href="https://stardustorz.github.io">draco</a>
+  </p>
+  <p class="copyright-item">
+    <span>Link: </span>
+    <a href="https://stardustorz.github.io/2025/07/25/Algorithm/SkipList/">https://stardustorz.github.io/2025/07/25/Algorithm/SkipList/</a>
+  </p>
+  <p class="copyright-item">
+    <span>License: </span>
+    
+    <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>
+  </p>
+</div>
+
+    
+
+  
+
+  
+  <footer class="post-footer">
+    
+    <div class="post-tags">
+      
+      <a href="/tags/Algorithm/">Algorithm</a>
+      
+    </div>
+    
+      
+  <nav class="post-nav">  
+      
+      <a class="prev" href="/2025/07/25/Basic/Linux%20%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">  
+        <i class="iconfont icon-left"></i>  
+        <span class="prev-text nav-default">[Basic] Linux 常用命令</span>  
+        <span class="prev-text nav-mobile">Prev</span>  
+      </a>  
+      
+      
+      <a class="next" href="/2025/07/25/Basic/Git%20%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/">  
+        <span class="next-text nav-default">[Basic] Git</span>  
+        <span class="prev-text nav-mobile">Next</span>  
+        <i class="iconfont icon-right"></i>  
+      </a>  
+      
+  </nav>  
+  
+
+  </footer>
+  
+
+</article>
+        </div>
+      </div>
+    </main>
+    <footer id="footer" class="footer">
+      <!-- Social Links -->
+
+<div class="social-links">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+  
+</div>
+
+
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme -
+    <a class="theme-link" target="_blank" rel="noopener" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+  <span class="division">|</span>
+  <span class="hosting-info">
+    footer.hosting
+  </span>
+
+  <span class="copyright-year">
+    <span>
+      
+      &copy;
+      
+      2019 - 2025      
+    </span>
+
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+
+    <span class="author">draco</span>
+  </span>
+
+</div>
+    </footer>
+    <div class="back-to-top" id="back-to-top"> <i class="iconfont icon-up"></i> </div>
+  </div>
+  
+
+
+
+
+
+
+
+<script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+
+
+
+<script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/even.js?v=3.0.0"></script>
+</body>
+
+</html>
