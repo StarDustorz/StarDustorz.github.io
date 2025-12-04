@@ -10,7 +10,7 @@ abbrlink: algorithm-linkedlist
 <!--more-->
 
 
-2### 0.1 定义
+
 
 ```java
 // Definition for singly-linked list.
