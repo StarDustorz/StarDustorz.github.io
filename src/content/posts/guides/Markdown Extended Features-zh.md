@@ -10,11 +10,11 @@ abbrlink: markdown-extended-features
 
 支持的 Markdown 扩展功能，包括语法示例与效果展示。
 
-## 图注
+## 1 图注
 
 使用标准的 Markdown 图像语法 `![alt](src)`，即可自动生成图注。在 `alt` 前添加下划线 `_` 或留空 `alt`，即可隐藏图注。
 
-### 语法
+### 1.1 语法
 
 ```
 ![图片描述](https://image.example.com/image-01.webp)
@@ -22,29 +22,29 @@ abbrlink: markdown-extended-features
 ![_图片描述](https://image.example.com/image-01.webp)
 ```
 
-### 效果
+### 1.2 效果
 
 
 
-## Github 仓库卡片
+## 2 Github 仓库卡片
 
 使用双冒号语法 `::github{repo="owner/repo"}`，即可创建 Github 仓库卡片。在页面加载后，从 GitHub API 中实时获取仓库数据。
 
-### 语法
+### 2.1 语法
 
 ```
 ::github{repo="radishzzz/astro-theme-retypeset"}
 ```
 
-### 效果
+### 2.2 效果
 
 ::github{repo="radishzzz/astro-theme-retypeset"}
 
-## 提示块
+## 3 提示块
 
 使用 GitHub 语法 `> [!TYPE]` 或三冒号语法 `:::type`，即可创建提示块。支持 `note`、`tip`、`important`、`warning` 和 `caution` 五种类型。
 
-### 语法
+### 3.1 语法
 
 ```
 > [!NOTE]
@@ -69,7 +69,7 @@ abbrlink: markdown-extended-features
 :::
 ```
 
-### 效果
+### 3.2 效果
 
 > [!NOTE]
 > 即使快速浏览，也值得用户留意的信息。
@@ -92,11 +92,11 @@ abbrlink: markdown-extended-features
 这是一个自定义标题的提示块。
 :::
 
-## 视频
+## 4 视频
 
 从 YouTube 或其它视频平台获取嵌入代码，并粘贴至 markdown 文件中，即可创建视频。不需要保留 `width` 和 `height` 参数。
 
-### 语法
+### 4.1 语法
 
 ```html
 <!-- Youtube -->
@@ -106,7 +106,7 @@ abbrlink: markdown-extended-features
 <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=930327443&bvid=BV1sK4y1Z7KG&cid=329802177&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
 ```
 
-### 效果
+### 4.2 效果
 
 <iframe src="https://www.youtube.com/embed/9pP0pIgP2kE?si=Rlk4C4ltaVPHXZ80" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
