@@ -20,7 +20,7 @@ export async function getStaticPaths() {
       paths.push({
         params: {
           lang: getLangRouteParam(lang),
-          tag: node.path.map(seg => encodeURIComponent(seg)).join('/'),
+          tag: node.path.join('/'),
         },
       })
 
@@ -39,7 +39,6 @@ export async function getStaticPaths() {
 
 const tagPath = (Astro.params.tag ?? '')
   .split('/')
-  .map(seg => decodeURIComponent(seg))
   .filter(Boolean)
 const currentLang = getLangFromLocale(Astro.currentLocale)
 const posts = await getPostsByTagPath(tagPath, currentLang)
