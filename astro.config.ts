@@ -1,78 +1,45 @@
-import type { Element } from 'hast'
 import mdx from '@astrojs/mdx'
 import partytown from '@astrojs/partytown'
 import sitemap from '@astrojs/sitemap'
 import Compress from 'astro-compress'
-import robotsTxt from 'astro-robots-txt'
 import { defineConfig } from 'astro/config'
-import rehypeAutolinkHeadings from 'rehype-autolink-headings'
-import rehypeExternalLinks from 'rehype-external-links'
 import rehypeKatex from 'rehype-katex'
+import rehypeMermaid from 'rehype-mermaid'
 import rehypeSlug from 'rehype-slug'
 import remarkDirective from 'remark-directive'
 import remarkMath from 'remark-math'
-import { visit } from 'unist-util-visit'
 import UnoCSS from 'unocss/astro'
-import { themeConfig } from './src/config'
+import { base, defaultLocale, themeConfig } from './src/config'
 import { langMap } from './src/i18n/config'
 import { rehypeCodeCopyButton } from './src/plugins/rehype-code-copy-button.mjs'
-import { rehypeImgErrorHandler } from './src/plugins/rehype-img-error-handler.mjs'
-import { rehypeImgToFigure } from './src/plugins/rehype-img-to-figure.mjs'
-import { rehypeUnwrapImg } from './src/plugins/rehype-unwrap-img.mjs'
-import { remarkAdmonitions } from './src/plugins/remark-admonitions.mjs'
-import { remarkGithubCard } from './src/plugins/remark-github-card.mjs'
+import { rehypeExternalLinks } from './src/plugins/rehype-external-links.mjs'
+import { rehypeHeadingAnchor } from './src/plugins/rehype-heading-anchor.mjs'
+import { rehypeImageProcessor } from './src/plugins/rehype-image-processor.mjs'
+import { remarkContainerDirectives } from './src/plugins/remark-container-directives.mjs'
+import { remarkLeafDirectives } from './src/plugins/remark-leaf-directives.mjs'
 import { remarkReadingTime } from './src/plugins/remark-reading-time.mjs'
-import { viteImgErrorHandler } from './src/plugins/vite-img-error-handler'
 
-const url = themeConfig.site.url
-const locale = themeConfig.global.locale
-const linkPrefetch = themeConfig.preload.linkPrefetch
-const imageHostURL = themeConfig.preload.imageHostURL
-// Configure domains and remotePatterns to optimize remote images in Markdown files using ![alt](src) syntax
-// Docs: https://docs.astro.build/en/guides/images/#authorizing-remote-images
+const { url: site } = themeConfig.site
+const { imageHostURL } = themeConfig.preload ?? {}
 const imageConfig = imageHostURL
-  ? { 
-      image: { 
-        domains: [
-          imageHostURL, 
-          'obsidian-1309391399.cos.ap-shanghai.myqcloud.com'
-        ], 
-        remotePatterns: [{ protocol: 'https' }] 
-      } 
-    }
+  ? { image: { domains: [imageHostURL], remotePatterns: [{ protocol: 'https' }] } }
   : {}
 
 export default defineConfig({
-  site: url,
-  base: '/',
-  trailingSlash: 'always',
+  site,
+  base,
+  trailingSlash: 'always', // Not recommended to change
   prefetch: {
     prefetchAll: true,
-    defaultStrategy: linkPrefetch,
+    defaultStrategy: 'viewport', // hover, tap, viewport, load
   },
   ...imageConfig,
-  vite: {
-    plugins: [
-      viteImgErrorHandler()
-    ],
-    build: {
-      rollupOptions: {
-        onwarn(warning, warn) {
-          // 忽略图片相关的警告
-          if (warning.code === 'UNRESOLVED_IMPORT' && warning.id && warning.id.match(/\.(png|jpg|jpeg|gif|webp)$/)) {
-            return
-          }
-          warn(warning)
-        }
-      }
-    }
-  },
   i18n: {
     locales: Object.entries(langMap).map(([path, codes]) => ({
       path,
-      codes: codes as [string, ...string[]],
+      codes: [...codes] as [string, ...string[]],
     })),
-    defaultLocale: locale,
+    defaultLocale,
   },
   integrations: [
     UnoCSS({
@@ -85,7 +52,6 @@ export default defineConfig({
       },
     }),
     sitemap(),
-    robotsTxt(),
     Compress({
       CSS: true,
       HTML: true,
@@ -98,70 +64,23 @@ export default defineConfig({
     remarkPlugins: [
       remarkDirective,
       remarkMath,
-      remarkAdmonitions,
-      remarkGithubCard,
+      remarkContainerDirectives,
+      remarkLeafDirectives,
       remarkReadingTime,
     ],
     rehypePlugins: [
       rehypeKatex,
+      [rehypeMermaid, { strategy: 'pre-mermaid' }],
       rehypeSlug,
+      rehypeHeadingAnchor,
+      rehypeImageProcessor,
+      rehypeExternalLinks,
       rehypeCodeCopyButton,
-      rehypeImgErrorHandler,
-      rehypeImgToFigure,
-      rehypeUnwrapImg,
-      [
-        rehypeAutolinkHeadings,
-        {
-          behavior: 'append',
-          test: ['h1', 'h2', 'h3', 'h4'],
-          content: {
-            type: 'element',
-            tagName: 'svg',
-            properties: {
-              'viewBox': '0 0 24 24',
-              'aria-hidden': 'true',
-              'fill': 'currentColor',
-            },
-            children: [
-              {
-                type: 'element',
-                tagName: 'path',
-                properties: {
-                  d: 'M2.6 21.4c2 2 5.9 2.9 8.9 0l3.5-3.5-1-1-3.5 3.5c-1.4 1.4-4.2 1.9-6.4-.3s-1.8-5-.3-6.4l3.5-3.5-1-1-3.5 3.5c-3 3-2 6.9 0 8.9ZM21.4 2.6c2 2 2.9 5.9 0 8.9L17.9 15l-1-1 3.5-3.5c1.4-1.4 1.9-4.2-.3-6.4s-5-1.8-6.4-.3l-3.5 3.5-1-1 3.5-3.5c3-3 6.9-2 8.9 0Z',
-                },
-              },
-              {
-                type: 'element',
-                tagName: 'path',
-                properties: {
-                  d: 'm8.01 14.97 6.93-6.93 1.061 1.06-6.93 6.93z',
-                },
-              },
-            ],
-          },
-          properties: (el: Element) => {
-            let text = ''
-            visit(el, 'text', (textNode) => {
-              text += textNode.value
-            })
-            return {
-              className: ['heading-anchor-link'],
-              ariaLabel: text
-                ? `Link to ${text.replace(/["']/g, char => char === '"' ? '&quot;' : '&#39;')}`
-                : undefined,
-            }
-          },
-        },
-      ],
-      [
-        rehypeExternalLinks,
-        {
-          target: '_blank',
-          rel: ['nofollow', 'noopener', 'noreferrer', 'external'],
-          protocols: ['http', 'https', 'mailto'],
-        },
-      ],
     ],
+    syntaxHighlight: {
+      type: 'shiki',
+      excludeLangs: ['mermaid'],
+    },
     shikiConfig: {
       // Available themes: https://shiki.style/themes
       themes: {
@@ -170,13 +89,24 @@ export default defineConfig({
       },
     },
   },
+  vite: {
+    plugins: [
+      {
+        name: 'prefix-font-urls-with-base',
+        transform(code, id) {
+          if (!id.split('?')[0].endsWith('src/styles/font.css')) {
+            return null
+          }
+
+          return code.replace(/url\(\s*(['"]?)\/fonts\//g, `url($1${base}/fonts/`)
+        },
+      },
+    ],
+    build: {
+      chunkSizeWarningLimit: 600,
+    },
+  },
   devToolbar: {
     enabled: false,
   },
-  // For local development
-  // server: {
-  //   headers: {
-  //     'Access-Control-Allow-Origin': 'https://giscus.app',
-  //   },
-  // },
 })
