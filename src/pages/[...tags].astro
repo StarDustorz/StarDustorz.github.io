@@ -1,4 +1,5 @@
 ---
+import type { Language } from '@/i18n/config'
 import { defaultLocale, moreLocales } from '@/config'
 import { getTagPath } from '@/i18n/path'
 import Layout from '@/layouts/Layout.astro'
@@ -7,7 +8,7 @@ import { getAllTags } from '@/utils/content'
 export async function getStaticPaths() {
   type PathItem = {
     params: { tags: string }
-    props: { lang: string }
+    props: { lang: Language }
   }
 
   const paths: PathItem[] = []
@@ -19,7 +20,7 @@ export async function getStaticPaths() {
   })
 
   // More locales
-  moreLocales.forEach((lang: string) => {
+  moreLocales.forEach((lang) => {
     paths.push({
       params: { tags: `${lang}/tags/` },
       props: { lang },
@@ -29,7 +30,7 @@ export async function getStaticPaths() {
   return paths
 }
 
-const { lang } = Astro.props
+const { lang } = Astro.props as { lang: Language }
 const allTags = await getAllTags(lang)
 ---
 

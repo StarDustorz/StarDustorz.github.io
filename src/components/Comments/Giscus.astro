@@ -2,20 +2,19 @@
 import { defaultLocale, themeConfig } from '@/config'
 import { giscusLocaleMap } from '@/i18n/config'
 
-const {
-  repo = '',
-  repoID = '',
-  category = '',
-  categoryID = '',
-  mapping = 'pathname',
-  strict = '0',
-  reactionsEnabled = '1',
-  emitMetadata = '0',
-  inputPosition = 'bottom',
-} = themeConfig.comment?.giscus ?? {}
+const giscusConfig = themeConfig.comment?.giscus
+const repo = giscusConfig?.repo ?? ''
+const repoId = giscusConfig?.repoId ?? ''
+const category = giscusConfig?.category ?? ''
+const categoryId = giscusConfig?.categoryId ?? ''
+const mapping = giscusConfig?.mapping ?? 'pathname'
+const strict = giscusConfig?.strict ?? '0'
+const reactionsEnabled = giscusConfig?.reactionsEnabled ?? '1'
+const emitMetadata = giscusConfig?.emitMetadata ?? '0'
+const inputPosition = giscusConfig?.inputPosition ?? 'bottom'
 
 const siteUrl = themeConfig.site.url
-const shouldRender = Boolean(repo && repoID && categoryID)
+const shouldRender = Boolean(repo && repoId && categoryId)
 ---
 
 {shouldRender && (
@@ -28,9 +27,9 @@ const shouldRender = Boolean(repo && repoID && categoryID)
     is:inline
     define:vars={{
       repo,
-      repoID,
+      repoId,
       category,
-      categoryID,
+      categoryId,
       mapping,
       strict,
       reactionsEnabled,
@@ -73,9 +72,9 @@ const shouldRender = Boolean(repo && repoID && categoryID)
     // Set up basic attributes
     const dataAttributes = {
       repo,
-      repoId: repoID,
+      repoId,
       category: undefined,
-      categoryId: categoryID,
+      categoryId,
       mapping,
       strict,
       reactionsEnabled,

@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content'
+import type { Language } from '@/i18n/config'
 import { getCollection, render } from 'astro:content'
 import Comments from '@/components/Comments/index.astro'
 import PostDate from '@/components/PostDate.astro'
@@ -9,7 +10,7 @@ import { allLocales, defaultLocale, moreLocales } from '@/config'
 import { getTagPath } from '@/i18n/path'
 import Layout from '@/layouts/Layout.astro'
 import { checkPostSlugDuplication } from '@/utils/content'
-import { generateDescription } from '@/utils/description'
+import { getPostDescription } from '@/utils/description'
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts')
@@ -35,7 +36,7 @@ export async function getStaticPaths() {
     }
 
     return map
-  }, new Map<string, Set<string>>())
+  }, new Map<string, Set<Language>>())
 
   // Convert Map<slug, Set<langs>> to Record<slug, langs[]> structure
   // Sort languages according to the order defined in allLocales
@@ -49,7 +50,7 @@ export async function getStaticPaths() {
   // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   type PathItem = {
     params: { posts_slug: string }
-    props: { post: any, lang: string, supportedLangs: string[] }
+    props: { post: CollectionEntry<'posts'>, lang: Language, supportedLangs: Language[] }
   }
 
   const paths: PathItem[] = []
@@ -75,7 +76,7 @@ export async function getStaticPaths() {
   })
 
   // More locales
-  moreLocales.forEach((lang: string) => {
+  moreLocales.forEach((lang) => {
     posts.forEach((post: CollectionEntry<'posts'>) => {
       // Process posts with matching language or no language specified
       if ((import.meta.env.DEV || !post.data.draft) && (post.data.lang === lang || post.data.lang === '')) {
@@ -95,8 +96,12 @@ export async function getStaticPaths() {
   return paths
 }
 
-const { post, lang, supportedLangs } = Astro.props
-const description = generateDescription(post, 'meta')
+const { post, lang, supportedLangs } = Astro.props as {
+  post: CollectionEntry<'posts'>
+  lang: Language
+  supportedLangs: Language[]
+}
+const description = getPostDescription(post, 'meta')
 const { Content, headings, remarkPluginFrontmatter } = await render(post)
 ---
 
