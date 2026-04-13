@@ -1,9 +1,9 @@
 ---
-import TagList from '@/components/TagList.astro'
 import { allLocales } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
+import { getTagPath } from '@/i18n/path'
 import Layout from '@/layouts/Layout.astro'
-import { getAllTags } from '@/utils/content'
+import { getTagTree } from '@/utils/content'
 
 export async function getStaticPaths() {
   return allLocales.map(lang => ({
@@ -12,15 +12,23 @@ export async function getStaticPaths() {
 }
 
 const currentLang = getLangFromLocale(Astro.currentLocale)
-const allTags = await getAllTags(currentLang)
+const tagTree = await getTagTree(currentLang)
 ---
 
 <Layout>
-  <!-- Decorative Line -->
   <div class="uno-decorative-line" />
-  <!-- Tag List -->
-  <TagList
-    tags={allTags}
-    lang={currentLang}
-  />
+
+  <div class="no-heti flex flex-wrap gap-x-2.8 gap-y-3.2">
+    {tagTree.map(topTag => (
+      <a
+        href={getTagPath(topTag.path, currentLang)}
+        class="relative inline-flex items-center border border-secondary/18 rounded-full px-2.8 py-0.6 text-sm c-secondary transition-[colors,border-color] duration-150 ease-out hover:(border-secondary/70 c-primary)"
+      >
+        {topTag.name}
+        <span class="ml-1.4 text-xs c-secondary/80">
+          {topTag.count}
+        </span>
+      </a>
+    ))}
+  </div>
 </Layout>

@@ -2,15 +2,15 @@
 import type { Language } from '@/i18n/config'
 import type { TagNode } from '@/utils/content'
 import PostList from '@/components/PostList.astro'
-import { defaultLocale, moreLocales } from '@/config'
+import { allLocales } from '@/config'
+import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
 import { getTagPath } from '@/i18n/path'
 import Layout from '@/layouts/Layout.astro'
 import { getPostsByTagPath, getTagSupportedLangs, getTagTree } from '@/utils/content'
 
 export async function getStaticPaths() {
   type PathItem = {
-    params: { tags_tag: string }
-    props: { tagPath: string[], lang: Language }
+    params: { lang?: string, tag: string }
   }
 
   const paths: PathItem[] = []
@@ -18,30 +18,32 @@ export async function getStaticPaths() {
   const collectNodes = (nodes: TagNode[], lang: Language) => {
     nodes.forEach((node) => {
       paths.push({
-        params: { tags_tag: `tags/${node.path.join('/')}/` },
-        props: { tagPath: node.path, lang },
+        params: {
+          lang: getLangRouteParam(lang),
+          tag: node.path.map(seg => encodeURIComponent(seg)).join('/'),
+        },
       })
 
-      if (node.children.length > 0) {
+      if (node.children.length > 0)
         collectNodes(node.children, lang)
-      }
     })
   }
 
-  const defaultTagTree = await getTagTree(defaultLocale)
-  collectNodes(defaultTagTree, defaultLocale)
-
-  for (const lang of moreLocales) {
-    const langTagTree = await getTagTree(lang)
-    collectNodes(langTagTree, lang)
+  for (const lang of allLocales) {
+    const tree = await getTagTree(lang)
+    collectNodes(tree, lang)
   }
 
   return paths
 }
 
-const { tagPath, lang } = Astro.props as { tagPath: string[], lang: Language }
-const posts = await getPostsByTagPath(tagPath, lang)
-const tagTree = await getTagTree(lang)
+const tagPath = (Astro.params.tag ?? '')
+  .split('/')
+  .map(seg => decodeURIComponent(seg))
+  .filter(Boolean)
+const currentLang = getLangFromLocale(Astro.currentLocale)
+const posts = await getPostsByTagPath(tagPath, currentLang)
+const tagTree = await getTagTree(currentLang)
 const supportedLangs = await getTagSupportedLangs(tagPath)
 const currentTopTag = tagPath[0] ?? ''
 const currentChildTag = tagPath[1] ?? ''
@@ -49,14 +51,12 @@ const currentTopNode = tagTree.find(node => node.path[0] === currentTopTag)
 ---
 
 <Layout supportedLangs={supportedLangs}>
-  <!-- Decorative Line -->
-  <div class="uno-decorative-line"></div>
+  <div class="uno-decorative-line" />
 
-  <!-- Top-level Tags -->
   <div class="no-heti flex flex-wrap gap-x-2.8 gap-y-3.2">
     {tagTree.map(topTag => (
       <a
-        href={getTagPath(topTag.path, lang)}
+        href={getTagPath(topTag.path, currentLang)}
         class={`relative inline-flex items-center border rounded-full px-2.8 py-0.6 text-sm transition-[colors,border-color] duration-150 ease-out ${
           topTag.path[0] === currentTopTag
             ? 'border-secondary/75 c-primary'
@@ -71,13 +71,12 @@ const currentTopNode = tagTree.find(node => node.path[0] === currentTopTag)
     ))}
   </div>
 
-  <!-- Child Tags of Current Top-level -->
   {currentTopNode && currentTopNode.children.length > 0 && (
     <div class="mt-5 border-l border-secondary/20 pl-4">
       <div class="flex flex-wrap gap-x-2.2 gap-y-2.2">
         {currentTopNode.children.map(childTag => (
           <a
-            href={getTagPath(childTag.path, lang)}
+            href={getTagPath(childTag.path, currentLang)}
             class={`relative inline-flex items-center border rounded-full px-2.8 py-0.6 text-sm transition-[colors,border-color] duration-150 ease-out ${
               childTag.name === currentChildTag
                 ? 'border-secondary/75 c-primary'
@@ -94,8 +93,10 @@ const currentTopNode = tagTree.find(node => node.path[0] === currentTopTag)
     </div>
   )}
 
-  <!-- Posts List -->
   <div class="mt-8.5">
-    <PostList posts={posts} lang={lang} />
+    <PostList
+      posts={posts}
+      lang={currentLang}
+    />
   </div>
 </Layout>

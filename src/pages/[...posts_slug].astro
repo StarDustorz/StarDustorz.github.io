@@ -57,8 +57,8 @@ export async function getStaticPaths() {
 
   // Default locale
   posts.forEach((post: CollectionEntry<'posts'>) => {
-    // Show drafts in dev mode only
-    if (import.meta.env.DEV || !post.data.draft) {
+    // Hide drafts in all environments
+    if (!post.data.draft) {
       const slug = post.data.abbrlink || post.id
       const lang = post.data.lang
 
@@ -78,8 +78,8 @@ export async function getStaticPaths() {
   // More locales
   moreLocales.forEach((lang) => {
     posts.forEach((post: CollectionEntry<'posts'>) => {
-      // Process posts with matching language or no language specified
-      if ((import.meta.env.DEV || !post.data.draft) && (post.data.lang === lang || post.data.lang === '')) {
+      // Process non-draft posts with matching language or no language specified
+      if (!post.data.draft && (post.data.lang === lang || post.data.lang === '')) {
         const slug = post.data.abbrlink || post.id
         paths.push({
           params: { posts_slug: `${lang}/posts/${slug}/` },
@@ -151,9 +151,9 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post)
   {post.data.tags && post.data.tags.length > 0 && (
     <div class="uno-decorative-line"></div>
     <div class="uno-tags-wrapper">
-      {post.data.tags.map((tag: string) => (
+      {post.data.tags.map((tag: string, index: number) => (
         <a
-          href={getTagPath(tag, lang)}
+          href={getTagPath(post.data.tags.slice(0, index + 1), lang)}
           class="uno-tags-style"
         >
           {tag}

@@ -6,6 +6,31 @@ import { defaultLocale } from '@/config'
 import { memoize } from '@/utils/cache'
 
 const metaCache = new Map<string, { minutes: number }>()
+const TAG_PATH_SEPARATOR = '/'
+
+export interface TagNode {
+  name: string
+  path: string[]
+  count: number
+  children: TagNode[]
+}
+
+function normalizeTagPath(tags: string[] | undefined): string[] {
+  return (tags ?? [])
+    .filter((tag): tag is string => typeof tag === 'string')
+    .map(tag => tag.trim())
+    .filter(Boolean)
+}
+
+function pathToKey(path: string[]): string {
+  return path.join(TAG_PATH_SEPARATOR)
+}
+
+function isPathPrefix(prefix: string[], full: string[]): boolean {
+  if (prefix.length > full.length)
+    return false
+  return prefix.every((seg, idx) => seg === full[idx])
+}
 
 /**
  * Add metadata including reading time to a post
@@ -81,8 +106,8 @@ async function _getPosts(lang?: Language) {
   const filteredPosts = await getCollection(
     'posts',
     ({ data }: CollectionEntry<'posts'>) => {
-      // Show drafts in dev mode only
-      const shouldInclude = import.meta.env.DEV || !data.draft
+      // Hide drafts in all environments
+      const shouldInclude = !data.draft
       return shouldInclude && (data.lang === currentLang || data.lang === '')
     },
   )
@@ -185,6 +210,68 @@ async function _getPostsGroupByTags(lang?: Language) {
 export const getPostsGroupByTags = memoize(_getPostsGroupByTags)
 
 /**
+ * Build hierarchical tag tree from post frontmatter tags.
+ * Example:
+ * tags:
+ *   - Golang
+ *   - Go关键字
+ */
+async function _getTagTree(lang?: Language): Promise<TagNode[]> {
+  const posts = await getPosts(lang)
+  const countMap = new Map<string, number>()
+  const childrenMap = new Map<string, Set<string>>()
+
+  posts.forEach((post) => {
+    const tagPath = normalizeTagPath(post.data.tags)
+    if (tagPath.length === 0)
+      return
+
+    // Each post contributes count to all ancestor paths.
+    for (let i = 0; i < tagPath.length; i += 1) {
+      const currentPath = tagPath.slice(0, i + 1)
+      const currentKey = pathToKey(currentPath)
+      countMap.set(currentKey, (countMap.get(currentKey) ?? 0) + 1)
+
+      if (i > 0) {
+        const parentPath = tagPath.slice(0, i)
+        const parentKey = pathToKey(parentPath)
+        if (!childrenMap.has(parentKey)) {
+          childrenMap.set(parentKey, new Set())
+        }
+        childrenMap.get(parentKey)?.add(currentKey)
+      }
+    }
+  })
+
+  const nodeMap = new Map<string, TagNode>()
+  for (const [key, count] of countMap.entries()) {
+    const path = key.split(TAG_PATH_SEPARATOR)
+    nodeMap.set(key, {
+      name: path[path.length - 1],
+      path,
+      count,
+      children: [],
+    })
+  }
+
+  for (const [parentKey, childKeys] of childrenMap.entries()) {
+    const parent = nodeMap.get(parentKey)
+    if (!parent)
+      continue
+    parent.children = Array.from(childKeys)
+      .map(childKey => nodeMap.get(childKey))
+      .filter((node): node is TagNode => Boolean(node))
+      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
+  }
+
+  return Array.from(nodeMap.values())
+    .filter(node => node.path.length === 1)
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
+}
+
+export const getTagTree = memoize(_getTagTree)
+
+/**
  * Get all tags sorted by post count
  *
  * @param lang The language code to filter by, defaults to site's default language
@@ -208,11 +295,39 @@ export const getAllTags = memoize(_getAllTags)
  * @returns Array of posts that contain the specified tag
  */
 async function _getPostsByTag(tag: string, lang?: Language) {
-  const tagMap = await getPostsGroupByTags(lang)
-  return tagMap.get(tag) ?? []
+  return _getPostsByTagPath([tag], lang, false)
 }
 
 export const getPostsByTag = memoize(_getPostsByTag)
+
+/**
+ * Get all posts that match a tag path.
+ *
+ * @param tagPath Hierarchical tag path, e.g. ['Golang', 'Go关键字']
+ * @param lang The language code to filter by
+ * @param includeDescendants Whether to include descendant tag paths
+ */
+async function _getPostsByTagPath(tagPath: string[], lang?: Language, includeDescendants = true) {
+  const posts = await getPosts(lang)
+  const normalizedPath = normalizeTagPath(tagPath)
+  if (normalizedPath.length === 0)
+    return []
+
+  return posts.filter((post) => {
+    const postTagPath = normalizeTagPath(post.data.tags)
+    if (postTagPath.length === 0)
+      return false
+
+    if (includeDescendants) {
+      return isPathPrefix(normalizedPath, postTagPath)
+    }
+
+    return postTagPath.length === normalizedPath.length
+      && isPathPrefix(normalizedPath, postTagPath)
+  })
+}
+
+export const getPostsByTagPath = memoize(_getPostsByTagPath)
 
 /**
  * Check which languages support a specific tag
@@ -220,16 +335,19 @@ export const getPostsByTag = memoize(_getPostsByTag)
  * @param tag The tag name to check language support for
  * @returns Array of language codes that support the specified tag
  */
-async function _getTagSupportedLangs(tag: string): Promise<Language[]> {
+async function _getTagSupportedLangs(tag: string | string[]): Promise<Language[]> {
   const posts = await getCollection(
     'posts',
     ({ data }) => !data.draft,
   )
   const { allLocales } = await import('@/config')
+  const tagPath = Array.isArray(tag)
+    ? normalizeTagPath(tag)
+    : normalizeTagPath([tag])
 
   return allLocales.filter(locale =>
     posts.some(post =>
-      post.data.tags?.includes(tag)
+      isPathPrefix(tagPath, normalizeTagPath(post.data.tags))
       && (post.data.lang === locale || post.data.lang === ''),
     ),
   )

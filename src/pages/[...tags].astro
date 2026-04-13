@@ -3,7 +3,7 @@ import type { Language } from '@/i18n/config'
 import { defaultLocale, moreLocales } from '@/config'
 import { getTagPath } from '@/i18n/path'
 import Layout from '@/layouts/Layout.astro'
-import { getAllTags } from '@/utils/content'
+import { getTagTree } from '@/utils/content'
 
 export async function getStaticPaths() {
   type PathItem = {
@@ -31,20 +31,22 @@ export async function getStaticPaths() {
 }
 
 const { lang } = Astro.props as { lang: Language }
-const allTags = await getAllTags(lang)
+const tagTree = await getTagTree(lang)
 ---
 
 <Layout>
-  <!-- Decorative Line -->
-  <div class="uno-decorative-line"></div>
-  <!-- Tags List -->
-  <div class="uno-tags-wrapper">
-    {allTags.map(tag => (
+  <div class="uno-decorative-line" />
+
+  <div class="no-heti flex flex-wrap gap-x-2.8 gap-y-3.2">
+    {tagTree.map(topTag => (
       <a
-        href={getTagPath(tag, lang)}
-        class="uno-tags-style"
+        href={getTagPath(topTag.path, lang)}
+        class="relative inline-flex items-center border border-secondary/18 rounded-full px-2.8 py-0.6 text-sm c-secondary transition-[colors,border-color] duration-150 ease-out hover:(border-secondary/70 c-primary)"
       >
-        {tag}
+        {topTag.name}
+        <span class="ml-1.4 text-xs c-secondary/80">
+          {topTag.count}
+        </span>
       </a>
     ))}
   </div>

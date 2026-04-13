@@ -54,8 +54,8 @@ export async function getStaticPaths() {
   // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
   return allLocales.flatMap(lang => posts
-    // Show drafts in dev mode only
-    .filter(post => import.meta.env.DEV || !post.data.draft)
+    // Hide drafts in all environments
+    .filter(post => !post.data.draft)
     // Match current language or universal posts
     .filter(post => post.data.lang === lang || post.data.lang === '')
     .map((post) => {

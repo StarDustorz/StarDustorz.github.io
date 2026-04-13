@@ -5,14 +5,21 @@ import { getLangFromPath, getNextGlobalLang } from '@/i18n/lang'
 /**
  * Get path to a specific tag page with language support
  *
- * @param tagName Tag name
+ * @param tagName Tag name or hierarchical tag path
  * @param lang Current language code
  * @returns Path to tag page
  */
-export function getTagPath(tagName: string, lang: Language): string {
+export function getTagPath(tagName: string | string[], lang: Language): string {
+  const normalizedTagPath = (Array.isArray(tagName) ? tagName : [tagName])
+    .map(seg => seg.trim())
+    .filter(Boolean)
+  const encodedPath = normalizedTagPath
+    .map(seg => encodeURIComponent(seg))
+    .join('/')
+
   const tagPath = lang === defaultLocale
-    ? `/tags/${tagName}/`
-    : `/${lang}/tags/${tagName}/`
+    ? `/tags/${encodedPath}/`
+    : `/${lang}/tags/${encodedPath}/`
 
   return base ? `${base}${tagPath}` : tagPath
 }
