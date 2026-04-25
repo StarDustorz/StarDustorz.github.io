@@ -3,7 +3,7 @@ title: "[Go] Time/rate使用"
 published: 2021-10-11
 tags:
   - Golang
-  - GoPackges
+  - GoPackages
 lang: zh
 toc: true
 abbrlink: golang-time-rate

@@ -11,8 +11,6 @@ draft: false
 ---
 
 
-
-
 >Defer 和栈比较相似，**先进后出**，即先注册的 defer 会后执行。
 
 <!--more-->

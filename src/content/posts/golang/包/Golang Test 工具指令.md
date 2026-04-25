@@ -3,7 +3,7 @@ title: "[Go] Package Test "
 published: 2021-08-17
 tags:
   - Golang
-  - GoPackges
+  - GoPackages
 lang: zh
 toc: true
 abbrlink: golang-package-test

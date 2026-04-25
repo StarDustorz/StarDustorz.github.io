@@ -3,7 +3,7 @@ title: "[Go] ldflags"
 published: 2021-08-09
 tags:
   - Golang
-  - GoPackges
+  - GoPackages
 lang: zh
 toc: true
 abbrlink: golang-ldflags
