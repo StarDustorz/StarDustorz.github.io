@@ -1,7 +1,7 @@
 ---
 title: "[LLM] 模型训练"
 published: 2026-04-22
-updated: 2026-04-22
+updated: 2026-04-26
 description: 介绍大语言模型（LLM）的训练流程，涵盖预训练、后训练、推理机制、幻觉问题及强化学习（RL/RLHF）等概念。
 tags:
   - LLM
@@ -15,9 +15,14 @@ abbrlink: llm-training
 
 > 训练大语言模型（LLM）主要分为两个核心阶段：**预训练（Pre-training）** 和 **后训练（Post-training）**。
 
+
+![LLM模型训练-插图-总流程-1.png](https://obsidian-1309391399.cos.ap-shanghai.myqcloud.com/Image/202605110010605.png)
+
+
 ---
 
 ## 第一部分：构建基础模型
+
 
 ### 一、预训练（Pre-training）
 
@@ -153,6 +158,7 @@ LLM 通常通过两种方式访问知识：
 
 ## 第二部分：强化学习（Reinforcement Learning）
 
+
 ### 回顾：LLM 训练的三个阶段
 
 | 阶段 | 说明 |
@@ -273,6 +279,10 @@ GRPO 通过**相对评估**消除了对评论者模型的依赖——响应在�
 3. **计算 GRPO 损失**：测量新策略生成过去响应的可能性，评估相对质量，应用裁剪以防止极端更新
 4. **反向传播 + 梯度下降**：计算每个参数对损失的贡献并更新参数
 5. **更新旧策略**：偶尔更新旧策略以与新策略匹配，为下一轮比较刷新基准
+
+![LLM模型训练-插图-RL闭环-1.png](https://obsidian-1309391399.cos.ap-shanghai.myqcloud.com/Image/202605110011707.png)
+
+
 
 #### 2. 思维链（Chain of Thought，CoT）
 

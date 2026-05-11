@@ -1,6 +1,7 @@
 ---
 title: "[LLM] Function Calling"
 published: 2026-04-24
+updated: 2026-04-26
 description: 介绍 Function Calling 的工作原理、工具定义规范、调用流程与并行调用实践，以及背后的 SFT 和 RLHF 训练机制。
 tags:
   - LLM
@@ -14,7 +15,9 @@ abbrlink: llm-function-calling
 
 开发者用 JSON Schema 描述工具，传给模型。模型判断需要工具时，**不输出自然语言，而是输出结构化的 `tool_calls` JSON**，告诉你调哪个函数、参数是什么。你的代码执行后把结果塞回对话，模型再给出最终答案。
 
-**本质：两轮对话 + 中间执行的闭环。**
+**本质：两轮对话 + 中间执行的调用流程。**
+
+![Function Calling 调用流程](https://obsidian-1309391399.cos.ap-shanghai.myqcloud.com/Image/%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8-%E6%8F%92%E5%9B%BE-%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B-1.png)
 
 ---
 
@@ -121,6 +124,8 @@ if msg.finish_reason == "tool_calls":
 ## 能力是如何训练出来的
 
 > 一句话：**SFT 教会怎么调，RLHF 教会什么时候调。**
+
+![Function Calling 能力训练](https://obsidian-1309391399.cos.ap-shanghai.myqcloud.com/Image/%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8-%E6%8F%92%E5%9B%BE-%E8%AE%AD%E7%BB%83%E6%9C%BA%E5%88%B6-1.png)
 
 ### SFT：学会怎么调
 
