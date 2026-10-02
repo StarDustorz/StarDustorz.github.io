@@ -15,6 +15,10 @@ import Layout from '@/layouts/Layout.astro'
 import { checkPostSlugDuplication } from '@/utils/content'
 import { isVisible, privatePreview } from '@/utils/content-access'
 import { getPostDescription } from '@/utils/description'
+import '@/styles/comment.css'
+import '@/styles/extension.css'
+import '@/styles/lqip.css'
+import '@/styles/markdown.css'
 
 export async function getStaticPaths() {
   const posts: CollectionEntry<'posts'>[] = await getCollection('posts', ({ data }) => isVisible(data))
@@ -88,6 +92,7 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post)
   postDescription={description}
   postSlug={post.id}
   supportedLangs={supportedLangs}
+  katex={post.body?.includes('$$') ?? false}
 >
   {post.data.toc && <TOC slot="toc" headings={headings} />}
   <PostSeries slot="series" {post} lang={currentLang} />

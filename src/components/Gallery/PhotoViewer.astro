@@ -107,39 +107,6 @@ function setupViewer() {
         sound.setAttribute('aria-pressed', String(!video.muted))
         sound.setAttribute('aria-label', video.muted ? (zh ? '开启声音' : 'Unmute') : (zh ? '静音' : 'Mute'))
       }, { signal: inlineEvents.signal })
-      let timer = 0
-      let held = false
-      let origin = { x: 0, y: 0 }
-      const cancelHold = () => {
-        clearTimeout(timer)
-        if (held)
-          player.pause()
-      }
-      frame.addEventListener('pointerdown', (event) => {
-        if ((event.target as HTMLElement).closest('button') || event.button !== 0)
-          return
-        held = false
-        origin = { x: event.clientX, y: event.clientY }
-        timer = window.setTimeout(() => {
-          held = true
-          inlinePlayers.filter(other => other !== player).forEach(other => other.pause())
-          void player.play()
-        }, 450)
-      }, { signal: inlineEvents.signal })
-      frame.addEventListener('pointermove', (event) => {
-        if (Math.hypot(event.clientX - origin.x, event.clientY - origin.y) > 10)
-          cancelHold()
-      }, { signal: inlineEvents.signal })
-      for (const event of ['pointerup', 'pointercancel', 'pointerleave'])
-        frame.addEventListener(event, cancelHold, { signal: inlineEvents.signal })
-      frame.addEventListener('click', (event) => {
-        if (held) {
-          event.preventDefault()
-          event.stopPropagation()
-          held = false
-        }
-      }, { capture: true, signal: inlineEvents.signal })
-      cleanups.push(() => clearTimeout(timer))
       frame.append(video, button, sound, status)
       inlinePlayers.push(player)
     }
@@ -260,47 +227,10 @@ function setupViewer() {
     players.delete(content)
   })
   box.on('close', () => players.forEach(player => player.pause()))
-  let holdTimer = 0
-  let held = false
-  let holdPoint = { x: 0, y: 0 }
-  const cancelHold = () => {
-    clearTimeout(holdTimer)
-    if (held)
-      box.pswp?.currSlide && players.get(box.pswp.currSlide.content)?.pause()
-  }
-  box.on('pointerDown', ({ originalEvent: event }) => {
-    held = false
-    if (!(event.target as HTMLElement).matches('.pswp__img, .photo-live-video'))
-      return
-    const content = box.pswp?.currSlide?.content
-    if (!content || !safeMediaURL(photoOf(content.data).live))
-      return
-    holdPoint = { x: event.clientX, y: event.clientY }
-    holdTimer = window.setTimeout(() => {
-      held = true
-      void prepare(content)?.play()
-    }, 450)
-  })
-  box.on('pointerMove', ({ originalEvent: event }) => {
-    if (Math.hypot(event.clientX - holdPoint.x, event.clientY - holdPoint.y) > 10)
-      cancelHold()
-  })
-  box.on('pointerUp', cancelHold)
-  box.on('imageClickAction', (event) => {
-    if (held)
-      event.preventDefault()
-  })
-  box.on('tapAction', (event) => {
-    if (held)
-      event.preventDefault()
-  })
   box.on('change', () => {
-    cancelHold()
-    held = false
     updateControls()
   })
   box.on('destroy', () => {
-    clearTimeout(holdTimer)
     players.forEach(player => player.destroy())
     players.clear()
   })

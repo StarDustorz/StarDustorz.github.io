@@ -1,6 +1,5 @@
 ---
 import type { AlbumData } from '@/schemas/album'
-import { themeConfig } from '@/config'
 import { parameterText } from '@/utils/photo'
 
 type Photo = AlbumData['photos'][number] & { albumTitle?: string }
@@ -9,21 +8,12 @@ interface Props {
   zh: boolean
   title: string
   back: string
-  albums?: { title: string, href: string }[]
 }
-const { photos, zh, title, back, albums = [] } = Astro.props
-const center = Math.floor(photos.length / 2)
+const { photos, zh, title, back } = Astro.props
 const viewerPhotos = photos.map(({ src, width, height, title, alt, live, metadata, taken, description }) => ({ src, width, height, title, alt, live, metadata, taken, description }))
 ---
-<section class="stack-gallery" data-gallery data-view="column" data-zh={zh}>
-  <header class="gallery-top">
-    <a class="gallery-home" href={back} aria-label={zh ? '返回博客' : 'Back'}>↖ <span>{themeConfig.site.title}</span></a>
-    <div class="gallery-title"><h1>{title}</h1></div>
-    <div class="gallery-options">
-      {albums.length > 0 && <details class="album-switch"><summary aria-label={zh ? '选择相册' : 'Choose album'} title={zh ? '选择相册' : 'Choose album'}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 7V5a1 1 0 0 1 1-1h6l2 3h8a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7Z" /></svg></summary><nav aria-label={zh ? '相册列表' : 'Albums'}>{albums.map(album => <a href={album.href}>{album.title}</a>)}</nav></details>}
-      {photos.length > 0 && <button class="view-toggle" type="button" data-action="view" aria-pressed="false" aria-label={zh ? '切换到网格' : 'Switch to grid'} title={zh ? '切换到网格' : 'Switch to grid'}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><g class="grid-icon"><rect x="3" y="3" width="6" height="6" rx="1" /><rect x="15" y="3" width="6" height="6" rx="1" /><rect x="3" y="15" width="6" height="6" rx="1" /><rect x="15" y="15" width="6" height="6" rx="1" /></g><g class="stack-icon"><path d="m12 3 9 5-9 5-9-5 9-5Z M3 12l9 5 9-5 M3 16l9 5 9-5" /></g></svg></button>}
-    </div>
-  </header>
+<section class="stack-gallery" data-gallery data-view="column" data-expansion="stack" data-zh={zh} aria-label={title}>
+  <a class="gallery-home" href={back} aria-label={zh ? '返回' : 'Back'}><span aria-hidden="true">↖</span></a>
   {photos.length > 0
 ? (
 <>
@@ -31,10 +21,15 @@ const viewerPhotos = photos.map(({ src, width, height, title, alt, live, metadat
       <div class="stack-track" data-stack-track></div>
       <template data-card-template><button class="stack-card" type="button"><canvas width="0" height="0" role="img"></canvas><img decoding="async" draggable="false" hidden /><span class="live-marker" hidden>◉ LIVE</span></button></template>
     </div>
-    <footer class="gallery-bottom">
-      <div class="photo-info" aria-live="polite"><h2 data-current-title></h2></div>
-      <div class="gallery-controls"><div class="photo-progress"><span data-position>{String(center + 1).padStart(2, '0')}</span><span aria-hidden="true">/</span><span>{String(photos.length).padStart(2, '0')}</span></div><div class="control-buttons"><button type="button" data-action="prev" aria-label={zh ? '上一张' : 'Previous'} title={zh ? '上一张' : 'Previous'}>←</button><button type="button" data-action="inspect" aria-label={zh ? '照片详情' : 'Photo details'} title={zh ? '照片详情' : 'Photo details'}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 11v6 M12 7v1" /></svg></button><button type="button" data-action="next" aria-label={zh ? '下一张' : 'Next'} title={zh ? '下一张' : 'Next'}>→</button></div></div>
-    </footer>
+    <figure class="gallery-focus" data-focus hidden>
+      <div class="focus-media">
+        <canvas data-focus-preview width="0" height="0" aria-hidden="true"></canvas>
+        <img data-focus-image decoding="async" draggable="false" />
+        <button class="focus-live" type="button" data-action="live" hidden aria-label={zh ? '播放 Live' : 'Play Live'}>◉ LIVE</button>
+        <span class="focus-status" role="status" hidden></span>
+      </div>
+      <figcaption><dl class="focus-parameters" aria-label={zh ? '摄影参数' : 'Camera settings'}></dl></figcaption>
+    </figure>
     <script is:inline type="application/json" data-gallery-photos set:html={JSON.stringify(viewerPhotos).replace(/</g, '\\u003c')} />
   </>
 )
@@ -44,8 +39,11 @@ const viewerPhotos = photos.map(({ src, width, height, title, alt, live, metadat
 
 <script>
 import type { AlbumData } from '@/schemas/album'
+import { expandedPhotoSize } from '@/utils/gallery-focus'
 import { observeGalleryFrames } from '@/utils/gallery-metrics'
 import { gridWindow, stackWindow } from '@/utils/gallery-window'
+import { createLivePlayer } from '@/utils/live-player'
+import { photoFields, safeMediaURL } from '@/utils/photo'
 
 let dispose: (() => void) | undefined
 function setupStack() {
@@ -79,7 +77,10 @@ function setupStack() {
   let layoutKey = ''
   let geometryVersion = 0
   let lastFrameTime = 0
-  let expanded = false
+  // 0: photo stack; 1: selected photo within the stack; 2: independent large view.
+  let expanded: 0 | 1 | 2 = 0
+  let focusWidth = 0
+  let thumbnailHalfWidth = 0
   let spacing = 58
   let frame = 0
   let touch = { x: 0, y: 0 }
@@ -87,7 +88,9 @@ function setupStack() {
   let touching = false
   let dragged = false
   let lastWheel = 0
-  let lastDetails = -1
+  let lastSelected = -1
+  let focusedIndex = -1
+  let player: ReturnType<typeof createLivePlayer> | undefined
   let columns = 4
   let tileWidth = 240
   let rowPitch = 280
@@ -96,12 +99,13 @@ function setupStack() {
   let loadCenter = selected
   let rasterSize = 1024
   const zh = root.dataset.zh === 'true'
-  const positionNode = root.querySelector('[data-position]')!
-  const titleNode = root.querySelector('[data-current-title]')!
-  const previous = root.querySelector<HTMLButtonElement>('[data-action="prev"]')!
-  const next = root.querySelector<HTMLButtonElement>('[data-action="next"]')!
+  const focus = root.querySelector<HTMLElement>('[data-focus]')!
+  const focusImage = root.querySelector<HTMLImageElement>('[data-focus-image]')!
+  const focusPreview = root.querySelector<HTMLCanvasElement>('[data-focus-preview]')!
+  const parameters = root.querySelector<HTMLDListElement>('.focus-parameters')!
+  const liveButton = root.querySelector<HTMLButtonElement>('.focus-live')!
+  const liveStatus = root.querySelector<HTMLElement>('.focus-status')!
   const clamp = (n: number) => Math.max(0, Math.min(photos.length - 1, n))
-  const open = (index: number) => document.dispatchEvent(new CustomEvent('stardust:open-photo', { detail: { photos, index } }))
   // Rasterize bounded previews; original COS sources are reserved for the viewer.
   // Start at most three decodes at once. Evicting a card cancels its pending work.
   const pump = () => {
@@ -182,6 +186,96 @@ function setupStack() {
       img.src = photo.src
     }
   }
+  const layoutFocus = () => {
+    if (focus.hidden)
+      return
+    const photo = photos[focusedIndex]
+    const size = expandedPhotoSize(window.innerWidth, window.innerHeight, photo.width || 4, photo.height || 3, parameters.offsetHeight, expanded === 1 ? 'preview' : 'fullscreen')
+    if (focusWidth !== size.width) {
+      focusWidth = size.width
+      geometryVersion++
+      update()
+    }
+    focus.style.width = `${size.width}px`
+    focus.style.setProperty('--focus-height', `${size.height}px`)
+  }
+  const closeFocus = () => {
+    player?.destroy()
+    player = undefined
+    focusedIndex = -1
+    focusImage.onload = null
+    focusImage.removeAttribute('src')
+    focusImage.classList.remove('ready')
+    focusPreview.width = focusPreview.height = 0
+    focus.hidden = true
+  }
+  const syncFocus = () => {
+    if (!expanded) {
+      if (focusedIndex !== -1)
+        closeFocus()
+      return
+    }
+    if (selected === focusedIndex) {
+      layoutFocus()
+      return
+    }
+    closeFocus()
+    focusedIndex = selected
+    const photo = photos[selected]
+    focus.hidden = false
+    focusImage.alt = photo.alt || photo.title
+    parameters.replaceChildren()
+    for (const [key, labels] of Object.entries(photoFields)) {
+      if (key === 'location')
+        continue
+      const value = photo.metadata?.[key as keyof typeof photoFields]
+      if (!value)
+        continue
+      const field = document.createElement('div')
+      const label = document.createElement('dt')
+      const content = document.createElement('dd')
+      label.textContent = labels[zh ? 0 : 1]
+      content.textContent = value
+      field.append(label, content)
+      parameters.append(field)
+    }
+    const preview = cards.get(selected)?.querySelector('canvas')
+    if (preview?.width) {
+      focusPreview.width = preview.width
+      focusPreview.height = preview.height
+      focusPreview.getContext('2d')!.drawImage(preview, 0, 0)
+    }
+    const index = selected
+    focusImage.onload = () => {
+      if (focusedIndex !== index)
+        return
+      photo.width = focusImage.naturalWidth
+      photo.height = focusImage.naturalHeight
+      focusImage.classList.add('ready')
+      layoutFocus()
+    }
+    focusImage.src = photo.src
+    layoutFocus()
+    liveStatus.hidden = true
+    const live = safeMediaURL(photo.live)
+    liveButton.hidden = !live
+    liveButton.dataset.state = 'idle'
+    if (live) {
+      const video = document.createElement('video')
+      video.className = 'focus-video'
+      video.loop = true
+      video.setAttribute('aria-label', zh ? 'Live 照片' : 'Live photo')
+      liveButton.before(video)
+      player = createLivePlayer(video, live, (state) => {
+        liveButton.dataset.state = state
+        liveButton.setAttribute('aria-pressed', String(state === 'playing'))
+        liveButton.setAttribute('aria-busy', String(state === 'loading'))
+        liveButton.setAttribute('aria-label', state === 'playing' ? (zh ? '暂停 Live' : 'Pause Live') : (zh ? '播放 Live' : 'Play Live'))
+        liveStatus.hidden = state !== 'error'
+        liveStatus.textContent = state === 'error' ? (zh ? 'Live 暂时无法播放' : 'Live unavailable') : ''
+      })
+    }
+  }
   const render = (time: number) => {
     frame = 0
     const elapsed = Math.min(32, lastFrameTime ? time - lastFrameTime : 16)
@@ -205,11 +299,13 @@ function setupStack() {
     const range = grid
       ? gridWindow(photos.length, columns, Math.max(0, -stage.getBoundingClientRect().top - 100), window.innerHeight, rowPitch)
       : stackWindow(photos.length, position, Math.ceil(window.innerWidth / spacing / 2) + 2)
-    const key = `${grid}:${range.start}:${range.end}:${expanded ? selected : -1}:${geometryVersion}`
+    syncFocus()
+    const key = `${grid}:${range.start}:${range.end}:${expanded}:${expanded ? selected : -1}:${geometryVersion}`
     // Fractional scrolling only moves a single composited track. No per-card work.
     if (key !== layoutKey) {
       layoutKey = key
       stage.style.height = 'height' in range ? `${range.height}px` : '100dvh'
+      document.documentElement.classList.toggle('gallery-locked', !grid || Boolean(expanded))
       for (const [index, card] of cards) {
         if (index >= range.start && index < range.end)
           continue
@@ -232,7 +328,8 @@ function setupStack() {
           cache.delete(oldest)
         }
       }
-      const gap = spacing * (window.innerWidth <= 480 ? 4.5 : Math.min(7, 4.5 + (window.innerWidth - 480) * 2.5 / 1120))
+      // Keep neighbouring thumbnails outside the selected photo's horizontal bounds.
+      const gap = Math.max(0, focusWidth / 2 + thumbnailHalfWidth + 24 - spacing)
       for (let index = range.start; index < range.end; index++) {
         let card = cards.get(index)
         if (!card && cache.has(index)) {
@@ -258,7 +355,7 @@ function setupStack() {
           track.append(card)
           cards.set(index, card)
         }
-        const cardLayout = `${grid}:${geometryVersion}:${expanded ? selected : -1}`
+        const cardLayout = `${grid}:${geometryVersion}:${expanded}:${expanded ? selected : -1}`
         if (card.dataset.layout === cardLayout)
           continue
         card.dataset.layout = cardLayout
@@ -267,10 +364,8 @@ function setupStack() {
           x += index < selected ? gap : -gap
         card.style.setProperty('--offset-x', `${x}px`)
         card.style.setProperty('--offset-y', `${x * -0.6}px`)
-        card.style.setProperty('--expand-x', `${(origin - selected) * spacing}px`)
-        card.style.setProperty('--expand-y', `${(origin - selected) * spacing * -0.6}px`)
-        card.classList.toggle('expanded', expanded && !grid && index === selected)
-        card.setAttribute('aria-expanded', String(expanded && !grid && index === selected))
+        card.classList.toggle('expanded', Boolean(expanded) && !grid && index === selected)
+        card.setAttribute('aria-expanded', String(Boolean(expanded) && !grid && index === selected))
         card.tabIndex = grid || index === selected ? 0 : -1
         card.style.left = grid ? `${sidePadding + (index % columns) * (tileWidth + 24)}px` : ''
         card.style.top = grid ? `${100 + Math.floor(index / columns) * rowPitch}px` : ''
@@ -283,15 +378,13 @@ function setupStack() {
     }
     const offset = grid ? 0 : (position - origin) * spacing
     track.style.transform = `translate3d(${offset}px,${offset * -0.6}px,0)`
-    if (lastDetails !== selected) {
-      cards.get(lastDetails)?.setAttribute('tabindex', '-1')
-      if (!grid)
+    if (lastSelected !== selected) {
+      if (!grid) {
+        cards.get(lastSelected)?.setAttribute('tabindex', '-1')
         cards.get(selected)?.setAttribute('tabindex', '0')
-      lastDetails = selected
-      positionNode.textContent = String(selected + 1).padStart(2, '0')
-      titleNode.textContent = photos[selected]?.title || ''
-      previous.disabled = selected === 0
-      next.disabled = selected === photos.length - 1
+      }
+      lastSelected = selected
+      root.dataset.selected = String(selected)
     }
     if (!grid && Math.abs(targetPosition - position) >= 0.002)
       update()
@@ -308,6 +401,7 @@ function setupStack() {
     const size = Math.min(width <= 480 ? width * 0.9 : width >= 1600 ? 800 : 480 + (width - 480) * 320 / 1120, height * 0.8)
     const scale = Math.max(0.33, Math.min(0.5, 0.5 - (width - 480) * 0.17 / 1120))
     spacing = size * scale * 63 / 240
+    thumbnailHalfWidth = size * scale * Math.SQRT1_2 / 2
     rasterSize = Math.min(1024, Math.ceil(size * Math.min(2, window.devicePixelRatio || 1)))
     stage.style.setProperty('--image-size', `${size}px`)
     stage.style.setProperty('--image-scale', String(scale))
@@ -319,12 +413,7 @@ function setupStack() {
   }
   const setView = () => {
     root.dataset.view = grid ? 'grid' : 'column'
-    root.classList.toggle('is-expanded', expanded && !grid)
-    const toggle = root.querySelector('[data-action="view"]')!
-    toggle.setAttribute('aria-pressed', String(grid))
-    const label = grid ? (zh ? '切换到堆叠' : 'Switch to stack') : (zh ? '切换到网格' : 'Switch to grid')
-    toggle.setAttribute('aria-label', label)
-    toggle.setAttribute('title', label)
+    root.classList.toggle('is-expanded', Boolean(expanded) && !grid)
     document.documentElement.classList.toggle('gallery-locked', !grid)
     window.scrollTo({ top: grid ? Math.floor(position / columns) * rowPitch : 0, behavior: 'instant' })
     update()
@@ -337,42 +426,44 @@ function setupStack() {
       window.scrollTo({ top: Math.floor(position / columns) * rowPitch, behavior: 'instant' })
     update()
   }
+  const setExpansion = (level: 0 | 1 | 2) => {
+    expanded = level
+    root.dataset.expansion = ['stack', 'preview', 'fullscreen'][level]
+    root.classList.toggle('is-expanded', level > 0 && !grid)
+    root.classList.toggle('is-fullscreen', level === 2)
+    track.inert = level === 2
+    if (!level)
+      closeFocus()
+    stage.focus({ preventScroll: true })
+    update()
+  }
+  const openPhoto = (index: number) => {
+    const next = grid ? 2 : index === selected && expanded ? (expanded === 1 ? 2 : 0) : 1
+    position = targetPosition = index
+    setExpansion(next)
+  }
   root.addEventListener('click', (event) => {
     const target = event.target as HTMLElement
-    const card = target.closest<HTMLButtonElement>('.stack-card')
-    if (card) {
-      if (dragged) {
-        dragged = false
-        return
-      }
-      const index = Number(card.dataset.index)
-      if (grid) {
-        position = targetPosition = index
-        update()
-        open(index)
-        return
-      }
-      expanded = index !== selected || !expanded
-      position = targetPosition = index
-      root.classList.toggle('is-expanded', expanded)
-      update()
+    if (target.closest('[data-action="live"]')) {
+      void player?.toggle()
       return
     }
-    switch (target.closest<HTMLElement>('[data-action]')?.dataset.action) {
-      case 'view': grid = !grid
-        expanded = false
-        setView()
-        break
-      case 'prev': move(Math.round(targetPosition) - 1)
-        break
-      case 'next': move(Math.round(targetPosition) + 1)
-        break
-      case 'inspect': open(selected)
-        break
+    if (dragged) {
+      dragged = false
+      return
     }
+    const card = target.closest<HTMLButtonElement>('.stack-card')
+    if (card) {
+      openPhoto(Number(card.dataset.index))
+      return
+    }
+    if (expanded && target.closest('.focus-media'))
+      setExpansion(expanded === 1 ? 2 : 0)
+    else if (expanded && !target.closest('a, .gallery-focus'))
+      setExpansion(0)
   }, { signal: signal.signal })
   root.addEventListener('wheel', (event) => {
-    if (grid || document.querySelector('.pswp') || (event.target as HTMLElement).closest('header, button[data-action], .album-switch'))
+    if ((grid && !expanded) || document.querySelector('.pswp') || (event.target as HTMLElement).closest('a, button[data-action]'))
       return
     event.preventDefault()
     const delta = (Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX) * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1)
@@ -387,15 +478,15 @@ function setupStack() {
       update()
     }
   }, { passive: false, signal: signal.signal })
-  stage.addEventListener('pointerdown', (event) => {
-    if (event.pointerType === 'mouse')
+  root.addEventListener('pointerdown', (event) => {
+    if (event.pointerType === 'mouse' || (event.target as HTMLElement).closest('a, .focus-live'))
       return
     touching = true
     touch = { x: event.clientX, y: event.clientY }
     lastTouch = touch
     dragged = false
   }, { signal: signal.signal })
-  stage.addEventListener('pointermove', (event) => {
+  root.addEventListener('pointermove', (event) => {
     if (!touching || grid || expanded)
       return
     const dx = event.clientX - lastTouch.x
@@ -409,8 +500,9 @@ function setupStack() {
     lastTouch = { x: event.clientX, y: event.clientY }
   }, { signal: signal.signal })
   const release = (event: PointerEvent) => {
+    const wasTouching = touching
     touching = false
-    if (event.type === 'pointerup' && event.pointerType !== 'mouse' && expanded && Math.abs(event.clientX - touch.x) > 40) {
+    if (wasTouching && event.type === 'pointerup' && event.pointerType !== 'mouse' && expanded && Math.abs(event.clientX - touch.x) > 40) {
       dragged = true
       move(selected + (event.clientX < touch.x ? 1 : -1))
     }
@@ -418,9 +510,14 @@ function setupStack() {
   window.addEventListener('pointerup', release, { signal: signal.signal })
   window.addEventListener('pointercancel', release, { signal: signal.signal })
   root.addEventListener('keydown', (event) => {
-    if ((event.target as HTMLElement).closest('header, .control-buttons') || grid || document.querySelector('.pswp'))
+    if (event.key === 'Escape') {
+      event.preventDefault()
+      setExpansion(0)
       return
-    if (['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'Home', 'End', ' ', 'Escape'].includes(event.key))
+    }
+    if ((event.target as HTMLElement).closest('a, .focus-live') || (grid && !expanded) || document.querySelector('.pswp'))
+      return
+    if (['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'Home', 'End', ' ', 'Escape', 'Enter'].includes(event.key) && (event.key !== 'Enter' || event.target === stage))
       event.preventDefault()
     if (event.key === 'ArrowRight' || event.key === 'ArrowDown')
       move(Math.round(targetPosition) + 1)
@@ -430,16 +527,8 @@ function setupStack() {
       move(0)
     if (event.key === 'End')
       move(photos.length - 1)
-    if (event.key === ' ') {
-      position = targetPosition = selected
-      expanded = !expanded
-      root.classList.toggle('is-expanded', expanded)
-      update()
-    }
-    if (event.key === 'Escape') {
-      expanded = false
-      root.classList.remove('is-expanded')
-      update()
+    if (event.key === ' ' || (event.key === 'Enter' && event.target === stage)) {
+      openPhoto(selected)
     }
   }, { signal: signal.signal })
   window.addEventListener('resize', resize, { signal: signal.signal })
@@ -449,13 +538,14 @@ function setupStack() {
   }, { passive: true, signal: signal.signal })
   reduced.addEventListener('change', () => {
     grid = reduced.matches
-    expanded = false
+    setExpansion(0)
     setView()
   }, { signal: signal.signal })
   setView()
   resize()
   dispose = () => {
     alive = false
+    closeFocus()
     signal.abort()
     cancelAnimationFrame(frame)
     tasks.forEach(cancel => cancel())
@@ -481,23 +571,7 @@ document.addEventListener('astro:before-swap', () => {
 
 <style>
   .stack-gallery { width: 100%; min-height: 100dvh; color: #272e29; background: #fbfcfa; position: relative; font-family: system-ui, sans-serif; }
-  .gallery-top { position: absolute; z-index: 20; inset: 26px 32px auto; display: flex; align-items: start; justify-content: space-between; gap: 20px; pointer-events: none; }
-  .gallery-top > * { pointer-events: auto; }
-  .gallery-home { display: flex; align-items: center; gap: 10px; font-size: 22px; }
-  .gallery-home span { font-size: 11px; letter-spacing: .17em; }
-  .gallery-title { position: absolute; left: 50%; transform: translateX(-50%); text-align: center; max-width: 45vw; }
-  h1 { font-size: 14px; font-weight: 400; letter-spacing: .1em; }
-  .gallery-options { display: flex; gap: 12px; font-size: 12px; align-items: center; }
-  .gallery-options button, .gallery-options summary { min-height: 44px; display: flex; align-items: center; justify-content: center; }
-  .view-toggle { width: 44px; }
-  .stack-icon { display: none; }
-  [data-view="grid"] .grid-icon { display: none; }
-  [data-view="grid"] .stack-icon { display: initial; }
-  .album-switch summary { cursor: pointer; list-style: none; }
-  .album-switch summary { width: 44px; }
-  .album-switch summary::-webkit-details-marker { display: none; }
-  .album-switch nav { position: absolute; right: 0; top: 48px; padding: 16px; min-width: 180px; max-height: 65vh; overflow: auto; background: #fbfcfaf5; border: 1px solid #272e2920; box-shadow: 0 8px 30px #0001; backdrop-filter: blur(16px); }
-  .album-switch nav a { display: block; padding: 12px 8px; }
+  .gallery-home { position: fixed; z-index: 20; top: 20px; left: 24px; display: grid; place-items: center; width: 44px; height: 44px; font: 24px/1 system-ui; }
   .gallery-stage { position: relative; width: 100%; height: 100dvh; overflow: hidden; isolation: isolate; display: flex; align-items: center; justify-content: center; --image-size: min(80dvh, 640px); --image-scale: .38; touch-action: none; }
   .stack-track { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; will-change: transform; }
   .stack-card { position: absolute; width: calc(var(--image-size) * var(--ratio-w)); height: calc(var(--image-size) * var(--ratio-h)); padding: 0; border: 0; background: transparent; line-height: 0; transform: translate3d(var(--offset-x),var(--offset-y),0) rotateX(-45deg) rotateY(-45deg) scale(var(--image-scale)); transition: none; backface-visibility: hidden; cursor: zoom-in; }
@@ -506,35 +580,38 @@ document.addEventListener('astro:before-swap', () => {
   .stack-card img[hidden] { display: none; }
   .stack-card:not([data-load-state="ready"]) { background: #e8ece7; }
   :global(html.dark) .stack-card:not([data-load-state="ready"]) { background: #202820; }
-  .stack-card.expanded { transform: translate3d(var(--expand-x),var(--expand-y),0) perspective(800px) rotateX(0) rotateY(0) scale(1); z-index: 10; cursor: zoom-out; }
+  .stack-card.expanded { opacity: 0; pointer-events: none; }
   .stack-gallery.is-expanded .stack-card { transition: transform .24s ease-out; }
   .image-failed { background: #dfe5de; }
   .image-failed::after { content: "↻"; font: 20px/1.4 system-ui; }
   .live-marker { position: absolute; top: 12px; left: 12px; font-size: 12px; line-height: 1; color: white; background: #0006; padding: 8px 10px; border-radius: 30px; letter-spacing: .1em; }
-  .gallery-bottom { position: absolute; z-index: 20; inset: auto 32px 24px; display: flex; align-items: end; justify-content: space-between; pointer-events: none; gap: 24px; }
-  .photo-info { max-width: min(45vw,440px); text-shadow: 0 1px 8px #fbfcfa; opacity: 0; transition: opacity .2s; }
-  .is-expanded .photo-info { opacity: .65; }
-  .photo-info h2 { font-size: 12px; font-weight: 400; letter-spacing: .04em; }
-  .gallery-controls { pointer-events: auto; display: flex; align-items: center; gap: 24px; }
-  .photo-progress { display: flex; align-items: center; gap: 8px; font-size: 10px; font-variant-numeric: tabular-nums; opacity: .65; }
-  .control-buttons { display: flex; gap: 2px; }
-  .control-buttons button { display: grid; place-items: center; font-size: 18px; width: 44px; height: 44px; background: #fbfcfad9; border-radius: 50%; }
-  button:disabled { opacity: .25; cursor: default; }
+  .gallery-focus { position: fixed; z-index: 15; top: 50%; left: 50%; transform: translate(-50%,-50%); margin: 0; }
+  .gallery-focus[hidden], .focus-live[hidden], .focus-status[hidden] { display: none; }
+  .stack-gallery.is-fullscreen .stack-track { visibility: hidden; pointer-events: none; }
+  .focus-media { position: relative; width: 100%; height: var(--focus-height); cursor: zoom-in; touch-action: none; }
+  .stack-gallery.is-fullscreen .focus-media { cursor: zoom-out; }
+  .focus-media > img, .focus-media > canvas, .focus-media > :global(video) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  .focus-media > img { opacity: 0; transition: opacity .12s; }
+  .focus-media > img.ready { opacity: 1; }
+  .focus-media > :global(video) { opacity: 0; pointer-events: none; }
+  .focus-media > :global(video.playing) { opacity: 1; }
+  .focus-live { position: absolute; top: 16px; left: 16px; min-height: 36px; padding: 8px 12px; border: 0; border-radius: 20px; font: 11px/1 system-ui; letter-spacing: .1em; color: white; background: #0006; cursor: pointer; }
+  .focus-live[data-state="loading"] { opacity: .6; }
+  .focus-status { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); padding: 6px 10px; background: #fffd; font: 12px/1.6 system-ui; }
+  .focus-parameters { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px 20px; margin: 16px 0 0; font: 12px/1.6 system-ui; opacity: .65; }
+  .focus-parameters:empty { display: none; }
+  .focus-parameters :global(dt) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .focus-parameters :global(dd) { margin: 0; overflow-wrap: anywhere; }
   .live-marker[hidden] { display: none; }
   .gallery-empty { min-height: 100dvh; display: grid; place-items: center; text-align: center; }
   .gallery-empty h2 { font-size: 14px; font-weight: 400; opacity: .5; }
   [data-view="grid"] .gallery-stage { display: block; min-height: 100dvh; overflow: clip; touch-action: auto; }
   [data-view="grid"] .stack-track { display: block; will-change: auto; }
   [data-view="grid"] .stack-card { position: absolute; transform: none; transition: none; }
-  [data-view="grid"] .gallery-bottom { position: fixed; padding-top: 20px; background: linear-gradient(transparent, #fbfcfa 35%); }
   .no-script-gallery { display: grid; gap: 30px; padding: 120px 10vw; }
   .no-script-gallery img { max-width: 100%; max-height: 80dvh; }
-  @media (max-width: 750px) { .gallery-top { inset: 16px 16px auto; } .gallery-home { min-height: 44px; } .gallery-home span { display: none; } .gallery-title { padding-top: 12px; } .gallery-options { gap: 8px; } .gallery-bottom { inset: auto 16px 12px; gap: 12px; align-items: center; } .gallery-controls { gap: 8px; } .control-buttons { gap: 0; } [data-view="grid"] .gallery-stage { grid-template-columns: repeat(2,minmax(0,1fr)); padding: 100px 20px; gap: 30px 16px; } }
-  @media (max-width: 430px) { .photo-info { max-width: 35vw; } .photo-info h2 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; } }
+  @media (max-width: 600px) { .gallery-home { top: 12px; left: 12px; } .focus-live { top: 12px; left: 12px; } .focus-parameters { gap: 5px 12px; font-size: 11px; margin-top: 12px; } }
   @media (prefers-reduced-motion: reduce) { .stack-card { transition: none; } }
   :global(html.gallery-locked), :global(html.gallery-locked body) { overflow: hidden; }
   :global(html.dark) .stack-gallery { background: #101512; color: #e7eae3; }
-  :global(html.dark) .control-buttons button, :global(html.dark) .album-switch nav { background: #101512eb; }
-  :global(html.dark) .photo-info { text-shadow: 0 1px 8px #101512; }
-  :global(html.dark) [data-view="grid"] .gallery-bottom { background: linear-gradient(transparent, #101512 35%); }
 </style>

@@ -123,68 +123,6 @@ async function _getPosts(lang?: Language) {
 export const getPosts = memoize(_getPosts)
 
 /**
- * Get all non-pinned posts
- *
- * @param lang The language code to filter by, defaults to site's default language
- * @returns Regular posts (non-pinned), filtered by language
- */
-async function _getRegularPosts(lang?: Language) {
-  const posts = await getPosts(lang)
-  return posts.filter(post => !post.data.pin)
-}
-
-export const getRegularPosts = memoize(_getRegularPosts)
-
-/**
- * Get pinned posts sorted by pin priority
- *
- * @param lang The language code to filter by, defaults to site's default language
- * @returns Pinned posts sorted by pin value in descending order
- */
-async function _getPinnedPosts(lang?: Language) {
-  const posts = await getPosts(lang)
-  return posts
-    .filter(post => post.data.pin && post.data.pin > 0)
-    .sort((a, b) => (b.data.pin ?? 0) - (a.data.pin ?? 0))
-}
-
-export const getPinnedPosts = memoize(_getPinnedPosts)
-
-/**
- * Group posts by year and sort within each year
- *
- * @param lang The language code to filter by, defaults to site's default language
- * @returns Map of posts grouped by year (descending), sorted by date within each year
- */
-async function _getPostsByYear(lang?: Language): Promise<Map<number, Post[]>> {
-  const posts = await getRegularPosts(lang)
-  const yearMap = new Map<number, Post[]>()
-
-  posts.forEach((post: Post) => {
-    const year = post.data.published.getFullYear()
-    let yearPosts = yearMap.get(year)
-    if (!yearPosts) {
-      yearPosts = []
-      yearMap.set(year, yearPosts)
-    }
-    yearPosts.push(post)
-  })
-
-  // Sort posts within each year by date
-  yearMap.forEach((yearPosts) => {
-    yearPosts.sort((a, b) => {
-      const aDate = a.data.published
-      const bDate = b.data.published
-      return bDate.getMonth() - aDate.getMonth() || bDate.getDate() - aDate.getDate()
-    })
-  })
-
-  return new Map([...yearMap.entries()].sort((a, b) => b[0] - a[0]))
-}
-
-export const getPostsByYear = memoize(_getPostsByYear)
-
-/**
  * Group posts by their tags
  *
  * @param lang The language code to filter by, defaults to site's default language

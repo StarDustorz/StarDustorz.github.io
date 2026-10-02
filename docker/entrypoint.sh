@@ -20,6 +20,7 @@ if [ -n "${GH_TOKEN:-}" ]; then
     echo 'GitHub 凭据配置失败，请检查 GH_TOKEN。' >&2
     exit 1
   }
+  export STARDUST_GITHUB_CREDENTIAL=1
 fi
 
 nginx -t

@@ -16,5 +16,5 @@ const photos = albums.flatMap(album => album.photos.map(photo => ({ ...photo, al
 const title = zh ? '相册' : 'Gallery'
 ---
 <GalleryLayout {title} description={zh ? '把生活的片刻，收进相册。' : 'A collection of moments.'}>
-  <StackGallery {photos} {zh} {title} back={getLocalizedPath('/', lang)} albums={albums.map(album => ({ title: album.title, href: getLocalizedPath(`/gallery/${album.slug}/`, lang) }))} />
+  <StackGallery {photos} {zh} {title} back={getLocalizedPath('/', lang)} />
 </GalleryLayout>

@@ -26,7 +26,11 @@ services:
       - astro_cache:/workspace/.astro
       - build_output:/workspace/dist
     healthcheck:
-      test: ['CMD', 'node', '-e', "Promise.all(['http://127.0.0.1:8080/healthz','http://127.0.0.1:4310/healthz'].map(url=>fetch(url).then(r=>{if(!r.ok)throw Error(url)}))).catch(()=>process.exit(1))"]
+      test:
+        - CMD
+        - node
+        - -e
+        - "Promise.all(['http://127.0.0.1:8080/healthz','http://127.0.0.1:4310/healthz'].map(url=>fetch(url).then(r=>{if(!r.ok)throw Error(url)}))).catch(()=>process.exit(1))"
       interval: 10s
       timeout: 3s
       start_period: 30s

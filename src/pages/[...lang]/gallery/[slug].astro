@@ -16,5 +16,5 @@ const { album, lang } = Astro.props
 const zh = lang === 'zh'
 ---
 <GalleryLayout title={album.title} description={album.description} supportedLangs={album.lang ? [album.lang] : allLocales}>
-  <StackGallery photos={album.photos} {zh} title={album.title} back={getLocalizedPath('/gallery/', lang)} albums={[{ title: zh ? '全部照片' : 'All photographs', href: getLocalizedPath('/gallery/', lang) }]} />
+  <StackGallery photos={album.photos} {zh} title={album.title} back={getLocalizedPath('/gallery/', lang)} />
 </GalleryLayout>

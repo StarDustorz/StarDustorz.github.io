@@ -74,7 +74,7 @@ export default defineConfig({
   markdown: {
     remarkPlugins: [
       remarkDirective,
-      remarkMath,
+      [remarkMath, { singleDollarTextMath: false }],
       remarkContainerDirectives,
       remarkPhotoDirective,
       remarkLeafDirectives,

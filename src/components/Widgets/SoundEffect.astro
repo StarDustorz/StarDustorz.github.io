@@ -11,11 +11,6 @@ const volumeSettings: Record<SoundType, number> = {
   [soundTypes.typing]: 0.4,
 }
 
-const clickTargets = [
-  '#language-switcher',
-  '#theme-toggle-button',
-] as const
-
 const typingTargets = [
   // Twikoo
   '.el-input__inner',
@@ -37,7 +32,7 @@ const ignoredKeys = new Set([
   'CapsLock',
 ])
 
-const clickSelector = clickTargets.join(',')
+const clickSelector = '#language-switcher, #theme-toggle-button'
 const typingSelector = typingTargets.join(',')
 
 function isMobileDevice(): boolean {

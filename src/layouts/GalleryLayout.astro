@@ -1,6 +1,5 @@
 ---
 import type { Language } from '@/i18n/config'
-import PhotoViewer from '@/components/Gallery/PhotoViewer.astro'
 import { getLangFromLocale } from '@/i18n/lang'
 import Head from '@/layouts/Head.astro'
 import '@/styles/font.css'
@@ -11,7 +10,7 @@ const { title, description, supportedLangs } = Astro.props
 ---
 <html lang={getLangFromLocale(Astro.currentLocale)} class="gallery-document font-sans">
   <Head postTitle={title} postDescription={description} {supportedLangs} />
-  <body><a class="skip-link" href="#main-content">跳到相册</a><main id="main-content" tabindex="-1"><slot /></main><PhotoViewer /></body>
+  <body><a class="skip-link" href="#main-content">跳到相册</a><main id="main-content" tabindex="-1"><slot /></main></body>
 </html>
 <style is:global>
   html.gallery-document { scrollbar-gutter: auto; }

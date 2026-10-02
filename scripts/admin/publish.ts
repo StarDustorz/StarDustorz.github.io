@@ -23,15 +23,6 @@ interface PublishState {
 }
 let state: PublishState = { phase: 'idle', logs: '' }
 let publishing = false
-async function githubAuthenticated() {
-  try {
-    await run('gh', ['auth', 'status', '--hostname', 'github.com'])
-    return true
-  }
-  catch {
-    return false
-  }
-}
 export function isPublishing() {
   return publishing
 }
@@ -124,7 +115,8 @@ export async function initializePublish() {
 export async function publishStatus() {
   if (state.commit && ['deploying', 'unknown'].includes(state.phase) && !publishing) {
     try {
-      const runs = JSON.parse(await run('gh', ['run', 'list', '--workflow', 'deploy.yml', '--commit', state.commit, '--limit', '1', '--json', 'status,conclusion,url']))
+      const repository = await githubRepository()
+      const runs = JSON.parse(await run('gh', ['run', 'list', '--repo', repository, '--workflow', 'deploy.yml', '--commit', state.commit, '--limit', '1', '--json', 'status,conclusion,url']))
       if (runs[0]) {
         state.deploymentURL = runs[0].url
         if (runs[0].status === 'completed') {
@@ -145,11 +137,10 @@ export async function publishStatus() {
     }
     await persist()
   }
-  const remoteAuthenticated = await githubAuthenticated()
   return {
     ...state,
     publishing,
-    remoteAuthenticationRequired: process.env.STARDUST_CONTAINER === '1' && !remoteAuthenticated,
+    remoteAuthenticationRequired: process.env.STARDUST_CONTAINER === '1' && process.env.STARDUST_GITHUB_CREDENTIAL !== '1',
     canRetryPush: !publishing && state.phase === 'failed' && !!state.commit && !state.pushed,
   }
 }
@@ -165,6 +156,13 @@ async function pushCommit() {
   state.error = undefined
   await persist()
 }
+async function githubRepository() {
+  const remote = (await run('git', ['remote', 'get-url', 'origin'])).trim()
+  const match = remote.match(/github\.com[/:]([^/]+\/[^/]+?)(?:\.git)?$/)
+  if (!match)
+    throw new StoreError('origin 不是 GitHub 仓库，无法查询部署状态。')
+  return match[1]
+}
 export async function startPublish(input: {
   paths: string[]
   revision: string
@@ -172,7 +170,7 @@ export async function startPublish(input: {
 }) {
   if (publishing)
     throw new StoreError('发布任务正在执行', 409)
-  if (process.env.STARDUST_CONTAINER === '1' && !await githubAuthenticated())
+  if (process.env.STARDUST_CONTAINER === '1' && process.env.STARDUST_GITHUB_CREDENTIAL !== '1')
     throw new StoreError('容器没有读取到 GitHub 凭据，请使用 pnpm local 重新启动。')
   const snapshot = await changes()
   if (snapshot.revision !== input.revision)

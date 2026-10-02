@@ -2,7 +2,7 @@
 FROM node:24-bookworm-slim AS build
 RUN npm install --global pnpm@10.33.0
 WORKDIR /workspace
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY patches ./patches
 RUN pnpm install --frozen-lockfile
 COPY . .

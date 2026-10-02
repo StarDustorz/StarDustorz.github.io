@@ -1,6 +1,6 @@
 import type { Language } from '@/i18n/config'
-import { allLocales, base, defaultLocale } from '@/config'
-import { getLangFromPath, getNextGlobalLang } from '@/i18n/lang'
+import { base, defaultLocale } from '@/config'
+import { getLangFromPath } from '@/i18n/lang'
 
 /**
  * Get path to a specific tag page with language support
@@ -76,44 +76,4 @@ export function getNextLangPath(currentPath: string, currentLang: Language, next
     : pathWithoutBase.replace(`/${currentLang}`, '')
 
   return getLocalizedPath(pagePath, nextLang)
-}
-
-/**
- * Get next language path from global language list
- *
- * @param currentPath Current page path
- * @returns Path for next supported language
- */
-export function getNextGlobalLangPath(currentPath: string): string {
-  const currentLang = getLangFromPath(currentPath)
-  const nextLang = getNextGlobalLang(currentLang)
-  return getNextLangPath(currentPath, currentLang, nextLang)
-}
-
-/**
- * Get next language path from supported language list
- *
- * @param currentPath Current page path
- * @param supportedLangs List of supported language codes
- * @returns Path for next supported language
- */
-export function getNextSupportedLangPath(currentPath: string, supportedLangs: Language[]): string {
-  if (supportedLangs.length === 0) {
-    return getNextGlobalLangPath(currentPath)
-  }
-
-  // Sort supported languages by global priority
-  const langPriority = new Map<Language, number>(
-    allLocales.map((lang, index) => [lang, index]),
-  )
-  const sortedLangs = [...supportedLangs].sort(
-    (a, b) => (langPriority.get(a) ?? 0) - (langPriority.get(b) ?? 0),
-  )
-
-  // Get current language and next in cycle
-  const currentLang = getLangFromPath(currentPath)
-  const currentIndex = sortedLangs.indexOf(currentLang)
-  const nextLang = sortedLangs[(currentIndex + 1) % sortedLangs.length]
-
-  return getNextLangPath(currentPath, currentLang, nextLang)
 }

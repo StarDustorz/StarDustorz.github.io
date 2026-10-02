@@ -12,6 +12,8 @@ import sharp from 'sharp'
 
 const workspace = await realpath(await mkdtemp(path.join(os.tmpdir(), 'stardust-admin-test-')))
 process.env.STARDUST_ROOT = workspace
+// Isolated local Git/PicGo fixtures must not inherit the production credential gate.
+process.env.STARDUST_CONTAINER = '0'
 // Mock PicGo reads the isolated fixture directory, including inside Compose.
 process.env.STARDUST_PICGO_HOST_ROOT = workspace
 const { getAlbum, getPost, savePost, saveAlbum, importPhoto, importLiveVideo, addPhotoLink, listBackups, restoreBackup, StoreError } = await import('../scripts/admin/store')
@@ -522,4 +524,20 @@ it('album schema accepts 1000 linked photos while preserving uniqueness and the 
   assert.equal(albumSchema.parse(album).photos.length, 1000)
   assert.equal(albumSchema.safeParse({ ...album, photos: [photos[0], photos[0]] }).success, false)
   assert.equal(albumSchema.safeParse({ ...album, photos: Array.from({ length: 5001 }, (_, i) => ({ ...photos[0], id: `over-${i}` })) }).success, false)
+})
+
+it('expanded photographs grow on desktop and fit portrait/mobile screens with parameters below', async () => {
+  const { expandedPhotoSize } = await import('../src/utils/gallery-focus')
+  const desktop = expandedPhotoSize(1920, 1080, 2400, 1600, 40)
+  assert.ok(desktop.width > 800, 'Selected landscape photo should exceed the previous 800px limit')
+  for (const [vw, vh, pw, ph] of [[1280, 720, 2400, 1600], [1280, 720, 1600, 2400], [390, 844, 2400, 1600], [390, 844, 1600, 2400]]) {
+    const { width, height } = expandedPhotoSize(vw, vh, pw, ph, 80)
+    assert.ok(width <= vw - 24)
+    assert.ok(height + 80 + 16 <= vh - 64)
+    assert.ok(Math.abs(width / height - pw / ph) < 0.001)
+    const preview = expandedPhotoSize(vw, vh, pw, ph, 80, 'preview')
+    assert.ok(preview.width < width, 'First click must leave room for the surrounding photo stack')
+    assert.ok(preview.height + 80 + 16 <= vh * 0.62)
+    assert.ok(Math.abs(preview.width / preview.height - pw / ph) < 0.001)
+  }
 })

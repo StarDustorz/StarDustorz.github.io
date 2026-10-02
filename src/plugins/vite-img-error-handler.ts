@@ -3,7 +3,7 @@ export function viteImgErrorHandler() {
     name: 'vite-img-error-handler',
     resolveId(id: string) {
       // 检查是否是图片文件且以特定格式命名（可能是缺失的图片）
-      if (id.match(/file-\d{17}\.(png|jpg|jpeg|gif|webp)$/)) {
+      if (/file-\d{17}\.(?:png|jpg|jpeg|gif|webp)$/.test(id)) {
         console.warn(`⚠️  图片文件不存在，已忽略: ${id}`)
         // 返回一个1x1透明PNG的data URL作为占位符
         return '\0virtual:placeholder-image'
@@ -18,6 +18,6 @@ export function viteImgErrorHandler() {
         return `export default "${transparentPng}"`
       }
       return null
-    }
+    },
   }
-} 
+}

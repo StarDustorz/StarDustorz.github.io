@@ -1,5 +1,5 @@
 import type { Language } from '@/i18n/config'
-import { allLocales, base, defaultLocale, moreLocales } from '@/config'
+import { base, defaultLocale, moreLocales } from '@/config'
 import { langMap } from '@/i18n/config'
 
 /**
@@ -41,22 +41,4 @@ export function getLangFromPath(path: string): Language {
     : path
 
   return moreLocales.find(lang => pathWithoutBase.startsWith(`/${lang}/`)) ?? defaultLocale
-}
-
-/**
- * Get the next language code in the global language cycle
- *
- * @param currentLang Current language code
- * @returns Next language code in the global cycle
- */
-export function getNextGlobalLang(currentLang: Language): Language {
-  // Get index of current language
-  const currentIndex = allLocales.indexOf(currentLang)
-  if (currentIndex === -1) {
-    return defaultLocale
-  }
-
-  // Calculate and return next language in cycle
-  const nextIndex = (currentIndex + 1) % allLocales.length
-  return allLocales[nextIndex]
 }

@@ -12,7 +12,6 @@ export function rehypeUnwrapImg() {
           || (child.type === 'text' && child.value.trim() === ''),
         )
       ) {
-
         const imgNodes = node.children.filter(child => child.tagName === 'img')
         if (imgNodes.length > 0) {
           parent.children.splice(index, 1, ...imgNodes)
