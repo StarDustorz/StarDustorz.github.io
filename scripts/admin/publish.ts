@@ -28,7 +28,7 @@ export function isPublishing() {
 }
 export function run(command: string, args: string[], onOutput?: (chunk: string) => void): Promise<string> {
   return new Promise((resolve, reject) => {
-    const child = spawn(command, args, { cwd: root, env: { ...process.env, STARDUST_PREVIEW: '', STARDUST_PREVIEW_TOKEN: '', GIT_TERMINAL_PROMPT: '0' }, stdio: ['ignore', 'pipe', 'pipe'] })
+    const child = spawn(command, args, { cwd: root, env: { ...process.env, STARDUST_PREVIEW: '', GIT_TERMINAL_PROMPT: '0' }, stdio: ['ignore', 'pipe', 'pipe'] })
     let output = ''
     const accept = (data: Buffer) => {
       const chunk = data.toString()

@@ -22,7 +22,6 @@ if (![port, previewPort].every(value => Number.isInteger(value) && value > 1024 
 const origin = `http://127.0.0.1:${port}`
 const bindHost = process.env.STARDUST_CONTAINER === '1' ? '0.0.0.0' : '127.0.0.1'
 const token = randomBytes(32).toString('hex')
-const previewToken = randomBytes(32).toString('hex')
 const assets = new URL('../../admin/', import.meta.url)
 let previewChild: ReturnType<typeof spawn> | undefined
 let previewReady: Promise<void> | undefined
@@ -76,7 +75,7 @@ function startPreview() {
     previewChild = spawn('pnpm', ['astro', 'dev', '--host', bindHost, '--port', String(previewPort)], {
       cwd: root,
       detached: process.platform !== 'win32',
-      env: { ...process.env, STARDUST_PREVIEW: '1', STARDUST_PREVIEW_TOKEN: previewToken },
+      env: { ...process.env, STARDUST_PREVIEW: '1' },
       stdio: ['ignore', 'pipe', 'pipe'],
     })
     let failed: Error | undefined
@@ -97,7 +96,6 @@ function startPreview() {
         throw failed
       try {
         const response = await fetch(`http://127.0.0.1:${previewPort}/__preview-health`, {
-          headers: { 'x-preview-token': previewToken },
           signal: AbortSignal.timeout(1500),
         })
         if (response.ok && await response.text() === 'ready')
@@ -190,7 +188,7 @@ async function api(req: IncomingMessage, res: ServerResponse, url: URL) {
         next = `${base}${prefix}/${value.kind === 'post' ? 'posts' : 'gallery'}/${String(slug).split('/').map(encodeURIComponent).join('/')}/`
       }
       await startPreview()
-      return json(res, { url: `http://127.0.0.1:${previewPort}/__preview?${new URLSearchParams({ ticket: previewToken, next })}` })
+      return json(res, { url: `http://127.0.0.1:${previewPort}${next}` })
     }
     case '/api/publish': {
       const value = z.object({ paths: z.array(z.string()).max(3000), revision: z.string(), message: z.string().default('') }).parse(input)
@@ -247,7 +245,14 @@ const server = createServer(async (req, res) => {
   }
 })
 server.requestTimeout = 120000
-server.listen(port, bindHost, () => console.log(`本地博客管理台：${origin}\n关闭此进程即可停止管理台与私有预览。`))
+server.listen(port, bindHost, () => {
+  console.log(`本地博客管理台：${origin}\n关闭此进程即可停止管理台与私有预览。`)
+  void startPreview().then(() => {
+    console.log(`本地预览：http://127.0.0.1:${previewPort}/`)
+  }).catch((error) => {
+    console.error('本地预览启动失败：', error.message)
+  })
+})
 server.on('error', (error) => {
   console.error(`管理台启动失败：${error.message}`)
   process.exitCode = 1
