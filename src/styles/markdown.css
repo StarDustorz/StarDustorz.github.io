@@ -7,6 +7,7 @@
 /* Global Styles */
 .heti {
   --at-apply: 'break-words leading-normal hyphens-auto cjk:tracking-wide';
+  line-height: 1.8;
 }
 
 /* Customized Post Title */
@@ -93,6 +94,9 @@ html.dark .heti pre span {
 .heti .code-block-wrapper {
   --at-apply: 'my-6 relative';
 }
+.code-block-wrapper[data-code-collapsed="true"] pre { max-height: 24rem; overflow-y: hidden; mask-image: linear-gradient(black 80%, transparent); }
+.code-collapse-button { display: block; width: 100%; padding: 10px; margin-top: 6px; font: 12px/1.6 system-ui; border-radius: 4px; cursor: pointer; --at-apply: 'bg-secondary/5 c-secondary/70'; }
+@media print { .code-block-wrapper[data-code-collapsed="true"] pre { max-height: none; overflow: visible; mask-image: none; } .code-collapse-button { display: none; } }
 .heti :is(h1, h2, h3, h4, h5, h6, .code-block-wrapper) + .code-block-wrapper {
   --at-apply: 'mt-4';
 }

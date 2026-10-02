@@ -4,15 +4,15 @@ import type { Language } from '@/i18n/config'
 import { getImage } from 'astro:assets'
 import { getCollection } from 'astro:content'
 import { Feed } from 'feed'
-import MarkdownIt from 'markdown-it'
 import { parse } from 'node-html-parser'
 import sanitizeHtml from 'sanitize-html'
 import { base, defaultLocale, themeConfig } from '@/config'
 import { ui } from '@/i18n/ui'
 import { memoize } from '@/utils/cache'
+import { isVisible } from '@/utils/content-access'
 import { getPostDescription } from '@/utils/description'
+import { renderFeedMarkdown } from '@/utils/feed-markdown'
 
-const markdownParser = new MarkdownIt()
 const { title, description, i18nTitle, url, author } = themeConfig.site
 const { folo } = themeConfig.seo ?? {}
 
@@ -139,7 +139,7 @@ export async function generateFeed({ lang }: { lang?: Language } = {}) {
   const posts = await getCollection(
     'posts',
     ({ data }: { data: CollectionEntry<'posts'>['data'] }) => {
-      const isNotDraft = !data.draft
+      const isNotDraft = isVisible(data)
       const isCorrectLang = data.lang === lang
         || data.lang === ''
         || (lang === undefined && data.lang === defaultLocale)
@@ -163,12 +163,12 @@ export async function generateFeed({ lang }: { lang?: Language } = {}) {
       ? sanitizeHtml(
           await fixRelativeImagePaths(
             // Remove HTML comments before rendering markdown
-            markdownParser.render(post.body.replace(/<!--[\s\S]*?-->/g, '')),
+            renderFeedMarkdown(post.body.replace(/<!--[\s\S]*?-->/g, '')),
             `${url}${base}/`,
           ),
           {
             // Allow <img> tags in feed content
-            allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
+            allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'figure', 'figcaption']),
           },
         )
       : ''

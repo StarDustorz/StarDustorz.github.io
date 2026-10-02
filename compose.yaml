@@ -1,0 +1,39 @@
+name: stardust
+services:
+  stardust:
+    build:
+      context: .
+      args:
+        SITE_URL: http://127.0.0.1:8080
+        LOCAL_ADMIN_URL: /admin/
+    image: stardust-local:latest
+    init: true
+    restart: unless-stopped
+    environment:
+      STARDUST_SITE_URL: http://127.0.0.1:8080
+      STARDUST_LOCAL_ADMIN_URL: /admin/
+      STARDUST_ADMIN_PORT: '4310'
+      STARDUST_PREVIEW_PORT: '4322'
+      STARDUST_PICGO_URL: http://host.docker.internal:36677
+      STARDUST_PICGO_HOST_ROOT: '${STARDUST_PICGO_HOST_ROOT:-${PWD}}'
+      GH_TOKEN: '${GH_TOKEN:-}'
+    ports:
+      - '127.0.0.1:8080:8080'
+      - '127.0.0.1:4322:4322'
+    volumes:
+      - .:/workspace
+      - linux_dependencies:/workspace/node_modules
+      - astro_cache:/workspace/.astro
+      - build_output:/workspace/dist
+    healthcheck:
+      test: ['CMD', 'node', '-e', "Promise.all(['http://127.0.0.1:8080/healthz','http://127.0.0.1:4310/healthz'].map(url=>fetch(url).then(r=>{if(!r.ok)throw Error(url)}))).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 3s
+      start_period: 30s
+      retries: 5
+    labels:
+      dev.orbstack.http-port: '8080'
+volumes:
+  linux_dependencies:
+  astro_cache:
+  build_output:

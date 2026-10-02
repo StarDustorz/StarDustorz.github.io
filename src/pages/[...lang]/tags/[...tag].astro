@@ -49,7 +49,8 @@ const currentChildTag = tagPath[1] ?? ''
 const currentTopNode = tagTree.find(node => node.path[0] === currentTopTag)
 ---
 
-<Layout supportedLangs={supportedLangs}>
+<Layout postTitle={tagPath.join(' / ')} supportedLangs={supportedLangs}>
+  <h1 class="mb-6 text-7 c-primary font-semibold">{tagPath.join(' / ')}</h1>
   <div class="uno-decorative-line" />
 
   <div class="no-heti flex flex-wrap gap-x-2.8 gap-y-3.2">

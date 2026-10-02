@@ -11,9 +11,19 @@ body {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
-body::selection {
+::selection {
   --at-apply: 'bg-highlight';
 }
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+.skip-link { position: fixed; top: .75rem; left: .75rem; z-index: 2000; padding: .65rem 1rem; background: white; color: #1e4035; transform: translateY(-200%); }
+.skip-link:focus { transform: translateY(0); }
+.code-copy-button:focus-visible { opacity: 1; }
+@media (hover: none) { .code-copy-button { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { html.scroll-smooth { scroll-behavior: auto; } }
 
 /* Highlight Hover Animation >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */
 .highlight-static,

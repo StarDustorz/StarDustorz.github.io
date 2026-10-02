@@ -41,8 +41,8 @@ export default defineConfig({
     },
     fontFamily: {
       title: ['Snell-Black', 'EarlySummer-Subset', 'EarlySummer', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
-      navbar: ['STIX-Italic', 'EarlySummer-Subset', 'EarlySummer', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
-      time: ['Snell-Bold', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
+      navbar: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+      time: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
       serif: ['STIX', 'EarlySummer', 'ui-serif', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
     },
   },
@@ -69,7 +69,9 @@ export default defineConfig({
     },
   ],
   transformers: [
-    transformerDirectives(),
+    // Astro caches development CSS before normal Vite transforms. Compile
+    // directives first so ClientRouter receives usable CSS on every navigation.
+    transformerDirectives({ enforce: 'pre' }),
     transformerVariantGroup(),
   ],
 })

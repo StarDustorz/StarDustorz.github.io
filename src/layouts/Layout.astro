@@ -2,14 +2,15 @@
 import type { Language } from '@/i18n/config'
 import Button from '@/components/Button.astro'
 import Footer from '@/components/Footer.astro'
+import PhotoViewer from '@/components/Gallery/PhotoViewer.astro'
 import Header from '@/components/Header.astro'
 import Navbar from '@/components/Navbar.astro'
 import CodeCopyButton from '@/components/Widgets/CodeCopyButton.astro'
 import GithubCard from '@/components/Widgets/GithubCard.astro'
-import ImageZoom from '@/components/Widgets/ImageZoom.astro'
 import MediaEmbed from '@/components/Widgets/MediaEmbed.astro'
 import SoundEffect from '@/components/Widgets/SoundEffect.astro'
 import { themeConfig } from '@/config'
+import { getLangFromLocale } from '@/i18n/lang'
 import Head from '@/layouts/Head.astro'
 import { getPageInfo } from '@/utils/page'
 import '@/styles/comment.css'
@@ -36,24 +37,25 @@ const MarginBottom = isPost && themeConfig.comment.enabled
 ---
 
 <html
-  lang={Astro.currentLocale}
+  lang={getLangFromLocale(Astro.currentLocale)}
   class:list={[
     fontStyle,
     isPost ? 'scroll-smooth' : '',
   ]}
 >
-  <Head {postTitle} {postDescription} {postSlug} />
-  <body>
+  <Head {postTitle} {postDescription} {postSlug} {supportedLangs} />
+  <body class:list={{ 'post-page': isPost }}>
+    <a class="skip-link" href="#main-content">{getLangFromLocale(Astro.currentLocale) === 'zh' ? '跳到正文' : 'Skip to content'}</a>
     <div
-      class="mx-auto max-w-205.848 min-h-vh w-full min-h-dvh"
-      p="x-[min(7.25vw,3.731rem)] y-10"
-      lg="mx-[max(5.75rem,calc(50vw-34.25rem))] my-20 max-w-[min(calc(75vw-16rem),44rem)] min-h-full p-0"
+      class:list={['layout-shell mx-auto max-w-205.848 min-h-vh w-full min-h-dvh', { 'article-shell': isPost }]}
     >
       <Header />
       <Navbar />
-      <main class={MarginBottom}>
-        <slot />
-      </main>
+      <div class:list={{ 'article-columns': isPost }}>
+        {isPost && <aside class="article-toc"><slot name="toc" /></aside>}
+        <main id="main-content" tabindex="-1" class={MarginBottom}><slot /></main>
+        {isPost && <aside class="article-series"><slot name="series" /></aside>}
+      </div>
       <Footer />
     </div>
     <Button supportedLangs={supportedLangs} />
@@ -61,6 +63,50 @@ const MarginBottom = isPost && themeConfig.comment.enabled
     <CodeCopyButton />
     <GithubCard />
     <MediaEmbed />
-    <ImageZoom />
+    <PhotoViewer />
   </body>
 </html>
+
+<style is:global>
+  .layout-shell { padding: 2.5rem min(7.25vw, 3.731rem); }
+  @media (min-width: 1024px) {
+    .layout-shell:not(.article-shell) { max-width: min(calc(75vw - 16rem),44rem); margin: 5rem max(5.75rem,calc(50vw - 34.25rem)); min-height: 100%; padding: 0; }
+  }
+  .layout-shell main { min-width: 0; overflow-wrap: anywhere; }
+  .post-page .article-shell { max-width: 1320px; margin: 0 auto; padding: 28px 32px 48px; }
+  .post-page .article-shell > header { position: static; width: auto; margin: 0; }
+  .post-page .article-shell > header h2 { margin: 0; font-size: 24px; }
+  .post-page .article-shell > header > div { display: none; }
+  .post-page .site-nav { position: static; width: auto; margin: -36px 0 68px; padding-left: 200px; padding-right: 56px; text-align: right; font-size: 14px; }
+  .post-page .site-nav ul { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 24px; }
+  .post-page .site-controls { position: absolute; top: 28px; right: max(32px,calc(50vw - 628px)); bottom: auto; width: auto; gap: 12px; }
+  .post-page .site-controls button, .post-page .site-controls a { display: grid; place-items: center; width: 44px; height: 44px; }
+  .post-page .site-controls svg { width: 16px; height: 16px; }
+  .post-page .article-shell > footer { position: static; width: auto; margin: 64px auto 0; max-width: 700px; opacity: .65; font-size: 12px; line-height: 1.6; }
+  .post-page main { min-width: 0; max-width: 700px; margin-inline: auto; width: 100%; }
+  .article-toc { display: none; }
+  .article-series { max-width: 700px; margin: 48px auto 0; }
+  @media (min-width: 1280px) {
+    .article-columns { display: grid; grid-template-columns: minmax(160px,1fr) minmax(0,700px) minmax(180px,1fr); gap: 36px; align-items: start; }
+    .article-toc { display: block; position: sticky; top: 40px; }
+    .article-series { position: sticky; top: 40px; margin: 0; width: 100%; }
+    .post-page #toc-container { position: static; max-width: none; border: 0; background: transparent; margin: 0; animation: none; opacity: 1; transform: none; }
+    .post-page #toc-container label { position: static; cursor: default; }
+    .post-page #toc-mobile-text { display: block; margin: 0; font: 12px/1.6 system-ui; opacity: .5; }
+    .post-page #toc-desktop-icon { display: none; }
+    .post-page #toc-accordion-wrapper { display: block; }
+    .post-page #toc-accordion-content { max-height: calc(100dvh - 130px); overflow-y: auto; padding: 0 12px 0 0; }
+    .post-page #toc-links-list { margin: 0; }
+    .post-page #toc-links-list a { display: block; font-size: 12px; line-height: 1.7; padding-block: 5px; opacity: .65; }
+    .post-page #toc-links-list a[aria-current] { opacity: 1; }
+    .post-page #back-button { display: none; }
+  }
+  @media (max-width: 600px) {
+    .layout-shell:not(.article-shell) { padding: 2.5rem 22px; }
+    .post-page .article-shell { padding: 24px 22px 40px; }
+    .post-page .article-shell > header h2 { font-size: 21px; }
+    .post-page .site-nav { margin: 16px 0 40px; padding: 0; text-align: left; }
+    .post-page .site-controls { right: 22px; top: 21px; }
+    .post-page .site-nav ul { justify-content: flex-start; gap: 22px; }
+  }
+</style>

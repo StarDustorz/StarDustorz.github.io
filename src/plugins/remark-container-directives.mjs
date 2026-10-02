@@ -46,11 +46,12 @@ function createFoldSection(node, title) {
 }
 
 // Gallery Containers
-function createGallery(node) {
+function createGallery(node, rows = false) {
   node.data ??= {}
   node.data.hName = 'div'
   node.data.hProperties = {
-    className: ['gallery-container'],
+    className: [rows ? 'photo-row' : 'gallery-container'],
+    ...(rows ? { 'data-columns': String(Math.max(1, Math.min(4, Number(node.attributes?.columns) || 4))) } : {}),
   }
 }
 
@@ -98,13 +99,13 @@ export function remarkContainerDirectives() {
       }
 
       // Gallery Containers
-      if (type === 'gallery') {
+      if (type === 'gallery' || type === 'photos') {
         // Remove label if exists
         if (labelNode?.data?.directiveLabel) {
           node.children.shift()
         }
 
-        createGallery(node)
+        createGallery(node, type === 'photos')
       }
     })
 

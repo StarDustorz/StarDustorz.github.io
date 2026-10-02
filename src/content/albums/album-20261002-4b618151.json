@@ -1,0 +1,38 @@
+{
+  "slug": "album-20261002-4b618151",
+  "title": "45345",
+  "description": "",
+  "published": "2026-10-02",
+  "tags": [],
+  "lang": "",
+  "draft": true,
+  "hidden": false,
+  "order": 0,
+  "cover": "photo-0bb91c2d-69e6-42e2-9122-ab91f67940ef",
+  "photos": [
+    {
+      "id": "photo-0bb91c2d-69e6-42e2-9122-ab91f67940ef",
+      "src": "https://obsidian-1309391399.cos.ap-shanghai.myqcloud.com/Image/202610020537159.webp",
+      "width": 2048,
+      "height": 1918,
+      "title": "v2-008070c7f03ec5c6340237b7cb6fd2d2_r",
+      "description": "",
+      "alt": "v2-008070c7f03ec5c6340237b7cb6fd2d2_r",
+      "taken": "",
+      "metadata": {},
+      "hidden": false
+    },
+    {
+      "id": "photo-110ab0de-5458-4341-bb73-97a7532a62fd",
+      "src": "https://obsidian-1309391399.cos.ap-shanghai.myqcloud.com/Image/202610020537794.webp",
+      "width": 160,
+      "height": 160,
+      "title": "v2-bb72c29f6ecdad812a35a84a6f159e25_1440w",
+      "description": "",
+      "alt": "v2-bb72c29f6ecdad812a35a84a6f159e25_1440w",
+      "taken": "",
+      "metadata": {},
+      "hidden": false
+    }
+  ]
+}

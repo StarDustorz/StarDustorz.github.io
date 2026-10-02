@@ -1,0 +1,12 @@
+.git
+node_modules
+dist
+.astro
+.local
+.output
+.env
+.env.*
+**/.DS_Store
+**/*.log
+.idea
+.vscode

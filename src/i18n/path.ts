@@ -53,7 +53,7 @@ export function getLocalizedPath(path: string, currentLang?: Language) {
   const langPrefix = lang === defaultLocale ? '' : `/${lang}`
   const localizedPath = normalizedPath === ''
     ? `${langPrefix}/`
-    : `${langPrefix}/${normalizedPath}/`
+    : `${langPrefix}/${normalizedPath}${/\.[a-z0-9]+$/i.test(normalizedPath) ? '' : '/'}`
 
   return base ? `${base}${localizedPath}` : localizedPath
 }

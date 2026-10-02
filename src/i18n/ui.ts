@@ -6,6 +6,7 @@ interface Translation {
   description: string
   posts: string
   tags: string
+  gallery: string
   about: string
   toc: string
 }
@@ -14,18 +15,20 @@ export const ui: Record<Language, Translation> = {
   en: {
     title: 'Draco',
     subtitle: 'Known Unknowns',
-    description: '',
+    description: 'Notes on technology, reading, and moments of everyday life by StarDust.',
     posts: 'Posts',
     tags: 'Tags',
+    gallery: 'Gallery',
     about: 'About',
     toc: 'Table of Contents',
   },
   zh: {
     title: '寻春续昼',
     subtitle: '拨雪寻春 烧灯续昼',
-    description: '',
+    description: '记录技术、阅读与生活中的光影。',
     posts: '文章',
     tags: '标签',
+    gallery: '相册',
     about: '关于',
     toc: '目录',
   },

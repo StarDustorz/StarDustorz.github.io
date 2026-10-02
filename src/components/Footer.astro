@@ -12,15 +12,17 @@ const year = Number(startYear) === currentYear
   : `${startYear}-${currentYear}`
 
 const currentLang = getLangFromPath(Astro.url.pathname)
-const socialLinks = links.map(({ name, url }) => {
+const localAdminURL = process.env.STARDUST_LOCAL_ADMIN_URL?.trim()
+const visibleLinks = localAdminURL
+  ? [...links, { name: currentLang === 'zh' ? '管理' : 'Admin', url: localAdminURL }]
+  : links
+const socialLinks = visibleLinks.map(({ name, url }) => {
   const isRSS = url === '/atom.xml' || url === '/rss.xml'
   const isEmail = /^[\w.-]+@[\w.-]+\.[a-z]{2,}$/i.test(url)
 
   if (isRSS) {
     const localizedPath = getLocalizedPath(url, currentLang)
-    const href = import.meta.env.DEV
-      ? localizedPath
-      : localizedPath.slice(0, -1)
+    const href = localizedPath
 
     return {
       name,

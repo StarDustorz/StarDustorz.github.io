@@ -79,59 +79,122 @@ const filteredHeadings = headings.filter(heading => heading.depth >= 2 && headin
         </ul>
       </nav>
     </div>
+    <button type="button" class="toc-floating-button" data-toc-open aria-label={currentUI.toc || '目录'} aria-expanded="false" aria-controls="toc-container"><TocIcon width="18" height="18" aria-hidden="true" fill="currentColor" /></button>
   </div>
 )}
 
 <script>
-const is2xl = window.matchMedia('(min-width: 1536px)')
-
-let ticking = false
-let lastLink: Element | null = null
-
-// Find and scroll to the active link
-function scrollToActiveLink() {
-  const tocList = document.getElementById('toc-links-list')
-  if (!tocList) {
-    ticking = false
+let dispose: (() => void) | undefined
+function setupTOC() {
+  dispose?.()
+  const container = document.getElementById('toc-container')
+  const button = document.querySelector<HTMLButtonElement>('[data-toc-open]')
+  const checkbox = document.querySelector<HTMLInputElement>('#toc-toggle')
+  const nav = document.querySelector<HTMLElement>('#toc-accordion-content')
+  if (!container || !button || !checkbox || !nav)
     return
+  // A transformed article becomes the containing block for fixed elements.
+  // Keep the floating controls outside it, restoring the markup before swaps.
+  const home = document.createComment('toc-home')
+  container.before(home)
+  document.body.append(button)
+  const signal = new AbortController()
+  const timers = new Set<number>()
+  const links = [...container.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')]
+  const headings = links.map(link => document.getElementById(decodeURIComponent(link.hash.slice(1))))
+  let current = -1
+  let frame = 0
+  let previousExpanded = checkbox.checked
+  const close = () => {
+    if (container.classList.contains('toc-popover')) {
+      home.after(container)
+      checkbox.checked = previousExpanded
+    }
+    container.classList.remove('toc-popover')
+    button.setAttribute('aria-expanded', 'false')
   }
-
-  const activeLink = tocList.querySelector('a:target-current')
-  if (activeLink && activeLink !== lastLink) {
-    activeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-    lastLink = activeLink
+  const update = () => {
+    frame = 0
+    let next = 0
+    headings.forEach((heading, index) => {
+      if (heading && heading.getBoundingClientRect().top <= 120)
+        next = index
+    })
+    if (next === current)
+      return
+    current = next
+    links.forEach((link, index) => index === current ? link.setAttribute('aria-current', 'location') : link.removeAttribute('aria-current'))
+    if (window.innerWidth >= 1280) {
+      const top = links[current].offsetTop - nav.offsetTop
+      if (top < nav.scrollTop || top > nav.scrollTop + nav.clientHeight - 32)
+        nav.scrollTo({ top: top - nav.clientHeight / 2, behavior: document.documentElement.classList.contains('reduce-motion') ? 'instant' : 'smooth' })
+    }
   }
-
-  ticking = false
-}
-
-// Throttle scroll events
-function handleScroll() {
-  if (!ticking && is2xl.matches) {
-    window.requestAnimationFrame(scrollToActiveLink)
-    ticking = true
+  document.addEventListener('scroll', () => {
+    frame ||= requestAnimationFrame(update)
+  }, { passive: true, signal: signal.signal })
+  button.addEventListener('click', () => {
+    const open = !container.classList.contains('toc-popover')
+    if (open) {
+      previousExpanded = checkbox.checked
+      document.body.append(container)
+      container.classList.add('toc-popover')
+      checkbox.checked = true
+      button.setAttribute('aria-expanded', 'true')
+      links[current]?.focus({ preventScroll: true })
+    }
+    else {
+      close()
+    }
+  }, { signal: signal.signal })
+  document.addEventListener('click', (event) => {
+    const target = event.target as HTMLElement
+    const link = target.closest<HTMLAnchorElement>('#toc-links-list a, .heading-anchor-link')
+    if (link) {
+      const heading = document.getElementById(decodeURIComponent(link.hash.slice(1)))
+      if (heading) {
+        heading.classList.add('heading-flash')
+        const timer = window.setTimeout(() => {
+          heading.classList.remove('heading-flash')
+          timers.delete(timer)
+        }, 1800)
+        timers.add(timer)
+      }
+      close()
+    }
+    else if (!target.closest('#toc-container, [data-toc-open]')) {
+      close()
+    }
+  }, { signal: signal.signal })
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && container.classList.contains('toc-popover')) {
+      close()
+      button.focus({ preventScroll: true })
+    }
+  }, { signal: signal.signal })
+  update()
+  dispose = () => {
+    signal.abort()
+    cancelAnimationFrame(frame)
+    timers.forEach(clearTimeout)
+    close()
+    container.append(button)
+    home.remove()
   }
 }
-
-// Initialize scroll listener
-function setupAutoScroll() {
-  ticking = false
-  lastLink = null
-
-  const tocList = document.getElementById('toc-links-list')
-  if (!tocList || !CSS.supports('selector(:target-current)')) {
-    return
-  }
-
-  document.addEventListener('scroll', handleScroll, { passive: true })
-}
-
-// Cleanup listener and reset state
-function cleanupAutoScroll() {
-  document.removeEventListener('scroll', handleScroll)
-  lastLink = null
-}
-
-document.addEventListener('astro:page-load', setupAutoScroll)
-document.addEventListener('astro:before-swap', cleanupAutoScroll)
+document.addEventListener('astro:page-load', setupTOC)
+document.addEventListener('astro:before-swap', () => {
+  dispose?.()
+  dispose = undefined
+})
 </script>
+<style is:global>
+  #toc-links-list a[aria-current="location"] { font-weight: 600; --at-apply: 'c-primary'; }
+  .toc-floating-button { position: fixed; bottom: max(20px,env(safe-area-inset-bottom)); left: 20px; z-index: 45; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; border: 1px solid; --at-apply: 'border-secondary/15 bg-background c-secondary/75'; box-shadow: 0 3px 20px #0000000d; }
+  #toc-container.toc-popover { position: fixed; z-index: 46; inset: auto auto 76px 20px; width: min(440px,calc(100vw - 40px)); margin: 0; padding-bottom: 12px; --at-apply: 'bg-background'; box-shadow: 0 8px 40px #00000018; }
+  #toc-container.toc-popover #toc-accordion-content { max-height: 55vh; overflow: auto; }
+  .heading-flash { animation: heading-flash 1.8s ease-out; border-radius: 4px; }
+  @keyframes heading-flash { from { background: #91ac7840; } to { background: transparent; } }
+  @media (min-width: 1280px) { .toc-floating-button { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .heading-flash { animation: none; outline: 1px solid #91ac7870; } }
+</style>

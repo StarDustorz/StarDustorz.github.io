@@ -4,6 +4,8 @@ import type { Language } from '@/i18n/config'
 import { getCollection, render } from 'astro:content'
 import Comment from '@/components/Comment/Index.astro'
 import PostDate from '@/components/PostDate.astro'
+import PostSeries from '@/components/PostSeries.astro'
+import RelatedPosts from '@/components/RelatedPosts.astro'
 import TagList from '@/components/TagList.astro'
 import BackButton from '@/components/Widgets/BackButton.astro'
 import TOC from '@/components/Widgets/TOC.astro'
@@ -11,10 +13,11 @@ import { allLocales } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
 import Layout from '@/layouts/Layout.astro'
 import { checkPostSlugDuplication } from '@/utils/content'
+import { isVisible, privatePreview } from '@/utils/content-access'
 import { getPostDescription } from '@/utils/description'
 
 export async function getStaticPaths() {
-  const posts: CollectionEntry<'posts'>[] = await getCollection('posts')
+  const posts: CollectionEntry<'posts'>[] = await getCollection('posts', ({ data }) => isVisible(data))
 
   // Check if there are duplicate post slugs
   const duplicates = await checkPostSlugDuplication(posts)
@@ -55,7 +58,7 @@ export async function getStaticPaths() {
 
   return allLocales.flatMap(lang => posts
     // Hide drafts in all environments
-    .filter(post => !post.data.draft)
+    .filter(post => isVisible(post.data))
     // Match current language or universal posts
     .filter(post => post.data.lang === lang || post.data.lang === '')
     .map((post) => {
@@ -86,6 +89,8 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post)
   postSlug={post.id}
   supportedLangs={supportedLangs}
 >
+  {post.data.toc && <TOC slot="toc" headings={headings} />}
+  <PostSeries slot="series" {post} lang={currentLang} />
   <article class="heti">
     <div class="relative">
       <!-- Go Back Button On Desktop -->
@@ -112,10 +117,10 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post)
         date={post.data.published}
         updatedDate={post.data.updated}
         minutes={remarkPluginFrontmatter.minutes}
+        wordCount={remarkPluginFrontmatter.wordCount}
+        imageCount={remarkPluginFrontmatter.imageCount}
       />
     </div>
-    <!-- TOC -->
-    {post.data.toc && <TOC headings={headings} />}
     <!-- Content -->
     <div id="post-content">
       <Content />
@@ -130,7 +135,8 @@ const { Content, headings, remarkPluginFrontmatter } = await render(post)
         />
       )}
       <!-- Comment -->
-      <Comment />
+      <RelatedPosts {post} lang={currentLang} />
+      {!privatePreview && <Comment />}
     </div>
   </article>
 </Layout>

@@ -46,6 +46,7 @@ const checkIcon = {
 
 export function rehypeCodeCopyButton() {
   return (tree) => {
+    let count = 0
     visit(tree, 'element', (node, index, parent) => {
       if (node.tagName !== 'pre' || node.children?.[0]?.tagName !== 'code' || !parent) {
         return
@@ -56,11 +57,16 @@ export function rehypeCodeCopyButton() {
       }
 
       node._hasCopyButton = true
+      const text = current => current.type === 'text' ? current.value : (current.children || []).map(text).join('')
+      const lines = text(node.children[0]).trimEnd().split('\n').length
+      const collapsible = lines > 20
+      const id = `code-source-${++count}`
+      node.properties = { ...node.properties, id }
 
       parent.children[index] = {
         type: 'element',
         tagName: 'div',
-        properties: { className: ['code-block-wrapper'] },
+        properties: { className: ['code-block-wrapper'], ...(collapsible ? { 'data-code-collapsed': 'true', 'data-code-lines': String(lines) } : {}) },
         children: [
           {
             type: 'element',
@@ -73,6 +79,14 @@ export function rehypeCodeCopyButton() {
             children: [copyIcon, checkIcon],
           },
           node,
+          ...(collapsible
+            ? [{
+                type: 'element',
+                tagName: 'button',
+                properties: { 'type': 'button', 'className': ['code-collapse-button'], 'data-code-toggle': '', 'aria-controls': id, 'aria-expanded': 'false' },
+                children: [{ type: 'text', value: `Expand code · ${lines}` }],
+              }]
+            : []),
         ],
       }
 

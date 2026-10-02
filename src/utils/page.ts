@@ -49,6 +49,7 @@ export function getPageInfo(path: string) {
   const isPost = isPostPage(path)
   const isTag = isTagPage(path)
   const isAbout = isAboutPage(path)
+  const isGallery = matchPageType(path, 'gallery')
 
   return {
     currentLang,
@@ -56,6 +57,7 @@ export function getPageInfo(path: string) {
     isPost,
     isTag,
     isAbout,
+    isGallery,
     getLocalizedPath: (targetPath: string) =>
       getLocalizedPath(targetPath, currentLang),
   }

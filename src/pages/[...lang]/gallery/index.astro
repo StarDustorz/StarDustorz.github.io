@@ -1,0 +1,20 @@
+---
+import StackGallery from '@/components/Gallery/StackGallery.astro'
+import { allLocales } from '@/config'
+import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
+import { getLocalizedPath } from '@/i18n/path'
+import GalleryLayout from '@/layouts/GalleryLayout.astro'
+import { getAlbums } from '@/utils/gallery'
+
+export function getStaticPaths() {
+  return allLocales.map(lang => ({ params: { lang: getLangRouteParam(lang) } }))
+}
+const lang = getLangFromLocale(Astro.currentLocale)
+const zh = lang === 'zh'
+const albums = await getAlbums(lang)
+const photos = albums.flatMap(album => album.photos.map(photo => ({ ...photo, albumTitle: album.title })))
+const title = zh ? '相册' : 'Gallery'
+---
+<GalleryLayout {title} description={zh ? '把生活的片刻，收进相册。' : 'A collection of moments.'}>
+  <StackGallery {photos} {zh} {title} back={getLocalizedPath('/', lang)} albums={albums.map(album => ({ title: album.title, href: getLocalizedPath(`/gallery/${album.slug}/`, lang) }))} />
+</GalleryLayout>

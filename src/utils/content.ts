@@ -4,6 +4,7 @@ import type { Post } from '@/types'
 import { getCollection, render } from 'astro:content'
 import { defaultLocale } from '@/config'
 import { memoize } from '@/utils/cache'
+import { isVisible } from '@/utils/content-access'
 
 const metaCache = new Map<string, { minutes: number }>()
 const TAG_PATH_SEPARATOR = '/'
@@ -41,7 +42,7 @@ function isPathPrefix(prefix: string[], full: string[]): boolean {
 async function addMetaToPost(post: CollectionEntry<'posts'>): Promise<Post> {
   const cacheKey = `${post.id}-${post.data.lang || 'universal'}`
   const cachedMeta = metaCache.get(cacheKey)
-  if (cachedMeta) {
+  if (cachedMeta && !import.meta.env.DEV) {
     return {
       ...post,
       remarkPluginFrontmatter: cachedMeta,
@@ -107,7 +108,7 @@ async function _getPosts(lang?: Language) {
     'posts',
     ({ data }: CollectionEntry<'posts'>) => {
       // Hide drafts in all environments
-      const shouldInclude = !data.draft
+      const shouldInclude = isVisible(data)
       return shouldInclude && (data.lang === currentLang || data.lang === '')
     },
   )
@@ -338,7 +339,7 @@ export const getPostsByTagPath = memoize(_getPostsByTagPath)
 async function _getTagSupportedLangs(tag: string | string[]): Promise<Language[]> {
   const posts = await getCollection(
     'posts',
-    ({ data }) => !data.draft,
+    ({ data }) => isVisible(data),
   )
   const { allLocales } = await import('@/config')
   const tagPath = Array.isArray(tag)

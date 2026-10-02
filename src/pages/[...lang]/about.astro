@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content'
 import { allLocales } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
+import { ui } from '@/i18n/ui'
 import Layout from '@/layouts/Layout.astro'
 
 export async function getStaticPaths() {
@@ -18,7 +19,8 @@ const aboutEntry = allAboutEntries.find(entry => entry.data.lang === currentLang
 const { Content } = aboutEntry ? await render(aboutEntry) : { Content: null }
 ---
 
-<Layout>
+<Layout postTitle={ui[currentLang].about}>
+  <h1 class="mb-6 text-7 c-primary font-semibold">{ui[currentLang].about}</h1>
   <!-- Decorative Line -->
   <div class="uno-decorative-line" />
   <!-- About Page Content -->

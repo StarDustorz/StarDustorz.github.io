@@ -1,0 +1,20 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import type { Language } from '@/i18n/config'
+import { getCollection } from 'astro:content'
+import { getLocalizedPath } from '@/i18n/path'
+import { relatedPosts } from '@/utils/related'
+
+interface Props { post: CollectionEntry<'posts'>, lang: Language }
+const { post, lang } = Astro.props
+const related = relatedPosts(post, await getCollection('posts'), lang)
+---
+{related.length > 0 && <aside class="related-posts" aria-label={lang === 'zh' ? '继续阅读' : 'Read next'}><p>{lang === 'zh' ? '继续阅读' : 'READ NEXT'}</p><ul>{related.map(entry => <li><a href={getLocalizedPath(`/posts/${entry.data.abbrlink || entry.id}/`, lang)}>{entry.data.title}<span aria-hidden="true">↗</span></a></li>)}</ul></aside>}
+<style>
+  .related-posts { margin-top: 48px; padding-top: 24px; border-top: 1px solid; --at-apply: 'border-secondary/10'; }
+  .related-posts p { font: 11px/1.6 system-ui; letter-spacing: .08em; opacity: .5; margin-bottom: 12px; }
+  .related-posts ul { list-style: none; padding: 0; margin: 0; }
+  .related-posts li { margin: 0; }
+  .related-posts a { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; padding-block: 10px; font-size: 14px; text-decoration: none; }
+  .related-posts span { font-size: 12px; opacity: .45; }
+</style>

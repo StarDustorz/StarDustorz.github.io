@@ -1,21 +1,24 @@
 ---
+import type { Language } from '@/i18n/config'
 import { ClientRouter } from 'astro:transitions'
 import katexCSS from 'katex/dist/katex.min.css?url'
-import { allLocales, base, defaultLocale, themeConfig } from '@/config'
+import { allLocales, base, themeConfig } from '@/config'
+import { getNextLangPath } from '@/i18n/path'
 import { ui } from '@/i18n/ui'
+import { privatePreview } from '@/utils/content-access'
 import { getPageInfo } from '@/utils/page'
 
 interface Props {
   postTitle?: string
   postDescription?: string
   postSlug?: string
+  supportedLangs?: Language[]
 }
 
 // Props and Language
-const { postTitle, postDescription, postSlug } = Astro.props
-const { currentLang } = getPageInfo(Astro.url.pathname)
+const { postTitle, postDescription, postSlug, supportedLangs = [] } = Astro.props
+const { currentLang, getLocalizedPath } = getPageInfo(Astro.url.pathname)
 const currentUI = ui[currentLang as keyof typeof ui] ?? {}
-const lang = currentLang === defaultLocale ? '' : `${currentLang}/`
 
 // Site Configuration
 const { title, subtitle, description, i18nTitle, author, favicon } = themeConfig.site
@@ -34,11 +37,13 @@ const siteDescription = i18nTitle ? currentUI.description : description
 // Page Metadata
 const pageTitle = postTitle ? `${postTitle} | ${siteTitle}` : `${siteTitle} - ${siteSubtitle}`
 const pageDescription = postDescription || siteDescription
+const canonical = new URL(Astro.url.pathname, themeConfig.site.url)
+const pageLocales = supportedLangs.length ? supportedLangs : allLocales
 const pageImage = postSlug
-  ? new URL(`${base}/og/${postSlug}.png`, Astro.url.origin)
+  ? new URL(`${base}/og/${postSlug}.png`, canonical.origin)
   : apiflashKey
     ? `https://api.apiflash.com/v1/urltoimage?access_key=${apiflashKey}&url=${Astro.url}&format=png&width=1500&height=788&ttl=259200&wait_until=network_idle&no_tracking=true`
-    : `https://api.apiflash.com/v1/urltoimage?access_key=02a837b6188f4ba0a7fd9fbeff03a83e&url=https://retypeset.radishzz.cc/${lang}&format=png&width=1500&height=788&ttl=604800&wait_until=network_idle&no_tracking=true`
+    : new URL(`${base}/icons/og-logo.png`, canonical.origin)
 ---
 
 <head>
@@ -51,33 +56,28 @@ const pageImage = postSlug
 <title>{pageTitle}</title>
 <meta name="description" content={pageDescription} />
 <meta name="author" content={author} />
+{privatePreview && <meta name="robots" content="noindex, nofollow" />}
 <meta name="generator" content={Astro.generator} />
 <meta name="theme-color" content={metaTheme} />
 
-<!-- Preload -->
-<link rel="preload" href={`${base}/fonts/EarlySummer-VF-Split/EarlySummer-VF-Subset.woff2`} as="font" type="font/woff2" crossorigin />
-<link rel="preload" href={`${base}/fonts/Snell-Black-SF.woff2`} as="font" type="font/woff2" crossorigin />
-<link rel="preload" href={`${base}/fonts/Snell-Bold-SF.woff2`} as="font" type="font/woff2" crossorigin />
-<link rel="preload" href={`${base}/fonts/STIX-VF.woff2`} as="font" type="font/woff2" crossorigin />
-<link rel="preload" href={`${base}/fonts/STIX-Italic-VF.woff2`} as="font" type="font/woff2" crossorigin />
 {katexEnabled && <link rel="stylesheet" href={katexCSS} media="print" onload={`this.media='all'`} />}
 
 <!-- Site Links -->
-<link rel="canonical" href={Astro.url} />
+<link rel="canonical" href={canonical} />
 <link rel="sitemap" href={`${base}/sitemap-index.xml`} />
-<link rel="alternate" href={`${base}/rss.xml`} type="application/rss+xml" title="RSS Feed" />
-<link rel="alternate" href={`${base}/atom.xml`} type="application/atom+xml" title="Atom Feed" />
-{allLocales.map(lang => (
+<link rel="alternate" href={getLocalizedPath('/rss.xml')} type="application/rss+xml" title="RSS Feed" />
+<link rel="alternate" href={getLocalizedPath('/atom.xml')} type="application/atom+xml" title="Atom Feed" />
+{pageLocales.map(lang => (
   <link
     rel="alternate"
-    href={`${Astro.url.origin}${base}${lang === defaultLocale ? '' : `/${lang}/`}`}
+    href={new URL(getNextLangPath(Astro.url.pathname, currentLang, lang), canonical.origin)}
     hreflang={lang}
   />
 ))}
 
 <!-- Open Graph -->
-<meta property="og:type" content={postTitle ? 'article' : 'website'} />
-<meta property="og:url" content={Astro.url} />
+<meta property="og:type" content={postSlug ? 'article' : 'website'} />
+<meta property="og:url" content={canonical} />
 <meta property="og:title" content={pageTitle} />
 <meta property="og:description" content={pageDescription} />
 <meta property="og:image" content={pageImage} />
@@ -379,7 +379,7 @@ const pageImage = postSlug
 <!-- Google Analytics -->
 <!-- Define gtag on window object for proper Partytown forwarding -->
 <!-- See https://github.com/QwikDev/partytown/issues/382 -->
-{googleAnalyticsID && (
+{!privatePreview && googleAnalyticsID && (
   <>
     <script
       is:inline
@@ -414,7 +414,7 @@ const pageImage = postSlug
 )}
 
 <!-- Umami Analytics -->
-{umamiAnalyticsID && (
+{!privatePreview && umamiAnalyticsID && (
   <script
     is:inline
     type="text/partytown"

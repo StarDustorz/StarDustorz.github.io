@@ -9,9 +9,11 @@ interface Props {
   date: Date
   updatedDate?: Date
   minutes: number
+  wordCount?: number
+  imageCount?: number
 }
 
-const { date, updatedDate, minutes } = Astro.props
+const { date, updatedDate, minutes, wordCount, imageCount } = Astro.props
 const { dateFormat: format } = themeConfig.global
 const isPost = isPostPage(Astro.url.pathname)
 const timeSpacingClass = isPost ? 'ml-1.75' : 'ml-1.5'
@@ -75,6 +77,6 @@ function formatDate(date: Date, format: DateFormat) {
 )}
 
 <!-- reading time -->
-<span class={timeSpacingClass}>
+<span class={timeSpacingClass} title={isPost && wordCount !== undefined ? `${wordCount} ${Astro.currentLocale?.startsWith('zh') ? '字' : 'words'} · ${imageCount || 0} ${Astro.currentLocale?.startsWith('zh') ? '张图片' : 'images'}` : undefined}>
   {minutes} min
 </span>

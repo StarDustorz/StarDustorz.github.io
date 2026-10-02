@@ -1,0 +1,540 @@
+---
+import type { AlbumData } from '@/schemas/album'
+import { themeConfig } from '@/config'
+import { parameterText } from '@/utils/photo'
+
+type Photo = AlbumData['photos'][number] & { albumTitle?: string }
+interface Props {
+  photos: Photo[]
+  zh: boolean
+  title: string
+  back: string
+  albums?: { title: string, href: string }[]
+}
+const { photos, zh, title, back, albums = [] } = Astro.props
+const center = Math.floor(photos.length / 2)
+const viewerPhotos = photos.map(({ src, width, height, title, alt, live, metadata, taken, description }) => ({ src, width, height, title, alt, live, metadata, taken, description }))
+---
+<section class="stack-gallery" data-gallery data-view="column" data-zh={zh}>
+  <header class="gallery-top">
+    <a class="gallery-home" href={back} aria-label={zh ? '返回博客' : 'Back'}>↖ <span>{themeConfig.site.title}</span></a>
+    <div class="gallery-title"><h1>{title}</h1></div>
+    <div class="gallery-options">
+      {albums.length > 0 && <details class="album-switch"><summary aria-label={zh ? '选择相册' : 'Choose album'} title={zh ? '选择相册' : 'Choose album'}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M3 7V5a1 1 0 0 1 1-1h6l2 3h8a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7Z" /></svg></summary><nav aria-label={zh ? '相册列表' : 'Albums'}>{albums.map(album => <a href={album.href}>{album.title}</a>)}</nav></details>}
+      {photos.length > 0 && <button class="view-toggle" type="button" data-action="view" aria-pressed="false" aria-label={zh ? '切换到网格' : 'Switch to grid'} title={zh ? '切换到网格' : 'Switch to grid'}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><g class="grid-icon"><rect x="3" y="3" width="6" height="6" rx="1" /><rect x="15" y="3" width="6" height="6" rx="1" /><rect x="3" y="15" width="6" height="6" rx="1" /><rect x="15" y="15" width="6" height="6" rx="1" /></g><g class="stack-icon"><path d="m12 3 9 5-9 5-9-5 9-5Z M3 12l9 5 9-5 M3 16l9 5 9-5" /></g></svg></button>}
+    </div>
+  </header>
+  {photos.length > 0
+? (
+<>
+    <div class="gallery-stage" role="region" tabindex="0" aria-label={zh ? '全屏堆叠相册，滚动浏览，点击展开' : 'Full screen photo stack. Scroll to browse, click to expand.'}>
+      <div class="stack-track" data-stack-track></div>
+      <template data-card-template><button class="stack-card" type="button"><canvas width="0" height="0" role="img"></canvas><img decoding="async" draggable="false" hidden /><span class="live-marker" hidden>◉ LIVE</span></button></template>
+    </div>
+    <footer class="gallery-bottom">
+      <div class="photo-info" aria-live="polite"><h2 data-current-title></h2></div>
+      <div class="gallery-controls"><div class="photo-progress"><span data-position>{String(center + 1).padStart(2, '0')}</span><span aria-hidden="true">/</span><span>{String(photos.length).padStart(2, '0')}</span></div><div class="control-buttons"><button type="button" data-action="prev" aria-label={zh ? '上一张' : 'Previous'} title={zh ? '上一张' : 'Previous'}>←</button><button type="button" data-action="inspect" aria-label={zh ? '照片详情' : 'Photo details'} title={zh ? '照片详情' : 'Photo details'}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 11v6 M12 7v1" /></svg></button><button type="button" data-action="next" aria-label={zh ? '下一张' : 'Next'} title={zh ? '下一张' : 'Next'}>→</button></div></div>
+    </footer>
+    <script is:inline type="application/json" data-gallery-photos set:html={JSON.stringify(viewerPhotos).replace(/</g, '\\u003c')} />
+  </>
+)
+: <div class="gallery-empty"><h2>{zh ? '暂无照片' : 'No photos yet'}</h2></div>}
+  <noscript><div class="no-script-gallery">{photos.map(photo => <figure><a href={photo.src}><img src={photo.src} alt={photo.alt || photo.title} loading="lazy" /></a><figcaption>{photo.title} {parameterText(photo.metadata)}</figcaption></figure>)}</div></noscript>
+</section>
+
+<script>
+import type { AlbumData } from '@/schemas/album'
+import { observeGalleryFrames } from '@/utils/gallery-metrics'
+import { gridWindow, stackWindow } from '@/utils/gallery-window'
+
+let dispose: (() => void) | undefined
+function setupStack() {
+  dispose?.()
+  const root = document.querySelector<HTMLElement>('.stack-gallery')
+  const stage = root?.querySelector<HTMLElement>('.gallery-stage')
+  const track = root?.querySelector<HTMLElement>('[data-stack-track]')
+  const template = root?.querySelector<HTMLTemplateElement>('[data-card-template]')
+  if (!root || !stage || !track || !template)
+    return
+  const photos: AlbumData['photos'] = JSON.parse(root.querySelector('[data-gallery-photos]')!.textContent!)
+  const signal = new AbortController()
+  if (import.meta.env.DEV && photos.length >= 1000)
+    observeGalleryFrames(root, signal.signal)
+  const cards = new Map<number, HTMLButtonElement>()
+  const tasks = new Map<number, () => void>()
+  // Detached cards retain decoded images for quick reverse scrolling; bounded by 48.
+  const cache = new Map<number, HTMLButtonElement>()
+  const previews = new Map<string, WeakRef<HTMLCanvasElement>>()
+  let cachedPixels = 0
+  const pixels = (card: HTMLButtonElement) => {
+    const canvas = card.querySelector('canvas')!
+    return canvas.width * canvas.height
+  }
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
+  let grid = reduced.matches || document.documentElement.classList.contains('reduce-motion')
+  let position = grid ? 0 : Math.floor(photos.length / 2)
+  let targetPosition = position
+  let origin = position
+  let selected = Math.round(position)
+  let layoutKey = ''
+  let geometryVersion = 0
+  let lastFrameTime = 0
+  let expanded = false
+  let spacing = 58
+  let frame = 0
+  let touch = { x: 0, y: 0 }
+  let lastTouch = touch
+  let touching = false
+  let dragged = false
+  let lastWheel = 0
+  let lastDetails = -1
+  let columns = 4
+  let tileWidth = 240
+  let rowPitch = 280
+  let sidePadding = 32
+  let alive = true
+  let loadCenter = selected
+  let rasterSize = 1024
+  const zh = root.dataset.zh === 'true'
+  const positionNode = root.querySelector('[data-position]')!
+  const titleNode = root.querySelector('[data-current-title]')!
+  const previous = root.querySelector<HTMLButtonElement>('[data-action="prev"]')!
+  const next = root.querySelector<HTMLButtonElement>('[data-action="next"]')!
+  const clamp = (n: number) => Math.max(0, Math.min(photos.length - 1, n))
+  const open = (index: number) => document.dispatchEvent(new CustomEvent('stardust:open-photo', { detail: { photos, index } }))
+  // Rasterize bounded previews; original COS sources are reserved for the viewer.
+  // Start at most three decodes at once. Evicting a card cancels its pending work.
+  const pump = () => {
+    if (!alive)
+      return
+    const pending = [...cards.entries()].filter(([, card]) => !card.querySelector('img')!.dataset.started).sort((a, b) => Math.abs(a[0] - loadCenter) - Math.abs(b[0] - loadCenter))
+    for (const [index, card] of pending) {
+      if (tasks.size >= 3)
+        break
+      const img = card.querySelector('img')!
+      const photo = photos[index]
+      const preview = previews.get(photo.src)?.deref()
+      if (preview?.width) {
+        const canvas = card.querySelector('canvas')!
+        canvas.width = preview.width
+        canvas.height = preview.height
+        photo.width ||= Number(preview.dataset.sourceWidth) || preview.width
+        photo.height ||= Number(preview.dataset.sourceHeight) || preview.height
+        const largest = Math.max(photo.width, photo.height)
+        card.style.setProperty('--ratio-w', String(photo.width / largest))
+        card.style.setProperty('--ratio-h', String(photo.height / largest))
+        canvas.dataset.sourceWidth = String(photo.width)
+        canvas.dataset.sourceHeight = String(photo.height)
+        canvas.getContext('2d')!.drawImage(preview, 0, 0)
+        card.dataset.loadState = img.dataset.loadState = 'ready'
+        img.dataset.started = 'true'
+        continue
+      }
+      let done = false
+      const finish = () => {
+        if (done)
+          return
+        done = true
+        img.onload = null
+        img.onerror = null
+        card.dataset.loadState = img.naturalWidth ? 'ready' : 'failed'
+        img.dataset.loadState = card.dataset.loadState
+        tasks.delete(index)
+        if (alive)
+          queueMicrotask(pump)
+      }
+      tasks.set(index, finish)
+      img.dataset.started = 'true'
+      img.dataset.loadState = 'loading'
+      img.onload = () => {
+        if (img.naturalWidth) {
+          photo.width = img.naturalWidth
+          photo.height = img.naturalHeight
+          const largest = Math.max(photo.width, photo.height)
+          card.style.setProperty('--ratio-w', String(photo.width / largest))
+          card.style.setProperty('--ratio-h', String(photo.height / largest))
+        }
+        void img.decode().catch(() => {}).then(() => {
+          if (!alive || done)
+            return
+          const canvas = card.querySelector('canvas')!
+          const ratio = Math.min(1, rasterSize / Math.max(img.naturalWidth, img.naturalHeight))
+          canvas.width = Math.max(1, Math.round(img.naturalWidth * ratio))
+          canvas.height = Math.max(1, Math.round(img.naturalHeight * ratio))
+          canvas.dataset.sourceWidth = String(img.naturalWidth)
+          canvas.dataset.sourceHeight = String(img.naturalHeight)
+          const context = canvas.getContext('2d')
+          if (context && img.naturalWidth)
+            context.drawImage(img, 0, 0, canvas.width, canvas.height)
+          previews.delete(photo.src)
+          previews.set(photo.src, new WeakRef(canvas))
+          if (previews.size > 128)
+            previews.delete(previews.keys().next().value!)
+          finish()
+          // No pixel extraction/export: remote images may safely remain tainted.
+          img.removeAttribute('src')
+        }).catch(finish)
+      }
+      img.onerror = () => {
+        card.classList.add('image-failed')
+        finish()
+      }
+      img.src = photo.src
+    }
+  }
+  const render = (time: number) => {
+    frame = 0
+    const elapsed = Math.min(32, lastFrameTime ? time - lastFrameTime : 16)
+    lastFrameTime = time
+    if (!grid && !expanded && !touching) {
+      const step = (targetPosition - position) * (1 - Math.exp(-elapsed / 45))
+      // A fast fling must not replace the whole window on every animation frame.
+      const maxStep = elapsed * 0.35
+      position += Math.max(-maxStep, Math.min(maxStep, step))
+      if (Math.abs(targetPosition - position) < 0.002)
+        position = targetPosition
+    }
+    else {
+      position = targetPosition
+    }
+    selected = Math.round(position)
+    if (!expanded && Math.abs(position - origin) > 32) {
+      origin = selected
+      geometryVersion++
+    }
+    const range = grid
+      ? gridWindow(photos.length, columns, Math.max(0, -stage.getBoundingClientRect().top - 100), window.innerHeight, rowPitch)
+      : stackWindow(photos.length, position, Math.ceil(window.innerWidth / spacing / 2) + 2)
+    const key = `${grid}:${range.start}:${range.end}:${expanded ? selected : -1}:${geometryVersion}`
+    // Fractional scrolling only moves a single composited track. No per-card work.
+    if (key !== layoutKey) {
+      layoutKey = key
+      stage.style.height = 'height' in range ? `${range.height}px` : '100dvh'
+      for (const [index, card] of cards) {
+        if (index >= range.start && index < range.end)
+          continue
+        card.remove()
+        cards.delete(index)
+        const img = card.querySelector('img')!
+        if (img.dataset.loadState === 'ready') {
+          cache.set(index, card)
+          cachedPixels += pixels(card)
+        }
+        else {
+          tasks.get(index)?.()
+          img.removeAttribute('src')
+        }
+        while (cache.size > 48 || cachedPixels > 8_000_000) {
+          const oldest = cache.keys().next().value!
+          cachedPixels -= pixels(cache.get(oldest)!)
+          const canvas = cache.get(oldest)!.querySelector('canvas')!
+          canvas.width = canvas.height = 0
+          cache.delete(oldest)
+        }
+      }
+      const gap = spacing * (window.innerWidth <= 480 ? 4.5 : Math.min(7, 4.5 + (window.innerWidth - 480) * 2.5 / 1120))
+      for (let index = range.start; index < range.end; index++) {
+        let card = cards.get(index)
+        if (!card && cache.has(index)) {
+          card = cache.get(index)!
+          cachedPixels -= pixels(card)
+          cache.delete(index)
+          track.append(card)
+          cards.set(index, card)
+        }
+        if (!card) {
+          card = template.content.firstElementChild!.cloneNode(true) as HTMLButtonElement
+          card.dataset.index = String(index)
+          const photo = photos[index]
+          card.setAttribute('aria-label', `${photo.title || photo.alt || `${zh ? '照片' : 'Photo'} ${index + 1}`} · ${zh ? '查看照片' : 'View photo'}`)
+          const img = card.querySelector('img')!
+          img.alt = photo.alt || photo.title
+          card.querySelector('canvas')!.setAttribute('aria-label', img.alt)
+          const width = photo.width || 4
+          const height = photo.height || 3
+          card.style.setProperty('--ratio-w', String(width / Math.max(width, height)))
+          card.style.setProperty('--ratio-h', String(height / Math.max(width, height)))
+          card.querySelector<HTMLElement>('.live-marker')!.hidden = !photo.live
+          track.append(card)
+          cards.set(index, card)
+        }
+        const cardLayout = `${grid}:${geometryVersion}:${expanded ? selected : -1}`
+        if (card.dataset.layout === cardLayout)
+          continue
+        card.dataset.layout = cardLayout
+        let x = (origin - index) * spacing
+        if (expanded && index !== selected)
+          x += index < selected ? gap : -gap
+        card.style.setProperty('--offset-x', `${x}px`)
+        card.style.setProperty('--offset-y', `${x * -0.6}px`)
+        card.style.setProperty('--expand-x', `${(origin - selected) * spacing}px`)
+        card.style.setProperty('--expand-y', `${(origin - selected) * spacing * -0.6}px`)
+        card.classList.toggle('expanded', expanded && !grid && index === selected)
+        card.setAttribute('aria-expanded', String(expanded && !grid && index === selected))
+        card.tabIndex = grid || index === selected ? 0 : -1
+        card.style.left = grid ? `${sidePadding + (index % columns) * (tileWidth + 24)}px` : ''
+        card.style.top = grid ? `${100 + Math.floor(index / columns) * rowPitch}px` : ''
+        card.style.width = grid ? `${tileWidth}px` : ''
+        card.style.height = grid ? `${rowPitch - 32}px` : ''
+        card.style.zIndex = String(expanded && !grid && index === selected ? photos.length + 1 : index + 1)
+      }
+      loadCenter = grid ? range.start + columns : selected
+      pump()
+    }
+    const offset = grid ? 0 : (position - origin) * spacing
+    track.style.transform = `translate3d(${offset}px,${offset * -0.6}px,0)`
+    if (lastDetails !== selected) {
+      cards.get(lastDetails)?.setAttribute('tabindex', '-1')
+      if (!grid)
+        cards.get(selected)?.setAttribute('tabindex', '0')
+      lastDetails = selected
+      positionNode.textContent = String(selected + 1).padStart(2, '0')
+      titleNode.textContent = photos[selected]?.title || ''
+      previous.disabled = selected === 0
+      next.disabled = selected === photos.length - 1
+    }
+    if (!grid && Math.abs(targetPosition - position) >= 0.002)
+      update()
+    else
+      lastFrameTime = 0
+  }
+  function update() {
+    frame ||= requestAnimationFrame(render)
+  }
+  const resize = () => {
+    geometryVersion++
+    const width = window.innerWidth
+    const height = window.innerHeight
+    const size = Math.min(width <= 480 ? width * 0.9 : width >= 1600 ? 800 : 480 + (width - 480) * 320 / 1120, height * 0.8)
+    const scale = Math.max(0.33, Math.min(0.5, 0.5 - (width - 480) * 0.17 / 1120))
+    spacing = size * scale * 63 / 240
+    rasterSize = Math.min(1024, Math.ceil(size * Math.min(2, window.devicePixelRatio || 1)))
+    stage.style.setProperty('--image-size', `${size}px`)
+    stage.style.setProperty('--image-scale', String(scale))
+    columns = width <= 750 ? 2 : 4
+    sidePadding = width <= 750 ? 20 : width * 0.05
+    tileWidth = (width - sidePadding * 2 - (columns - 1) * 24) / columns
+    rowPitch = Math.max(180, Math.min(360, height * 0.4)) + 32
+    update()
+  }
+  const setView = () => {
+    root.dataset.view = grid ? 'grid' : 'column'
+    root.classList.toggle('is-expanded', expanded && !grid)
+    const toggle = root.querySelector('[data-action="view"]')!
+    toggle.setAttribute('aria-pressed', String(grid))
+    const label = grid ? (zh ? '切换到堆叠' : 'Switch to stack') : (zh ? '切换到网格' : 'Switch to grid')
+    toggle.setAttribute('aria-label', label)
+    toggle.setAttribute('title', label)
+    document.documentElement.classList.toggle('gallery-locked', !grid)
+    window.scrollTo({ top: grid ? Math.floor(position / columns) * rowPitch : 0, behavior: 'instant' })
+    update()
+  }
+  const move = (index: number) => {
+    targetPosition = clamp(index)
+    if (grid || expanded || Math.abs(targetPosition - position) > 20)
+      position = targetPosition
+    if (grid)
+      window.scrollTo({ top: Math.floor(position / columns) * rowPitch, behavior: 'instant' })
+    update()
+  }
+  root.addEventListener('click', (event) => {
+    const target = event.target as HTMLElement
+    const card = target.closest<HTMLButtonElement>('.stack-card')
+    if (card) {
+      if (dragged) {
+        dragged = false
+        return
+      }
+      const index = Number(card.dataset.index)
+      if (grid) {
+        position = targetPosition = index
+        update()
+        open(index)
+        return
+      }
+      expanded = index !== selected || !expanded
+      position = targetPosition = index
+      root.classList.toggle('is-expanded', expanded)
+      update()
+      return
+    }
+    switch (target.closest<HTMLElement>('[data-action]')?.dataset.action) {
+      case 'view': grid = !grid
+        expanded = false
+        setView()
+        break
+      case 'prev': move(Math.round(targetPosition) - 1)
+        break
+      case 'next': move(Math.round(targetPosition) + 1)
+        break
+      case 'inspect': open(selected)
+        break
+    }
+  }, { signal: signal.signal })
+  root.addEventListener('wheel', (event) => {
+    if (grid || document.querySelector('.pswp') || (event.target as HTMLElement).closest('header, button[data-action], .album-switch'))
+      return
+    event.preventDefault()
+    const delta = (Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX) * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1)
+    if (expanded) {
+      if (performance.now() - lastWheel > 400 && Math.abs(delta) > 10) {
+        move(selected + (delta > 0 ? 1 : -1))
+        lastWheel = performance.now()
+      }
+    }
+    else {
+      targetPosition = clamp(targetPosition + delta * 0.92 / spacing)
+      update()
+    }
+  }, { passive: false, signal: signal.signal })
+  stage.addEventListener('pointerdown', (event) => {
+    if (event.pointerType === 'mouse')
+      return
+    touching = true
+    touch = { x: event.clientX, y: event.clientY }
+    lastTouch = touch
+    dragged = false
+  }, { signal: signal.signal })
+  stage.addEventListener('pointermove', (event) => {
+    if (!touching || grid || expanded)
+      return
+    const dx = event.clientX - lastTouch.x
+    const dy = event.clientY - lastTouch.y
+    if (Math.hypot(event.clientX - touch.x, event.clientY - touch.y) > 8)
+      dragged = true
+    if (dragged) {
+      position = targetPosition = clamp(position + (dx - dy) * 0.7 / spacing)
+      update()
+    }
+    lastTouch = { x: event.clientX, y: event.clientY }
+  }, { signal: signal.signal })
+  const release = (event: PointerEvent) => {
+    touching = false
+    if (event.type === 'pointerup' && event.pointerType !== 'mouse' && expanded && Math.abs(event.clientX - touch.x) > 40) {
+      dragged = true
+      move(selected + (event.clientX < touch.x ? 1 : -1))
+    }
+  }
+  window.addEventListener('pointerup', release, { signal: signal.signal })
+  window.addEventListener('pointercancel', release, { signal: signal.signal })
+  root.addEventListener('keydown', (event) => {
+    if ((event.target as HTMLElement).closest('header, .control-buttons') || grid || document.querySelector('.pswp'))
+      return
+    if (['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'Home', 'End', ' ', 'Escape'].includes(event.key))
+      event.preventDefault()
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown')
+      move(Math.round(targetPosition) + 1)
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowUp')
+      move(Math.round(targetPosition) - 1)
+    if (event.key === 'Home')
+      move(0)
+    if (event.key === 'End')
+      move(photos.length - 1)
+    if (event.key === ' ') {
+      position = targetPosition = selected
+      expanded = !expanded
+      root.classList.toggle('is-expanded', expanded)
+      update()
+    }
+    if (event.key === 'Escape') {
+      expanded = false
+      root.classList.remove('is-expanded')
+      update()
+    }
+  }, { signal: signal.signal })
+  window.addEventListener('resize', resize, { signal: signal.signal })
+  window.addEventListener('scroll', () => {
+    if (grid)
+      update()
+  }, { passive: true, signal: signal.signal })
+  reduced.addEventListener('change', () => {
+    grid = reduced.matches
+    expanded = false
+    setView()
+  }, { signal: signal.signal })
+  setView()
+  resize()
+  dispose = () => {
+    alive = false
+    signal.abort()
+    cancelAnimationFrame(frame)
+    tasks.forEach(cancel => cancel())
+    const releaseCard = (card: HTMLButtonElement) => {
+      card.querySelector('img')!.removeAttribute('src')
+      const canvas = card.querySelector('canvas')!
+      canvas.width = canvas.height = 0
+    }
+    cards.forEach(releaseCard)
+    cards.clear()
+    cache.forEach(releaseCard)
+    cache.clear()
+    previews.clear()
+    document.documentElement.classList.remove('gallery-locked')
+  }
+}
+document.addEventListener('astro:page-load', setupStack)
+document.addEventListener('astro:before-swap', () => {
+  dispose?.()
+  dispose = undefined
+})
+</script>
+
+<style>
+  .stack-gallery { width: 100%; min-height: 100dvh; color: #272e29; background: #fbfcfa; position: relative; font-family: system-ui, sans-serif; }
+  .gallery-top { position: absolute; z-index: 20; inset: 26px 32px auto; display: flex; align-items: start; justify-content: space-between; gap: 20px; pointer-events: none; }
+  .gallery-top > * { pointer-events: auto; }
+  .gallery-home { display: flex; align-items: center; gap: 10px; font-size: 22px; }
+  .gallery-home span { font-size: 11px; letter-spacing: .17em; }
+  .gallery-title { position: absolute; left: 50%; transform: translateX(-50%); text-align: center; max-width: 45vw; }
+  h1 { font-size: 14px; font-weight: 400; letter-spacing: .1em; }
+  .gallery-options { display: flex; gap: 12px; font-size: 12px; align-items: center; }
+  .gallery-options button, .gallery-options summary { min-height: 44px; display: flex; align-items: center; justify-content: center; }
+  .view-toggle { width: 44px; }
+  .stack-icon { display: none; }
+  [data-view="grid"] .grid-icon { display: none; }
+  [data-view="grid"] .stack-icon { display: initial; }
+  .album-switch summary { cursor: pointer; list-style: none; }
+  .album-switch summary { width: 44px; }
+  .album-switch summary::-webkit-details-marker { display: none; }
+  .album-switch nav { position: absolute; right: 0; top: 48px; padding: 16px; min-width: 180px; max-height: 65vh; overflow: auto; background: #fbfcfaf5; border: 1px solid #272e2920; box-shadow: 0 8px 30px #0001; backdrop-filter: blur(16px); }
+  .album-switch nav a { display: block; padding: 12px 8px; }
+  .gallery-stage { position: relative; width: 100%; height: 100dvh; overflow: hidden; isolation: isolate; display: flex; align-items: center; justify-content: center; --image-size: min(80dvh, 640px); --image-scale: .38; touch-action: none; }
+  .stack-track { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; will-change: transform; }
+  .stack-card { position: absolute; width: calc(var(--image-size) * var(--ratio-w)); height: calc(var(--image-size) * var(--ratio-h)); padding: 0; border: 0; background: transparent; line-height: 0; transform: translate3d(var(--offset-x),var(--offset-y),0) rotateX(-45deg) rotateY(-45deg) scale(var(--image-scale)); transition: none; backface-visibility: hidden; cursor: zoom-in; }
+  .stack-card canvas { width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity .12s; }
+  .stack-card[data-load-state="ready"] canvas { opacity: 1; }
+  .stack-card img[hidden] { display: none; }
+  .stack-card:not([data-load-state="ready"]) { background: #e8ece7; }
+  :global(html.dark) .stack-card:not([data-load-state="ready"]) { background: #202820; }
+  .stack-card.expanded { transform: translate3d(var(--expand-x),var(--expand-y),0) perspective(800px) rotateX(0) rotateY(0) scale(1); z-index: 10; cursor: zoom-out; }
+  .stack-gallery.is-expanded .stack-card { transition: transform .24s ease-out; }
+  .image-failed { background: #dfe5de; }
+  .image-failed::after { content: "↻"; font: 20px/1.4 system-ui; }
+  .live-marker { position: absolute; top: 12px; left: 12px; font-size: 12px; line-height: 1; color: white; background: #0006; padding: 8px 10px; border-radius: 30px; letter-spacing: .1em; }
+  .gallery-bottom { position: absolute; z-index: 20; inset: auto 32px 24px; display: flex; align-items: end; justify-content: space-between; pointer-events: none; gap: 24px; }
+  .photo-info { max-width: min(45vw,440px); text-shadow: 0 1px 8px #fbfcfa; opacity: 0; transition: opacity .2s; }
+  .is-expanded .photo-info { opacity: .65; }
+  .photo-info h2 { font-size: 12px; font-weight: 400; letter-spacing: .04em; }
+  .gallery-controls { pointer-events: auto; display: flex; align-items: center; gap: 24px; }
+  .photo-progress { display: flex; align-items: center; gap: 8px; font-size: 10px; font-variant-numeric: tabular-nums; opacity: .65; }
+  .control-buttons { display: flex; gap: 2px; }
+  .control-buttons button { display: grid; place-items: center; font-size: 18px; width: 44px; height: 44px; background: #fbfcfad9; border-radius: 50%; }
+  button:disabled { opacity: .25; cursor: default; }
+  .live-marker[hidden] { display: none; }
+  .gallery-empty { min-height: 100dvh; display: grid; place-items: center; text-align: center; }
+  .gallery-empty h2 { font-size: 14px; font-weight: 400; opacity: .5; }
+  [data-view="grid"] .gallery-stage { display: block; min-height: 100dvh; overflow: clip; touch-action: auto; }
+  [data-view="grid"] .stack-track { display: block; will-change: auto; }
+  [data-view="grid"] .stack-card { position: absolute; transform: none; transition: none; }
+  [data-view="grid"] .gallery-bottom { position: fixed; padding-top: 20px; background: linear-gradient(transparent, #fbfcfa 35%); }
+  .no-script-gallery { display: grid; gap: 30px; padding: 120px 10vw; }
+  .no-script-gallery img { max-width: 100%; max-height: 80dvh; }
+  @media (max-width: 750px) { .gallery-top { inset: 16px 16px auto; } .gallery-home { min-height: 44px; } .gallery-home span { display: none; } .gallery-title { padding-top: 12px; } .gallery-options { gap: 8px; } .gallery-bottom { inset: auto 16px 12px; gap: 12px; align-items: center; } .gallery-controls { gap: 8px; } .control-buttons { gap: 0; } [data-view="grid"] .gallery-stage { grid-template-columns: repeat(2,minmax(0,1fr)); padding: 100px 20px; gap: 30px 16px; } }
+  @media (max-width: 430px) { .photo-info { max-width: 35vw; } .photo-info h2 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; } }
+  @media (prefers-reduced-motion: reduce) { .stack-card { transition: none; } }
+  :global(html.gallery-locked), :global(html.gallery-locked body) { overflow: hidden; }
+  :global(html.dark) .stack-gallery { background: #101512; color: #e7eae3; }
+  :global(html.dark) .control-buttons button, :global(html.dark) .album-switch nav { background: #101512eb; }
+  :global(html.dark) .photo-info { text-shadow: 0 1px 8px #101512; }
+  :global(html.dark) [data-view="grid"] .gallery-bottom { background: linear-gradient(transparent, #101512 35%); }
+</style>

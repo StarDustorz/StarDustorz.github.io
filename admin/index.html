@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="admin-token" content="__CSRF_TOKEN__">
+  <title>寻春续昼 · 本地管理</title>
+  <link rel="stylesheet" href="admin.css">
+  <script type="module" src="admin.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/">寻春续昼<span>CONTENT STUDIO</span></a>
+    <p class="sidebar-label">内容管理</p>
+    <nav aria-label="管理导航">
+      <button data-nav="posts" class="active"><span>✎</span>文章<span id="posts-count" class="nav-count"></span></button>
+      <button data-nav="albums"><span>▧</span>相册<span id="albums-count" class="nav-count"></span></button>
+      <button data-nav="media"><span>▦</span>媒体库</button>
+      <button data-nav="publish"><span>↗</span>发布中心</button>
+      <button data-nav="history"><span>↶</span>本地备份</button>
+    </nav>
+    <div class="sidebar-bottom"><span class="local-dot"></span>只在这台电脑运行<p>保存于本地文件<br>本地发布 / GitHub Pages</p><button data-action="home-preview" class="text-button">打开私有预览 ↗</button></div>
+  </aside>
+  <main>
+    <header class="topbar"><span id="breadcrumb">内容 / 文章</span><span class="local-tag">LOCAL</span></header>
+    <div id="notice" role="status" aria-live="polite" hidden></div>
+    <div id="content"><p class="loading">正在读取本地内容…</p></div>
+  </main>
+  <dialog id="confirm-dialog"><h2>确认操作</h2><p id="confirm-text"></p><div class="dialog-actions"><button data-confirm="no" class="secondary">取消</button><button data-confirm="yes" class="primary">确定</button></div></dialog>
+  <dialog id="publish-dialog">
+    <h2>发布到博客</h2><p>以下内容将提交并推送到 main，然后由 GitHub Pages 构建上线。</p>
+    <div id="publish-review"></div>
+    <label>提交说明<input id="commit-message" maxlength="500" placeholder="发布博客内容"></label>
+    <div class="dialog-actions"><button data-action="cancel-publish" class="secondary">返回检查</button><button data-action="confirm-publish" class="primary">确认发布</button></div>
+  </dialog>
+  <dialog id="media-dialog" class="media-dialog" aria-labelledby="media-dialog-title">
+    <h2 id="media-dialog-title">从媒体库选择</h2>
+    <div class="toolbar"><input id="picker-search" type="search" placeholder="搜索照片、相册或文章" aria-label="搜索媒体库"><label class="checkbox-label"><input id="picker-live" type="checkbox">仅 Live</label></div>
+    <div id="picker-grid" class="media-grid"></div>
+    <div class="dialog-actions"><span id="picker-count"></span><button type="button" class="secondary" data-action="media-cancel">取消</button><button type="button" class="primary" data-action="media-use">插入所选</button></div>
+  </dialog>
+  <dialog id="live-dialog" aria-labelledby="live-dialog-title">
+    <h2 id="live-dialog-title">制作 Live</h2>
+    <video id="clip-video" class="clip-video" controls playsinline preload="metadata"></video>
+    <p id="clip-state">选择片段后预览，确认再上传。</p>
+    <div class="form-grid"><label>起点（秒）<input id="clip-start" type="number" min="0" max="300" step="0.01" value="0"></label><label>终点（秒）<input id="clip-end" type="number" min="0.01" max="300" step="0.01" value="3"></label></div>
+    <p class="helper">原视频最大 40 MB、5 分钟；导出的 Live 最长 30 秒。</p>
+    <div class="dialog-actions"><button type="button" class="secondary" data-clip="cancel">取消</button><button type="button" class="secondary" data-clip="preview">预览片段</button><button type="button" class="primary" data-clip="confirm">上传此片段</button></div>
+  </dialog>
+</body>
+</html>

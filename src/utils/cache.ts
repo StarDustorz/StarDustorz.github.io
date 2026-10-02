@@ -7,6 +7,9 @@
 export function memoize<Args extends any[], T>(
   fn: (...args: Args) => Promise<T>,
 ): (...args: Args) => Promise<T> {
+  if (import.meta.env.DEV)
+    return fn
+
   const cache = new Map<string, Promise<T>>()
 
   return async (...args: Args): Promise<T> => {

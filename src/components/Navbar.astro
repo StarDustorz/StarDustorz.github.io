@@ -2,7 +2,7 @@
 import { ui } from '@/i18n/ui'
 import { getPageInfo } from '@/utils/page'
 
-const { currentLang, isHome, isPost, isTag, isAbout, getLocalizedPath } = getPageInfo(Astro.url.pathname)
+const { currentLang, isHome, isPost, isTag, isAbout, isGallery, getLocalizedPath } = getPageInfo(Astro.url.pathname)
 const currentUI = ui[currentLang as keyof typeof ui] ?? {}
 
 const isPostActive = isHome || isPost
@@ -18,16 +18,25 @@ function getNavItemClass(isActive: boolean) {
 const navItems = [
   {
     href: '/',
+    active: isPostActive,
     label: currentUI.posts,
     className: getNavItemClass(isPostActive),
   },
   {
     href: '/tags/',
+    active: isTagActive,
     label: currentUI.tags,
     className: getNavItemClass(isTagActive),
   },
   {
+    href: '/gallery/',
+    active: isGallery,
+    label: currentUI.gallery,
+    className: getNavItemClass(isGallery),
+  },
+  {
     href: '/about/',
+    active: isAboutActive,
     label: currentUI.about,
     className: getNavItemClass(isAboutActive),
   },
@@ -35,11 +44,10 @@ const navItems = [
 ---
 
 <nav
-  aria-label="Site Navigation"
+  aria-label={currentLang === 'zh' ? '网站导航' : 'Site navigation'}
   class:list={[
-    'mb-10.5 text-3.6 font-semibold leading-2.45em font-navbar',
+    'site-nav mb-8 text-3.6 font-semibold leading-2.45em font-navbar',
     'lg:(uno-desktop-column text-4 bottom-[min(9.04rem+3.85vw,12.5rem)]) cjk:tracking-wide',
-    isPost ? 'hidden lg:block' : '',
   ]}
 >
   <ul>
@@ -48,6 +56,7 @@ const navItems = [
         <a
           href={getLocalizedPath(item.href)}
           class={item.className}
+          aria-current={item.active ? 'page' : undefined}
         >
           {item.label}
         </a>
@@ -55,3 +64,10 @@ const navItems = [
     ))}
   </ul>
 </nav>
+
+<style>
+  @media (max-width: 1023px) {
+    .site-nav ul { display: flex; flex-wrap: wrap; gap: .3rem 1.6rem; }
+    .site-nav a { display: inline-flex; align-items: center; min-height: 44px; }
+  }
+</style>

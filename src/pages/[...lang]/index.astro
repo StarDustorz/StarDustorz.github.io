@@ -2,8 +2,9 @@
 import PostList from '@/components/PostList.astro'
 import { allLocales } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
+import { getLocalizedPath, getTagPath } from '@/i18n/path'
 import Layout from '@/layouts/Layout.astro'
-import { getPinnedPosts, getPostsByYear } from '@/utils/content'
+import { getPinnedPosts, getRegularPosts } from '@/utils/content'
 
 export async function getStaticPaths() {
   return allLocales.map(lang => ({
@@ -13,23 +14,55 @@ export async function getStaticPaths() {
 
 const currentLang = getLangFromLocale(Astro.currentLocale)
 const pinnedPosts = await getPinnedPosts(currentLang)
-const postsByYear = await getPostsByYear(currentLang)
+const recentPosts = (await getRegularPosts(currentLang)).slice(0, 10)
+const hasPosts = pinnedPosts.length > 0 || recentPosts.length > 0
+const topicLinks = currentLang === 'zh'
+  ? [
+      { label: 'Go', path: ['Golang'] },
+      { label: '算法', path: ['Algorithm'] },
+      { label: 'LLM', path: ['LLM'] },
+    ]
+  : []
 ---
 
-<Layout>
-  <!-- Pinned Posts -->
+<Layout supportedLangs={[currentLang]}>
+  {!hasPosts && (
+    <div class="py-10">
+      <p>{currentLang === 'zh' ? '还没有公开文章。新内容整理好后，会出现在这里。' : 'No published posts in this language yet.'}</p>
+      {currentLang !== 'zh' && <a class="mt-4 inline-block underline" href={getLocalizedPath('/', 'zh')}>Read Chinese posts</a>}
+    </div>
+  )}
+
   {pinnedPosts.length > 0 && (
-    <section class="mb-7.5">
+    <section class="mb-10" aria-label="精选文章">
+      <p class="mb-3 text-sm c-secondary/70">精选</p>
       <div class="uno-decorative-line" />
       <PostList posts={pinnedPosts} lang={currentLang} pinned={true} />
     </section>
   )}
 
-  <!-- Regular Posts -->
-  {Array.from(postsByYear.entries(), ([_year, posts]) => (
-    <section class="mb-7.5">
+  {recentPosts.length > 0 && (
+    <section class="mb-10" aria-label="最近文章">
+      <p class="mb-3 text-sm c-secondary/70">最近更新</p>
       <div class="uno-decorative-line" />
-      <PostList posts={posts} lang={currentLang} />
+      <PostList posts={recentPosts} lang={currentLang} />
     </section>
-  ))}
+  )}
+
+  {topicLinks.length > 0 && (
+    <section class="mb-10" aria-label="文章专题">
+      <p class="mb-3 text-sm c-secondary/70">按专题阅读</p>
+      <div class="flex flex-wrap gap-3">
+        {topicLinks.map(topic => (
+          <a class="border border-secondary/20 rounded-full px-4 py-2 text-sm transition-colors hover:(border-secondary/60 c-primary)" href={getTagPath(topic.path, currentLang)}>{topic.label}</a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {hasPosts && (
+    <a class="min-h-11 inline-flex items-center text-sm underline underline-offset-4" href={getLocalizedPath('/archives/', currentLang)}>
+      {currentLang === 'zh' ? '查看全部文章' : 'View all posts'}
+    </a>
+  )}
 </Layout>

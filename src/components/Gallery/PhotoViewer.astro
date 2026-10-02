@@ -1,0 +1,473 @@
+---
+import 'photoswipe/style.css'
+---
+<script>
+import type { SlideData } from 'photoswipe'
+import type { AlbumData } from '@/schemas/album'
+import PhotoSwipeLightbox from 'photoswipe/lightbox'
+import { createLivePlayer } from '@/utils/live-player'
+import { photoFields, safeMediaURL } from '@/utils/photo'
+
+const liveIcon = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="6.5"/><circle cx="12" cy="12" r="10" stroke-dasharray="1 3"/></svg>'
+const soundIcon = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4V9Z M17 8a6 6 0 0 1 0 8 M20 5a10 10 0 0 1 0 14"/></svg>'
+const loopIcon = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m16 3 4 4-4 4 M20 7H8a5 5 0 0 0-5 5 M8 21l-4-4 4-4 M4 17h12a5 5 0 0 0 5-5"/></svg>'
+let viewer: PhotoSwipeLightbox | undefined
+let disposeInline: (() => void) | undefined
+function setupViewer() {
+  viewer?.destroy()
+  disposeInline?.()
+  const zh = document.documentElement.lang.startsWith('zh')
+  const post = document.querySelector<HTMLElement>('#post-content')
+  const inlinePlayers: ReturnType<typeof createLivePlayer>[] = []
+  const inlineEvents = new AbortController()
+  const cleanups: (() => void)[] = []
+  const connection = (navigator as Navigator & { connection?: { saveData?: boolean, effectiveType?: string } }).connection
+  const saveData = connection?.saveData || connection?.effectiveType?.includes('2g')
+  if (post) {
+    post.setAttribute('data-photo-group', '')
+    post.querySelectorAll<HTMLImageElement>('img').forEach((img) => {
+      if (img.closest('a, [data-gallery]'))
+        return
+      const anchor = document.createElement('a')
+      anchor.href = img.currentSrc || img.src
+      anchor.setAttribute('data-photo-view', '')
+      anchor.dataset.title = img.alt.startsWith('_') ? '' : img.alt
+      anchor.setAttribute('aria-label', `${img.alt || '照片'} · ${zh ? '查看照片' : 'View photo'}`)
+      img.replaceWith(anchor)
+      anchor.append(img)
+    })
+    const images = [...post.querySelectorAll<HTMLImageElement>('a[data-photo-view] img')]
+    const neighbors = saveData ? 0 : 3
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting)
+          continue
+        const index = images.indexOf(entry.target as HTMLImageElement)
+        for (const image of images.slice(Math.max(0, index - neighbors), index + neighbors + 1))
+          image.loading = 'eager'
+      }
+    }, { rootMargin: '240px 0px' })
+    for (const img of images) {
+      observer.observe(img)
+      const anchor = img.closest<HTMLAnchorElement>('a[data-photo-view]')!
+      const frame = document.createElement('div')
+      frame.className = 'inline-photo-frame'
+      anchor.replaceWith(frame)
+      frame.append(anchor)
+      cleanups.push(() => frame.replaceWith(anchor))
+      const dimensions = () => {
+        const width = img.naturalWidth || img.width
+        const height = img.naturalHeight || img.height
+        if (!width || !height)
+          return
+        anchor.dataset.pswpWidth = String(width)
+        anchor.dataset.pswpHeight = String(height)
+        frame.style.setProperty('--photo-ratio', String(width / height))
+        anchor.closest<HTMLElement>('figure')?.style.setProperty('--photo-ratio', String(width / height))
+      }
+      img.addEventListener('load', dimensions, { signal: inlineEvents.signal })
+      dimensions()
+      const src = safeMediaURL(anchor.dataset.live)
+      if (!src)
+        continue
+      const button = document.createElement('button')
+      button.type = 'button'
+      button.className = 'live-photo-trigger'
+      button.innerHTML = `${liveIcon}<span>LIVE</span>`
+      const sound = document.createElement('button')
+      sound.type = 'button'
+      sound.className = 'live-photo-sound'
+      sound.innerHTML = soundIcon
+      sound.hidden = true
+      sound.setAttribute('aria-label', zh ? '开启声音' : 'Unmute')
+      sound.setAttribute('aria-pressed', 'false')
+      const status = document.createElement('span')
+      status.className = 'live-photo-status'
+      status.setAttribute('role', 'status')
+      const video = document.createElement('video')
+      video.className = 'inline-live-video'
+      const player = createLivePlayer(video, src, (state) => {
+        button.dataset.state = state
+        button.setAttribute('aria-pressed', String(state === 'playing'))
+        button.setAttribute('aria-busy', String(state === 'loading'))
+        const label = state === 'playing' ? (zh ? '暂停 Live' : 'Pause Live') : (zh ? '播放 Live' : 'Play Live')
+        button.setAttribute('aria-label', label)
+        button.title = label
+        sound.hidden = state !== 'playing'
+        status.textContent = state === 'error' ? (zh ? 'Live 暂时无法播放' : 'Live unavailable') : ''
+      })
+      button.setAttribute('aria-label', zh ? '播放 Live' : 'Play Live')
+      button.title = zh ? '播放 Live' : 'Play Live'
+      button.addEventListener('click', () => {
+        inlinePlayers.filter(other => other !== player).forEach(other => other.pause())
+        void player.toggle()
+      }, { signal: inlineEvents.signal })
+      sound.addEventListener('click', () => {
+        video.muted = !video.muted
+        sound.setAttribute('aria-pressed', String(!video.muted))
+        sound.setAttribute('aria-label', video.muted ? (zh ? '开启声音' : 'Unmute') : (zh ? '静音' : 'Mute'))
+      }, { signal: inlineEvents.signal })
+      let timer = 0
+      let held = false
+      let origin = { x: 0, y: 0 }
+      const cancelHold = () => {
+        clearTimeout(timer)
+        if (held)
+          player.pause()
+      }
+      frame.addEventListener('pointerdown', (event) => {
+        if ((event.target as HTMLElement).closest('button') || event.button !== 0)
+          return
+        held = false
+        origin = { x: event.clientX, y: event.clientY }
+        timer = window.setTimeout(() => {
+          held = true
+          inlinePlayers.filter(other => other !== player).forEach(other => other.pause())
+          void player.play()
+        }, 450)
+      }, { signal: inlineEvents.signal })
+      frame.addEventListener('pointermove', (event) => {
+        if (Math.hypot(event.clientX - origin.x, event.clientY - origin.y) > 10)
+          cancelHold()
+      }, { signal: inlineEvents.signal })
+      for (const event of ['pointerup', 'pointercancel', 'pointerleave'])
+        frame.addEventListener(event, cancelHold, { signal: inlineEvents.signal })
+      frame.addEventListener('click', (event) => {
+        if (held) {
+          event.preventDefault()
+          event.stopPropagation()
+          held = false
+        }
+      }, { capture: true, signal: inlineEvents.signal })
+      cleanups.push(() => clearTimeout(timer))
+      frame.append(video, button, sound, status)
+      inlinePlayers.push(player)
+    }
+    cleanups.push(() => observer.disconnect())
+  }
+  disposeInline = () => {
+    inlineEvents.abort()
+    inlinePlayers.forEach(player => player.destroy())
+    cleanups.forEach(cleanup => cleanup())
+  }
+  const box = new PhotoSwipeLightbox({
+    gallery: '[data-photo-group]',
+    children: 'a[data-photo-view]',
+    pswpModule: () => import('photoswipe'),
+    bgOpacity: 1,
+    preload: saveData ? [0, 1] : [1, 2],
+    showHideAnimationType: 'fade',
+    paddingFn: viewport => ({ top: 60, bottom: viewport.x < 600 ? 136 : 100, left: viewport.x < 600 ? 12 : 32, right: viewport.x < 600 ? 12 : 32 }),
+    closeTitle: zh ? '关闭' : 'Close',
+    zoomTitle: zh ? '放大' : 'Zoom',
+    arrowPrevTitle: zh ? '上一张' : 'Previous',
+    arrowNextTitle: zh ? '下一张' : 'Next',
+    errorMsg: zh ? '照片加载失败，请检查图片链接' : 'Photo could not be loaded',
+  })
+  viewer = box
+  const players = new Map<object, ReturnType<typeof createLivePlayer>>()
+  let liveButton: HTMLElement | undefined
+  let soundButton: HTMLElement | undefined
+  let loopButton: HTMLElement | undefined
+  let loop = false
+  type ViewerContent = NonNullable<NonNullable<PhotoSwipeLightbox['pswp']>['currSlide']>['content']
+  const photoOf = (data?: SlideData) => {
+    const anchor = data?.element
+    return (data?.photo as AlbumData['photos'][number] | undefined) || {
+      title: anchor?.dataset.title || anchor?.querySelector('img')?.alt || '',
+      description: anchor?.dataset.description,
+      taken: anchor?.dataset.taken,
+      live: anchor?.dataset.live,
+      metadata: anchor?.dataset.metadata,
+    }
+  }
+  const metadataOf = (data?: SlideData) => {
+    try {
+      const value = photoOf(data).metadata
+      const raw = typeof value === 'string' ? JSON.parse(value) : value || {}
+      return Object.fromEntries(Object.keys(photoFields).filter(key => typeof raw?.[key] === 'string').map(key => [key, raw[key].slice(0, 200)]))
+    }
+    catch { return {} }
+  }
+  const updateControls = () => {
+    const pswp = box.pswp
+    const content = pswp?.currSlide?.content
+    const hasLive = !!safeMediaURL(photoOf(content?.data).live)
+    for (const button of [liveButton, soundButton, loopButton]) {
+      if (button)
+        button.hidden = !hasLive
+    }
+    const video = content && players.get(content)?.video
+    if (soundButton) {
+      soundButton.setAttribute('aria-pressed', String(video ? !video.muted : false))
+      soundButton.setAttribute('aria-label', video && !video.muted ? (zh ? '静音' : 'Mute') : (zh ? '开启声音' : 'Unmute'))
+    }
+    loopButton?.setAttribute('aria-pressed', String(loop))
+  }
+  box.addFilter('itemData', (data) => {
+    const img = data.element?.querySelector('img')
+    data.width = data.width || Number(data.element?.dataset.pswpWidth) || img?.naturalWidth || img?.width || 1600
+    data.height = data.height || Number(data.element?.dataset.pswpHeight) || img?.naturalHeight || img?.height || 1200
+    return data
+  })
+  const prepare = (content: ViewerContent) => {
+    const src = safeMediaURL(photoOf(content.data).live)
+    if (!src || !content.slide)
+      return
+    let player = players.get(content)
+    if (!player) {
+      const video = document.createElement('video')
+      video.className = 'photo-live-video'
+      player = createLivePlayer(video, src, (state) => {
+        if (box.pswp?.currSlide?.content !== content)
+          return
+        if (liveButton) {
+          liveButton.dataset.state = state
+          liveButton.setAttribute('aria-pressed', String(state === 'playing'))
+          liveButton.setAttribute('aria-busy', String(state === 'loading'))
+          liveButton.setAttribute('aria-label', state === 'playing' ? (zh ? '暂停 Live' : 'Pause Live') : (zh ? '播放 Live' : 'Play Live'))
+        }
+        const status = box.pswp?.element?.querySelector('.photo-live-error')
+        if (status)
+          status.textContent = state === 'error' ? (zh ? 'Live 暂时无法播放，请检查视频链接' : 'Live unavailable') : ''
+      })
+      players.set(content, player)
+    }
+    player.video.loop = loop
+    player.video.style.width = content.element?.style.width || `${content.width}px`
+    player.video.style.height = content.element?.style.height || `${content.height}px`
+    content.slide.container.append(player.video)
+    return player
+  }
+  box.on('beforeOpen', () => inlinePlayers.forEach(player => player.pause()))
+  box.on('contentAppend', ({ content }) => {
+    prepare(content)
+  })
+  box.on('contentResize', ({ content, width, height }) => {
+    const video = players.get(content)?.video
+    if (video) {
+      video.style.width = `${width}px`
+      video.style.height = `${height}px`
+    }
+  })
+  box.on('contentDeactivate', ({ content }) => players.get(content)?.pause())
+  box.on('contentRemove', ({ content }) => {
+    players.get(content)?.pause()
+    players.get(content)?.video.remove()
+  })
+  box.on('contentDestroy', ({ content }) => {
+    players.get(content)?.destroy()
+    players.delete(content)
+  })
+  box.on('close', () => players.forEach(player => player.pause()))
+  let holdTimer = 0
+  let held = false
+  let holdPoint = { x: 0, y: 0 }
+  const cancelHold = () => {
+    clearTimeout(holdTimer)
+    if (held)
+      box.pswp?.currSlide && players.get(box.pswp.currSlide.content)?.pause()
+  }
+  box.on('pointerDown', ({ originalEvent: event }) => {
+    held = false
+    if (!(event.target as HTMLElement).matches('.pswp__img, .photo-live-video'))
+      return
+    const content = box.pswp?.currSlide?.content
+    if (!content || !safeMediaURL(photoOf(content.data).live))
+      return
+    holdPoint = { x: event.clientX, y: event.clientY }
+    holdTimer = window.setTimeout(() => {
+      held = true
+      void prepare(content)?.play()
+    }, 450)
+  })
+  box.on('pointerMove', ({ originalEvent: event }) => {
+    if (Math.hypot(event.clientX - holdPoint.x, event.clientY - holdPoint.y) > 10)
+      cancelHold()
+  })
+  box.on('pointerUp', cancelHold)
+  box.on('imageClickAction', (event) => {
+    if (held)
+      event.preventDefault()
+  })
+  box.on('tapAction', (event) => {
+    if (held)
+      event.preventDefault()
+  })
+  box.on('change', () => {
+    cancelHold()
+    held = false
+    updateControls()
+  })
+  box.on('destroy', () => {
+    clearTimeout(holdTimer)
+    players.forEach(player => player.destroy())
+    players.clear()
+  })
+  box.on('uiRegister', () => {
+    const pswp = box.pswp!
+    pswp.ui?.registerElement({
+      name: 'photo-caption',
+      appendTo: 'root',
+      isButton: false,
+      onInit: (element) => {
+        element.setAttribute('aria-live', 'polite')
+        const update = () => {
+          const data = pswp.currSlide?.data
+          const photo = photoOf(data)
+          element.replaceChildren()
+          const metadata = metadataOf(data)
+          const title = document.createElement('strong')
+          title.textContent = photo.title || ''
+          const parameters = document.createElement('dl')
+          for (const [key, labels] of Object.entries(photoFields)) {
+            if (!metadata[key])
+              continue
+            const pair = document.createElement('div')
+            const label = document.createElement('dt')
+            label.textContent = labels[zh ? 0 : 1]
+            const value = document.createElement('dd')
+            value.textContent = metadata[key]
+            pair.title = labels[zh ? 0 : 1]
+            pair.append(label, value)
+            parameters.append(pair)
+          }
+          const error = document.createElement('p')
+          error.className = 'photo-live-error'
+          error.setAttribute('role', 'status')
+          const date = document.createElement('span')
+          date.textContent = photo.taken ? photo.taken.slice(0, 10) : ''
+          if (date.textContent)
+            parameters.append(date)
+          element.append(title, parameters, error)
+          if (photo.description) {
+            const note = document.createElement('details')
+            note.className = 'photo-caption-note'
+            const summary = document.createElement('summary')
+            summary.textContent = zh ? '照片说明' : 'Photo note'
+            const description = document.createElement('p')
+            description.textContent = photo.description
+            note.append(summary, description)
+            element.append(note)
+          }
+        }
+        pswp.on('change', update)
+        update()
+      },
+    })
+    pswp.ui?.registerElement({
+      name: 'live',
+      order: 8,
+      isButton: true,
+      html: `${liveIcon}<span>LIVE</span>`,
+      title: zh ? '播放 Live' : 'Play Live',
+      onInit: (element) => {
+        liveButton = element
+        updateControls()
+      },
+      onClick: () => {
+        const content = pswp.currSlide?.content
+        if (content)
+          void prepare(content)?.toggle()
+      },
+    })
+    pswp.ui?.registerElement({
+      name: 'sound',
+      order: 9,
+      isButton: true,
+      html: soundIcon,
+      title: zh ? '开启声音' : 'Unmute',
+      onInit: (element) => {
+        soundButton = element
+        updateControls()
+      },
+      onClick: () => {
+        const content = pswp.currSlide?.content
+        const player = content && prepare(content)
+        if (player)
+          player.video.muted = !player.video.muted
+        updateControls()
+      },
+    })
+    pswp.ui?.registerElement({
+      name: 'loop',
+      order: 10,
+      isButton: true,
+      html: loopIcon,
+      title: zh ? '循环播放' : 'Loop',
+      onInit: (element) => {
+        loopButton = element
+        updateControls()
+      },
+      onClick: () => {
+        loop = !loop
+        players.forEach((player) => {
+          player.video.loop = loop
+        })
+        updateControls()
+      },
+    })
+  })
+  document.addEventListener('stardust:open-photo', (event) => {
+    const { photos, index } = (event as CustomEvent<{ photos: AlbumData['photos'], index: number }>).detail
+    if (!photos?.length || index < 0 || index >= photos.length)
+      return
+    const items = photos.map(photo => ({ src: photo.src, width: photo.width || 1600, height: photo.height || 1200, alt: photo.alt || photo.title, photo }))
+    box.loadAndOpen(index, items)
+  }, { signal: inlineEvents.signal })
+  box.init()
+}
+document.addEventListener('astro:page-load', setupViewer)
+document.addEventListener('astro:before-swap', () => {
+  viewer?.destroy()
+  viewer = undefined
+  disposeInline?.()
+  disposeInline = undefined
+})
+</script>
+<style is:global>
+  .pswp { --pswp-bg: #fff; --pswp-icon-color: #454545; --pswp-icon-color-secondary: #fff; --pswp-icon-stroke-color: #fff; --pswp-icon-stroke-width: 1px; z-index: 3000; }
+  .pswp__button[hidden], .live-photo-sound[hidden] { display: none; }
+  .pswp__button--live { width: 90px; display: flex; align-items: center; justify-content: center; gap: 7px; font: 10px/1.4 system-ui; letter-spacing: .1em; }
+  .pswp__button--sound, .pswp__button--loop { display: grid; place-items: center; }
+  .pswp__button[aria-pressed="true"] { color: #466631; }
+  .photo-live-video { position: absolute; inset: 0; z-index: 1; max-width: none; opacity: 0; pointer-events: none; object-fit: contain; }
+  .photo-live-video.playing, .inline-live-video.playing { opacity: 1; }
+  .pswp__photo-caption { position: absolute; bottom: max(18px,env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: min(90vw,850px); text-align: center; color: #454545; font: 12px/1.6 system-ui; }
+  .pswp__photo-caption strong { font-size: 14px; font-weight: 500; overflow-wrap: anywhere; }
+  .pswp__photo-caption p { margin: 5px 0; opacity: .65; white-space: pre-line; }
+  .pswp__photo-caption p:empty, .pswp__photo-caption strong:empty { display: none; }
+  .pswp__counter { color: #454545; text-shadow: none; }
+  .pswp__photo-caption { bottom: max(12px,env(safe-area-inset-bottom)); width: calc(100% - 32px); }
+  .pswp__photo-caption strong { font-size: 11px; opacity: .5; }
+  .pswp__photo-caption dl { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px 16px; margin: 5px 0; font-size: 12px; font-variant-numeric: tabular-nums; }
+  .pswp__photo-caption dt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .pswp__photo-caption dd { margin: 0; }
+  .photo-caption-note { font-size: 10px; opacity: .55; }
+  .pswp .photo-caption-note summary { cursor: pointer; list-style: none; display: block; width: auto; padding: 0; margin: 0; text-align: center; }
+  .pswp .photo-caption-note summary::before { display: none; }
+  .photo-caption-note[open] { padding: 12px; max-height: 30dvh; overflow: auto; background: #fff; box-shadow: 0 0 24px #0001; }
+  .photo-caption-note p { max-width: 850px; margin-inline: auto; }
+  .photograph { margin-block: 2rem; }
+  .photograph a[data-photo-view], .inline-photo-frame > a { display: block; cursor: zoom-in; }
+  .inline-photo-frame { position: relative; line-height: 0; }
+  .inline-photo-frame img { display: block; }
+  .inline-live-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; pointer-events: none; transition: opacity .15s; }
+  .live-photo-trigger, .live-photo-sound { position: absolute; z-index: 2; top: 12px; border: 0; min-height: 40px; padding: 8px 12px; border-radius: 30px; color: white; background: #17201980; backdrop-filter: blur(10px); cursor: pointer; }
+  .live-photo-trigger { left: 12px; display: flex; align-items: center; gap: 7px; font: 10px/1 system-ui; letter-spacing: .08em; }
+  .live-photo-sound { right: 12px; display: grid; place-items: center; }
+  .live-photo-sound[aria-pressed="false"] { opacity: .65; }
+  .live-photo-status { position: absolute; bottom: 12px; left: 12px; color: white; font: 12px/1.4 system-ui; text-shadow: 0 1px 4px black; }
+  [data-state="loading"] > svg, [data-state="playing"] > svg { animation: live-spin 5s linear infinite; }
+  @keyframes live-spin { to { transform: rotate(360deg); } }
+  .photo-parameters { font: 11px/1.8 system-ui; opacity: .6; text-align: center; }
+  .photo-row { margin-block: 2rem; display: grid; gap: 16px; }
+  .photo-row-line { display: flex; gap: 12px; align-items: start; }
+  .heti .photo-row-line > figure { flex: var(--photo-ratio,1.5) 1 0; min-width: 0; margin: 0; }
+  .photo-row-line .inline-photo-frame { aspect-ratio: var(--photo-ratio,1.5); }
+  .photo-row-line img { width: 100%; height: 100%; object-fit: contain; margin: 0; }
+  .photo-row-line .inline-photo-frame > a { width: 100%; height: 100%; }
+  .photo-row figcaption { font-size: 10px; margin-top: 8px; overflow-wrap: anywhere; }
+  @media (max-width: 600px) { .pswp__top-bar > .pswp__button { width: 40px; } .pswp__top-bar > .pswp__button--live { width: 78px; } .pswp__counter { margin-left: 10px; font-size: 13px; } .photo-row-line { flex-wrap: wrap; gap: 16px 10px; } .photo-row-line > figure { flex-basis: calc(50% - 10px); flex-grow: 0; } .photo-row-line > figure:only-child { flex-basis: 100%; } .live-photo-trigger { top: 8px; left: 8px; padding: 6px 8px; min-height: 36px; } }
+  @media (prefers-reduced-motion: reduce) { .pswp { --pswp-transition-duration: 0ms; } .inline-live-video { transition: none; } [data-state] > svg { animation: none; } }
+</style>

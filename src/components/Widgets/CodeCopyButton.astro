@@ -7,6 +7,18 @@ async function handleCodeCopyClick(e: MouseEvent) {
   }
 
   const button = e.target.closest('.code-copy-button')
+  const toggle = e.target.closest<HTMLElement>('[data-code-toggle]')
+  if (toggle) {
+    const wrapper = toggle.closest<HTMLElement>('.code-block-wrapper')!
+    const collapsed = wrapper.dataset.codeCollapsed !== 'true'
+    wrapper.dataset.codeCollapsed = String(collapsed)
+    toggle.setAttribute('aria-expanded', String(!collapsed))
+    const zh = document.documentElement.lang.startsWith('zh')
+    toggle.textContent = collapsed ? `${zh ? '展开代码' : 'Expand code'} · ${wrapper.dataset.codeLines} ${zh ? '行' : 'lines'}` : (zh ? '收起代码' : 'Collapse code')
+    if (collapsed && wrapper.getBoundingClientRect().bottom < 0)
+      wrapper.scrollIntoView({ block: 'start' })
+    return
+  }
   if (!button) {
     return
   }
@@ -44,4 +56,10 @@ async function handleCodeCopyClick(e: MouseEvent) {
 }
 
 document.addEventListener('click', handleCodeCopyClick)
+document.addEventListener('astro:page-load', () => {
+  const zh = document.documentElement.lang.startsWith('zh')
+  document.querySelectorAll<HTMLElement>('[data-code-toggle]').forEach((button) => {
+    button.textContent = `${zh ? '展开代码' : 'Expand code'} · ${button.closest<HTMLElement>('[data-code-lines]')?.dataset.codeLines} ${zh ? '行' : 'lines'}`
+  })
+})
 </script>

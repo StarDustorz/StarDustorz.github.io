@@ -1,0 +1,102 @@
+{
+  "slug": "features-demo",
+  "title": "光影 · 功能演示",
+  "description": "Lynan 摄影与 Live 示例，CC BY-NC 4.0；仅用于本站非商业功能演示。来源：https://lynan.cn/new-features/ 与 https://lynan.cn/live-photo/。照片已压缩转为 WebP，视频转为 MP4。",
+  "published": "2026-10-02",
+  "tags": [
+    "博客",
+    "前端"
+  ],
+  "lang": "zh",
+  "draft": false,
+  "hidden": false,
+  "order": 0,
+  "cover": "demo-1",
+  "photos": [
+    {
+      "id": "demo-1",
+      "src": "https://obsidian-1309391399.cos.ap-shanghai.myqcloud.com/Image/202610021412688.webp",
+      "width": 1920,
+      "height": 1280,
+      "title": "树影与圆窗 · Lynan",
+      "description": "作者与素材来源：Lynan；CC BY-NC 4.0（https://creativecommons.org/licenses/by-nc/4.0/）。原图：https://r2-assets.lynan.cn/post/2025hangzhou/DSC06049.jpg；本站转换为 SDR WebP。",
+      "alt": "树影与圆窗，Lynan 的开放许可功能演示素材",
+      "taken": "",
+      "metadata": {},
+      "hidden": false
+    },
+    {
+      "id": "demo-2",
+      "src": "https://obsidian-1309391399.cos.ap-shanghai.myqcloud.com/Image/202610021412430.webp",
+      "width": 1600,
+      "height": 2400,
+      "title": "窗边的光 · Lynan",
+      "description": "作者与素材来源：Lynan；CC BY-NC 4.0（https://creativecommons.org/licenses/by-nc/4.0/）。原图：https://r2-assets.lynan.cn/post/2025hangzhou/DSC06070.jpg；本站转换为 SDR WebP。",
+      "alt": "窗边的光，Lynan 的开放许可功能演示素材",
+      "taken": "2025-08-03",
+      "metadata": {
+        "camera": "SONY ILCE-7CM2",
+        "lens": "E 28-200mm F2.8-5.6 A071",
+        "focalLength": "45 mm",
+        "aperture": "ƒ/6.3",
+        "shutter": "1/50 s",
+        "iso": "ISO 640",
+        "exposure": "0 EV"
+      },
+      "hidden": false
+    },
+    {
+      "id": "demo-3",
+      "src": "https://obsidian-1309391399.cos.ap-shanghai.myqcloud.com/Image/202610021412944.webp",
+      "width": 1920,
+      "height": 1280,
+      "title": "街角一瞥 · Lynan",
+      "description": "作者与素材来源：Lynan；CC BY-NC 4.0（https://creativecommons.org/licenses/by-nc/4.0/）。原图：https://r2-assets.lynan.cn/post/kanto-2026/sdr/DSC07358.jpg；本站转换为 SDR WebP。",
+      "alt": "街角一瞥，Lynan 的开放许可功能演示素材",
+      "taken": "2026-04-02",
+      "metadata": {
+        "camera": "SONY ILCE-7CM2",
+        "lens": "FE 20-70mm F4 G",
+        "focalLength": "37 mm",
+        "aperture": "ƒ/4",
+        "shutter": "1/1600 s",
+        "iso": "ISO 200",
+        "exposure": "0 EV"
+      },
+      "hidden": false
+    },
+    {
+      "id": "demo-4",
+      "src": "https://obsidian-1309391399.cos.ap-shanghai.myqcloud.com/Image/202610021412572.webp",
+      "width": 1920,
+      "height": 1280,
+      "title": "城市片刻 · Lynan",
+      "description": "作者与素材来源：Lynan；CC BY-NC 4.0（https://creativecommons.org/licenses/by-nc/4.0/）。原图：https://r2-assets.lynan.cn/post/macau-2026/sdr/DSC07004.jpg；本站转换为 SDR WebP。",
+      "alt": "城市片刻，Lynan 的开放许可功能演示素材",
+      "taken": "2026-03-14",
+      "metadata": {
+        "camera": "SONY ILCE-7CM2",
+        "lens": "FE 20-70mm F4 G",
+        "focalLength": "20 mm",
+        "aperture": "ƒ/22",
+        "shutter": "1/100 s",
+        "iso": "ISO 200",
+        "exposure": "-0.3 EV"
+      },
+      "hidden": false
+    },
+    {
+      "id": "demo-5",
+      "src": "https://obsidian-1309391399.cos.ap-shanghai.myqcloud.com/Image/202610021412073.webp",
+      "width": 1920,
+      "height": 1080,
+      "title": "海风与浪 · Lynan",
+      "description": "作者与素材来源：Lynan；CC BY-NC 4.0（https://creativecommons.org/licenses/by-nc/4.0/）。原图：https://lynan.cn/static/live-photo/test/live.jpg；本站转换为 SDR WebP。",
+      "alt": "海风与浪，Lynan 的开放许可功能演示素材",
+      "taken": "",
+      "live": "https://obsidian-1309391399.cos.ap-shanghai.myqcloud.com/Image/202610021412741.mp4",
+      "metadata": {},
+      "hidden": false
+    }
+  ]
+}

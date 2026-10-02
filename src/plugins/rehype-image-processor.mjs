@@ -49,7 +49,7 @@ export function rehypeImageProcessor() {
         return
       }
 
-      const isInGallery = parent?.properties?.className?.includes('gallery-container')
+      const isInGallery = ['gallery-container', 'photo-row'].some(name => parent?.properties?.className?.includes(name))
 
       // Gallery container: convert images to figures
       if (isInGallery) {
@@ -70,8 +70,10 @@ export function rehypeImageProcessor() {
         return
       }
 
-      // Multiple images: unwrap in non-gallery containers
-      parent.children.splice(index, 1, ...imgNodes)
+      // Adjacent Markdown images form a responsive photo row.
+      node.tagName = 'div'
+      node.properties = { 'className': ['photo-row'], 'data-columns': '4' }
+      node.children = imgNodes.map(imgNode => createFigure(imgNode, true))
     })
   }
 }

@@ -2,6 +2,7 @@
 import { allLocales } from '@/config'
 import { getLangFromLocale, getLangRouteParam } from '@/i18n/lang'
 import { getTagPath } from '@/i18n/path'
+import { ui } from '@/i18n/ui'
 import Layout from '@/layouts/Layout.astro'
 import { getTagTree } from '@/utils/content'
 
@@ -15,7 +16,8 @@ const currentLang = getLangFromLocale(Astro.currentLocale)
 const tagTree = await getTagTree(currentLang)
 ---
 
-<Layout>
+<Layout postTitle={ui[currentLang].tags}>
+  <h1 class="mb-6 text-7 c-primary font-semibold">{ui[currentLang].tags}</h1>
   <div class="uno-decorative-line" />
 
   <div class="no-heti flex flex-wrap gap-x-2.8 gap-y-3.2">
