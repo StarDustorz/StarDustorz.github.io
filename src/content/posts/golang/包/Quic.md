@@ -171,7 +171,7 @@ func main() {
 
 ## 4 运行
 
-```text
+```fallback
 > go run quic_server.go
 LocalAddr 127.0.0.1:9999, RemoteAddr 127.0.0.1:53893
 Server: Got 'Client: Sending '519247000''
